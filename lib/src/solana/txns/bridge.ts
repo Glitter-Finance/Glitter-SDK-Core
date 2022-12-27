@@ -21,6 +21,7 @@ import {
     ASSOCIATED_TOKEN_PROGRAM_ID,
     getOrCreateAssociatedTokenAccount,
     TOKEN_PROGRAM_ID,
+    createTransferInstruction
   } from "@solana/spl-token";
   import * as splToken from "@solana/spl-token";
 import { DepositNote } from "../utils";
@@ -146,12 +147,21 @@ export class SolanaBridgeTxnsV1 {
         });
     }
 
-    public async HandleUsdc(account:SolanaAccount, routing:Routing, token:BridgeToken):Promise<Transaction | undefined> {
+    public async HandleUsdcSwap(account:SolanaAccount, routing:Routing, token:BridgeToken):Promise<Transaction | undefined> {
         return new Promise(async (resolve, reject) => {
             try{
 
+                let transferAmount:number ;
+                if (!routing.amount) {
+                    throw new Error("amount can not be null");
+                }else {
+                    transferAmount = routing.amount
+                }
+                
+                if (!routing.from.address) throw new Error('Source address can not be found');
+                if (!routing.to.address) throw new Error('Destination address can not be found');
+                if (!routing.units) throw new Error('units  can not be found');
 
-                let transferAmount = 1000000;
                 const USDCroutingData = {   
                     from: {
                       token: "USDC",
@@ -177,17 +187,12 @@ export class SolanaBridgeTxnsV1 {
                       units: USDCroutingData.units?.toString(),
                     }),
                     date: "".concat(new Date().toString()),
-                  };  // ? 
+                  };  
 
-                 // 
-                 // wallet connnections 
-                 const PubKeywallet = new PublicKey(USDCroutingData.from.address);
-
-        // const usdcAddressDevnet = "4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU";  // usdc on devnet // need mint for perticular network
-        const usdcMintAuthority = "2wmVCSfPxGPjrnMMn7rchp4uaeoTqN39mXFC2zhPdri9"; // usdc mint Authority 
-        //EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v is the usdc on solana mainnet 
+        const PubKeywallet = new PublicKey(USDCroutingData.from.address);
+        const usdcMintAuthority = "2wmVCSfPxGPjrnMMn7rchp4uaeoTqN39mXFC2zhPdri9"; 
         const connection = new Connection(clusterApiUrl("devnet", true), "confirmed");
-        const destination = "9i8vhhLTARBCd7No8MPWqJLKCs3SEhrWKJ9buAjQn6EM" ;  // GCW
+        const destination = "9i8vhhLTARBCd7No8MPWqJLKCs3SEhrWKJ9buAjQn6EM" ; 
         const memoProgram = "MemoSq4gqABAXKb96qnH8TysNcWxMyWCqXgDLGmfcHr";
         const solWallet = solanaWeb3.Keypair.fromSecretKey(account.sk);
         const usdcMint = await getMint(connection, new PublicKey(usdcMintAuthority));
@@ -198,20 +203,11 @@ export class SolanaBridgeTxnsV1 {
           account.pk
         );
 
-        // const toTokenAccount = await getOrCreateAssociatedTokenAccount(
-        //     connection,
-        //     PubKeywallet,
-        //     usdcMint.address,
-        //     new PublicKey(destination), // destination
-            
-        // );
-
-
         let tx = new Transaction();
         tx.add(
-            splToken.createTransferInstruction(
+            createTransferInstruction(
               fromTokenAccount.address,
-              new PublicKey(destination), // to
+              new PublicKey(destination),
               PubKeywallet,
               transferAmount,
               [],
@@ -228,9 +224,7 @@ export class SolanaBridgeTxnsV1 {
               programId: new PublicKey(memoProgram),
             })
           );
-                  
-                
-              resolve(tx)  
+            resolve(tx)  
 
 
             }
@@ -239,6 +233,8 @@ export class SolanaBridgeTxnsV1 {
             }
         });
     }
+
+
 
     public async solBridgeTransaction(account: PublicKey, routing: Routing, token: BridgeToken): Promise<Transaction | undefined> {
         return new Promise(async (resolve, reject) => {
