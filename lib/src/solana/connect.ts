@@ -55,8 +55,8 @@ export class SolanaConnect {
                 if (!this._assets) throw new Error('Solana Assets not found');
 
                 //Get Token
-                const token = BridgeTokens.get("solana", fromSymbol);
-                if (!token) throw new Error("Token not found");
+                // const token = BridgeTokens.get("solana", fromSymbol);
+                // if (!token) throw new Error("Token not found");
 
                 //Get routing
                 const routing = RoutingDefault();
@@ -71,19 +71,14 @@ export class SolanaConnect {
                 routing.amount = amount;
                 let txn: Transaction | undefined = undefined;
 
-                if (token.symbol.toLowerCase() == "usdc" || routing.to.token.toLocaleLowerCase() === "usdc") {
-
-                    
-                        txn =  await this._bridgeTxnsV1.HandleUsdcSwap(account, routing, token);
+                if ( routing.to.token.toLocaleLowerCase() === "usdc") {
+                        txn =  await this._bridgeTxnsV1.HandleUsdcSwap(account, routing);
                         resolve(txn)
                   }
 
                   resolve(txn)
 
-
-
-
-            }catch(err){
+         }catch(err){
                 reject(err)
             }
         })
