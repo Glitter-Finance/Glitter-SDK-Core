@@ -9,6 +9,8 @@ const { resolve } = require('path');
 import {SolanaConnect} from '../connect'; 
 import { BridgeToken, BridgeTokens } from 'glitter-bridge-common';
 import { BridgeTokenConfig } from 'glitter-bridge-common-dev/dist';
+import {AlgorandConfig,AlgorandAssetConfig} from '../../algorand/config';
+import {AlgorandConnect} from '../../algorand/connect';
 
 run()
 
@@ -163,12 +165,60 @@ async function run() {
 
 
             const solanaConnect = new SolanaConnect(SolanaConf);
-            
-          const res =  await solanaConnect.createBridgeTransferInstruction(solanaAccount, "USDC", "algorand", algorandAccount?.addr ?? "DEWV6H5KYDD3VXGQOOGN5X622IM25XPSLWJEIL7ULUU6XMZAAYH6DFLJXU", "USDC", 1);
+            if (!algorandAccount){
+                throw new Error("algo account not found ")
+            }
+          const sres =  await solanaConnect.createBridgeTransferInstruction(solanaAccount, "USDC", "algorand", algorandAccount.addr, "USDC", 1,"mainnet-beta");
+          console.log("  Solana to Algo  USDC TRANSACTION COMPLETED");
+          console.log(sres);
+        const USDCalgorandAssetConfig = {
 
-          
+            symbol:"USDC",
+            type:"token",
+            asset_id:31566704,
+            decimal:6,
+            min_balance:1,
+            fee_rate:0.005
+        } as AlgorandAssetConfig;
+        const ALGOalgorandAssetConfig = {
+
+            symbol:"ALGO",
+            type:"native",
+            asset_id:27165954,
+            decimal:6,
+            min_balance:5,
+            fee_rate:0.005
+        } as AlgorandAssetConfig;
+        
+        const xSOLalgorandAssetConfig = {
+
+            symbol:"XSol",
+            type:"token",
+            asset_id:792313023,
+            decimal:9,
+            min_balance:0.05,
+            fee_rate:0.005
+        } as AlgorandAssetConfig;
+ 
+        
+    const list = [USDCalgorandAssetConfig,ALGOalgorandAssetConfig,xSOLalgorandAssetConfig];
+        const algoConfig:AlgorandConfig = {
+            name:"Mainnet" , 
+            serverUrl:"https://node.algoexplorerapi.io",
+            serverPort:"",
+            indexerUrl:"https://algoindexer.algoexplorerapi.io",
+            indexerPort:"",
+            nativeToken:"",
+            appProgramId:813301700,
+            assets_info:list
+        } ;
+
+
+        const algoConnect = new AlgorandConnect(algoConfig);
+        if (!algorandAccount) throw new Error("Algorand Client not defined");
+        const res = algoConnect.createUSDCBridgeTransfer(algorandAccount,"USDC","solana",solanaAccount.addr,"USDC",1,"mainnet");
             console.log();
-            console.log("TRANSACTION COMPLETED");
+            console.log(" Algo to Solana USDC TRANSACTION COMPLETED");
             console.log(res);
 
             resolve(true)

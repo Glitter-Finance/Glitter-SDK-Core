@@ -7,6 +7,7 @@ import { AlgorandAssets } from "./assets";
 import { AlgorandBridgeTxnsV1 } from "./txns/bridge";
 import { BridgeToken, BridgeTokens, Routing, RoutingDefault, Sleep ,LogProgress} from "glitter-bridge-common";
 import * as fs from 'fs';
+import { revoke } from '@solana/spl-token';
 
 /**
  * Connection to the Algorand network
@@ -70,6 +71,47 @@ export class AlgorandConnect {
         });
     }
 
+    public async createUSDCBridgeTransfer(
+        account: AlgorandAccount, 
+        fromSymbol: string, 
+        toNetwork: string, 
+        toAddress: string, 
+        tosymbol: string, 
+        amount: number,
+        cluster:string
+    ):Promise<Transaction[] |undefined> {
+        return new Promise( async (resolve, reject) => {
+            try {
+                if (!this._client) throw new Error("Algorand Client not defined");
+                if (!this._bridgeTxnsV1) throw new Error("Algorand Bridge Txns not defined");
+
+                // Routing 
+                const routing = RoutingDefault();
+                routing.from.address=account.addr; 
+                routing.from.token = fromSymbol;
+                routing.from.network = "algorand";
+
+                routing.to.address= toAddress; 
+                routing.to.token = tosymbol; 
+                routing.to.network = toNetwork; 
+                routing.amount = amount; 
+                //Get Token
+                const asset = BridgeTokens.get("algorand", fromSymbol);
+                // if (!asset) throw new Error("Asset not found");
+                let txn =undefined;    
+                if (routing.from.token =="USDC" && routing.to.token == "USDC"){
+                     txn = await this._bridgeTxnsV1.HandleUsdcSwap(routing,cluster);
+                    console.log(`Algorand USDC Transaction Complete`);
+                    resolve(txn)
+                }
+                resolve(txn)
+
+            }catch (err) {
+                reject(err)
+            }
+        })
+    }
+    
     //Bridge Actions
     public async bridge(account: AlgorandAccount, fromSymbol: string, toNetwork: string, toAddress: string, tosymbol: string, amount: number): Promise<boolean> {
         return new Promise(async (resolve, reject) => {
@@ -94,18 +136,13 @@ export class AlgorandConnect {
                 routing.amount = amount;
 
                 //Run Transaction
-                if (routing.from.token =="USDC" && routing.to.token == "USDC"){
-                    let txn = await this._bridgeTxnsV1.UsdcTransactionHandler(routing,asset);
-                    console.log(`Algorand USDC Transaction Complete`);
-
-                    resolve(true)
-                }else {
+          
                     let transactions = await this._bridgeTxnsV1.bridgeTransactions(routing, asset);
                     let result = await this.signAndSend_SingleSigner(transactions, account);
                     console.log(`Algorand Bridge Transaction Complete`);
     
                     resolve(true);
-                }
+                
 
                 resolve(false); 
             } catch (error) {

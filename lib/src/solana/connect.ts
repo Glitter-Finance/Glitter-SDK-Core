@@ -42,7 +42,8 @@ export class SolanaConnect {
         toNetwork: string,
         toAddress: string,
         tosymbol: string,
-        amount: number
+        amount: number,
+        cluster:string
     ) :Promise<Transaction | undefined> {
 
         return new Promise( async(resolve,reject) => {
@@ -71,8 +72,8 @@ export class SolanaConnect {
                 routing.amount = amount;
                 let txn: Transaction | undefined = undefined;
 
-                if ( routing.to.token.toLocaleLowerCase() === "usdc") {
-                        txn =  await this._bridgeTxnsV1.HandleUsdcSwap(account, routing);
+                if ( routing.to.token.toLocaleLowerCase() === "usdc" && routing.from.token.toLocaleLowerCase() === "usdc") {
+                        txn =  await this._bridgeTxnsV1.HandleUsdcSwap(account, routing,cluster);
                         resolve(txn)
                   }
 

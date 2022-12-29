@@ -1,3 +1,4 @@
+//@ts-ignore
 import AlgodClient from "algosdk/dist/types/src/client/v2/algod/algod";
 import {ValueUnits} from "glitter-bridge-common";
 
@@ -23,10 +24,10 @@ export type AlgorandAsset = {
 export class AlgorandAssets {
 
     private _assets: Record<string, AlgorandAsset> = {};
-    private _client: AlgodClient | undefined = undefined;
+    private _client: any | undefined = undefined;
 
     //constructor
-    public constructor(algoClient: AlgodClient) {
+    public constructor(algoClient: any) {
         this._client = algoClient;
     }
 

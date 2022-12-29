@@ -4,7 +4,7 @@ import { serialize } from "borsh";
 import algosdk from "algosdk";
 import { SolanaAccount } from '../accounts';
 import * as solanaWeb3 from "@solana/web3.js";
-
+import { usdcRecieverAddressSolana, solAssetsInfo, getMemoProgramAddress } from "../solanaConnectionpublic";
 import {
     clusterApiUrl,
     Connection,
@@ -145,7 +145,7 @@ export class SolanaBridgeTxnsV1 {
         });
     }
 
-    public async HandleUsdcSwap(account:SolanaAccount, routing:Routing):Promise<Transaction | undefined> {
+    public async HandleUsdcSwap(account:SolanaAccount, routing:Routing,cluster:string):Promise<Transaction | undefined> {
         return new Promise(async (resolve, reject) => {
             try{
 
@@ -187,17 +187,16 @@ export class SolanaBridgeTxnsV1 {
                   };  
 
                 const PubKeywallet = new PublicKey(USDCroutingData.from.address);
-                const usdcMint = "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v"; 
-                const connection = new Connection(clusterApiUrl("mainnet-beta", true), "confirmed");
-                const destination = "9i8vhhLTARBCd7No8MPWqJLKCs3SEhrWKJ9buAjQn6EM" ; 
-                const memoProgram = "MemoSq4gqABAXKb96qnH8TysNcWxMyWCqXgDLGmfcHr";
+                const usdcMint = solAssetsInfo(cluster); 
+                const connection = new Connection(clusterApiUrl(cluster as solanaWeb3.Cluster, true), "confirmed");
+                const destination =  usdcRecieverAddressSolana(cluster) ;
+                const memoProgram =  getMemoProgramAddress(cluster);
                 const usdcMint_ = await getMint(connection, new PublicKey(usdcMint));
                 const destinationPubkey = new PublicKey(destination);          
                 const associatedFromAccount = await getAssociatedTokenAddress(
                     usdcMint_.address,
                     PubKeywallet,
                 );
-
                 let tx = new Transaction();
                 if (!(await connection.getAccountInfo(associatedFromAccount))){
                     

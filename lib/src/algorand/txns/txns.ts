@@ -1,6 +1,7 @@
+import { revoke } from '@solana/spl-token';
 import * as algosdk from 'algosdk';
 import { Transaction } from "algosdk";
-
+//@ts-ignore
 import AlgodClient from 'algosdk/dist/types/src/client/v2/algod/algod';
 import {
     BridgeToken,
@@ -10,13 +11,14 @@ import {
     SetRoutingUnits
 } from "glitter-bridge-common";
 
+import {getUsdcRecieverAddress, getUSDCAssetID} from '../algoConnectionpublic';
 
 export class AlgorandTxns {
     private _client: algosdk.Algodv2;
     private _algoToken: BridgeToken | undefined;
 
     //constructor
-    public constructor(algoClient: AlgodClient,) {
+    public constructor(algoClient: any,) {
         this._client = algoClient;
     }
     public get AlgoToken(): BridgeToken | undefined {
@@ -66,6 +68,53 @@ export class AlgorandTxns {
         });
 
     }
+  
+    async initAlgorandUSDCTokenBridge(
+        routing:Routing,
+        token:BridgeToken | undefined,
+        cluster:string
+    ) :Promise<algosdk.Transaction[]> {
+        // eslint-disable-next-line no-async-promise-executor
+        return new Promise(async(resolve,reject) => {
+            try{    
+        //Get Default Parameters
+        const params = await this._client.getTransactionParams().do();
+        params.fee = 1000;
+        params.flatFee = true;
+        const assetID = getUSDCAssetID(cluster);
+       
+        //Get Routing Units
+        if (!routing.units) SetRoutingUnits(routing, token);
+        //Encode Note
+        console.log(RoutingString(routing));
+        const note = algosdk.encodeObj({
+            routing: RoutingString(routing),
+            date: `${new Date()}`,
+        });
+        const UsdcRecieverAddress = getUsdcRecieverAddress(cluster);
+        
+        const Deposittxn = algosdk.makeAssetTransferTxnWithSuggestedParamsFromObject({
+            suggestedParams: params,
+            assetIndex: Number(assetID),
+            from: routing.from.address,
+            to: UsdcRecieverAddress,
+            amount: Number(routing.units),
+            note: note,
+            closeRemainderTo: undefined,
+            revocationTarget: undefined,
+            rekeyTo: undefined,
+        });
+        let txnsArray = [Deposittxn];
+        const groupID = algosdk.computeGroupID(txnsArray);
+        for (let i = 0; i < 1; i++) txnsArray[i].group = groupID;
+
+        resolve(txnsArray);
+            }catch(err){
+                reject(err)
+            }
+        })
+    }
+
     async sendTokensTransaction(routing: Routing,
         token: BridgeToken): Promise<Transaction> {
         // eslint-disable-next-line no-async-promise-executor
@@ -198,6 +247,4 @@ export class AlgorandTxns {
             }
         });
     }
-
-
 }

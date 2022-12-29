@@ -10,7 +10,9 @@
       // ... other libs
       "ES2021.String",
       "dom"
-    ]
+    ],
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
   },
   "include": ["lib"],
   "exclude": ["node_modules", "**/__tests__/*"],

@@ -1,4 +1,5 @@
 import algosdk, { MultisigMetadata } from "algosdk";
+//@ts-ignore
 import AlgodClient from "algosdk/dist/types/src/client/v2/algod/algod";
 import * as util from "util";
 import { ValueUnits, BridgeToken } from "glitter-bridge-common";
@@ -42,10 +43,10 @@ export class AlgorandAccounts {
 
     private _accounts: Record<string, AlgorandAccount> = {};
     private _msigs: Record<string, AlgorandMSigAccount> = {};
-    private _client: AlgodClient | undefined = undefined;
+    private _client: any | undefined = undefined;
 
     //constructor
-    public constructor(algoClient: AlgodClient) {
+    public constructor(algoClient: any) {
         this._client = algoClient;
     }
 
