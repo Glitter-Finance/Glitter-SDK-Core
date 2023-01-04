@@ -157,6 +157,14 @@ export class GlitterEvmBridge {
     }
   }
 
+  private async isCorrectChain(
+    source: BridgeEvmNetwork,
+    wallet: ethers.Wallet
+  ): Promise<boolean> {
+    const chainId = await wallet.getChainId();
+    return EVM_CONFIG[this.__environment][source].chainId === chainId;
+  }
+
   async bridge(
     source: BridgeEvmNetwork,
     destination: BridgeEvmNetwork | BridgeNetworks,
@@ -166,6 +174,12 @@ export class GlitterEvmBridge {
     wallet: ethers.Wallet
   ): Promise<ethers.ContractTransaction> {
     try {
+      const isCorrectChain = await this.isCorrectChain(source, wallet);
+      if (!isCorrectChain)
+        throw new Error(
+          `[EvmBridge] Signer should be connected to network ${source}`
+        );
+
       const bridge = TokenBridge__factory.connect(
         this.getAddress("bridge", source),
         wallet
