@@ -1,25 +1,18 @@
-import { revoke } from '@solana/spl-token';
 import * as algosdk from 'algosdk';
 import { Transaction } from "algosdk";
-//@ts-ignore
-import AlgodClient from 'algosdk/dist/types/src/client/v2/algod/algod';
-import {
-    BridgeToken,
-    BridgeTokens,
-    Routing,
-    RoutingString,
-    SetRoutingUnits
-} from "glitter-bridge-common";
-
-import {getUsdcRecieverAddress, getUSDCAssetID} from '../algoConnectionpublic';
+import { BridgeToken, BridgeTokens, Routing, RoutingString, SetRoutingUnits } from '../../_common';
+import { AlgorandAccountsConfig } from '../config';
+//import {getUsdcRecieverAddress, getUSDCAssetID} from '../algoConnectionpublic';
 
 export class AlgorandTxns {
     private _client: algosdk.Algodv2;
     private _algoToken: BridgeToken | undefined;
+    private _accounts: AlgorandAccountsConfig|undefined;
 
     //constructor
-    public constructor(algoClient: any,) {
+    public constructor(algoClient: any,accounts:AlgorandAccountsConfig) {
         this._client = algoClient;
+        this._accounts = accounts;
     }
     public get AlgoToken(): BridgeToken | undefined {
         if (!this._algoToken) {
@@ -81,7 +74,8 @@ export class AlgorandTxns {
         const params = await this._client.getTransactionParams().do();
         params.fee = 1000;
         params.flatFee = true;
-        const assetID = getUSDCAssetID(cluster);
+        const assetID =  BridgeTokens.get("algorand","usdc");//     getUSDCAssetID(cluster);
+        if (!assetID) throw new Error("USDC Asset ID not found");
        
         //Get Routing Units
         if (!routing.units) SetRoutingUnits(routing, token);
@@ -92,13 +86,14 @@ export class AlgorandTxns {
             date: `${new Date()}`,
         });
         
-        const UsdcRecieverAddress = getUsdcRecieverAddress(cluster);
+        const UsdcDepositAddress = this._accounts?.usdcDeposit//   getUsdcRecieverAddress(cluster);
+        if (!UsdcDepositAddress) throw new Error("USDC Deposit Address not found");
         
         const Deposittxn = algosdk.makeAssetTransferTxnWithSuggestedParamsFromObject({
             suggestedParams: params,
             assetIndex: Number(assetID),
             from: routing.from.address,
-            to: UsdcRecieverAddress,
+            to: UsdcDepositAddress,
             amount: Number(routing.units),
             note: note,
             closeRemainderTo: undefined,

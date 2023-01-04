@@ -3,16 +3,9 @@ import { AlgorandTxns } from "./txns";
 import * as util from "util";
 //@ts-ignore
 import AlgodClient from "algosdk/dist/types/src/client/v2/algod/algod";
-import {
-    BridgeAccountNames,
-    BridgeAccounts,
-    BridgeToken,
-    BridgeTokens,
-    Routing,
-    RoutingDefault,
-    RoutingString,
-    SetRoutingUnits
-} from "glitter-bridge-common";
+import {  BridgeToken, BridgeTokens, Routing, RoutingDefault, RoutingString, SetRoutingUnits } from "../../_common";
+import {AlgorandAccountsConfig} from "../config";
+
 
 
 export enum AlgorandBridgeTxnType {
@@ -38,13 +31,15 @@ export class AlgorandBridgeTxnsV1 {
     private _bridgeApprovalAppId = 0;
     private _client: any | undefined = undefined;
     private _transactions: AlgorandTxns | undefined = undefined;
+    private _accounts: AlgorandAccountsConfig | undefined = undefined;
     
     //constructor
-    public constructor(algoClient: any, appId: number, transactions: AlgorandTxns) {
+    public constructor(algoClient: any, appId: number, transactions: AlgorandTxns,accounts: AlgorandAccountsConfig) {
 
         this._client = algoClient;
         this._bridgeApprovalAppId = appId;
         this._transactions = transactions;
+        this._accounts= accounts;
     }
 
     public appArgs(functionName: AlgorandBridgeTxnType): Uint8Array[] | undefined;
@@ -69,11 +64,11 @@ export class AlgorandBridgeTxnsV1 {
                     appArgs.push(algosdk.encodeUint64(Number(token.address)));  //1
                     appArgs.push(new Uint8Array(Buffer.from(token.symbol)));  //2
                     appArgs.push(algosdk.encodeUint64(Number(token.decimals)));  //3
-                    appArgs.push(algosdk.encodeUint64(Number(token.params.fee_divisor)));  //4
+                    appArgs.push(algosdk.encodeUint64(Number(token.fee_divisor)));  //4
 
-                    const min_transfer = token.params.min_transfer ? token.params.min_transfer : 0;
+                    const min_transfer = token.min_transfer ? token.min_transfer : 0;
                     appArgs.push(algosdk.encodeUint64(Number(min_transfer * Math.pow(10, token.decimals))));  //5
-                    const max_transfer = token.params.max_transfer ? token.params.max_transfer : 0;
+                    const max_transfer = token.max_transfer ? token.max_transfer : 0;
                     appArgs.push(algosdk.encodeUint64(Number(max_transfer * Math.pow(10, token.decimals))));  //6
                 }
                 break;
@@ -308,7 +303,7 @@ export class AlgorandBridgeTxnsV1 {
                 //Fail Safe
                 if (!this._client) throw new Error("Algorand Client is required");
                 if (!routing) throw new Error("Bridge Transaction is required");
-
+              
                 //Get Default Parameters
                 const params = await this._client.getTransactionParams().do();
                 params.fee = 1000;
@@ -331,15 +326,18 @@ export class AlgorandBridgeTxnsV1 {
                 switch (functionName) {
                     case AlgorandBridgeTxnType.xsol_deposit:
                         accounts.push(routing.from.address);
-                        accounts.push(BridgeAccounts.getAddress(BridgeAccountNames.algorand_asaVault));
+                        if (!this._accounts?.asaVault) throw new Error("ASA Vault is required");                
+                        accounts.push(this._accounts?.asaVault);
                         break;
                     case AlgorandBridgeTxnType.algo_deposit:
                         accounts.push(routing.from.address);
-                        accounts.push(BridgeAccounts.getAddress(BridgeAccountNames.algorand_algoVault));
+                        if (!this._accounts?.algoVault) throw new Error("ASA Vault is required");                
+                        accounts.push(this._accounts?.algoVault);
                        break;
                     default:
                         accounts.push(routing.from.address);
-                        accounts.push(BridgeAccounts.getAddress(BridgeAccountNames.algorand_algoVault));
+                        if (!this._accounts?.algoVault) throw new Error("ASA Vault is required");                
+                        accounts.push(this._accounts?.algoVault);
                         break;
                 }
 
@@ -376,20 +374,20 @@ export class AlgorandBridgeTxnsV1 {
                 //Get Token
                 const token = await BridgeTokens.get("algorand", routing.from.token);
                 if (!token) throw new Error("Token Config is required");
-                if (!token.params) throw new Error("Token Params is required");
-                if (!token.params.fee_divisor) throw new Error("Token Fee Divisor is required");
+               if (!token.fee_divisor) throw new Error("Token Fee Divisor is required");
                 if (!routing.amount) throw new Error("Routing Amount is required");
                 if (!this._transactions) throw new Error("Algorand Transactions is required");
+                if (!this._accounts?.feeReceiver) throw new Error("Fee Receiver is required");
 
                 //Get Fee Routing
                 const feeRouting = RoutingDefault(routing);
                 feeRouting.to.network = "algorand";
                 feeRouting.to.token = feeRouting.from.token;
-                feeRouting.to.address = BridgeAccounts.getAddress(BridgeAccountNames.algorand_feeReceiver);
+                feeRouting.to.address = this._accounts?.feeReceiver;
                 feeRouting.units = undefined;
 
                 //Get Fee
-                feeRouting.amount = routing.amount / token.params.fee_divisor;
+                feeRouting.amount = routing.amount / token.fee_divisor;
 
                 //Get Transaction
                 //  usdc 
@@ -466,8 +464,7 @@ export class AlgorandBridgeTxnsV1 {
                 //Get Token
                 const token = await BridgeTokens.get("algorand", routing.from.token);
                 if (!token) throw new Error("Token Config is required");
-                if (!token.params) throw new Error("Token Params is required");
-                if (!token.params.fee_divisor) throw new Error("Token Fee Divisor is required");
+                if (!token.fee_divisor) throw new Error("Token Fee Divisor is required");
                 if (!routing.amount) throw new Error("Routing Amount is required");
                 if (!this._transactions) throw new Error("Algorand Transactions is required");
 
@@ -478,10 +475,12 @@ export class AlgorandBridgeTxnsV1 {
                 depositRouting.units = undefined;
 
                 if (routing.from.token.toLowerCase() == "algo") {
-                    depositRouting.to.address = BridgeAccounts.getAddress(BridgeAccountNames.algorand_algoVault);
+                    if (!this._accounts?.algoVault) throw new Error("Algo Vault is required");
+                    depositRouting.to.address =  this._accounts?.algoVault ;
                 }
                 else {
-                    depositRouting.to.address = BridgeAccounts.getAddress(BridgeAccountNames.algorand_asaVault);
+                    if (!this._accounts?.asaVault) throw new Error("ASA Vault is required");
+                    depositRouting.to.address = this._accounts?.asaVault;
                 }
                 //Get Transaction
                 let txn = undefined;

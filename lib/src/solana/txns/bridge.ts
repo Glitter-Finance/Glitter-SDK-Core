@@ -1,10 +1,7 @@
-
-import { BridgeToken, Routing, ValueUnits } from "glitter-bridge-common-dev";
 import { serialize } from "borsh";
 import algosdk from "algosdk";
 import { SolanaAccount } from '../accounts';
 import * as solanaWeb3 from "@solana/web3.js";
-import { usdcRecieverAddressSolana, solAssetsInfo, getMemoProgramAddress } from "../solanaConnectionpublic";
 import {
     clusterApiUrl,
     Connection,
@@ -23,17 +20,21 @@ import {
     createAssociatedTokenAccountInstruction
   } from "@solana/spl-token";
 import { DepositNote } from "../utils";
+import { BridgeToken, BridgeTokens, Routing, ValueUnits } from "../../_common";
+import { SolanaAccountsConfig } from "../config";
 
 export class SolanaBridgeTxnsV1 {
 
     private _bridgeProgramAddress: string | undefined = undefined;
     private _primarySeed: string = "glitter";
     private _client?: Connection;
+    private _accounts: SolanaAccountsConfig | undefined = undefined;
 
     //Setters
-    public constructor(client: Connection, bridgeProgramAddress: string) {
+    public constructor(client: Connection, bridgeProgramAddress: string, accounts: SolanaAccountsConfig) {
         this._client = client;
         this._bridgeProgramAddress = bridgeProgramAddress;
+        this._accounts = accounts;
     }
 
     public async getSolEscrowAccount(account: PublicKey): Promise<PublicKey> {
@@ -187,10 +188,16 @@ export class SolanaBridgeTxnsV1 {
                   };  
 
                 const PubKeywallet = new PublicKey(USDCroutingData.from.address);
-                const usdcMint = solAssetsInfo(cluster); 
+                const usdcMint =  BridgeTokens.get("solana","usdc")?.address;//  solAssetsInfo(cluster); 
+                if (!usdcMint) throw new Error('USDC mint not found');
+
                 const connection = new Connection(clusterApiUrl(cluster as solanaWeb3.Cluster, true), "confirmed");
-                const destination =  usdcRecieverAddressSolana(cluster) ; 
-                const memoProgram =  getMemoProgramAddress(cluster);
+                const destination =  this._accounts?.usdcDeposit;//    usdcRecieverAddressSolana(cluster) ; 
+                if (!destination) throw new Error('USDC destination not found');
+
+                const memoProgram =  this._accounts?.memoProgram; //getMemoProgramAddress(cluster);
+                if (!memoProgram) throw new Error('Memo Program not found');
+
                 const usdcMint_ = await getMint(connection, new PublicKey(usdcMint));
                 const destinationPubkey = new PublicKey(destination);          
                 const associatedFromAccount = await getAssociatedTokenAddress(

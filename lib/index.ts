@@ -37,7 +37,6 @@ import {
 
  import {
     AlgorandConfig,
-    AlgorandAssetConfig
  } from './src/algorand/config';
  import {
     AlgorandConnect
@@ -49,13 +48,6 @@ import {
     AlgorandTxns
  } from './src/algorand/txns/txns';
 
- import {
-    BridgeAccount,
-    BridgeAccountConfig,
-    BridgeMSig,
-    BridgeAccountNames,
-    BridgeAccounts
-} from "./src/_common/accounts/accounts";
 import {
     Routing,
     RoutingPoint,
@@ -67,9 +59,7 @@ import {
 import {
     BridgeTokenConfig,
     BridgeToken,
-    BridgeTokenParams,
     BridgeTokenDefault,
-    BridgeTokenParamsDefault,
     BridgeTokens
 } from "./src/_common/tokens/tokens";
 import {
@@ -84,8 +74,6 @@ import {
 import {
     ValueUnits
 } from "./src/_common/utils/value_units";
-
-
 
 export{
     SolanaBridgeTxnsV1,
@@ -107,16 +95,10 @@ export{
     AlgorandAsset,
     AlgorandAssets,
     AlgorandConfig,
-    AlgorandAssetConfig,
     AlgorandConnect,
     AlgorandBridgeTxnsV1,
     AlgorandTxns,
-
-    BridgeAccount,
-    BridgeAccountConfig,
-    BridgeMSig,
-    BridgeAccountNames,
-    BridgeAccounts,
+ 
     Routing,
     RoutingPoint,
     RoutingDefault,
@@ -125,9 +107,7 @@ export{
     SetRoutingUnits,
     BridgeTokenConfig,
     BridgeToken,
-    BridgeTokenParams,
     BridgeTokenDefault,
-    BridgeTokenParamsDefault,
     BridgeTokens,
     Logger,
     InputParams,

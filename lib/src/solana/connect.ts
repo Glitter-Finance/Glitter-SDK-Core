@@ -4,8 +4,8 @@ import { SolanaAssets } from './assets';
 import { SolanaBridgeTxnsV1 } from './txns/bridge';
 import { SolanaConfig } from './config';
 import { SolanaTxns } from './txns/txns';
-import { BridgeToken, Routing, RoutingDefault, ValueUnits, Sleep, BridgeTokens, Precise, LogProgress } from 'glitter-bridge-common';
 import * as util from 'util';
+import { BridgeToken, BridgeTokens, LogProgress, Precise, Routing, RoutingDefault, Sleep, ValueUnits } from '../_common';
 
 export class SolanaConnect {
 
@@ -21,7 +21,7 @@ export class SolanaConnect {
         this._accounts = new SolanaAccounts(this._client);
         this._assets = new SolanaAssets(this._client);
         this._transactions = new SolanaTxns(this._client);
-        this._bridgeTxnsV1 = new SolanaBridgeTxnsV1(this._client, config.programAddress);
+        this._bridgeTxnsV1 = new SolanaBridgeTxnsV1(this._client,config.accounts.bridgeProgram, config.accounts );
 
     }
 
