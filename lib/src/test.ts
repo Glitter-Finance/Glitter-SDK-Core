@@ -1,16 +1,16 @@
 import { AlgorandAccounts,AlgorandAccount } from 'glitter-bridge-algorand/dist';
 import { GlitterBridgeSDK, BridgeNetworks, GlitterNetworks } from 'glitter-bridge-sdk';
 import { SolanaAccounts, SolanaAccount } from 'glitter-bridge-solana/dist';
-import { SolanaConfig } from '../config';
+import { SolanaConfig } from './solana/config';
 const path = require('path');
 const util = require('util');
 const fs = require('fs');
 const { resolve } = require('path');
-import {SolanaConnect} from '../connect'; 
+import {SolanaConnect} from './solana/connect'; 
 import { BridgeToken, BridgeTokens } from 'glitter-bridge-common';
 import { BridgeTokenConfig } from 'glitter-bridge-common-dev/dist';
-import {AlgorandConfig,AlgorandAssetConfig} from '../../algorand/config';
-import {AlgorandConnect} from '../../algorand/connect';
+import {AlgorandConfig,AlgorandAssetConfig} from './algorand/config';
+import {AlgorandConnect} from './algorand/connect';
 
 run()
 
@@ -19,7 +19,6 @@ async function run() {
     console.log(result);
 }
 
-
  async function runMain() :Promise<boolean>{
 
     return new Promise(async (resolve,reject) => {
@@ -27,6 +26,7 @@ async function run() {
             const sdk = new GlitterBridgeSDK()
             .setEnvironment(GlitterNetworks.mainnet)
             .connect([BridgeNetworks.algorand, BridgeNetworks.solana]);
+
             const algorandAccounts = sdk.algorand?.accounts;
             const solanaAccounts = sdk.solana?.accounts;
             const algorand = sdk.algorand;
@@ -47,6 +47,7 @@ async function run() {
             console.log();
             console.log("==== Creating New Solana Account ============");
             const solanaAccount = await getSolanaAccount(solanaAccounts);
+            
             console.log(`Solana Account: ${solanaAccount.addr}`);
 
 
@@ -68,25 +69,25 @@ async function run() {
 
 
 
-            //fund Solana account
-            // console.log();
-            // console.log("==== Funding Solana Account  ============");
-            // console.log("Here is the address of your account.  Click on the link to fund it with **10** testnet tokens.");
-            // console.log(`https://explorer.solana.com/address/${solanaAccount.addr}?cluster=testnet`);
-            // console.log();
-            // console.log("Dispenser");
-            // console.log(`https://solfaucet.com/}`);
-            // console.log(`Address: ${solanaAccount.addr}`);
-            // await solana.waitForMinBalance(solanaAccount.addr, 1, 5 * 60); //You need to send 1 or more testnet sol to the account 
-            // console.log();
-            // const solanaBalance = await solana.getBalance(solanaAccount.addr);
-            // console.log(`Solana Balance: ${solanaBalance}`);
+            // fund Solana account
+            console.log();
+            console.log("==== Funding Solana Account  ============");
+            console.log("Here is the address of your account.  Click on the link to fund it with **10** testnet tokens.");
+            console.log(`https://explorer.solana.com/address/${solanaAccount.addr}?cluster=testnet`);
+            console.log();
+            console.log("Dispenser");
+            console.log(`https://solfaucet.com/}`);
+            console.log(`Address: ${solanaAccount.addr}`);
+            await solana.waitForMinBalance(solanaAccount.addr, 1, 5 * 60); //You need to send 1 or more testnet sol to the account 
+            console.log();
+            const solanaBalance = await solana.getBalance(solanaAccount.addr);
+            console.log(`Solana Balance: ${solanaBalance}`);
 
             // Add USDC to Bridge Tokens 
             const solanaUSDC:BridgeToken = {
                 symbol:"USDC"    ,
                 network:"solana",
-                address:"",
+                address: "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v",               //"EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v",
                 decimals:6, 
                 params:{
                     name:"usdc",
@@ -98,7 +99,7 @@ async function run() {
                 }
             }  ;
 
-            // BridgeTokens.add(solanaUSDC);
+            BridgeTokens.add(solanaUSDC);
             console.log("====  SOLANAUSDC added ============");
 
             const algoUSDC:BridgeToken = {
@@ -116,9 +117,7 @@ async function run() {
                 }
             }  ;
 
-         
-
-            // BridgeTokens.add(algoUSDC);
+            BridgeTokens.add(algoUSDC);
 
             const tokenList = [solanaUSDC,algoUSDC]; 
             const bridgeTokenConfig:BridgeTokenConfig = {
@@ -128,32 +127,39 @@ async function run() {
 
             console.log("====  ALGOUSDC added ============");
 
-            // const token = BridgeTokens.get("algorand", "USDC");
-            // if (!token) throw new Error("Token not found on algo");
+            const token = BridgeTokens.get("algorand", "USDC");
+            if (!token) throw new Error("Token not found on algo");
 
-            // const tokenS = BridgeTokens.get("solana", "USDC");
-            // if (!tokenS) throw new Error("Token not found on solana ");
-
-
-            // console.log();
-            // console.log("====  Opting USDC To Algorand  ============");
-            // let startingBalance = await algorand.getBalance(algorandAccount?.addr ?? "");
-            // await algorand.optinToken(algorandAccount as AlgorandAccount, "USDC");
-            // await algorand.waitForBalanceChange(algorandAccount?.addr?? "", startingBalance); //Wait for balance to change
-            // console.log();
-            // console.log("Opted in to USDC");
+            const tokenS = BridgeTokens.get("solana", "USDC");
+            if (!tokenS) throw new Error("Token not found on solana ");
 
 
-            //  //Opt in to USDC
-            //  console.log();
-            //  console.log("==== Opting Solana Account In to USDC ============");
-            //  startingBalance = await solana.getBalance(solanaAccount.addr);
-            //  await solana.optinToken(solanaAccount, "USDC");
+            console.log();
+            console.log("====  Opting USDC To Algorand  ============");
+            let startingBalance = await algorand.getBalance(algorandAccount?.addr ?? "DEWV6H5KYDD3VXGQOOGN5X622IM25XPSLWJEIL7ULUU6XMZAAYH6DFLJXU");
+            await algorand.optinToken(algorandAccount as AlgorandAccount, "USDC");
+            await algorand.waitForBalanceChange(algorandAccount?.addr?? "DEWV6H5KYDD3VXGQOOGN5X622IM25XPSLWJEIL7ULUU6XMZAAYH6DFLJXU", startingBalance); //Wait for balance to change
+            console.log();
+            console.log("Opted in to USDC to Algorand");
 
-              // Solana to Algorand USDC
-            // console.log();
-            // console.log("====  Bridging xALGO to ALGO  ============");
-            // startingBalance = await algorand.getBalance(algorandAccount?.addr ?? "");
+            
+            
+             //Opt in to USDC
+             console.log();
+             console.log("==== Opting Solana Account In to USDC ============");
+             startingBalance = await solana.getBalance(solanaAccount.addr);
+             await solana.optinToken(solanaAccount, "USDC");
+
+                 
+             if (!(await solana.optinAccountExists(solanaAccount, "USDC"))) {
+                await solana.waitForBalanceChange(solanaAccount.addr, startingBalance); //Wait for balance to change
+            }
+             console.log("Opted in to USDC to solana");
+
+            //   Solana to Algorand USDC
+            console.log();
+            console.log("====  Bridging xALGO to ALGO  ============");
+            startingBalance = await algorand.getBalance(algorandAccount?.addr ?? "DEWV6H5KYDD3VXGQOOGN5X622IM25XPSLWJEIL7ULUU6XMZAAYH6DFLJXU");
 
             // dummy solanaConfig 
             
@@ -180,6 +186,9 @@ async function run() {
             min_balance:1,
             fee_rate:0.005
         } as AlgorandAssetConfig;
+
+
+
         const ALGOalgorandAssetConfig = {
 
             symbol:"ALGO",

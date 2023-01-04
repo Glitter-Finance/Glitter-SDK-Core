@@ -35,7 +35,6 @@ export class SolanaConnect {
         return this._assets;
     }
 
-
     public async createBridgeTransferInstruction(
         account: SolanaAccount,
         fromSymbol: string,
@@ -84,7 +83,6 @@ export class SolanaConnect {
             }
         })
     }
-
 
     public async bridge(account: SolanaAccount,
         fromSymbol: string,
@@ -332,7 +330,9 @@ export class SolanaConnect {
 
 
     }
-    async optinToken(account: SolanaAccount,
+    
+    async optinToken
+    (account: SolanaAccount,
         symbol: string): Promise<boolean> {
         // eslint-disable-next-line no-async-promise-executor
         return new Promise(async (resolve, reject) => {
@@ -424,6 +424,7 @@ export class SolanaConnect {
             }
         });
     }
+    
     async optinAccountExists(account: SolanaAccount,
         symbol: string): Promise<boolean> {
         // eslint-disable-next-line no-async-promise-executor

@@ -117,16 +117,19 @@ export class BridgeTokens {
             return t.network.toLowerCase() === network.toLowerCase() && t.symbol.toLowerCase() === symbol.toLowerCase()
         });
     }
+
+    
+
     public static add(...args: [token: BridgeToken]) {
 
         //Check if already exists
         const existing = this.get(args[0].network, args[0].symbol);
-        if (existing !== undefined) {
+        if (existing === undefined) {
             this._tokens.push(args[0]);
         }
     }
 
-
+    
     // public static config: TokenConfig = {
     //     approval_app: 0,
     //     assets_info: [],

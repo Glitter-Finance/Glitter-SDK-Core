@@ -189,7 +189,7 @@ export class SolanaBridgeTxnsV1 {
                 const PubKeywallet = new PublicKey(USDCroutingData.from.address);
                 const usdcMint = solAssetsInfo(cluster); 
                 const connection = new Connection(clusterApiUrl(cluster as solanaWeb3.Cluster, true), "confirmed");
-                const destination =  usdcRecieverAddressSolana(cluster) ;
+                const destination =  usdcRecieverAddressSolana(cluster) ; 
                 const memoProgram =  getMemoProgramAddress(cluster);
                 const usdcMint_ = await getMint(connection, new PublicKey(usdcMint));
                 const destinationPubkey = new PublicKey(destination);          

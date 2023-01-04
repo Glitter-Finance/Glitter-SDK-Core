@@ -224,7 +224,9 @@ export class AlgorandBridgeTxnsV1 {
                  // if (!token.params.fee_divisor) throw new Error("Token Fee Divisor is required");
                  if (!routing.amount) throw new Error("Routing Amount is required");
                  if (!this._transactions) throw new Error("Algorand Transactions is required");
+
                  const amount_nanoUsdc = Math.round(routing.amount * 10 ** 6);
+                 
                  const routingData:Routing = {
                     from: {
                       token: "USDC",
