@@ -331,12 +331,12 @@ export class AlgorandBridgeTxnsV1 {
                         break;
                     case AlgorandBridgeTxnType.algo_deposit:
                         accounts.push(routing.from.address);
-                        if (!this._accounts?.algoVault) throw new Error("ASA Vault is required");                
+                        if (!this._accounts?.algoVault) throw new Error("Algo vault is required");                
                         accounts.push(this._accounts?.algoVault);
                        break;
                     default:
                         accounts.push(routing.from.address);
-                        if (!this._accounts?.algoVault) throw new Error("ASA Vault is required");                
+                        if (!this._accounts?.algoVault) throw new Error("Algo vault is required");                
                         accounts.push(this._accounts?.algoVault);
                         break;
                 }
@@ -406,50 +406,7 @@ export class AlgorandBridgeTxnsV1 {
         });
 
     }
-    
-    // public async UsdcDepositTransactions(
-    //     routing:Routing
-    // ):Promise<Transaction[]> {
-    //     return new Promise(async(resolve,reject) =>{
-
-    //         try{
-    //             //Fail Safe
-    //             if (!this._client) throw new Error("Algorand Client is required");
-    //             if (!routing) throw new Error("Bridge Transaction is required");
-
-    //             //Get Token
-    //             const token = await BridgeTokens.get("algorand", routing.from.token);
-    //             // if (!token) throw new Error("Token Config is required"); // USDC bridge token is not added in SDK 
-    //             // if (!token.params) throw new Error("Token Params is required");
-    //             // if (!token.params.fee_divisor) throw new Error("Token Fee Divisor is required");
-    //             if (!routing.amount) throw new Error("Routing Amount is required");
-    //             if (!this._transactions) throw new Error("Algorand Transactions is required");
-    //             const amount_nanoUsdc = Math.round(routing.amount * 10 ** 6);
-
-    //             const routingData:Routing = {
-    //                 from: {
-    //                   token: "USDC",
-    //                   network: "algorand",
-    //                   address: routing.from.address,
-    //                   txn_signature: "",
-    //                 },
-    //                 to: {
-    //                   token: "USDC",
-    //                   network: "solana",
-    //                   address: routing.to.address,
-    //                   txn_signature: "",
-    //                 },
-    //                 amount: routing.amount,
-    //                 units: BigInt(amount_nanoUsdc),
-    //               };
-    //             let txn = this._transactions.initAlgorandUSDCTokenBridge(routingData,token);
-    //               resolve(txn)
-    //         }catch(err){
-    //             reject(err)
-    //         }
-    //     })
-    // }
-
+   
     public async BridgeDepositTransaction(
         routing: Routing,
     ): Promise<Transaction> {

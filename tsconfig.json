@@ -14,7 +14,7 @@
     "resolveJsonModule": true,
     "esModuleInterop": true,
   },
-  "include": ["lib", "tests/test.ts"],
+  "include": ["lib"],
   "exclude": ["node_modules", "**/__tests__/*"],
   "types": ["webrtc"]
 }
