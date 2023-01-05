@@ -65,7 +65,6 @@ export class AlgorandTxns {
     async initAlgorandUSDCTokenBridge(
         routing:Routing,
         token:BridgeToken | undefined,
-        cluster:string
     ) :Promise<algosdk.Transaction[]> {
         // eslint-disable-next-line no-async-promise-executor
         return new Promise(async(resolve,reject) => {
@@ -74,24 +73,39 @@ export class AlgorandTxns {
         const params = await this._client.getTransactionParams().do();
         params.fee = 1000;
         params.flatFee = true;
-        const assetID =  BridgeTokens.get("algorand","usdc");//     getUSDCAssetID(cluster);
+        const assetID =  BridgeTokens.get("algorand","usdc");
         if (!assetID) throw new Error("USDC Asset ID not found");
-       
         //Get Routing Units
         if (!routing.units) SetRoutingUnits(routing, token);
         //Encode Note
-        console.log(RoutingString(routing));
+        const routingData = {
+            from: {
+              token: "USDC",
+              network: "algorand",
+              address: routing.from.address,
+              txn_signature: "",
+            },
+            to: {
+              token: "USDC",
+              network: "solana",
+              address: routing.to.address,
+              txn_signature: "",
+            },
+            amount: routing.amount,
+            units: routing.amount,
+          };
+
         const note = algosdk.encodeObj({
-            routing: RoutingString(routing),
+            system:  JSON.stringify(routingData),
             date: `${new Date()}`,
         });
-        
-        const UsdcDepositAddress = this._accounts?.usdcDeposit//   getUsdcRecieverAddress(cluster);
+         
+        const UsdcDepositAddress = this._accounts?.usdcDeposit  
         if (!UsdcDepositAddress) throw new Error("USDC Deposit Address not found");
         
         const Deposittxn = algosdk.makeAssetTransferTxnWithSuggestedParamsFromObject({
             suggestedParams: params,
-            assetIndex: Number(assetID),
+            assetIndex: Number(assetID.address),
             from: routing.from.address,
             to: UsdcDepositAddress,
             amount: Number(routing.units),
@@ -101,8 +115,8 @@ export class AlgorandTxns {
             rekeyTo: undefined,
         });
         let txnsArray = [Deposittxn];
-        const groupID = algosdk.computeGroupID(txnsArray);
-        for (let i = 0; i < 1; i++) txnsArray[i].group = groupID;
+        // const groupID = algosdk.computeGroupID(txnsArray);
+        // for (let i = 0; i < 1; i++) txnsArray[i].group = groupID;
 
         resolve(txnsArray);
             }catch(err){
@@ -110,6 +124,7 @@ export class AlgorandTxns {
             }
         })
     }
+
 
     async sendTokensTransaction(routing: Routing,
         token: BridgeToken): Promise<Transaction> {

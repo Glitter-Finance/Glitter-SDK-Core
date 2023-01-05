@@ -77,7 +77,6 @@ export class AlgorandConnect {
         toAddress: string, 
         tosymbol: string, 
         amount: number,
-        cluster:string
     ):Promise<Transaction[] |undefined> {
         return new Promise( async (resolve, reject) => {
             try {
@@ -96,11 +95,12 @@ export class AlgorandConnect {
                 routing.amount = amount; 
                 //Get Token
                 const asset = BridgeTokens.get("algorand", fromSymbol);
-                // if (!asset) throw new Error("Asset not found");
+                if (!asset) throw new Error("Asset not found");
                 let txn =undefined;    
                 if (routing.from.token =="USDC" && routing.to.token == "USDC"){
-                     txn = await this._bridgeTxnsV1.HandleUsdcSwap(routing,cluster);
+                     txn = await this._bridgeTxnsV1.HandleUsdcSwap(routing);
                     console.log(`Algorand USDC Transaction Complete`);
+
                     resolve(txn)
                 }
                 resolve(txn)
@@ -110,6 +110,7 @@ export class AlgorandConnect {
             }
         })
     }
+
     
     //Bridge Actions
     public async bridge(account: AlgorandAccount, fromSymbol: string, toNetwork: string, toAddress: string, tosymbol: string, amount: number): Promise<boolean> {
@@ -425,6 +426,8 @@ export class AlgorandConnect {
             }
         });
     }
+
+
     async signAndSend_MultiSig(groupedTxns: Transaction[],
         signers: Account[],
         mParams: algosdk.MultisigMetadata,

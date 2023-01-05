@@ -44,6 +44,7 @@ export class GlitterBridgeSDK {
         throw new Error("Environment not found");
     }
 
+    
 
     //Get Tokens
     let tokens: BridgeToken[] = [];
@@ -75,6 +76,7 @@ export class GlitterBridgeSDK {
 
     return this;
   }
+
   private connectToAlgorand(): GlitterBridgeSDK {
 
     //Failsafe

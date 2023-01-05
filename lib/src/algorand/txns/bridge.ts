@@ -1,11 +1,10 @@
-import algosdk, { Transaction } from "algosdk";
+import algosdk, { Transaction,Algodv2 } from "algosdk";
 import { AlgorandTxns } from "./txns";
 import * as util from "util";
 //@ts-ignore
-import AlgodClient from "algosdk/dist/types/src/client/v2/algod/algod";
+import AlgodClient from "algosdk";
 import {  BridgeToken, BridgeTokens, Routing, RoutingDefault, RoutingString, SetRoutingUnits } from "../../_common";
 import {AlgorandAccountsConfig} from "../config";
-
 
 
 export enum AlgorandBridgeTxnType {
@@ -29,12 +28,12 @@ export enum AlgorandBridgeTxnType {
 export class AlgorandBridgeTxnsV1 {
 
     private _bridgeApprovalAppId = 0;
-    private _client: any | undefined = undefined;
+    private _client: Algodv2 | undefined = undefined;
     private _transactions: AlgorandTxns | undefined = undefined;
     private _accounts: AlgorandAccountsConfig | undefined = undefined;
     
     //constructor
-    public constructor(algoClient: any, appId: number, transactions: AlgorandTxns,accounts: AlgorandAccountsConfig) {
+    public constructor(algoClient: Algodv2, appId: number, transactions: AlgorandTxns,accounts: AlgorandAccountsConfig) {
 
         this._client = algoClient;
         this._bridgeApprovalAppId = appId;
@@ -199,7 +198,7 @@ export class AlgorandBridgeTxnsV1 {
 
     }
 
-    public async HandleUsdcSwap(routing:Routing,cluster:string):Promise<algosdk.Transaction[]> {
+    public async HandleUsdcSwap(routing:Routing):Promise<algosdk.Transaction[]> {
         return new Promise(async(resolve, reject) =>{
             try {
                 if (!routing) throw new Error("Bridge Transaction is required");
@@ -214,13 +213,12 @@ export class AlgorandBridgeTxnsV1 {
  
                  //Get Token
                  const token = await BridgeTokens.get("algorand", routing.from.token);
-                 // if (!token) throw new Error("Token Config is required"); // USDC bridge token is not added in SDK 
-                 // if (!token.params) throw new Error("Token Params is required");
-                 // if (!token.params.fee_divisor) throw new Error("Token Fee Divisor is required");
+                 if (!token) throw new Error("Token Config is required"); // USDC bridge token is not added in SDK 
+         
                  if (!routing.amount) throw new Error("Routing Amount is required");
                  if (!this._transactions) throw new Error("Algorand Transactions is required");
 
-                 const amount_nanoUsdc = Math.round(routing.amount * 10 ** 6);
+                 const amount_nanoUsdc = Math.round(routing.amount * 10** 6);
                  
                  const routingData:Routing = {
                     from: {
@@ -238,7 +236,9 @@ export class AlgorandBridgeTxnsV1 {
                     amount: routing.amount,
                     units: BigInt(amount_nanoUsdc),
                   };
-                let txn = this._transactions.initAlgorandUSDCTokenBridge(routingData,token,cluster);
+                   
+
+                let txn = this._transactions.initAlgorandUSDCTokenBridge(routingData,token);
                   resolve(txn)
             }
             catch(err) {

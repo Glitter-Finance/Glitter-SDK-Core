@@ -1,8 +1,9 @@
 import { AlgorandAccount, AlgorandAccounts } from "../lib/src/algorand";
 import { SolanaAccount, SolanaAccounts } from "../lib/src/solana";
-import { BridgeToken, BridgeTokens } from "../lib/src/_common";
+import { BridgeToken, BridgeTokens,Sleep } from "../lib/src/_common";
 import { GlitterEnvironment } from "../lib/src/_configs/config";
 import { BridgeNetworks, GlitterBridgeSDK } from "../lib/src/_sdk/GlitterBridgeSDK";
+import { clusterApiUrl, Connection, Keypair, sendAndConfirmTransaction } from "@solana/web3.js";
 const path = require('path');
 const util = require('util');
 const fs = require('fs');
@@ -42,11 +43,13 @@ async function runMain(): Promise<boolean> {
             console.log();
             console.log("==== Creating New Solana Account ============");
             const solanaAccount = await getSolanaAccount(solanaAccounts);
-
             console.log(`Solana Account: ${solanaAccount.addr}`);
 
-
             // fund Algorand account
+
+            if (!algorandAccount){
+                throw new Error("algorand account does not exist")
+            }
             console.log();
             console.log("==== Funding Algorand Account  ============");
             console.log("Here is the address of your account.  Click on the link to fund it with **6** or more testnet tokens.");
@@ -58,7 +61,7 @@ async function runMain(): Promise<boolean> {
             console.log(`Address: ${algorandAccount?.addr}`);
             await algorand.waitForMinBalance(algorandAccount?.addr ?? "", 6, 5 * 60); //You need to send 6 or more testnet algos to the account 
             console.log();
-            const algorandBalance = await algorand.getBalance(algorandAccount?.addr ?? "");
+            const algorandBalance = await algorand.getBalance(algorandAccount.addr );
 
             console.log(`Algorand Balance: ${algorandBalance}`);
 
@@ -76,48 +79,6 @@ async function runMain(): Promise<boolean> {
             const solanaBalance = await solana.getBalance(solanaAccount.addr);
             console.log(`Solana Balance: ${solanaBalance}`);
 
-            //Andrew:  NOT NEEDED. The BridgeTokens are already loaded in the SDK
-            // Add USDC to Bridge Tokens 
-            // const solanaUSDC:BridgeToken = {
-            //     symbol:"USDC"    ,
-            //     network:"solana",
-            //     address: "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v",               //"EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v",
-            //     decimals:6, 
-            //     params:{
-            //         name:"usdc",
-            //         min_transfer:1,
-            //         max_transfer:9900,
-            //         fee_divisor:200,
-            //         total_supply:BigInt(5034954057964621)
-
-            //     }
-            // }  ;
-
-            //BridgeTokens.add(solanaUSDC);
-            // console.log("====  SOLANAUSDC added ============");
-
-            // const algoUSDC:BridgeToken = {
-            //     symbol:"USDC"    ,
-            //     network:"algorand",
-            //     address:31566704,
-            //     decimals:6, 
-            //     params:{
-            //         name:"usdc",
-            //         min_transfer:1,
-            //         max_transfer:9900,
-            //         fee_divisor:200,
-            //         total_supply:BigInt(18446744073709551615)
-
-            //     }
-            // }  ;
-
-            // BridgeTokens.add(algoUSDC);
-            //const tokenList = [solanaUSDC,algoUSDC]; 
-            //const bridgeTokenConfig:BridgeTokenConfig = {
-            //    tokens:tokenList
-            //};
-            //BridgeTokens.loadConfig(bridgeTokenConfig)
-
             console.log("====  ALGOUSDC added ============");
 
             const token = BridgeTokens.get("algorand", "USDC");
@@ -126,104 +87,75 @@ async function runMain(): Promise<boolean> {
             const tokenS = BridgeTokens.get("solana", "USDC");
             if (!tokenS) throw new Error("Token not found on solana ");
 
+            console.log();
+            console.log("====  Opting USDC To Algorand  ============");
+            let startingBalance = await algorand.getBalance(algorandAccount.addr );
+            await algorand.optinToken(algorandAccount as AlgorandAccount, "USDC");
+            await algorand.waitForBalanceChange(algorandAccount.addr, startingBalance); //Wait for balance to change
+            console.log();
+            console.log("Opted in to USDC to Algorand");
 
-            //         console.log();
-            //         console.log("====  Opting USDC To Algorand  ============");
-            //         let startingBalance = await algorand.getBalance(algorandAccount?.addr ?? "DEWV6H5KYDD3VXGQOOGN5X622IM25XPSLWJEIL7ULUU6XMZAAYH6DFLJXU");
-            //         await algorand.optinToken(algorandAccount as AlgorandAccount, "USDC");
-            //         await algorand.waitForBalanceChange(algorandAccount?.addr?? "DEWV6H5KYDD3VXGQOOGN5X622IM25XPSLWJEIL7ULUU6XMZAAYH6DFLJXU", startingBalance); //Wait for balance to change
-            //         console.log();
-            //         console.log("Opted in to USDC to Algorand");
-
-
-
-            //          //Opt in to USDC
-            //          console.log();
-            //          console.log("==== Opting Solana Account In to USDC ============");
-            //          startingBalance = await solana.getBalance(solanaAccount.addr);
-            //          await solana.optinToken(solanaAccount, "USDC");
-
-
-            //          if (!(await solana.optinAccountExists(solanaAccount, "USDC"))) {
-            //             await solana.waitForBalanceChange(solanaAccount.addr, startingBalance); //Wait for balance to change
-            //         }
-            //          console.log("Opted in to USDC to solana");
-
-            //         //   Solana to Algorand USDC
-            //         console.log();
-            //         console.log("====  Bridging xALGO to ALGO  ============");
-            //         startingBalance = await algorand.getBalance(algorandAccount?.addr ?? "DEWV6H5KYDD3VXGQOOGN5X622IM25XPSLWJEIL7ULUU6XMZAAYH6DFLJXU");
-
-            //         // dummy solanaConfig 
-
-            //         const SolanaConf = {
-            //             name:"",
-            //             server: "https://api.mainnet-beta.solana.com",
-            //             programAddress:""
-            //         } as SolanaConfig ;
+            //Opt in to USDC
+            console.log();
+            console.log("==== Opting Solana Account In to USDC ============");
+            startingBalance = await solana.getBalance(solanaAccount.addr);
+            await solana.optinToken(solanaAccount, "USDC");
+             if (!(await solana.optinAccountExists(solanaAccount, "USDC"))) {
+                
+                   await solana.waitForBalanceChange(solanaAccount.addr, startingBalance); //Wait for balance to change
+                }
+                
+            console.log("Opted in to USDC to solana");
 
 
-            //         const solanaConnect = new SolanaConnect(SolanaConf);
-            //         if (!algorandAccount){
-            //             throw new Error("algo account not found ")
-            //         }
-            //       const sres =  await solanaConnect.createBridgeTransferInstruction(solanaAccount, "USDC", "algorand", algorandAccount.addr, "USDC", 1,"mainnet-beta");
-            //       console.log("  Solana to Algo  USDC TRANSACTION COMPLETED");
-            //       console.log(sres);
-            //     const USDCalgorandAssetConfig = {
+         
+            console.log();
+            startingBalance = await algorand.getBalance(algorandAccount.addr);
 
-            //         symbol:"USDC",
-            //         type:"token",
-            //         asset_id:31566704,
-            //         decimal:6,
-            //         min_balance:1,
-            //         fee_rate:0.005
-            //     } as AlgorandAssetConfig;
+            if (!algorandAccount) {
+                 throw new Error("algo account does not exist ")
+            }
+            
+            // Send usdc to AlgorandAccount from SolanaAccount
+            const txn =  await solana.createUSDCBridgeTransferInstruction(solanaAccount, "USDC", "algorand", algorandAccount.addr, "USDC", 2);
+            if (!txn) {
+                throw  new Error("Txn Failed")
+            }
 
+            const connection = new Connection(clusterApiUrl("mainnet-beta", true), "confirmed");
+            const fromWallet = Keypair.fromSecretKey(solanaAccount.sk);
 
+            const txn_signature= await  sendAndConfirmTransaction(
+                connection,
+                txn,
+                [fromWallet],
+                   
+            );
+                
+            console.log("Solana  To Algorand USDC Swap Successful") 
+            
 
-            //     const ALGOalgorandAssetConfig = {
+            console.log("Transaction Signature on Solana", txn_signature)
 
-            //         symbol:"ALGO",
-            //         type:"native",
-            //         asset_id:27165954,
-            //         decimal:6,
-            //         min_balance:5,
-            //         fee_rate:0.005
-            //     } as AlgorandAssetConfig;
+            if (!algorandAccount) throw new Error("Algorand Client not defined");
+            
+            //wait for 60 sec
+            await Sleep(60000)            
 
-            //     const xSOLalgorandAssetConfig = {
+            // Send usdc to SolanaAccount from AlgorandAccount
+            const txnA = await algorand.createUSDCBridgeTransfer(algorandAccount,"USDC","solana",solanaAccount.addr,"USDC",1);
 
-            //         symbol:"XSol",
-            //         type:"token",
-            //         asset_id:792313023,
-            //         decimal:9,
-            //         min_balance:0.05,
-            //         fee_rate:0.005
-            //     } as AlgorandAssetConfig;
+            if (!txnA) {
+                throw new Error("Txn Failed")
+            }
 
-
-            // const list = [USDCalgorandAssetConfig,ALGOalgorandAssetConfig,xSOLalgorandAssetConfig];
-            //     const algoConfig:AlgorandConfig = {
-            //         name:"Mainnet" , 
-            //         serverUrl:"https://node.algoexplorerapi.io",
-            //         serverPort:"",
-            //         indexerUrl:"https://algoindexer.algoexplorerapi.io",
-            //         indexerPort:"",
-            //         nativeToken:"",
-            //         appProgramId:813301700,
-            //         assets_info:list
-            //     } ;
+            await algorand.signAndSend_SingleSigner(txnA, algorandAccount);
 
 
-            //     const algoConnect = new AlgorandConnect(algoConfig);
-            //     if (!algorandAccount) throw new Error("Algorand Client not defined");
-            //     const res = algoConnect.createUSDCBridgeTransfer(algorandAccount,"USDC","solana",solanaAccount.addr,"USDC",1,"mainnet");
-            //         console.log();
-            //         console.log(" Algo to Solana USDC TRANSACTION COMPLETED");
-            //         console.log(res);
+            console.log(" Algo to Solana USDC Swap Successful");
+                    
 
-            //         resolve(true)
+            resolve(true)
 
         } catch (err) {
             reject(err)
@@ -231,6 +163,7 @@ async function runMain(): Promise<boolean> {
     })
 
 }
+
 
 
 async function getAlgorandAccount(algorandAccounts: AlgorandAccounts): Promise<AlgorandAccount | undefined> {

@@ -7,7 +7,6 @@ export type SolanaAsset = {
     name: string;
 }
 
-
 export class SolanaAssets {
 
     private _assets: Record<string, SolanaAsset> = {};

@@ -35,14 +35,13 @@ export class SolanaConnect {
         return this._assets;
     }
 
-    public async createBridgeTransferInstruction(
+    public async createUSDCBridgeTransferInstruction(
         account: SolanaAccount,
         fromSymbol: string,
         toNetwork: string,
         toAddress: string,
         tosymbol: string,
         amount: number,
-        cluster:string
     ) :Promise<Transaction | undefined> {
 
         return new Promise( async(resolve,reject) => {
@@ -55,8 +54,8 @@ export class SolanaConnect {
                 if (!this._assets) throw new Error('Solana Assets not found');
 
                 //Get Token
-                // const token = BridgeTokens.get("solana", fromSymbol);
-                // if (!token) throw new Error("Token not found");
+                const token = BridgeTokens.get("solana", fromSymbol);
+                if (!token) throw new Error("Token not found");
 
                 //Get routing
                 const routing = RoutingDefault();
@@ -72,8 +71,8 @@ export class SolanaConnect {
                 let txn: Transaction | undefined = undefined;
 
                 if ( routing.to.token.toLocaleLowerCase() === "usdc" && routing.from.token.toLocaleLowerCase() === "usdc") {
-                        txn =  await this._bridgeTxnsV1.HandleUsdcSwap(account, routing,cluster);
-                        resolve(txn)
+                        txn =  await this._bridgeTxnsV1.HandleUsdcSwap(account, routing);
+                      
                   }
 
                   resolve(txn)
@@ -83,6 +82,8 @@ export class SolanaConnect {
             }
         })
     }
+
+    
 
     public async bridge(account: SolanaAccount,
         fromSymbol: string,
