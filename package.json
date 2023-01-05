@@ -46,6 +46,8 @@
 
     "@perawallet/connect": "^1.0.7",
 
+    "@project-serum/sol-wallet-adapter": "^0.2.6",
+
     "@randlabs/myalgo-connect": "^1.4.2",
 
     "@solana/spl-token": "^0.3.6",

@@ -1,5 +1,5 @@
 export type SolanaConfig = {
-    name: string;
-    server: string;
-    programAddress: string;
-  };  
+  name: string;
+  server: string;
+  programAddress: string;
+};

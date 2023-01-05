@@ -18,7 +18,7 @@ export class AlgorandWallet extends EventEmitter {
         const result = await peraWallet.connect();
 
         if (peraWallet.connector?.peerMeta?.name !== "Pera Wallet") {
-          peraWallet.disconnect();
+          await peraWallet.disconnect();
           reject("Please make sure you connect with Pera Wallet");
           return;
         }
@@ -69,7 +69,26 @@ export class AlgorandWallet extends EventEmitter {
     });
   }
 
-  // connect myAlgo wallet
+  // Disconnect pera wallet
+  public disconnectPeraWallet(): Promise<void> {
+    return new Promise(async (resolve, reject) => {
+      try {
+        // Initialize pera wallet
+        const peraWallet = new PeraWalletConnect();
+
+        // disconnect pera wallet
+        await peraWallet.disconnect();
+
+        // Resolve
+        resolve();
+      } catch (error) {
+        // Reject
+        reject(error);
+      }
+    });
+  }
+
+  // Connect myAlgo wallet
   public connectMyAlgo(): Promise<MyAlgoWalletResult> {
     return new Promise(async (resolve, reject) => {
       try {
