@@ -1,8 +1,5 @@
-
-import { Account } from "@solana/spl-token";
 import * as solanaWeb3 from "@solana/web3.js";
 import { Connection, Keypair, PublicKey, Signer } from "@solana/web3.js";
-// import { BridgeToken, ValueUnits } from "glitter-bridge-common-dev";
 import { SolanaUtils } from "./utils";
 
 export type SolanaAccount = {

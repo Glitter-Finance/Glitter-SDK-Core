@@ -1,8 +1,6 @@
 import algosdk, { MultisigMetadata } from "algosdk";
-//@ts-ignore
-import AlgodClient from "algosdk/dist/types/src/client/v2/algod/algod";
 import * as util from "util";
-import { ValueUnits, BridgeToken } from "glitter-bridge-common";
+import { BridgeToken, ValueUnits } from "../_common";
 
 export type AlgorandAccount = {
     addr: string;

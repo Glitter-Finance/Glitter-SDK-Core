@@ -1,14 +1,13 @@
-
-import { BridgeToken, Routing, ValueUnits } from "glitter-bridge-common-dev";
 import { serialize } from "borsh";
 import algosdk from "algosdk";
 import { SolanaAccount } from '../accounts';
 import * as solanaWeb3 from "@solana/web3.js";
-import { usdcRecieverAddressSolana, solAssetsInfo, getMemoProgramAddress } from "../solanaConnectionpublic";
 import {
     clusterApiUrl,
     Connection,
+    Keypair,
     PublicKey,
+    sendAndConfirmTransaction,
     SystemProgram,
     Transaction,
     TransactionInstruction,
@@ -20,20 +19,23 @@ import {
     TOKEN_PROGRAM_ID,
     createTransferInstruction,
     getAssociatedTokenAddress,
-    createAssociatedTokenAccountInstruction
   } from "@solana/spl-token";
 import { DepositNote } from "../utils";
+import { BridgeToken, BridgeTokens, Routing, ValueUnits } from "../../_common";
+import { SolanaAccountsConfig } from "../config";
 
 export class SolanaBridgeTxnsV1 {
 
     private _bridgeProgramAddress: string | undefined = undefined;
     private _primarySeed: string = "glitter";
     private _client?: Connection;
+    private _accounts: SolanaAccountsConfig | undefined = undefined;
 
     //Setters
-    public constructor(client: Connection, bridgeProgramAddress: string) {
+    public constructor(client: Connection, bridgeProgramAddress: string, accounts: SolanaAccountsConfig) {
         this._client = client;
         this._bridgeProgramAddress = bridgeProgramAddress;
+        this._accounts = accounts;
     }
 
     public async getSolEscrowAccount(account: PublicKey): Promise<PublicKey> {
@@ -145,20 +147,24 @@ export class SolanaBridgeTxnsV1 {
         });
     }
 
-    public async HandleUsdcSwap(account:SolanaAccount, routing:Routing,cluster:string):Promise<Transaction | undefined> {
+    public async HandleUsdcSwap(account:SolanaAccount, routing:Routing):Promise<Transaction | undefined> {
         return new Promise(async (resolve, reject) => {
             try{
 
                 let transferAmount:number ;
+                if (!routing.from.address) throw new Error('Source address can not be found');
+                if (!routing.to.address) throw new Error('Destination address can not be found');
+                let asset = BridgeTokens.get("solana", routing.from.token);
+                if (!asset || asset.symbol.toLocaleLowerCase() !== "usdc"){
+                    throw new Error("Token Not Found")
+                }
+
                 if (!routing.amount) {
                     throw new Error("amount can not be null");
                 }else {
-                    transferAmount = routing.amount
+                    transferAmount = routing.amount * 10**asset.decimals
                 }
-                
-                if (!routing.from.address) throw new Error('Source address can not be found');
-                if (!routing.to.address) throw new Error('Destination address can not be found');
-                
+          
                 const USDCroutingData = {   
                     from: {
                       token: "USDC",
@@ -187,33 +193,43 @@ export class SolanaBridgeTxnsV1 {
                   };  
 
                 const PubKeywallet = new PublicKey(USDCroutingData.from.address);
-                const usdcMint = solAssetsInfo(cluster); 
-                const connection = new Connection(clusterApiUrl(cluster as solanaWeb3.Cluster, true), "confirmed");
-                const destination =  usdcRecieverAddressSolana(cluster) ;
-                const memoProgram =  getMemoProgramAddress(cluster);
-                const usdcMint_ = await getMint(connection, new PublicKey(usdcMint));
-                const destinationPubkey = new PublicKey(destination);          
-                const associatedFromAccount = await getAssociatedTokenAddress(
+                const usdcMint =  BridgeTokens.get("solana","usdc")?.address;
+                if (!usdcMint) throw new Error('USDC mint not found');
+                const destination =  this._accounts?.usdcDeposit;
+                if (!destination) throw new Error('USDC destination not found');
+                const memoProgram =  this._accounts?.memoProgram; 
+                if (!memoProgram) throw new Error('Memo Program not found');
+                if ( ! this._client){
+                    throw new Error("connection not set up")
+                }
+                const usdcMint_ = await getMint(this._client, new PublicKey(usdcMint));
+                const destinationPubkey = new PublicKey(destination);   
+                
+                const fromTokenAccount = await getOrCreateAssociatedTokenAccount(
+                    this._client,
+                    Keypair.fromSecretKey(account.sk),
                     usdcMint_.address,
                     PubKeywallet,
-                );
+                )
+                if (!fromTokenAccount){
+                    throw new Error("fromTokenAccount does not exist")
+                }
                 let tx = new Transaction();
-                if (!(await connection.getAccountInfo(associatedFromAccount))){
+                if (!(await this._client.getAccountInfo(fromTokenAccount.address))){
                     
                     throw new Error('USDC not opted in, please Opt in');
                 } 
-                
                 tx.add(
                     createTransferInstruction(
-                        PubKeywallet,
+                        fromTokenAccount.address,
                         destinationPubkey,
-                        account.pk,
+                        PubKeywallet,
                         transferAmount,
                         [],
                         TOKEN_PROGRAM_ID
+                      
                     )
                 );
-            
                 tx.add(
                     new TransactionInstruction({
                     keys: [
@@ -222,16 +238,19 @@ export class SolanaBridgeTxnsV1 {
                     data: Buffer.from(JSON.stringify(bridgeNodeInstructionData), "utf-8"),
                     programId: new PublicKey(memoProgram),
                     })
+
                 );
-                    resolve(tx)  
-                    }
-                    catch(err){
-                        reject(err)
-                    }
-                });
+             
+                 resolve(tx)  
+                }
+                catch(err){
+                    reject(err)
+                }
+
+            });
+
     }
 
- 
 
     public async solBridgeTransaction(account: PublicKey, routing: Routing, token: BridgeToken): Promise<Transaction | undefined> {
         return new Promise(async (resolve, reject) => {
