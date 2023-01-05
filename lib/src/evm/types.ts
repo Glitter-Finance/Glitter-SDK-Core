@@ -1,3 +1,5 @@
+import { BridgeEvmNetwork } from "../_common/networks/networks";
+
 export const TokenIds = ["usdc"] as const;
 export type TokenId = typeof TokenIds[number];
 
@@ -11,12 +13,6 @@ export type EvmConfig = {
     releaseWallet: string;
   };
 };
-
-export enum BridgeEvmNetwork {
-  Ethereum = "ethereum",
-  Polygon = "polygon",
-  Avalanche = "avalanche",
-}
 
 export type GlitterEvmBridgeConfig = {
   network: BridgeEvmNetwork;

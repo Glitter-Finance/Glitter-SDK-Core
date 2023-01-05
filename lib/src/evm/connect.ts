@@ -1,9 +1,4 @@
-import {
-  BridgeEvmNetwork,
-  GlitterEvmBridgeConfig,
-  TokenId,
-  TokenIds,
-} from "./types";
+import { GlitterEvmBridgeConfig, TokenId, TokenIds } from "./types";
 import { ethers, providers } from "ethers";
 import {
   ERC20,
@@ -22,6 +17,7 @@ import {
 import { PublicKey } from "@solana/web3.js";
 import algosdk from "algosdk";
 import { SerializeEvmBridgeTransfer } from "./serde";
+import { BridgeEvmNetwork } from "../_common/networks/networks";
 
 type EvmConnection = {
   rpcProvider: providers.BaseProvider;
@@ -29,32 +25,32 @@ type EvmConnection = {
   tokens: Record<TokenId, ERC20>;
 };
 
-function createConnections(
-  rpcUrl: string,
-  network: BridgeEvmNetwork,
-  environment: GlitterNetworks
-): EvmConnection {
-  const bridgeAddress = EVM_CONFIG[environment][network].bridge;
-  const rpcProvider = new ethers.providers.JsonRpcProvider(rpcUrl);
-  const bridge = TokenBridge__factory.connect(bridgeAddress, rpcProvider);
-  const tokens = TokenIds.reduce((_tokens, curr) => {
-    _tokens[curr] = ERC20__factory.connect(
-      EVM_CONFIG[environment][network].tokens[curr],
-      rpcProvider
-    );
-    return _tokens;
-  }, {} as Record<TokenId, ERC20>);
-
-  return {
-    rpcProvider,
-    bridge,
-    tokens,
-  };
-}
-
 export class GlitterEvmBridge {
   protected readonly __providers: Record<BridgeEvmNetwork, EvmConnection>;
   protected readonly __environment: GlitterNetworks;
+
+  private createConnections(
+    rpcUrl: string,
+    network: BridgeEvmNetwork,
+    environment: GlitterNetworks
+  ): EvmConnection {
+    const bridgeAddress = EVM_CONFIG[environment][network].bridge;
+    const rpcProvider = new ethers.providers.JsonRpcProvider(rpcUrl);
+    const bridge = TokenBridge__factory.connect(bridgeAddress, rpcProvider);
+    const tokens = TokenIds.reduce((_tokens, curr) => {
+      _tokens[curr] = ERC20__factory.connect(
+        EVM_CONFIG[environment][network].tokens[curr],
+        rpcProvider
+      );
+      return _tokens;
+    }, {} as Record<TokenId, ERC20>);
+
+    return {
+      rpcProvider,
+      bridge,
+      tokens,
+    };
+  }
 
   constructor(sdkConfig: {
     networks: GlitterEvmBridgeConfig[];
@@ -62,7 +58,7 @@ export class GlitterEvmBridge {
   }) {
     this.__environment = sdkConfig.environment;
     this.__providers = sdkConfig.networks.reduce((_providers, config) => {
-      _providers[config.network] = createConnections(
+      _providers[config.network] = this.createConnections(
         config.rpcUrl,
         config.network,
         sdkConfig.environment

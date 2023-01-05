@@ -1,9 +1,9 @@
 import { PublicKey } from "@solana/web3.js";
 import { ethers } from "ethers";
 import { BridgeNetworks } from "glitter-bridge-sdk/dist";
-import { BridgeEvmNetwork } from "./types";
-import { fromHexString } from "./utils";
+import { fromHexString } from "../_common/utils/bytes";
 import algoSdk from "algosdk";
+import { BridgeEvmNetwork } from "../_common/networks/networks";
 
 /**
  * We can store this mapping
@@ -15,9 +15,8 @@ const NetworkIdentifiers: {
   1: BridgeNetworks.algorand,
   2: BridgeEvmNetwork.Avalanche,
   3: BridgeEvmNetwork.Ethereum,
-  4: BridgeEvmNetwork.Hedera,
-  5: BridgeNetworks.solana,
-  6: BridgeEvmNetwork.Polygon,
+  4: BridgeNetworks.solana,
+  5: BridgeEvmNetwork.Polygon,
 };
 export class SerializeEvmBridgeTransfer {
   /**
@@ -38,7 +37,6 @@ export class SerializeEvmBridgeTransfer {
       case BridgeEvmNetwork.Polygon:
       case BridgeEvmNetwork.Avalanche:
       case BridgeEvmNetwork.Ethereum:
-      case BridgeEvmNetwork.Hedera:
         return account as string;
       case BridgeNetworks.algorand:
         return ethers.utils
@@ -118,7 +116,6 @@ export class DeserializeEvmBridgeTransfer {
       case BridgeEvmNetwork.Polygon:
       case BridgeEvmNetwork.Avalanche:
       case BridgeEvmNetwork.Ethereum:
-      case BridgeEvmNetwork.Hedera:
         return `0x${data.toLowerCase()}`;
       case BridgeNetworks.solana:
         return new PublicKey(fromHexString(data) as Uint8Array).toString();

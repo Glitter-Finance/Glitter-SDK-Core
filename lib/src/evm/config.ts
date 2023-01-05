@@ -1,5 +1,6 @@
 import { GlitterNetworks } from "glitter-bridge-sdk/dist";
-import { BridgeEvmNetwork, EvmConfig } from "./types";
+import { BridgeEvmNetwork } from "../_common/networks/networks";
+import { EvmConfig } from "./types";
 
 const EVM_CONFIG: Record<GlitterNetworks, EvmConfig> = {
   testnet: {
