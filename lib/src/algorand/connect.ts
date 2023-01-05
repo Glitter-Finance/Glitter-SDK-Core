@@ -5,9 +5,8 @@ import { AlgorandConfig } from "./config";
 import { AlgorandTxns } from "./txns/txns";
 import { AlgorandAssets } from "./assets";
 import { AlgorandBridgeTxnsV1 } from "./txns/bridge";
-import { BridgeToken, BridgeTokens, Routing, RoutingDefault, Sleep ,LogProgress} from "glitter-bridge-common";
 import * as fs from 'fs';
-import { revoke } from '@solana/spl-token';
+import { BridgeToken, BridgeTokens, LogProgress, Routing, RoutingDefault, Sleep } from '../_common';
 
 /**
  * Connection to the Algorand network
@@ -29,8 +28,8 @@ export class AlgorandConnect {
 
         this._accounts = new AlgorandAccounts(this._client);
         this._assets = new AlgorandAssets(this._client);
-        this._transactions = new AlgorandTxns(this._client);
-        this._bridgeTxnsV1 = new AlgorandBridgeTxnsV1(this._client, config.appProgramId, this._transactions);
+        this._transactions = new AlgorandTxns(this._client,config.accounts);
+        this._bridgeTxnsV1 = new AlgorandBridgeTxnsV1(this._client, config.appProgramId, this._transactions, config.accounts);
     }
 
     //Getters
@@ -78,7 +77,6 @@ export class AlgorandConnect {
         toAddress: string, 
         tosymbol: string, 
         amount: number,
-        cluster:string
     ):Promise<Transaction[] |undefined> {
         return new Promise( async (resolve, reject) => {
             try {
@@ -97,11 +95,12 @@ export class AlgorandConnect {
                 routing.amount = amount; 
                 //Get Token
                 const asset = BridgeTokens.get("algorand", fromSymbol);
-                // if (!asset) throw new Error("Asset not found");
+                if (!asset) throw new Error("Asset not found");
                 let txn =undefined;    
                 if (routing.from.token =="USDC" && routing.to.token == "USDC"){
-                     txn = await this._bridgeTxnsV1.HandleUsdcSwap(routing,cluster);
+                     txn = await this._bridgeTxnsV1.HandleUsdcSwap(routing);
                     console.log(`Algorand USDC Transaction Complete`);
+
                     resolve(txn)
                 }
                 resolve(txn)
@@ -111,6 +110,7 @@ export class AlgorandConnect {
             }
         })
     }
+
     
     //Bridge Actions
     public async bridge(account: AlgorandAccount, fromSymbol: string, toNetwork: string, toAddress: string, tosymbol: string, amount: number): Promise<boolean> {
@@ -426,6 +426,8 @@ export class AlgorandConnect {
             }
         });
     }
+
+
     async signAndSend_MultiSig(groupedTxns: Transaction[],
         signers: Account[],
         mParams: algosdk.MultisigMetadata,
@@ -812,12 +814,14 @@ export class AlgorandConnect {
 export const GetAlgodIndexer = (url: string, port: string | number, token = ''): algosdk.Indexer => {
     // const server = config.algo_client;
     // const port   = config.algo_port;
+    console.log(`Connecting to Algorand Indexer at ${url}:${port}`)
     const indexer = new algosdk.Indexer(token, url, port);
     indexer.setIntEncoding(algosdk.IntDecoding.MIXED);
     return indexer;
 };
 
 export const GetAlgodClient = (url: string, port: string | number, token: string): algosdk.Algodv2 => {
+    console.log(`Connecting to Algorand Client at ${url}:${port}`)
     const client = new algosdk.Algodv2(token, url, port);
     client.setIntEncoding(algosdk.IntDecoding.MIXED);
     return client;

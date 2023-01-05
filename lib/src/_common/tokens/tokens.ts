@@ -60,9 +60,6 @@ export type BridgeToken = {
     network: string;
     address: string | number | undefined;
     decimals: number;
-    params: BridgeTokenParams;
-}
-export type BridgeTokenParams = {
     name: string | undefined;
     fee_divisor: number | undefined;
     min_transfer: number | undefined;
@@ -75,11 +72,6 @@ export function BridgeTokenDefault(): BridgeToken {
         network: "",
         address: undefined,
         decimals: 0,
-        params: BridgeTokenParamsDefault(),
-    }
-}
-export function BridgeTokenParamsDefault(): BridgeTokenParams {
-    return {
         name: undefined,
         fee_divisor: undefined,
         min_transfer: undefined,
@@ -92,16 +84,16 @@ export class BridgeTokens {
 
     private static _tokens: BridgeToken[];
 
-    public static loadConfig(config: BridgeTokenConfig) {
+    public static loadConfig(tokens: BridgeToken[]) {
 
-        if (config.tokens === undefined) {
+        if (tokens === undefined) {
             throw new Error("Tokens config not found");
         } else if (this._tokens === undefined) {
-            this._tokens = config.tokens;
+            this._tokens = tokens;
         } else {
 
             //Parse config tokens and add to list
-            config.tokens.forEach(token => {
+            tokens.forEach(token => {
                 //check if token already exists
                 const existing = this.get(token.network, token.symbol);
                 if (existing !== undefined) {
@@ -117,16 +109,18 @@ export class BridgeTokens {
             return t.network.toLowerCase() === network.toLowerCase() && t.symbol.toLowerCase() === symbol.toLowerCase()
         });
     }
+    
+
     public static add(...args: [token: BridgeToken]) {
 
         //Check if already exists
         const existing = this.get(args[0].network, args[0].symbol);
-        if (existing !== undefined) {
+        if (existing === undefined) {
             this._tokens.push(args[0]);
         }
     }
 
-
+    
     // public static config: TokenConfig = {
     //     approval_app: 0,
     //     assets_info: [],

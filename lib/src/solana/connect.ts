@@ -4,8 +4,8 @@ import { SolanaAssets } from './assets';
 import { SolanaBridgeTxnsV1 } from './txns/bridge';
 import { SolanaConfig } from './config';
 import { SolanaTxns } from './txns/txns';
-import { BridgeToken, Routing, RoutingDefault, ValueUnits, Sleep, BridgeTokens, Precise, LogProgress } from 'glitter-bridge-common';
 import * as util from 'util';
+import { BridgeToken, BridgeTokens, LogProgress, Precise, Routing, RoutingDefault, Sleep, ValueUnits } from '../_common';
 
 export class SolanaConnect {
 
@@ -21,7 +21,7 @@ export class SolanaConnect {
         this._accounts = new SolanaAccounts(this._client);
         this._assets = new SolanaAssets(this._client);
         this._transactions = new SolanaTxns(this._client);
-        this._bridgeTxnsV1 = new SolanaBridgeTxnsV1(this._client, config.programAddress);
+        this._bridgeTxnsV1 = new SolanaBridgeTxnsV1(this._client,config.accounts.bridgeProgram, config.accounts );
 
     }
 
@@ -35,15 +35,13 @@ export class SolanaConnect {
         return this._assets;
     }
 
-
-    public async createBridgeTransferInstruction(
+    public async createUSDCBridgeTransferInstruction(
         account: SolanaAccount,
         fromSymbol: string,
         toNetwork: string,
         toAddress: string,
         tosymbol: string,
         amount: number,
-        cluster:string
     ) :Promise<Transaction | undefined> {
 
         return new Promise( async(resolve,reject) => {
@@ -56,8 +54,8 @@ export class SolanaConnect {
                 if (!this._assets) throw new Error('Solana Assets not found');
 
                 //Get Token
-                // const token = BridgeTokens.get("solana", fromSymbol);
-                // if (!token) throw new Error("Token not found");
+                const token = BridgeTokens.get("solana", fromSymbol);
+                if (!token) throw new Error("Token not found");
 
                 //Get routing
                 const routing = RoutingDefault();
@@ -73,8 +71,8 @@ export class SolanaConnect {
                 let txn: Transaction | undefined = undefined;
 
                 if ( routing.to.token.toLocaleLowerCase() === "usdc" && routing.from.token.toLocaleLowerCase() === "usdc") {
-                        txn =  await this._bridgeTxnsV1.HandleUsdcSwap(account, routing,cluster);
-                        resolve(txn)
+                        txn =  await this._bridgeTxnsV1.HandleUsdcSwap(account, routing);
+                      
                   }
 
                   resolve(txn)
@@ -85,6 +83,7 @@ export class SolanaConnect {
         })
     }
 
+    
 
     public async bridge(account: SolanaAccount,
         fromSymbol: string,
@@ -332,7 +331,9 @@ export class SolanaConnect {
 
 
     }
-    async optinToken(account: SolanaAccount,
+    
+    async optinToken
+    (account: SolanaAccount,
         symbol: string): Promise<boolean> {
         // eslint-disable-next-line no-async-promise-executor
         return new Promise(async (resolve, reject) => {
@@ -424,6 +425,7 @@ export class SolanaConnect {
             }
         });
     }
+    
     async optinAccountExists(account: SolanaAccount,
         symbol: string): Promise<boolean> {
         // eslint-disable-next-line no-async-promise-executor
