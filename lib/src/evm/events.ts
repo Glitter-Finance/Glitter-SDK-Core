@@ -23,7 +23,7 @@ export type TransferEvent = {
   __type: "Transfer";
 };
 
-export class EvmBridgeEvents {
+export class EvmBridgeEventsParser {
   static readonly EventsABI = [
     "event BridgeDeposit(uint16 destinationChainId, uint256 amount, address tokenContractAddress, bytes destinationWallet)",
     "event BridgeRelease(uint256 amount, address tokenContractAddress, address destinationWallet, bytes32 depositId)",
@@ -34,7 +34,7 @@ export class EvmBridgeEvents {
     eventLogs: ethers.providers.Log[]
   ): ethers.utils.LogDescription[] {
     const bridgeContractinterface = new ethers.utils.Interface(
-      EvmBridgeEvents.EventsABI
+      EvmBridgeEventsParser.EventsABI
     );
 
     return eventLogs

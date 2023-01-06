@@ -1,7 +1,7 @@
 import { Account, ASSOCIATED_TOKEN_PROGRAM_ID, createAssociatedTokenAccountInstruction, getAccount, getAssociatedTokenAddress, TOKEN_PROGRAM_ID } from "@solana/spl-token";
 import { ConfirmOptions, Connection, PublicKey, sendAndConfirmTransaction, Signer, Transaction } from "@solana/web3.js";
-import { BridgeToken } from "glitter-bridge-common-dev";
 import * as util from "util";
+import { BridgeToken } from "../_common";
 
 export type SolanaAsset = {
     name: string;

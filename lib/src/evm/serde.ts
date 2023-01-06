@@ -1,23 +1,13 @@
 import { PublicKey } from "@solana/web3.js";
 import { ethers } from "ethers";
-import { BridgeNetworks } from "glitter-bridge-sdk/dist";
 import { fromHexString } from "../_common/utils/bytes";
 import algoSdk from "algosdk";
-import { BridgeEvmNetwork } from "../_common/networks/networks";
+import {
+  BridgeEvmNetworks,
+  BridgeNetworks,
+  NetworkIdentifiers,
+} from "../_common/networks/networks";
 
-/**
- * We can store this mapping
- * elsewhere, wherever feasible
- */
-const NetworkIdentifiers: {
-  [chainId: number]: BridgeEvmNetwork | BridgeNetworks;
-} = {
-  1: BridgeNetworks.algorand,
-  2: BridgeEvmNetwork.Avalanche,
-  3: BridgeEvmNetwork.Ethereum,
-  4: BridgeNetworks.solana,
-  5: BridgeEvmNetwork.Polygon,
-};
 export class SerializeEvmBridgeTransfer {
   /**
    * Convert encoded addresses to bytes
@@ -26,7 +16,7 @@ export class SerializeEvmBridgeTransfer {
    * @returns hex string
    */
   static serializeAddress(
-    sourceChain: BridgeEvmNetwork | BridgeNetworks,
+    sourceChain: BridgeNetworks | BridgeEvmNetworks,
     account: PublicKey | algoSdk.Account | string
   ): string {
     switch (sourceChain) {
@@ -34,9 +24,9 @@ export class SerializeEvmBridgeTransfer {
         return ethers.utils
           .hexZeroPad((account as PublicKey).toBytes(), 32)
           .toString();
-      case BridgeEvmNetwork.Polygon:
-      case BridgeEvmNetwork.Avalanche:
-      case BridgeEvmNetwork.Ethereum:
+      case BridgeNetworks.Polygon:
+      case BridgeNetworks.Avalanche:
+      case BridgeNetworks.Ethereum:
         return account as string;
       case BridgeNetworks.algorand:
         return ethers.utils
@@ -49,16 +39,16 @@ export class SerializeEvmBridgeTransfer {
   }
   /**
    * Serialize bridge transfer parameters
-   * @param {BridgeEvmNetwork} sourceChain
-   * @param {BridgeEvmNetwork | BridgeNetworks} destinationChain
+   * @param {BridgeEvmNetworks} sourceChain
+   * @param {BridgeEvmNetworks | BridgeNetworks} destinationChain
    * @param {string} sourceWallet
    * @param {PublicKey | algoSdk.Account | string} destinationWallet
    * @param {ethers.BigNumber} amount
    * @returns Serialized transfer
    */
   static serialize(
-    sourceChain: BridgeEvmNetwork,
-    destinationChain: BridgeEvmNetwork | BridgeNetworks,
+    sourceChain: BridgeEvmNetworks,
+    destinationChain: BridgeEvmNetworks | BridgeNetworks,
     sourceWallet: string,
     destinationWallet: PublicKey | algoSdk.Account | string,
     amount: ethers.BigNumber
@@ -107,15 +97,15 @@ export class DeserializeEvmBridgeTransfer {
    * @returns {string} formatted address
    */
   static deserializeAddress(
-    chain: BridgeEvmNetwork | BridgeNetworks,
+    chain: BridgeEvmNetworks | BridgeNetworks,
     data: string
   ): string {
     switch (chain) {
       case BridgeNetworks.algorand:
         return algoSdk.encodeAddress(fromHexString(data));
-      case BridgeEvmNetwork.Polygon:
-      case BridgeEvmNetwork.Avalanche:
-      case BridgeEvmNetwork.Ethereum:
+      case BridgeNetworks.Polygon:
+      case BridgeNetworks.Avalanche:
+      case BridgeNetworks.Ethereum:
         return `0x${data.toLowerCase()}`;
       case BridgeNetworks.solana:
         return new PublicKey(fromHexString(data) as Uint8Array).toString();
@@ -129,8 +119,8 @@ export class DeserializeEvmBridgeTransfer {
     destinationIdBytes: string,
     amount: ethers.BigNumber
   ): {
-    sourceNetwork: BridgeEvmNetwork;
-    destinationNetwork: BridgeEvmNetwork | BridgeNetworks;
+    sourceNetwork: BridgeEvmNetworks;
+    destinationNetwork: BridgeEvmNetworks | BridgeNetworks;
     sourceWallet: string;
     destinationWallet: string;
     amount: ethers.BigNumber;
@@ -153,7 +143,7 @@ export class DeserializeEvmBridgeTransfer {
       );
 
     return {
-      sourceNetwork: sourceChain[1] as BridgeEvmNetwork,
+      sourceNetwork: sourceChain[1] as BridgeEvmNetworks,
       destinationNetwork: destinationChain[1],
       amount,
       sourceWallet,

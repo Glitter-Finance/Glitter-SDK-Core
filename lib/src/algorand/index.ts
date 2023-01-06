@@ -13,7 +13,7 @@ import {
 
  import {
     AlgorandConfig,
-    AlgorandAssetConfig
+    AlgorandAccountsConfig
  } from './config';
  import {
     AlgorandConnect
@@ -34,7 +34,7 @@ export {
     AlgorandAsset,
     AlgorandAssets,
     AlgorandConfig,
-    AlgorandAssetConfig,
+    AlgorandAccountsConfig,
     AlgorandConnect,
     AlgorandBridgeTxnsV1,
     AlgorandTxns

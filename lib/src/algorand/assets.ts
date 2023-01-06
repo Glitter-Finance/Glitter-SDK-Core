@@ -1,6 +1,6 @@
 //@ts-ignore
 import AlgodClient from "algosdk/dist/types/src/client/v2/algod/algod";
-import {ValueUnits} from "glitter-bridge-common";
+import { ValueUnits } from "../_common";
 
 export type AlgorandAsset = {
     index: number;

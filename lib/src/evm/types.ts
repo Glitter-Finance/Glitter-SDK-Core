@@ -1,21 +1,21 @@
-import { BridgeEvmNetwork } from "../_common/networks/networks";
+import { BridgeEvmNetworks } from "../_common/networks/networks";
 
-export const TokenIds = ["usdc"] as const;
-export type TokenId = typeof TokenIds[number];
+export type TokenConfig = {
+  symbol: string;
+  name: string;
+  decimals: number;
+  address: string;
+};
 
 export type EvmConfig = {
-  [network in BridgeEvmNetwork]: {
+  [network in BridgeEvmNetworks]: {
     chainId: number;
     bridge: string;
     rpcUrl: string;
-    tokens: Record<TokenId, string>;
+    tokens: TokenConfig[];
     depositWallet: string;
     releaseWallet: string;
   };
 };
 
-export type GlitterEvmBridgeConfig = {
-  network: BridgeEvmNetwork;
-  rpcUrl: string;
-  explorerUrl: string;
-};
+export type EvmNetworkConfig = EvmConfig[BridgeEvmNetworks];
