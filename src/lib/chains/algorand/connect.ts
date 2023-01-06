@@ -6,7 +6,7 @@ import { AlgorandTxns } from "./txns/txns";
 import { AlgorandAssets } from "./assets";
 import { AlgorandBridgeTxnsV1 } from "./txns/bridge";
 import * as fs from 'fs';
-import { BridgeToken, BridgeTokens, LogProgress, Routing, RoutingDefault, Sleep } from '../_common';
+import { BridgeToken, BridgeTokens, LogProgress, Routing, RoutingDefault, Sleep } from '../../common';
 
 /**
  * Connection to the Algorand network

@@ -1,6 +1,6 @@
 import * as algosdk from 'algosdk';
 import { Transaction } from "algosdk";
-import { BridgeToken, BridgeTokens, Routing, RoutingString, SetRoutingUnits } from '../../_common';
+import { BridgeToken, BridgeTokens, Routing, RoutingString, SetRoutingUnits } from '../../../common';
 import { AlgorandAccountsConfig } from '../config';
 //import {getUsdcRecieverAddress, getUSDCAssetID} from '../algoConnectionpublic';
 

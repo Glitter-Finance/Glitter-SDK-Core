@@ -1,6 +1,6 @@
-import { AlgorandConfig } from "../algorand";
-import { EvmConfig } from "../evm";
-import { SolanaConfig } from "../solana";
+import { AlgorandConfig } from "../chains/algorand";
+import { EvmConfig } from "../chains/evm";
+import { SolanaConfig } from "../chains/solana";
 
 export type GlitterBridgeConfig = {
   name: string;

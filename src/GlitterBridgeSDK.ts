@@ -1,14 +1,14 @@
-import { AlgorandConnect } from "../algorand";
-import { EvmConnect } from "../evm";
-import { SolanaConnect } from "../solana";
-import { BridgeToken, BridgeTokens } from "../_common";
+import { AlgorandConnect } from "./lib/chains/algorand";
+import { EvmConnect } from "./lib/chains/evm";
+import { SolanaConnect } from "./lib/chains/solana";
+import { BridgeToken, BridgeTokens } from "./lib/common";
 import {
   BridgeEvmNetworks,
   BridgeNetworks,
-} from "../_common/networks/networks";
-import { GlitterBridgeConfig, GlitterEnvironment } from "../_configs/config";
-import { BridgeMainnet } from "../_configs/networks/mainnet";
-import { BridgeTestnet } from "../_configs/networks/testnet";
+} from "./lib/common/networks/networks";
+import { GlitterBridgeConfig, GlitterEnvironment } from "./lib/configs/config";
+import { BridgeMainnet } from "./lib/configs/networks/mainnet";
+import { BridgeTestnet } from "./lib/configs/networks/testnet";
 export class GlitterBridgeSDK {
   //Configs
   private _bridgeConfig: GlitterBridgeConfig | undefined;

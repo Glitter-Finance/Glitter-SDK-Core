@@ -21,7 +21,7 @@ import {
     getAssociatedTokenAddress,
   } from "@solana/spl-token";
 import { DepositNote } from "../utils";
-import { BridgeToken, BridgeTokens, Routing, ValueUnits } from "../../_common";
+import { BridgeToken, BridgeTokens, Routing, ValueUnits } from "../../../common";
 import { SolanaAccountsConfig } from "../config";
 
 export class SolanaBridgeTxnsV1 {

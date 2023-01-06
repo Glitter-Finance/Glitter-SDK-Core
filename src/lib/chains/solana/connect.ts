@@ -5,7 +5,7 @@ import { SolanaBridgeTxnsV1 } from './txns/bridge';
 import { SolanaConfig } from './config';
 import { SolanaTxns } from './txns/txns';
 import * as util from 'util';
-import { BridgeToken, BridgeTokens, LogProgress, Precise, Routing, RoutingDefault, Sleep, ValueUnits } from '../_common';
+import { BridgeToken, BridgeTokens, LogProgress, Precise, Routing, RoutingDefault, Sleep, ValueUnits } from '../../common';
 
 export class SolanaConnect {
 

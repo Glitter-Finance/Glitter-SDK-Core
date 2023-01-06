@@ -1,15 +1,15 @@
-import { AlgorandAccount, AlgorandAccounts } from "../lib/src/algorand";
-import { SolanaAccount, SolanaAccounts } from "../lib/src/solana";
-import { BridgeToken, BridgeTokens, Sleep } from "../lib/src/_common";
-import { GlitterEnvironment } from "../lib/src/_configs/config";
-import { GlitterBridgeSDK } from "../lib/src/_sdk/GlitterBridgeSDK";
+import { AlgorandAccount, AlgorandAccounts } from "../src/lib/chains/algorand";
+import { SolanaAccount, SolanaAccounts } from "../src/lib/chains/solana";
+import { BridgeToken, BridgeTokens, Sleep } from "../src/lib/common";
+import { GlitterEnvironment } from "../src/lib/configs/config";
+import { GlitterBridgeSDK } from "../src/GlitterBridgeSDK";
 import {
   clusterApiUrl,
   Connection,
   Keypair,
   sendAndConfirmTransaction,
 } from "@solana/web3.js";
-import { BridgeNetworks } from "../lib/src/_common/networks/networks";
+import { BridgeNetworks } from "../src/lib/common/networks/networks";
 const path = require("path");
 const util = require("util");
 const fs = require("fs");

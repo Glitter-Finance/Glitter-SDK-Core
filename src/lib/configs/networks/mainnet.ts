@@ -1,4 +1,4 @@
-import { BridgeNetworks } from "../../_common/networks/networks";
+import { BridgeNetworks } from "../../common/networks/networks";
 import { GlitterBridgeConfig } from "../config";
 
 export const BridgeMainnet: GlitterBridgeConfig = {

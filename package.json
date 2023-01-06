@@ -1,7 +1,7 @@
 {
-  "name": "glitter-bridge-connections",
+  "name": "glitter-bridge-sdk-dev",
   "version": "1.0.3",
-  "description": "Glitter Finance Bridge: Connections Library",
+  "description": "Glitter Finance Bridge: Connections Library (Dev Version)",
   "main": "dist/index.js",
   "module": "dist/index.js",
   "types": "dist/index.d.js",

@@ -18,7 +18,7 @@ import { SerializeEvmBridgeTransfer } from "./serde";
 import {
   BridgeEvmNetworks,
   BridgeNetworks,
-} from "../_common/networks/networks";
+} from "../../common/networks/networks";
 
 type Connection = {
   rpcProvider: providers.BaseProvider;

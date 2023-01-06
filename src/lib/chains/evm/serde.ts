@@ -1,12 +1,12 @@
 import { PublicKey } from "@solana/web3.js";
 import { ethers } from "ethers";
-import { fromHexString } from "../_common/utils/bytes";
+import { fromHexString } from "../../common/utils/bytes";
 import algoSdk from "algosdk";
 import {
   BridgeEvmNetworks,
   BridgeNetworks,
   NetworkIdentifiers,
-} from "../_common/networks/networks";
+} from "../../common/networks/networks";
 
 export class SerializeEvmBridgeTransfer {
   /**

@@ -1,7 +1,7 @@
 import { Account, Connection, Keypair, PublicKey, Signer, SystemProgram, Transaction } from "@solana/web3.js";
 import { ASSOCIATED_TOKEN_PROGRAM_ID, TOKEN_PROGRAM_ID, NATIVE_MINT, createCloseAccountInstruction, getOrCreateAssociatedTokenAccount, createTransferCheckedInstruction } from "@solana/spl-token";
 import * as util from "util";
-import { BridgeToken, BridgeTokens, Routing, ValueUnits } from "../../_common";
+import { BridgeToken, BridgeTokens, Routing, ValueUnits } from "../../../common";
 
 export class SolanaTxns {
 

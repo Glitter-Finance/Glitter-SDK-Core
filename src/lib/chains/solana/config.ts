@@ -1,4 +1,4 @@
-import { BridgeToken } from "../_common";
+import { BridgeToken } from "../../common";
 
 export type SolanaConfig = {
     name: string;

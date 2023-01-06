@@ -5,19 +5,19 @@ import {
   EvmBridgeEventsParser,
   SerializeEvmBridgeTransfer,
   DeserializeEvmBridgeTransfer,
-} from "./src/evm";
+} from "./lib/chains/evm";
 
-import { SolanaBridgeTxnsV1 } from "./src/solana/txns/bridge";
-import { SolanaTxns } from "./src/solana/txns/txns";
+import { SolanaBridgeTxnsV1 } from "./lib/chains/solana/txns/bridge";
+import { SolanaTxns } from "./lib/chains/solana/txns/txns";
 import {
   SolanaAccounts,
   SolanaAccountDetails,
   SolanaTokenAccount,
   SolanaAccount,
-} from "./src/solana/accounts";
-import { SolanaAssets, SolanaAsset } from "./src/solana/assets";
-import { SolanaConfig } from "./src/solana/config";
-import { SolanaConnect } from "./src/solana/connect";
+} from "./lib/chains/solana/accounts";
+import { SolanaAssets, SolanaAsset } from "./lib/chains/solana/assets";
+import { SolanaConfig } from "./lib/chains/solana/config";
+import { SolanaConnect } from "./lib/chains/solana/connect";
 
 import {
   AlgorandAccount,
@@ -25,14 +25,14 @@ import {
   AlgorandAccountDetails,
   AlgorandAccountAsset,
   AlgorandAccounts,
-} from "./src/algorand/accounts";
+} from "./lib/chains/algorand/accounts";
 
-import { AlgorandAsset, AlgorandAssets } from "./src/algorand/assets";
+import { AlgorandAsset, AlgorandAssets } from "./lib/chains/algorand/assets";
 
-import { AlgorandConfig } from "./src/algorand/config";
-import { AlgorandConnect } from "./src/algorand/connect";
-import { AlgorandBridgeTxnsV1 } from "./src/algorand/txns/bridge";
-import { AlgorandTxns } from "./src/algorand/txns/txns";
+import { AlgorandConfig } from "./lib/chains/algorand/config";
+import { AlgorandConnect } from "./lib/chains/algorand/connect";
+import { AlgorandBridgeTxnsV1 } from "./lib/chains/algorand/txns/bridge";
+import { AlgorandTxns } from "./lib/chains/algorand/txns/txns";
 
 import {
   Routing,
@@ -41,21 +41,21 @@ import {
   RoutingPointDefault,
   RoutingString,
   SetRoutingUnits,
-} from "./src/_common/routing/routing";
+} from "./lib/common/routing/routing";
 import {
   BridgeTokenConfig,
   BridgeToken,
   BridgeTokenDefault,
   BridgeTokens,
-} from "./src/_common/tokens/tokens";
-import { Logger } from "./src/_common/utils/logger";
+} from "./lib/common/tokens/tokens";
+import { Logger } from "./lib/common/utils/logger";
 import {
   InputParams,
   Sleep,
   Precise,
   LogProgress,
-} from "./src/_common/utils/utils";
-import { ValueUnits } from "./src/_common/utils/value_units";
+} from "./lib/common/utils/utils";
+import { ValueUnits } from "./lib/common/utils/value_units";
 
 export {
   EvmConfig,

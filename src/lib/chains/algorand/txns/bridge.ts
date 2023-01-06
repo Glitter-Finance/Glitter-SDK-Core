@@ -3,7 +3,7 @@ import { AlgorandTxns } from "./txns";
 import * as util from "util";
 //@ts-ignore
 import AlgodClient from "algosdk";
-import {  BridgeToken, BridgeTokens, Routing, RoutingDefault, RoutingString, SetRoutingUnits } from "../../_common";
+import {  BridgeToken, BridgeTokens, Routing, RoutingDefault, RoutingString, SetRoutingUnits } from "../../../common";
 import {AlgorandAccountsConfig} from "../config";
 
 
@@ -391,7 +391,7 @@ export class AlgorandBridgeTxnsV1 {
 
                 //Get Transaction
                 //  usdc 
-                let txn = undefined;
+                let txn: algosdk.Transaction |undefined = undefined;
                 if (feeRouting.from.token.toLowerCase() === "algo") {
                     txn = await this._transactions.sendAlgoTransaction(feeRouting);
                 } else {
@@ -440,7 +440,7 @@ export class AlgorandBridgeTxnsV1 {
                     depositRouting.to.address = this._accounts?.asaVault;
                 }
                 //Get Transaction
-                let txn = undefined;
+                let txn: algosdk.Transaction |undefined = undefined;
                 if (depositRouting.from.token.toLowerCase() === "algo") {
                     txn = await this._transactions.sendAlgoTransaction(depositRouting);
                 } else {

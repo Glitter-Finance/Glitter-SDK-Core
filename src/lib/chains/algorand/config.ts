@@ -1,6 +1,6 @@
 import { PeraWalletConnect } from "@perawallet/connect";
 import MyAlgoConnect from "@randlabs/myalgo-connect";
-import { BridgeToken } from "../_common";
+import { BridgeToken } from "../../common";
 
 export type AlgorandConfig = {
   name: string;

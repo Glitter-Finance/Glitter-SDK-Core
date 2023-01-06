@@ -1,6 +1,6 @@
 import algosdk, { MultisigMetadata } from "algosdk";
 import * as util from "util";
-import { BridgeToken, ValueUnits } from "../_common";
+import { BridgeToken, ValueUnits } from "../../common";
 
 export type AlgorandAccount = {
     addr: string;

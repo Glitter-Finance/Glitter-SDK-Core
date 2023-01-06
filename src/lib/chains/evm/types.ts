@@ -1,4 +1,4 @@
-import { BridgeEvmNetworks } from "../_common/networks/networks";
+import { BridgeEvmNetworks } from "../../common/networks/networks";
 
 export type TokenConfig = {
   symbol: string;
