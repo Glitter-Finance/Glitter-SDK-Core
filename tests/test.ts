@@ -222,16 +222,28 @@ async function getAlgorandAccount(
       //Save algorand account to file
       console.log("Saving Algorand Account to file " + algoAccountFile);
 
-      //Write account to file
-      fs.writeFile(algoAccountFile, mnemonic, "utf8", function (err: any) {
+      var getDirName = require('path').dirname;
+
+      fs.mkdir(getDirName(algoAccountFile), { recursive: true }, function (err: any) {
         if (err) {
           console.log(
             "An error occured while writing algorand Object to File."
           );
           return console.log(err);
-        }
+        } else {
 
-        console.log("algorand file has been saved.");
+          //Write account to file
+          fs.writeFile(algoAccountFile, mnemonic, "utf8", function (err: any) {
+            if (err) {
+              console.log(
+                "An error occured while writing algorand Object to File."
+              );
+              return console.log(err);
+            }
+
+            console.log("algorand file has been saved.");
+          });
+        }
       });
 
       resolve(newAlgoAccount);
@@ -276,14 +288,25 @@ async function getSolanaAccount(
       //Save solana account to file
       console.log("Saving Solana Account to file " + solanaAccountFile);
 
-      //Write account to file
-      fs.writeFile(solanaAccountFile, mnemonic, "utf8", function (err: any) {
+      var getDirName = require('path').dirname;
+      fs.mkdir(getDirName(solanaAccountFile), { recursive: true }, function (err: any) {
         if (err) {
-          console.log("An error occured while writing solana Object to File.");
+          console.log(
+            "An error occured while writing algorand Object to File."
+          );
           return console.log(err);
-        }
+        } else {
 
-        console.log("Solana file has been saved.");
+          //Write account to file
+          fs.writeFile(solanaAccountFile, mnemonic, "utf8", function (err: any) {
+            if (err) {
+              console.log("An error occured while writing solana Object to File.");
+              return console.log(err);
+            }
+
+            console.log("Solana file has been saved.");
+          });
+        }
       });
 
       resolve(newSolanaAccount);
