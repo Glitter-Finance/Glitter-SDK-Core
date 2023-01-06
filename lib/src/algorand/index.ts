@@ -1,15 +1,12 @@
-import { 
-    AlgorandAccount,
-    AlgorandMSigAccount,
-    AlgorandAccountDetails,
-    AlgorandAccountAsset,
-    AlgorandAccounts    
- } from './accounts';
+import {
+  AlgorandAccount,
+  AlgorandMSigAccount,
+  AlgorandAccountDetails,
+  AlgorandAccountAsset,
+  AlgorandAccounts,
+} from "./accounts";
 
- import {
-    AlgorandAsset,
-    AlgorandAssets
- } from './assets';
+import { AlgorandAsset, AlgorandAssets } from "./assets";
 
  import {
     AlgorandConfig,
