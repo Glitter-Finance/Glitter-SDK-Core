@@ -1,5 +1,7 @@
 //@ts-ignore
 import AlgodClient from "algosdk/dist/types/src/client/v2/algod/algod";
+import * as algosdk from 'algosdk';
+
 import { ValueUnits } from "../../common";
 
 export type AlgorandAsset = {
@@ -24,10 +26,10 @@ export type AlgorandAsset = {
 export class AlgorandAssets {
 
     private _assets: Record<string, AlgorandAsset> = {};
-    private _client: any | undefined = undefined;
+    private _client: algosdk.Algodv2 | undefined = undefined;
 
     //constructor
-    public constructor(algoClient: any) {
+    public constructor(algoClient: algosdk.Algodv2 ) {
         this._client = algoClient;
     }
 

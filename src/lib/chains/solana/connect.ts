@@ -1,4 +1,4 @@
-import {  Connection, Keypair, PublicKey, Transaction } from '@solana/web3.js';
+import {  Connection, Keypair, PublicKey, Transaction,sendAndConfirmTransaction } from '@solana/web3.js';
 import { SolanaAccount, SolanaAccounts } from './accounts';
 import { SolanaAssets } from './assets';
 import { SolanaBridgeTxnsV1 } from './txns/bridge';
@@ -326,9 +326,6 @@ export class SolanaConnect {
                 reject(error);
             }
         });
-
-
-
 
     }
     
@@ -773,5 +770,33 @@ export class SolanaConnect {
         });
     }
 
+    // Txn Helper
+    async SignAndConfirmTxn(txn:Transaction, account:SolanaAccount):Promise<string> {
+        // eslint-disable-next-line no-async-promise-executor
+        return new Promise(async(resolve, reject)=>{
+            try{
+                
+                if (!this._client) throw new Error('Solana Client not found');
+                if (!txn) throw new Error("Transaction is not valid");
+                if (!account) throw new Error("solana wallet does not exist ");
+
+                const wallet = Keypair.fromSecretKey(account.sk);
+                if(!wallet) throw new Error("wallet is not defined");
+                const txn_signature = await sendAndConfirmTransaction(
+                    this._client,
+                    txn,
+                    [wallet]
+                );
+
+                resolve(txn_signature)
+
+
+
+            }catch(err){
+                reject(err)
+            }
+        })
+
+    }
 
 }

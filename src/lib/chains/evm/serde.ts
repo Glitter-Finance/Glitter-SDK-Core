@@ -89,6 +89,8 @@ export class SerializeEvmBridgeTransfer {
   }
 }
 
+
+
 export class DeserializeEvmBridgeTransfer {
   /**
    * Deserialize address from bytes

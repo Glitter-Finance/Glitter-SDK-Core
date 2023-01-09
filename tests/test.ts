@@ -146,6 +146,7 @@ async function runMain(): Promise<boolean> {
         clusterApiUrl("mainnet-beta", true),
         "confirmed"
       );
+      
       const fromWallet = Keypair.fromSecretKey(solanaAccount.sk);
 
       const txn_signature = await sendAndConfirmTransaction(connection, txn, [

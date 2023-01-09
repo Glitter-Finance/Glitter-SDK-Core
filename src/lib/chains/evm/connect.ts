@@ -6,6 +6,7 @@ import {
   TokenBridge,
   TokenBridge__factory,
 } from "glitter-evm-contracts";
+
 import {
   BridgeDepositEvent,
   BridgeReleaseEvent,
@@ -209,3 +210,4 @@ export class EvmConnect {
     }
   }
 }
+

@@ -10,7 +10,7 @@ export class AlgorandTxns {
     private _accounts: AlgorandAccountsConfig|undefined;
 
     //constructor
-    public constructor(algoClient: any,accounts:AlgorandAccountsConfig) {
+    public constructor(algoClient: algosdk.Algodv2,accounts:AlgorandAccountsConfig) {
         this._client = algoClient;
         this._accounts = accounts;
     }
