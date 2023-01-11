@@ -71,7 +71,7 @@ export class AlgorandConnect {
     }
 
     public async createUSDCBridgeTransfer(
-        account: AlgorandAccount, 
+        account: string, 
         fromSymbol: string, 
         toNetwork: string, 
         toAddress: string, 
@@ -85,7 +85,7 @@ export class AlgorandConnect {
 
                 // Routing 
                 const routing = RoutingDefault();
-                routing.from.address=account.addr; 
+                routing.from.address=account; 
                 routing.from.token = fromSymbol;
                 routing.from.network = "algorand";
 
@@ -419,6 +419,7 @@ export class AlgorandConnect {
                     console.log('Transaction ' + i + ': ' + txnID);
                 }
                 console.log('------------------------------')
+
                 resolve(true);
 
             } catch (error) {
@@ -427,6 +428,33 @@ export class AlgorandConnect {
         });
     }
 
+    //wallet-txn helper
+    async sendTransaction(
+    rawsignedTxns:Uint8Array[],
+    debug_rootPath?:string                
+    ):Promise<boolean>{
+        return new Promise(async (resolve,reject) =>{
+        // eslint-disable-next-line no-async-promise-executor
+            try{
+                //Fail Safe
+                if (!this._transactions) throw new Error("Algorand Transactions not defined");
+                if (!this._client) throw new Error("Algorand Client not defined");
+                if (debug_rootPath) {
+                    await this.createDryrun(rawsignedTxns, debug_rootPath);
+                }
+                console.log('------------------------------')
+                const txnResult = await this._client.sendRawTransaction(rawsignedTxns).do();
+                await algosdk.waitForConfirmation(this._client, txnResult, 4); // why 4? 
+                console.log('Group Transaction ID: ' + txnResult.txId);
+                
+                resolve(true)
+
+
+            }catch(err) {
+                reject(err)
+            }
+        })
+    }
 
     async signAndSend_MultiSig(groupedTxns: Transaction[],
         signers: Account[],

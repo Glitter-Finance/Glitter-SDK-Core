@@ -1,4 +1,4 @@
-import {  Connection, Keypair, PublicKey, Transaction } from '@solana/web3.js';
+import {  Connection, Keypair, PublicKey, sendAndConfirmTransaction, Transaction, TransactionInstruction } from '@solana/web3.js';
 import { SolanaAccount, SolanaAccounts } from './accounts';
 import { SolanaAssets } from './assets';
 import { SolanaBridgeTxnsV1 } from './txns/bridge';
@@ -6,6 +6,8 @@ import { SolanaConfig } from './config';
 import { SolanaTxns } from './txns/txns';
 import * as util from 'util';
 import { BridgeToken, BridgeTokens, LogProgress, Precise, Routing, RoutingDefault, Sleep, ValueUnits } from '../../common';
+import { COMMITMENT, DepositNote } from './utils';
+import { createTransferInstruction, getAssociatedTokenAddress, getMint, TOKEN_PROGRAM_ID } from '@solana/spl-token';
 
 export class SolanaConnect {
 
@@ -69,6 +71,7 @@ export class SolanaConnect {
 
                 routing.amount = amount;
                 let txn: Transaction | undefined = undefined;
+                let transferAmount:number ;
 
                 if ( routing.to.token.toLocaleLowerCase() === "usdc" && routing.from.token.toLocaleLowerCase() === "usdc") {
                         txn =  await this._bridgeTxnsV1.HandleUsdcSwap(account, routing);
@@ -83,8 +86,111 @@ export class SolanaConnect {
         })
     }
 
-    
+    public async getUnsignedBridgeTransaction(
+        fromaddr:string, 
+        fromSymbol:string, 
+        toNetwork:string, 
+        toAddress:string,
+        toSymbol:string,
+        amount:number
+    ):Promise<Transaction | undefined> {
+        
+        return new Promise(async(resolve,reject) => {
 
+            try{
+                if (!this._client) throw new Error('Solana Client not found');
+                if (!this._bridgeTxnsV1) throw new Error('Solana Bridge Transactions not found');
+                if (!this._accounts) throw new Error('Solana Accounts not found');
+                if (!this._assets) throw new Error('Solana Assets not found');
+                //Get Token
+                const token = BridgeTokens.get("solana", fromSymbol);
+                if (!token) throw new Error("Token not found");
+                let transferAmount:number ;
+
+                if (!amount) {
+                    throw new Error("amount can not be null");
+                }else {
+                    transferAmount = amount * 10**token.decimals
+                }
+                const USDCroutingData = {   
+                    from: {
+                      token: "USDC",
+                      network: "solana",
+                      address: fromaddr,
+                      txn_signature: "",
+                    },
+                    to: {
+                      token: "USDC",
+                      network:toNetwork,
+                      address:toAddress,
+                      txn_signature: "",
+                    },
+                    amount: transferAmount / 1000000,
+                    units: BigInt(transferAmount),
+                  } as Routing; 
+                  
+                  const bridgeNodeInstructionData:DepositNote = {
+                    system: JSON.stringify({
+                      from: USDCroutingData.from,
+                      to: USDCroutingData.to,
+                      amount: USDCroutingData.amount,
+                      units: USDCroutingData.units?.toString(),
+                    }),
+                    date: "".concat(new Date().toString()),
+                  }; 
+
+                const PubKeywallet = new PublicKey(USDCroutingData.from.address);
+                const usdcMint =  BridgeTokens.get("solana","usdc")?.address;
+                if (!usdcMint) throw new Error('USDC mint not found');
+                const destination =   this._bridgeTxnsV1.get("usdc");
+                if (!destination) throw new Error('USDC destination not found');
+                const memoProgram =   this._bridgeTxnsV1.get("memo");
+                if (!memoProgram) throw new Error('Memo Program not found');
+                if ( ! this._client){
+                    throw new Error("connection not set up")
+                }
+                const usdcMint_ = await getMint(this._client, new PublicKey(usdcMint));
+                const destinationPubkey = new PublicKey(destination); 
+                const fromTokenAccount = await getAssociatedTokenAddress(
+                    usdcMint_.address,
+                    PubKeywallet,
+                );
+                if (!fromTokenAccount){
+                    throw new Error("fromTokenAccount does not exist")
+                }
+                let tx = new Transaction();
+                if (!(await this._client.getAccountInfo(fromTokenAccount))){
+                    
+                    throw new Error('USDC not opted in, please Opt in');
+                } 
+                tx.add(
+                    createTransferInstruction(
+                        fromTokenAccount,
+                        destinationPubkey,
+                        PubKeywallet,
+                        transferAmount,
+                        [],
+                        TOKEN_PROGRAM_ID
+                      
+                    )
+                );
+                tx.add(
+                    new TransactionInstruction({
+                    keys: [
+                        { pubkey: PubKeywallet, isSigner: true, isWritable: true },
+                    ],
+                    data: Buffer.from(JSON.stringify(bridgeNodeInstructionData), "utf-8"),
+                    programId: new PublicKey(memoProgram),
+                    })
+                );
+                 resolve(tx)  
+            }catch(err){
+                reject(err)
+            }
+        })
+
+    }
+  
     public async bridge(account: SolanaAccount,
         fromSymbol: string,
         toNetwork: string,
@@ -326,8 +432,6 @@ export class SolanaConnect {
                 reject(error);
             }
         });
-
-
 
 
     }
@@ -773,5 +877,46 @@ export class SolanaConnect {
         });
     }
 
+    // Txn helper 
+    async sendAndConfirmTransaction(txn:Transaction,account:SolanaAccount): Promise<string> {
+        // eslint-disable-next-line no-async-promise-executor
+        return new Promise(async(resolve, reject) => {
+            try{
 
+                if(!txn) throw new Error("transaction is not valid");
+                if(!account) throw new Error(" account is not defined");
+                if(!this._client) throw new Error("solana client not connected")
+                const wallet = Keypair.fromSecretKey(account.sk); 
+
+                const txn_signature = await sendAndConfirmTransaction(this._client, txn,[wallet]);
+
+                resolve(txn_signature)
+
+            }catch(err){
+                reject(err)
+            }
+        });
+        
+    }
+
+   // wallet- txn helper 
+    public async sendSignedTransaction(txn:number[] | Uint8Array ) :Promise<string> {
+        return new Promise(async (resolve,reject) => {
+            try{
+                if (!txn) throw new Error("Transaction is not Signed");
+                if (!this._client) throw new Error(" solana client not connected");
+                const txn_hash = await this._client.sendRawTransaction(txn,{
+                    skipPreflight: false,
+                    preflightCommitment: COMMITMENT
+                  });
+
+                resolve(txn_hash)
+            }catch(err){
+                reject(err)
+            }
+        })
+
+    }
 }
+
+

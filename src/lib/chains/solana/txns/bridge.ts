@@ -211,6 +211,7 @@ export class SolanaBridgeTxnsV1 {
                     usdcMint_.address,
                     PubKeywallet,
                 )
+
                 if (!fromTokenAccount){
                     throw new Error("fromTokenAccount does not exist")
                 }
@@ -219,6 +220,7 @@ export class SolanaBridgeTxnsV1 {
                     
                     throw new Error('USDC not opted in, please Opt in');
                 } 
+
                 tx.add(
                     createTransferInstruction(
                         fromTokenAccount.address,
@@ -391,6 +393,20 @@ export class SolanaBridgeTxnsV1 {
         });
 
     }
+
+
+    // get token 
+    public  get(input:string):string | undefined {
+
+        let res:string | undefined; 
+        if (input.toLocaleLowerCase() == "usdc"){
+            res =  this._accounts?.usdcDeposit;
+        }else if (input.toLocaleLowerCase() == "memo"){
+            res = this._accounts?.memoProgram
+        }
+     return  res ;
+    
+}
 
 
 

@@ -218,7 +218,7 @@ export class AlgorandBridgeTxnsV1 {
                  if (!routing.amount) throw new Error("Routing Amount is required");
                  if (!this._transactions) throw new Error("Algorand Transactions is required");
 
-                 const amount_nanoUsdc = Math.round(routing.amount * 10** 6);
+                 const amount_nanoUsdc = Math.round(routing.amount * 10**token.decimals);
                  
                  const routingData:Routing = {
                     from: {
@@ -236,7 +236,6 @@ export class AlgorandBridgeTxnsV1 {
                     amount: routing.amount,
                     units: BigInt(amount_nanoUsdc),
                   };
-                   
 
                 let txn = this._transactions.initAlgorandUSDCTokenBridge(routingData,token);
                   resolve(txn)

@@ -163,7 +163,7 @@ async function runMain(): Promise<boolean> {
 
       // Send usdc to SolanaAccount from AlgorandAccount
       const txnA = await algorand.createUSDCBridgeTransfer(
-        algorandAccount,
+        algorandAccount.addr,
         "USDC",
         "solana",
         solanaAccount.addr,
