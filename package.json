@@ -33,7 +33,7 @@
     "dotenv": "^16.0.3",
     "ed25519-hd-key": "^1.3.0",
     "ethers": "^5.7.2",
-    "glitter-evm-contracts": "^1.0.30",
+    "glitter-evm-contracts": "^1.0.31",
     "eventemitter3": "^5.0.0",
     "minimist": "latest",
     "tweetnacl": "^1.0.3",

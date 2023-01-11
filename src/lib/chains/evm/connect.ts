@@ -208,4 +208,8 @@ export class EvmConnect {
       return Promise.reject(error);
     }
   }
+
+  public getProvider(): providers.BaseProvider {
+    return this.__providers.rpcProvider;
+  }
 }
