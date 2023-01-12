@@ -789,7 +789,6 @@ public async bridge(account: SolanaAccount,
 
                 const txn_signature = await sendAndConfirmTransaction(this._client, txn,[wallet]);
 
-                console.log(`   ✅ - Transaction sent to network ${txn_signature}`);
 
                 resolve(txn_signature)
 

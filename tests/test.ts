@@ -184,7 +184,7 @@ async function runMain(): Promise<boolean> {
         console.log();
         console.log("==== Bridging ALGO to xALGO  ============");
         startingBalance = await solana.getTokenBalance(solanaAccount.addr, "xALGO");
-        await algorand.bridge(algorandAccount, "algo", "solana", solanaAccount.addr, "xalgo", 5.5);
+        await algorand.bridge(algorandAccount, "algo", "solana", solanaAccount.addr, "xalgo", 0.5);
         await solana.waitForTokenBalanceChange(solanaAccount.addr, "xAlgo", startingBalance,90);
         console.log();
         console.log("Bridged ALGO to xALGO");
@@ -195,7 +195,7 @@ async function runMain(): Promise<boolean> {
         console.log();
         console.log("==== Bridging xALGO to ALGO  ============");
         startingBalance = await algorand.getBalance(algorandAccount.addr);
-        await solana.bridge(solanaAccount, "xalgo", "algorand", algorandAccount.addr, "algo", 5);
+        await solana.bridge(solanaAccount, "xalgo", "algorand", algorandAccount.addr, "algo", 0.3);
         await algorand.waitForBalanceChange(algorandAccount.addr, startingBalance,90);
         console.log();
         console.log("Bridged xALGO to ALGO");
@@ -205,7 +205,7 @@ async function runMain(): Promise<boolean> {
          console.log("==== Bridging SOL to xSOL  ============");
          startingBalance = await algorand.getTokenBalance(algorandAccount.addr, "xSOL");
          console.log("Starting Balance: ", startingBalance);
-         await solana.bridge(solanaAccount, "sol", "algorand", algorandAccount.addr, "xsol", 0.1);
+         await solana.bridge(solanaAccount, "sol", "algorand", algorandAccount.addr, "xsol", 0.3);
          await algorand.waitForTokenBalanceChange(algorandAccount.addr, "xSOL", startingBalance,90);
          console.log();
          console.log("Bridged SOL to xSOL");
