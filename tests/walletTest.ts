@@ -3,12 +3,7 @@ import { SolanaAccount, SolanaAccounts } from "../src/lib/chains/solana";
 import { BridgeToken, BridgeTokens, Sleep } from "../src/lib/common";
 import { GlitterEnvironment } from "../src/lib/configs/config";
 import { GlitterBridgeSDK } from "../src/GlitterBridgeSDK";
-import {
-  clusterApiUrl,
-  Connection,
-  Keypair,
-  sendAndConfirmTransaction,
-} from "@solana/web3.js";
+
 import { BridgeNetworks } from "../src/lib/common/networks/networks";
 const path = require("path");
 const util = require("util");
@@ -20,9 +15,6 @@ async function run() {
   const result = await runMain();
   console.log(result);
 }
-
-
-
 
 async function runMain(): Promise<boolean> {
     return new Promise(async (resolve, reject) => {
@@ -131,51 +123,68 @@ async function runMain(): Promise<boolean> {
         if (!algorandAccount) {
           throw new Error("algo account does not exist ");
         }
+
+   
+        console.log("USDC Bridging Transaction Test for Wallet") ;
+        /**
+         * add the recent blockhash 
+         * add the fee payer 
+         * sign the transaction with wallet
+         * pass that signed txn to the below function
+         */
   
-        // Send usdc to AlgorandAccount from SolanaAccount
-        const txn = await solana.getUnsignedBridgeTransaction(
+        const usdc_bridge_txn_solana = await solana.bridgeTransactions(
           solanaAccount.addr,
           "USDC",
           "algorand",
           algorandAccount.addr,
           "USDC",
-          0.5
+          0.3
         );
 
-        if (!txn) {
+        if (!usdc_bridge_txn_solana) {
           throw new Error("Txn Failed");
         }else {
-            console.log("TXN", txn);
+            console.log("TXN", usdc_bridge_txn_solana);
+        }
+
+        const usdc_bridge_txn_solana_result = await solana.sendAndConfirmTransaction(usdc_bridge_txn_solana,solanaAccount);
+
+        console.log("solana bridge txn hash", usdc_bridge_txn_solana_result);
+
+
+        console.log("Bridging Transaction Test for Wallet") ;
+
+        const bridge_txn_solana = await solana.bridgeTransactions(
+          solanaAccount.addr, "sol", "algorand", algorandAccount.addr, "xsol", 0.2
+        );
+        
+        if(!bridge_txn_solana) {
+          throw new Error("solana bridge txn failed")
         }
         
-        /**
-         * add the recent blockhash 
-         * add the fee payer 
-         * sign the transaction with wallet
-         */
-        const transaction_Signature = await solana.sendSignedTransaction(txn.serialize());
+        console.log("sign and send solana transaction"); 
 
-        if(!transaction_Signature) {
-            throw new Error("transaction not went through");
-        }else{
-            console.log("transaction is completed the transaction  hash is:", transaction_Signature);
-        }
+        const bridge_txn_solana_result = await solana.sendAndConfirmTransaction(bridge_txn_solana,solanaAccount);
+
+        console.log("solana bridge txn hash", bridge_txn_solana_result);
+
 
         console.log("Solana  To Algorand USDC Swap Successful");
    
-        if (!algorandAccount) throw new Error("Algorand Client not defined");
-  
         //wait for 60 sec
         await Sleep(60000);
   
-        // Send usdc to SolanaAccount from AlgorandAccount
-        const txnA = await algorand.createUSDCBridgeTransfer(
+        if (!algorandAccount) throw new Error("Algorand account not defined");
+
+         // Send usdc to SolanaAccount from AlgorandAccount
+        const txnA = await algorand.bridgeTransaction(
           algorandAccount.addr,
           "USDC",
           "solana",
           solanaAccount.addr,
           "USDC",
-          1
+          0.5
         );
   
         if (!txnA) {
@@ -187,17 +196,33 @@ async function runMain(): Promise<boolean> {
          *  pass it to the function below 
          */
   
-        // await algorand.sendTransaction(txnA);
+        await algorand.signAndSend_SingleSigner(txnA,algorandAccount);
+
   
         console.log(" Algo to Solana USDC Swap Successful");
-  
+
+        console.log("bridge txn for algorand ")
+
+        const bridge_txn_algorand = await algorand.bridgeTransaction(
+          algorandAccount.addr, "xsol", "solana", solanaAccount.addr, "sol", 0.2
+        );
+
+        if(!bridge_txn_algorand) {
+          throw new Error("algorand bridge txn failed")
+        }
+
+
+        const bridge_txn_algorand_result   = await algorand.signAndSend_SingleSigner(bridge_txn_algorand,algorandAccount);
+
+        console.log("algorand bridge txn hash", bridge_txn_algorand_result);
+
         resolve(true);
       } catch (err) {
         reject(err);
       }
     });
   }
-  
+
   async function getAlgorandAccount(
     algorandAccounts: AlgorandAccounts
   ): Promise<AlgorandAccount | undefined> {

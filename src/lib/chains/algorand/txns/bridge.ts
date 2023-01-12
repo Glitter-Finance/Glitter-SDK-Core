@@ -6,7 +6,6 @@ import AlgodClient from "algosdk";
 import {  BridgeToken, BridgeTokens, Routing, RoutingDefault, RoutingString, SetRoutingUnits } from "../../../common";
 import {AlgorandAccountsConfig} from "../config";
 
-
 export enum AlgorandBridgeTxnType {
     none,
     token_vault_setup = "token_vault_setup",
@@ -192,10 +191,7 @@ export class AlgorandBridgeTxnsV1 {
             default:
                 return undefined;
         }
-
         return appArgs;
-
-
     }
 
     public async HandleUsdcSwap(routing:Routing):Promise<algosdk.Transaction[]> {
