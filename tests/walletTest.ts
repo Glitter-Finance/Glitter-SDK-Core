@@ -132,25 +132,25 @@ async function runMain(): Promise<boolean> {7
        * 
        */
       // Send usdc to AlgorandAccount from SolanaAccount
-      // const txn = await solana.bridgeTransactions(
-      //   solanaAccount.addr,
-      //   "USDC",
-      //   "algorand",
-      //   algorandAccount.addr,
-      //   "USDC",
-      //   0.01
-      // );
-      // if (!txn) {
-      //   throw new Error("Txn Failed");
-      // }
+      const txn = await solana.bridgeTransactions(
+        solanaAccount.addr,
+        "USDC",
+        "algorand",
+        algorandAccount.addr,
+        "USDC",
+        1
+      );
+      if (!txn) {
+        throw new Error("Txn Failed");
+      }
 
-    //  const usdc_bridge_txn_sol = await solana.sendAndConfirmTransaction(txn,solanaAccount);
-    //  if (!usdc_bridge_txn_sol) {
-    //   console.log("usdc bridge transaction failed")
-    //  }else {
-    //   console.log(`   ✅ - Transaction sent to network ${usdc_bridge_txn_sol}`);
+     const usdc_bridge_txn_sol = await solana.sendAndConfirmTransaction(txn,solanaAccount);
+     if (!usdc_bridge_txn_sol) {
+      console.log("usdc bridge transaction failed")
+     }else {
+      console.log(`   ✅ - Transaction sent to network ${usdc_bridge_txn_sol}`);
 
-    //  }
+     }
      console.log("===========Solana To Algorand USDC Swap Successful================");
      if (!algorandAccount) throw new Error("Algorand Client not defined");
 
@@ -166,7 +166,7 @@ async function runMain(): Promise<boolean> {7
       "solana",
       solanaAccount.addr,
       "USDC",
-      0.2
+      1
     );
 
     if (!txnA) {
