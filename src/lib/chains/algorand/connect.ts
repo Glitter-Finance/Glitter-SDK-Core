@@ -107,7 +107,8 @@ export class AlgorandConnect {
 
                  transaction = await this._bridgeTxnsV1.HandleUsdcSwap(routing);
             }else {
-               transaction = await this._bridgeTxnsV1.bridgeTransactions(routing, asset);
+               
+            transaction = await this._bridgeTxnsV1.bridgeTransactions(routing, asset);
             }
 
             resolve(transaction);
