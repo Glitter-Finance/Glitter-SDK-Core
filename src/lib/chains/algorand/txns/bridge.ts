@@ -203,6 +203,11 @@ export class AlgorandBridgeTxnsV1 {
                 if (!routing.amount) {
                     throw new Error("amount can not be null");
                 }
+
+                if(routing.amount <1 ) {
+                    throw new Error("Minimum Deposit Amount should be >= 1")
+                }
+                
                  //Fail Safe
                  if (!this._client) throw new Error("Algorand Client is required");
                  if (!routing) throw new Error("Bridge Transaction is required");

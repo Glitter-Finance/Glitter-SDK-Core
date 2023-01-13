@@ -142,7 +142,7 @@ async function runMain(): Promise<boolean> {
                "algorand",
                algorandAccount.addr,
                "USDC",
-               0.2
+               1
              );
              if (!txn) {
                throw new Error("Txn Failed");
@@ -162,9 +162,10 @@ async function runMain(): Promise<boolean> {
              "solana",
              solanaAccount.addr,
              "USDC",
-             0.2
+             1
            );
-   
+          
+
            if (!txnA) {
              throw new Error("Txn Failed");
            }  

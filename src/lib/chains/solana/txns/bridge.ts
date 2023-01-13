@@ -165,6 +165,10 @@ export class SolanaBridgeTxnsV1 {
                     transferAmount = routing.amount * 10**asset.decimals
                 }
           
+                if(routing.amount <1 ) {
+                    throw new Error("Minimum Deposit Amount should be >= 1")
+                }
+
                 const USDCroutingData = {   
                     from: {
                       token: "USDC",
@@ -269,7 +273,9 @@ export class SolanaBridgeTxnsV1 {
             }else {
                 transferAmount = routing.amount * 10**asset.decimals
             }
-      
+            if(routing.amount <1 ) {
+                throw new Error("Minimum Deposit Amount should be >= 1")
+            }
             const USDCroutingData = {   
                 from: {
                   token: "USDC",
