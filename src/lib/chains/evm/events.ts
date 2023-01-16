@@ -1,32 +1,10 @@
 import { ethers } from "ethers";
-
-export type BridgeDepositEvent = {
-  destinationChainId: number;
-  amount: ethers.BigNumber;
-  tokenContractAddress: string;
-  destinationWallet: string;
-  __type: "BridgeDeposit";
-};
-
-export type BridgeReleaseEvent = {
-  amount: ethers.BigNumber;
-  tokenContractAddress: string;
-  destinationWallet: string;
-  depositId: string;
-  __type: "BridgeRelease";
-};
-
-export type TransferEvent = {
-  from: string;
-  to: string;
-  amount: ethers.BigNumber;
-  __type: "Transfer";
-};
+import { BridgeDepositEvent, BridgeReleaseEvent, TransferEvent } from "./types";
 
 export class EvmBridgeEventsParser {
   static readonly EventsABI = [
-    "event BridgeDeposit(uint16 destinationChainId, uint256 amount, address tokenContractAddress, bytes destinationWallet)",
-    "event BridgeRelease(uint256 amount, address tokenContractAddress, address destinationWallet, bytes32 depositId)",
+    "event BridgeDeposit(uint16 destinationChainId, uint256 amount, address token, bytes destinationWallet)",
+    "event BridgeRelease(uint256 amount, address destinationWallet, address token, bytes32 depositTransactionHash)",
     "event Transfer(address indexed from, address indexed to, uint256 value)",
   ];
 
@@ -54,17 +32,13 @@ export class EvmBridgeEventsParser {
     const parsedDeposit = parsedLogs.find((x) => x.name === "BridgeDeposit");
 
     if (!parsedDeposit) return null;
-    const {
-      destinationChainId,
-      amount,
-      tokenContractAddress,
-      destinationWallet,
-    } = parsedDeposit.args;
+    const { destinationChainId, amount, token, destinationWallet } =
+      parsedDeposit.args;
 
     return {
       destinationChainId,
       amount,
-      tokenContractAddress,
+      erc20Address: token,
       destinationWallet,
       __type: "BridgeDeposit",
     };
@@ -90,14 +64,14 @@ export class EvmBridgeEventsParser {
     const parsedRelease = parsedLogs.find((x) => x.name === "BridgeRelease");
 
     if (!parsedRelease) return null;
-    const { amount, tokenContractAddress, destinationWallet, depositId } =
+    const { amount, token, destinationWallet, depositTransactionHash } =
       parsedRelease.args;
 
     return {
       amount,
-      tokenContractAddress,
+      erc20Address: token,
       destinationWallet,
-      depositId,
+      depositTransactionHash,
       __type: "BridgeRelease",
     };
   }

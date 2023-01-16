@@ -1,4 +1,9 @@
-import { EvmNetworkConfig } from "./types";
+import {
+  BridgeDepositEvent,
+  BridgeReleaseEvent,
+  EvmNetworkConfig,
+  TransferEvent,
+} from "./types";
 import { ethers, providers } from "ethers";
 import {
   ERC20,
@@ -6,12 +11,7 @@ import {
   TokenBridge,
   TokenBridge__factory,
 } from "glitter-evm-contracts";
-import {
-  BridgeDepositEvent,
-  BridgeReleaseEvent,
-  EvmBridgeEventsParser,
-  TransferEvent,
-} from "./events";
+import { EvmBridgeEventsParser } from "./events";
 import { PublicKey } from "@solana/web3.js";
 import algosdk from "algosdk";
 import { SerializeEvmBridgeTransfer } from "./serde";
@@ -55,6 +55,18 @@ export class EvmConnect {
     this.__config = config;
     this.__network = network;
     this.__providers = this.createConnections(config.rpcUrl, config);
+  }
+
+  get provider(): ethers.providers.BaseProvider {
+    return this.__providers.rpcProvider;
+  }
+
+  get config(): EvmNetworkConfig {
+    return this.__config;
+  }
+
+  get network(): BridgeEvmNetworks {
+    return this.__network;
   }
 
   getAddress(
