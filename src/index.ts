@@ -60,6 +60,8 @@ import { ValueUnits } from "./lib/common/utils/value_units";
 import { GlitterBridgeSDK } from "./GlitterBridgeSDK";
 import { BridgeNetworks } from "./lib/common/networks/networks";
 import { GlitterEnvironment } from "./lib/configs/config";
+import { AlgorandWallet } from "./lib/chains/algorand/wallet";
+import { SolanaWallet } from "./lib/chains/solana/wallet";
 
 export {
   GlitterBridgeSDK,
@@ -108,4 +110,6 @@ export {
   Precise,
   ValueUnits,
   LogProgress,
+  AlgorandWallet,
+  SolanaWallet,
 };

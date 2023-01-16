@@ -1,3 +1,4 @@
+import { ethers } from "ethers";
 import { BridgeEvmNetworks } from "../../common/networks/networks";
 
 export type TokenConfig = {
@@ -16,6 +17,29 @@ export type EvmConfig = {
     depositWallet: string;
     releaseWallet: string;
   };
+};
+
+export type BridgeDepositEvent = {
+  amount: ethers.BigNumber;
+  destinationChainId: number;
+  destinationWallet: string;
+  erc20Address: string;
+  __type: "BridgeDeposit";
+};
+
+export type BridgeReleaseEvent = {
+  amount: ethers.BigNumber;
+  depositTransactionHash: string;
+  destinationWallet: string;
+  erc20Address: string;
+  __type: "BridgeRelease";
+};
+
+export type TransferEvent = {
+  from: string;
+  to: string;
+  amount: ethers.BigNumber;
+  __type: "Transfer";
 };
 
 export type EvmNetworkConfig = EvmConfig[BridgeEvmNetworks];

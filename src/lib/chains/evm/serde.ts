@@ -48,7 +48,7 @@ export class SerializeEvmBridgeTransfer {
    */
   static serialize(
     sourceChain: BridgeEvmNetworks,
-    destinationChain: BridgeEvmNetworks | BridgeNetworks,
+    destinationChain: BridgeNetworks,
     sourceWallet: string,
     destinationWallet: PublicKey | algoSdk.Account | string,
     amount: ethers.BigNumber
