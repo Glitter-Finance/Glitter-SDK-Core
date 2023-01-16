@@ -6,6 +6,9 @@ export type DepositNote = {
     system: string, // RoutingData json format
     date: string,
   }
+
+export const COMMITMENT = "singleGossip";
+
 export class SolanaUtils {
     public static async mnemonicToSecretKey(mnemonic: string): Promise<Uint8Array> {
         // eslint-disable-next-line no-async-promise-executor

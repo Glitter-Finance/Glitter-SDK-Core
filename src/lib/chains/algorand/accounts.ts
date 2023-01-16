@@ -1,4 +1,4 @@
-import algosdk, { MultisigMetadata } from "algosdk";
+import algosdk, { MultisigMetadata, Algodv2 } from "algosdk";
 import * as util from "util";
 import { BridgeToken, ValueUnits } from "../../common";
 
@@ -41,10 +41,10 @@ export class AlgorandAccounts {
 
     private _accounts: Record<string, AlgorandAccount> = {};
     private _msigs: Record<string, AlgorandMSigAccount> = {};
-    private _client: any | undefined = undefined;
+    private _client: Algodv2 | undefined = undefined;
 
     //constructor
-    public constructor(algoClient: any) {
+    public constructor(algoClient: Algodv2) {
         this._client = algoClient;
     }
 
