@@ -109,15 +109,22 @@ export const BridgeTestnet: GlitterBridgeConfig = {
   },
   evm: {
     [BridgeNetworks.Avalanche]: {
-      bridge: "",
+      bridge: "0x07c48413bEA695Ef37a75Be8A09ec84A4c8a6bc1",
       rpcUrl: "",
-      tokens: [],
-      depositWallet: "",
-      releaseWallet: "",
+      tokens: [
+        {
+          address: "0x5425890298aed601595a70AB815c96711a31Bc65",
+          symbol: "USDC",
+          decimals: 6,
+          name: "USD Coin",
+        },
+      ],
+      depositWallet: "0x7e88bd12cc7f81aaf59970af31ebbfea563cc61e",
+      releaseWallet: "0x6D57268BE8EBa2dF18f07267cfF4e114933da429",
       chainId: 43113,
     },
     [BridgeNetworks.Ethereum]: {
-      bridge: "0x29e885951b8ef0a38c1f2d44aa7300cd268b398c",
+      bridge: "0xc918b9719A0e04Df45842eec88FC84480266b568",
       rpcUrl: "",
       tokens: [
         {
@@ -127,12 +134,12 @@ export const BridgeTestnet: GlitterBridgeConfig = {
           name: "USD Coin",
         },
       ],
-      depositWallet: "",
-      releaseWallet: "",
+      depositWallet: "0xef0b89ded605e65b27ed55ccf45551de9a928355",
+      releaseWallet: "0x7c10Ee260F6d408aC0c9f297A16808ca407e469E",
       chainId: 5,
     },
     [BridgeNetworks.Polygon]: {
-      bridge: "0xe3495ebfa9d668d2fb7ec625da6d1f74475fd263",
+      bridge: "0xA870B28c23F2358971dC1FF93bC2a2Ec908A6D33",
       rpcUrl: "",
       tokens: [
         {
@@ -142,8 +149,8 @@ export const BridgeTestnet: GlitterBridgeConfig = {
           name: "USD Coin",
         },
       ],
-      depositWallet: "",
-      releaseWallet: "",
+      depositWallet: "0x5eab1d1c700814499036166c38f22069b40dda11",
+      releaseWallet: "0xEAFA843b04A5847ec463358FC499347435354D3D",
       chainId: 80001,
     },
   },
