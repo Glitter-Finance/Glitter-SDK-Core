@@ -70,48 +70,57 @@ export class AlgorandConnect {
         });
     }
 
-    public async createUSDCBridgeTransfer(
-        account: AlgorandAccount, 
-        fromSymbol: string, 
-        toNetwork: string, 
-        toAddress: string, 
-        tosymbol: string, 
-        amount: number,
-    ):Promise<Transaction[] |undefined> {
-        return new Promise( async (resolve, reject) => {
-            try {
-                if (!this._client) throw new Error("Algorand Client not defined");
-                if (!this._bridgeTxnsV1) throw new Error("Algorand Bridge Txns not defined");
+ public async bridgeTransaction(
+    fromAddress:string, 
+    fromSymbol:string,
+    toNetwork:string,
+    toAddress:string, 
+    tosymbol:string,
+    amount:number
+ ): Promise<algosdk.Transaction[]> {
+    return new Promise(async (resolve, reject ) =>{
+        try{
 
-                // Routing 
-                const routing = RoutingDefault();
-                routing.from.address=account.addr; 
-                routing.from.token = fromSymbol;
-                routing.from.network = "algorand";
+            if (!this._client) throw new Error("Algorand Client not defined");
+            if (!this._bridgeTxnsV1) throw new Error("Algorand Bridge Txns not defined");
 
-                routing.to.address= toAddress; 
-                routing.to.token = tosymbol; 
-                routing.to.network = toNetwork; 
-                routing.amount = amount; 
-                //Get Token
-                const asset = BridgeTokens.get("algorand", fromSymbol);
-                if (!asset) throw new Error("Asset not found");
-                let txn =undefined;    
-                if (routing.from.token =="USDC" && routing.to.token == "USDC"){
-                     txn = await this._bridgeTxnsV1.HandleUsdcSwap(routing);
-                    console.log(`Algorand USDC Transaction Complete`);
+            //Get Token
+            const asset = BridgeTokens.get("algorand", fromSymbol);
+            // ?? asset should be xsol 
+            if (!asset) throw new Error("Asset not found");
 
-                    resolve(txn)
-                }
-                resolve(txn)
+            //Get routing
+            const routing = RoutingDefault();
+            routing.from.address = fromAddress;
+            routing.from.token = fromSymbol;
+            routing.from.network = "algorand";
 
-            }catch (err) {
-                reject(err)
+            routing.to.address = toAddress;
+            routing.to.token = tosymbol;
+            routing.to.network = toNetwork;
+            routing.amount = amount;
+
+
+            let  transaction :Transaction[] ;
+
+            if (asset.symbol.toLocaleLowerCase() =="usdc" && routing.to.token.toLocaleLowerCase()=="usdc" ) {
+
+                 transaction = await this._bridgeTxnsV1.HandleUsdcSwap(routing);
+            }else {
+               
+            transaction = await this._bridgeTxnsV1.bridgeTransactions(routing, asset);
             }
-        })
-    }
 
-    
+            resolve(transaction);
+
+        } catch(err){
+
+            reject(err)
+        }
+    })
+
+ }   
+
     //Bridge Actions
     public async bridge(account: AlgorandAccount, fromSymbol: string, toNetwork: string, toAddress: string, tosymbol: string, amount: number): Promise<boolean> {
         return new Promise(async (resolve, reject) => {
@@ -121,7 +130,6 @@ export class AlgorandConnect {
 
                 //Get Token
                 const asset = BridgeTokens.get("algorand", fromSymbol);
-                // ?? asset should be xsol 
                 if (!asset) throw new Error("Asset not found");
 
                 //Get routing
@@ -136,20 +144,26 @@ export class AlgorandConnect {
                 routing.amount = amount;
 
                 //Run Transaction
-          
-                    let transactions = await this._bridgeTxnsV1.bridgeTransactions(routing, asset);
-                    let result = await this.signAndSend_SingleSigner(transactions, account);
-                    console.log(`Algorand Bridge Transaction Complete`);
-    
-                    resolve(true);
-                
+                let  transaction :Transaction[] ;
 
-                resolve(false); 
+                if (asset.symbol.toLocaleLowerCase() =="usdc" && routing.to.token.toLocaleLowerCase()=="usdc" ) {
+
+                     transaction = await this._bridgeTxnsV1.HandleUsdcSwap(routing);
+                }else {
+                   transaction = await this._bridgeTxnsV1.bridgeTransactions(routing, asset);
+                }
+
+                let result = await this.signAndSend_SingleSigner(transaction, account);
+                console.log(`Algorand Bridge Transaction Complete`);
+    
+                resolve(true);
+                
             } catch (error) {
                 reject(error);
             }
         });
     }
+
 
     //Account Actions
     public async fundAccount(funder: AlgorandAccount, account: AlgorandAccount, amount: number): Promise<boolean> {
@@ -419,6 +433,7 @@ export class AlgorandConnect {
                     console.log('Transaction ' + i + ': ' + txnID);
                 }
                 console.log('------------------------------')
+
                 resolve(true);
 
             } catch (error) {
@@ -427,6 +442,32 @@ export class AlgorandConnect {
         });
     }
 
+    //wallet-txn helper
+    async sendSignedTransaction(
+    rawsignedTxns:Uint8Array[],
+    debug_rootPath?:string                
+    ):Promise<boolean>{
+        return new Promise(async (resolve,reject) =>{
+        // eslint-disable-next-line no-async-promise-executor
+            try{
+                //Fail Safe
+                if (!this._transactions) throw new Error("Algorand Transactions not defined");
+                if (!this._client) throw new Error("Algorand Client not defined");
+                if (debug_rootPath) {
+                    await this.createDryrun(rawsignedTxns, debug_rootPath);
+                }
+                const txnResult = await this._client.sendRawTransaction(rawsignedTxns).do();
+                await algosdk.waitForConfirmation(this._client, txnResult, 4); // why 4? 
+                console.log('Group Transaction ID: ' + txnResult.txId);
+                
+                resolve(true)
+
+
+            }catch(err) {
+                reject(err)
+            }
+        })
+    }
 
     async signAndSend_MultiSig(groupedTxns: Transaction[],
         signers: Account[],

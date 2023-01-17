@@ -6,7 +6,6 @@ import AlgodClient from "algosdk";
 import {  BridgeToken, BridgeTokens, Routing, RoutingDefault, RoutingString, SetRoutingUnits } from "../../../common";
 import {AlgorandAccountsConfig} from "../config";
 
-
 export enum AlgorandBridgeTxnType {
     none,
     token_vault_setup = "token_vault_setup",
@@ -192,10 +191,7 @@ export class AlgorandBridgeTxnsV1 {
             default:
                 return undefined;
         }
-
         return appArgs;
-
-
     }
 
     public async HandleUsdcSwap(routing:Routing):Promise<algosdk.Transaction[]> {
@@ -207,6 +203,11 @@ export class AlgorandBridgeTxnsV1 {
                 if (!routing.amount) {
                     throw new Error("amount can not be null");
                 }
+
+                if(routing.amount <1 ) {
+                    throw new Error("Minimum Deposit Amount should be >= 1")
+                }
+                
                  //Fail Safe
                  if (!this._client) throw new Error("Algorand Client is required");
                  if (!routing) throw new Error("Bridge Transaction is required");
@@ -218,7 +219,7 @@ export class AlgorandBridgeTxnsV1 {
                  if (!routing.amount) throw new Error("Routing Amount is required");
                  if (!this._transactions) throw new Error("Algorand Transactions is required");
 
-                 const amount_nanoUsdc = Math.round(routing.amount * 10** 6);
+                 const amount_nanoUsdc = Math.round(routing.amount * 10**token.decimals);
                  
                  const routingData:Routing = {
                     from: {
@@ -236,7 +237,6 @@ export class AlgorandBridgeTxnsV1 {
                     amount: routing.amount,
                     units: BigInt(amount_nanoUsdc),
                   };
-                   
 
                 let txn = this._transactions.initAlgorandUSDCTokenBridge(routingData,token);
                   resolve(txn)
@@ -267,8 +267,8 @@ export class AlgorandBridgeTxnsV1 {
                     fn = AlgorandBridgeTxnType.xsol_deposit;
                 }
 
-                let appTxn = await this.BridgeApprovalTransaction(fn, routing, token); // switch for usdc 
-                let feeTxn = await this.BridgeFeeTransaction(routing);   // 
+                let appTxn = await this.BridgeApprovalTransaction(fn, routing, token); 
+                let feeTxn = await this.BridgeFeeTransaction(routing);  
                 let depositTxn = await this.BridgeDepositTransaction(routing);
                 let transactions = [appTxn, feeTxn, depositTxn];
 
@@ -280,6 +280,7 @@ export class AlgorandBridgeTxnsV1 {
 
     }
 
+    
     public ValidateSendRouting(routing: Routing): boolean {
 
         let fNetwork = routing.from.network.toLowerCase();
@@ -289,6 +290,8 @@ export class AlgorandBridgeTxnsV1 {
 
         if (fNetwork == "algorand" && fToken == "algo" && tNetwork == "solana" && tToken == "xalgo") return true;
         if (fNetwork == "algorand" && fToken == "xsol" && tNetwork == "solana" && tToken == "sol") return true;
+        if (fNetwork == "algorand" && fToken == "usdc" && tNetwork == "solana" && tToken == "usdc") return true;
+
         return false;
     }
     public async BridgeApprovalTransaction(

@@ -1,16 +1,16 @@
 import * as algosdk from 'algosdk';
-import { Transaction } from "algosdk";
+import { Transaction,Algodv2 } from "algosdk";
 import { BridgeToken, BridgeTokens, Routing, RoutingString, SetRoutingUnits } from '../../../common';
 import { AlgorandAccountsConfig } from '../config';
 //import {getUsdcRecieverAddress, getUSDCAssetID} from '../algoConnectionpublic';
 
 export class AlgorandTxns {
-    private _client: algosdk.Algodv2;
+    private _client: Algodv2;
     private _algoToken: BridgeToken | undefined;
     private _accounts: AlgorandAccountsConfig|undefined;
 
     //constructor
-    public constructor(algoClient: any,accounts:AlgorandAccountsConfig) {
+    public constructor(algoClient:Algodv2,accounts:AlgorandAccountsConfig) {
         this._client = algoClient;
         this._accounts = accounts;
     }
