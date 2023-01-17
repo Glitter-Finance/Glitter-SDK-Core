@@ -61,7 +61,7 @@ import { GlitterBridgeSDK } from "./GlitterBridgeSDK";
 import { BridgeNetworks } from "./lib/common/networks/networks";
 import { GlitterEnvironment } from "./lib/configs/config";
 import { AlgorandWallet } from "./lib/chains/algorand/wallet";
-import { SolanaWallet } from "./lib/chains/solana/wallet";
+import { SolanaWallets } from "./lib/chains/solana/wallet";
 
 export {
   GlitterBridgeSDK,
@@ -111,5 +111,5 @@ export {
   ValueUnits,
   LogProgress,
   AlgorandWallet,
-  SolanaWallet,
+  SolanaWallets,
 };
