@@ -2,9 +2,9 @@ import { BridgeNetworks } from "../../common/networks/networks";
 import { GlitterBridgeConfig } from "../config";
 
 export const BridgeTestnet: GlitterBridgeConfig = {
-  name: "mainnet",
+  name: "testnet",
   algorand: {
-    name: "mainnet",
+    name: "testnet",
     serverUrl: "https://node.testnet.algoexplorerapi.io",
     serverPort: "",
     indexerUrl: "https://algoindexer.testnet.algoexplorerapi.io",
