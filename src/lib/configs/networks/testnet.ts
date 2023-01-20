@@ -4,7 +4,7 @@ import { GlitterBridgeConfig } from "../config";
 export const BridgeTestnet: GlitterBridgeConfig = {
   name: "testnet",
   algorand: {
-    name: "testnet",
+    name: "Algorand",
     serverUrl: "https://node.testnet.algoexplorerapi.io",
     serverPort: "",
     indexerUrl: "https://algoindexer.testnet.algoexplorerapi.io",
@@ -62,7 +62,7 @@ export const BridgeTestnet: GlitterBridgeConfig = {
     ],
   },
   solana: {
-    name: "devnet",
+    name: "Solana",
     server: "https://api.devnet.solana.com",
     accounts: {
       bridgeProgram: "GLittnj1E7PtSF5thj6nYgjtMvobyBuZZMuoemXpnv3G",
