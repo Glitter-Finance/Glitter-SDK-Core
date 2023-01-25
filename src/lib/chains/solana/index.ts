@@ -9,7 +9,6 @@ import {
 import { SolanaAssets, SolanaAsset } from "./assets";
 import { SolanaConfig } from "./config";
 import { SolanaConnect } from "./connect";
-// import { SolanaWallet } from "./wallet";
 
 export {
   SolanaBridgeTxnsV1,
@@ -22,5 +21,4 @@ export {
   SolanaAsset,
   SolanaConfig,
   SolanaConnect,
-  // SolanaWallet,
 };
