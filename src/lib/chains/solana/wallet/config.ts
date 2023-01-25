@@ -1,10 +1,10 @@
-import { PhantomProvider } from "./adapters/phantom";
+// import { PhantomProvider } from "./adapters/phantomDeprecated";
 
 export const WALLET_PROVIDERS = [
   {
     name: "phantom",
     url: "https://phantom.app/",
-    adapter: PhantomProvider,
+    // adapter: PhantomProvider,
   },
   {
     name: "solflare",

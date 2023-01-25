@@ -1,14 +1,13 @@
-import {  Connection, Keypair, PublicKey, sendAndConfirmTransaction, Transaction, TransactionInstruction } from '@solana/web3.js';
+import {  ConfirmedSignaturesForAddress2Options, Connection, Keypair, PublicKey, sendAndConfirmTransaction, Transaction, TransactionInstruction } from '@solana/web3.js';
 import { SolanaAccount, SolanaAccounts } from './accounts';
 import { SolanaAssets } from './assets';
 import { SolanaBridgeTxnsV1 } from './txns/bridge';
-import { SolanaConfig } from './config';
+import { SolanaConfig, SolanaProgramId } from './config';
 import { SolanaTxns } from './txns/txns';
 import * as util from 'util';
 import { BridgeToken, BridgeTokens, LogProgress, Precise, Routing, RoutingDefault, Sleep, ValueUnits } from '../../common';
 import { COMMITMENT, DepositNote } from './utils';
-import { createTransferInstruction, getAssociatedTokenAddress, getMint, TOKEN_PROGRAM_ID } from '@solana/spl-token';
-
+import { SolanaPoller } from './poller';
 export class SolanaConnect {
 
     private _client?: Connection;
@@ -16,27 +15,29 @@ export class SolanaConnect {
     private _assets: SolanaAssets | undefined = undefined;
     private _transactions: SolanaTxns | undefined = undefined;
     private _bridgeTxnsV1: SolanaBridgeTxnsV1 | undefined = undefined;
-
+    private _poller:SolanaPoller | undefined;
+    _lastTxnHash: string = "";
     constructor(config: SolanaConfig) {
         this._client = new Connection(config.server);
-
         this._accounts = new SolanaAccounts(this._client);
         this._assets = new SolanaAssets(this._client);
         this._transactions = new SolanaTxns(this._client);
         this._bridgeTxnsV1 = new SolanaBridgeTxnsV1(this._client,config.accounts.bridgeProgram, config.accounts );
-
+        this._poller = new SolanaPoller(this._client,this._bridgeTxnsV1) 
     }
 
-    public get client() {
-        return this._client;
-    }
-    public get accounts() {
-        return this._accounts;
-    }
-    public get assets() {
-        return this._assets;
-    }
-
+  
+ /**
+  * @method bridgeTransactions
+  * @param fromAddress 
+  * @param fromSymbol 
+  * @param toNetwork 
+  * @param toAddress 
+  * @param tosymbol 
+  * @param amount 
+  * @returns Unsigned bridge transaction
+  * @description performs the bridge operation without signing transaction and return the undigned transaction instead
+  */
     public async bridgeTransactions(
         fromAddress:string, 
         fromSymbol:string,
@@ -53,7 +54,7 @@ export class SolanaConnect {
             if (!this._bridgeTxnsV1) throw new Error('Solana Bridge Transactions not found');
             if (!this._accounts) throw new Error('Solana Accounts not found');
             if (!this._assets) throw new Error('Solana Assets not found');
-
+            
              //Get Token
              const token = BridgeTokens.get("solana", fromSymbol);
              if (!token) throw new Error("Token not found");
@@ -91,6 +92,17 @@ export class SolanaConnect {
     })
 }
 
+/**
+ * @method bridge
+ * @param account solana account of source 
+ * @param fromSymbol token symbol of source 
+ * @param toNetwork destination chain
+ * @param toAddress address on destination chain
+ * @param tosymbol destination token symbol
+ * @param amount  amount to be transfered from source 
+ * @returns 
+ * @description performs the bridging operation between two chains 
+ */
 public async bridge(account: SolanaAccount,
         fromSymbol: string,
         toNetwork: string,
@@ -152,6 +164,14 @@ public async bridge(account: SolanaAccount,
         });
     }
 
+    /**
+     * @method fundAccount 
+     * @param funder 
+     * @param account 
+     * @param amount 
+     * @returns 
+     * @description transfers sol from funder to account 
+     */
     //Account Actions
     public async fundAccount(funder: SolanaAccount, account: SolanaAccount, amount: number): Promise<boolean> {
         return new Promise(async (resolve, reject) => {
@@ -179,6 +199,16 @@ public async bridge(account: SolanaAccount,
             }
         });
     }
+
+    /**
+     * @method fundAccountToken
+     * @param funder 
+     * @param account 
+     * @param amount 
+     * @param symbol 
+     * @returns 
+     * @description transfers given token from funder to account
+     */
     public async fundAccountTokens(funder: SolanaAccount, account: SolanaAccount, amount: number, symbol: string): Promise<boolean> {
         return new Promise(async (resolve, reject) => {
             try {
@@ -209,6 +239,13 @@ public async bridge(account: SolanaAccount,
             }
         });
     }
+
+    /**
+     * @method closeOutAccount
+     * @param signer 
+     * @param receiver 
+     * @returns 
+     */
     public async closeOutAccount(signer: SolanaAccount, receiver: SolanaAccount): Promise<boolean> {
         return new Promise(async (resolve, reject) => {
             try {
@@ -263,7 +300,13 @@ public async bridge(account: SolanaAccount,
         });
     }
 
-    //Txn Actions
+    /**
+     * @method sendSol 
+     * @param routing 
+     * @param signer 
+     * @returns 
+     * @description transfers SOL
+     */
     public async sendSol(routing: Routing, signer: SolanaAccount): Promise<boolean> {
         // eslint-disable-next-line no-async-promise-executor
         return new Promise(async (resolve, reject) => {
@@ -290,6 +333,15 @@ public async bridge(account: SolanaAccount,
             }
         });
     }
+
+    /**
+     * @method sendTokens
+     * @param routing 
+     * @param account 
+     * @param token 
+     * @returns 
+     * @description transfers SPL token
+     */
     public async sendTokens(routing: Routing,
         account: SolanaAccount,
         token: BridgeToken): Promise<boolean> {
@@ -338,6 +390,13 @@ public async bridge(account: SolanaAccount,
 
     }
     
+    /**
+     * @method optinToken
+	 * @param account 
+     * @param symbol 
+     * @returns 
+     * @description creates token account 
+     */
     async optinToken
     (account: SolanaAccount,
         symbol: string): Promise<boolean> {
@@ -388,6 +447,14 @@ public async bridge(account: SolanaAccount,
             }
         });
     }
+
+    /**
+     * @method closeOutAccount
+     * @param signer 
+     * @param receiver 
+     * @param symbol 
+     * @returns 
+     */
     public async closeOutTokenAccount(
         signer: SolanaAccount,
         receiver: SolanaAccount,
@@ -429,6 +496,12 @@ public async bridge(account: SolanaAccount,
         });
     }
     
+    /**
+     * @method optinAccountExists
+     * @param account 
+     * @param symbol 
+     * @returns 
+     */
     async optinAccountExists(account: SolanaAccount,
         symbol: string): Promise<boolean> {
         // eslint-disable-next-line no-async-promise-executor
@@ -460,6 +533,11 @@ public async bridge(account: SolanaAccount,
     }
 
     //Account Info
+    /**
+     * @method getBalance
+     * @param address 
+     * @returns balance of address 
+     */
     public async getBalance(address: string): Promise<number> {
         return new Promise(async (resolve, reject) => {
             try {
@@ -487,6 +565,17 @@ public async bridge(account: SolanaAccount,
             }
         });
     }
+
+    /**
+     * @method waitForBalance
+     * @param address 
+     * @param expectedAmount 
+     * @param timeoutSeconds 
+     * @param threshold 
+     * @param anybalance 
+     * @param noBalance 
+     * @returns 
+     */
     public async waitForBalance(address: string, expectedAmount: number, timeoutSeconds: number = 60, threshold: number = 0.001, anybalance: boolean = false, noBalance: boolean = false): Promise<number> {
         return new Promise(async (resolve, reject) => {
             try {
@@ -531,6 +620,14 @@ public async bridge(account: SolanaAccount,
             }
         });
     }
+
+    /**
+     * @method waitForMinBalance
+     * @param address 
+     * @param minAmount 
+     * @param timeoutSeconds 
+     * @returns 
+     */
     public async waitForMinBalance(address: string, minAmount: number, timeoutSeconds: number = 60): Promise<number> {
         return new Promise(async (resolve, reject) => {
             try {
@@ -571,6 +668,14 @@ public async bridge(account: SolanaAccount,
             }
         });
     }
+
+    /**
+     * @method waitForBalanceChange
+     * @param address 
+     * @param startingAmount 
+     * @param timeoutSeconds 
+     * @returns 
+     */
     public async waitForBalanceChange(address: string, startingAmount: number, timeoutSeconds: number = 60): Promise<number> {
         return new Promise(async (resolve, reject) => {
             try {
@@ -611,6 +716,13 @@ public async bridge(account: SolanaAccount,
             }
         });
     }
+
+    /**
+     * @method getTokenBalance
+     * @param address 
+     * @param symbol 
+     * @returns balnce of token(symbol) for the address
+     */
     public async getTokenBalance(address: string, symbol: string): Promise<number> {
         return new Promise(async (resolve, reject) => {
             try {
@@ -639,6 +751,18 @@ public async bridge(account: SolanaAccount,
             }
         });
     }
+
+    /**
+     * @method waitForTokenBalance
+     * @param address 
+     * @param symbol 
+     * @param expectedAmount 
+     * @param timeoutSeconds 
+     * @param threshold 
+     * @param anybalance 
+     * @param noBalance 
+     * @returns 
+     */
     public async waitForTokenBalance(address: string, symbol: string, expectedAmount: number, timeoutSeconds: number = 60, threshold: number = 0.001, anybalance: boolean = false, noBalance: boolean = false): Promise<number> {
         return new Promise(async (resolve, reject) => {
             try {
@@ -683,6 +807,15 @@ public async bridge(account: SolanaAccount,
             }
         });
     }
+
+    /**
+     * @method waitForMinTokenBalance
+     * @param address 
+     * @param symbol 
+     * @param minAmount 
+     * @param timeoutSeconds 
+     * @returns 
+     */
     public async waitForMinTokenBalance(address: string, symbol: string, minAmount: number, timeoutSeconds: number = 60): Promise<number> {
         return new Promise(async (resolve, reject) => {
             try {
@@ -722,6 +855,15 @@ public async bridge(account: SolanaAccount,
             }
         });
     }
+
+    /**
+     * @method waitForTokenBalance
+     * @param address 
+     * @param symbol 
+     * @param startingAmount 
+     * @param timeoutSeconds 
+     * @returns the changed token balance of adddress
+     */
     public async waitForTokenBalanceChange(address: string, symbol: string, startingAmount: number, timeoutSeconds: number = 60): Promise<number> {
         return new Promise(async (resolve, reject) => {
             try {
@@ -798,7 +940,18 @@ public async bridge(account: SolanaAccount,
         });
         
     }
-
+    public get client() {
+        return this._client;
+    }
+    public get accounts() {
+        return this._accounts;
+    }
+    public get assets() {
+        return this._assets;
+    }
+    public get lastTxnHash() {
+        return this._lastTxnHash
+    }
    // wallet- txn helper 
     public async sendSignedTransaction(txn:number[] | Uint8Array ) :Promise<string> {
         return new Promise(async (resolve,reject) => {
@@ -817,6 +970,12 @@ public async bridge(account: SolanaAccount,
         })
 
     }
+
+    // get Id
+    public getSolanaBridgeAddress(id:SolanaProgramId):string|number|undefined{
+        return this._bridgeTxnsV1?.getGlitterAccountAddress(id);
+    }
+
 }
 
 

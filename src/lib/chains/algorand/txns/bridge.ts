@@ -4,7 +4,7 @@ import * as util from "util";
 //@ts-ignore
 import AlgodClient from "algosdk";
 import {  BridgeToken, BridgeTokens, Routing, RoutingDefault, RoutingString, SetRoutingUnits } from "../../../common";
-import {AlgorandAccountsConfig} from "../config";
+import {AlgorandAccountsConfig, AlgorandProgramAccount} from "../config";
 
 export enum AlgorandBridgeTxnType {
     none,
@@ -458,5 +458,73 @@ export class AlgorandBridgeTxnsV1 {
         });
 
     }
+
+     // get Id
+     public  getGlitterAccountAddress(input:AlgorandProgramAccount):string |number | undefined {
+
+        let res:string | number | undefined; 
+          switch(input) {
+            case "asaOwner":{
+                res = this._accounts?.asaOwner;
+                break;
+            }
+            case "algoOwner":{
+                res = this._accounts?.algoOwner;
+                break;
+            }
+            case "feeReceiver":{
+                res = this._accounts?.feeReceiver;
+                break;
+            }
+            case "multiSig1":{
+                res = this._accounts?.multiSig1;
+                break;
+            }
+            case "multiSig2":{
+                res = this._accounts?.multiSig2;
+                break;
+            }
+            case "bridge":{
+                res = this._accounts?.bridge;
+                break;
+            }
+            case "asaVault":{
+                res = this._accounts?.asaVault;
+                break;
+            }
+            case "algoVault":{
+                res = this._accounts?.algoVault;
+                break;
+            }
+            case "usdcReceiver":{
+                res = this._accounts?.usdcReceiver;
+                break;
+            }
+            case "bridgeOwner":{
+                res = this._accounts?.bridgeOwner;
+                break;                
+            }
+            case "usdcDeposit":{
+                res = this._accounts?.usdcDeposit;
+                break;                
+            }
+            case "appID":{
+                res = this._bridgeApprovalAppId;
+                break;
+            }
+            case "UsdcassetId":{
+                res = BridgeTokens.get("algorand","usdc")?.address;
+                break;
+            }
+            default: { 
+                console.log("Invalid Address"); 
+                res = undefined;
+                break;              
+             } 
+          }
+
+     return  res ;
+    
+}
 
 }

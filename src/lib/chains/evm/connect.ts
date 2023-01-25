@@ -19,6 +19,8 @@ import {
   BridgeEvmNetworks,
   BridgeNetworks,
 } from "../../common/networks/networks";
+import { PartialBridgeTxn } from "../../common/transactions/transactions";
+import { BridgeToken } from "../../common/tokens/tokens";
 
 type Connection = {
   rpcProvider: providers.BaseProvider;
@@ -220,4 +222,15 @@ export class EvmConnect {
       return Promise.reject(error);
     }
   }
+
+  public async listBridgeTransaction(limit:number,asset:BridgeToken, starthash?:string ):Promise<PartialBridgeTxn[]> {
+    return new Promise(async(resolve,reject) =>{
+      try{
+          
+      }catch(err) {
+        reject(err)
+      }
+    })
+  }
+
 }

@@ -1,6 +1,7 @@
 import * as bip39 from 'bip39';
 import * as nacl from 'tweetnacl';
 import { derivePath } from 'ed25519-hd-key';
+import { Commitment } from '@solana/web3.js';
 
 export type DepositNote = {
     system: string, // RoutingData json format
@@ -8,7 +9,7 @@ export type DepositNote = {
   }
 
 export const COMMITMENT = "singleGossip";
-
+export const defaultCommitment = 'confirmed' as Commitment;
 export class SolanaUtils {
     public static async mnemonicToSecretKey(mnemonic: string): Promise<Uint8Array> {
         // eslint-disable-next-line no-async-promise-executor
