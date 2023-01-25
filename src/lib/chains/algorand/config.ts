@@ -35,3 +35,19 @@ export type AlgorandAccountsConfig = {
   usdcReceiver: string;
   usdcDeposit: string;
 };
+
+export enum AlgorandProgramAccount {
+  AsaOwnerAccount ="asaOwner",
+  AlgoOwnerAccount ="algoOwner",
+  BridgeOwnerAccount = "bridgeOwner",
+  FeeRecieverAccount = "feeReceiver",
+  MultiSig1Account = "multiSig1",
+  MultiSig2Account = "multiSig2",
+  BridgeAccount = "bridge",
+  AsaVaultAccount = "asaVault",
+  AlgoVaultAccount = "algoVault",
+  UsdcReceiverAccount = "usdcReceiver",
+  UsdcDepositAccount = "usdcDeposit",
+  BridgeProgramId = "appID",
+  UsdcAssetId ="UsdcassetId"
+}

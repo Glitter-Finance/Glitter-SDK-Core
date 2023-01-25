@@ -501,21 +501,49 @@ export class SolanaBridgeTxnsV1 {
 
     }
 
+    // get Id
+    public  getSolanaProgramId(input:string):string |number | undefined {
 
-    // get token 
-    public  get(input:string):string | undefined {
+        let res:string | number | undefined; 
+          switch(input) {
+            case "bridgeProgram":{
+                res = this._accounts?.bridgeProgram;
+                break;
+            }
+            case "vestingProgram":{
+                res = this._accounts?.vestingProgram;
+                break;
+            }
+            case "owner":{
+                res = this._accounts?.owner;
+                break;
+            }
+            case "usdcReceiver":{
+                res = this._accounts?.usdcReceiver;
+                break;
+            }
+            case "usdcDeposit":{
+                res = this._accounts?.usdcDeposit;
+                break;
+            }
+            case "memoProgram":{
+                res = this._accounts?.memoProgram;
+                break;
+            }
+            case "UsdcMint":{
+                res = BridgeTokens.get("solana","usdc")?.address;
+                break;
+            }
+            default: { 
+                console.log("Invalid Address"); 
+                res = undefined;
+                break;              
+             } 
+          }
 
-        let res:string | undefined; 
-        if (input.toLocaleLowerCase() == "usdc"){
-            res =  this._accounts?.usdcDeposit;
-        }else if (input.toLocaleLowerCase() == "memo"){
-            res = this._accounts?.memoProgram
-        }
      return  res ;
     
 }
-
-
 
 }
 

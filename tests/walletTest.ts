@@ -3,8 +3,11 @@ import { SolanaAccount, SolanaAccounts } from "../src/lib/chains/solana";
 import { BridgeToken, BridgeTokens, Sleep } from "../src/lib/common";
 import { GlitterEnvironment } from "../src/lib/configs/config";
 import { GlitterBridgeSDK } from "../src/GlitterBridgeSDK";
-
+import {SolanaWallets} from "../src/lib/chains/solana/wallet/index"
+import { SolanaWalletOption } from "../src/lib/chains/solana/wallet/config";
 import { BridgeNetworks } from "../src/lib/common/networks/networks";
+import { SolanaProgramId } from "../src/lib/chains/solana/config";
+import { AlgorandProgramAccount } from "../src/lib/chains/algorand/config";
 const path = require("path");
 const util = require("util");
 const fs = require("fs");
@@ -12,9 +15,147 @@ const fs = require("fs");
 run();
 
 async function run() {
-  const result = await runMain();
+  const result = await TransactionListTest();
   console.log(result);
 }
+
+async function testGetAddress():Promise<boolean> {
+
+  return new Promise(async (resolve,reject) =>{
+    try{
+       //Load SDK
+       const sdk = new GlitterBridgeSDK()
+       .setEnvironment(GlitterEnvironment.mainnet)
+       .connect([BridgeNetworks.algorand, BridgeNetworks.solana]);
+
+   //Reference variables locally for ease of use
+   const algorandAccounts = sdk.algorand?.accounts;
+   const solanaAccounts = sdk.solana?.accounts;
+   const algorand = sdk.algorand;
+   const solana = sdk.solana;
+
+   console.log("bridgeAddressSolana",solana?.getSolanaBridgeAddress(SolanaProgramId.BridgeProgramId)== "GLittnj1E7PtSF5thj6nYgjtMvobyBuZZMuoemXpnv3G");
+   console.log("vestingProgramSolana",solana?.getSolanaBridgeAddress(SolanaProgramId.VestingProgramId)== "EMkD74T2spV3A71qfY5PNqVNrNrpbFcdwMF2TerRMr9n");
+   console.log("ownerAddressSolana",solana?.getSolanaBridgeAddress(SolanaProgramId.OwnerId)=="hY5PXHYm58H5KtJW4GrtegxXnpMruoX3LLP6CufHoHj");
+   console.log("usdcReceiverSolana",solana?.getSolanaBridgeAddress(SolanaProgramId.UsdcReceiverId)=="GUsVsb8R4pF4T7Bo83dkzhKeY5nGd1vdpK4Hw36ECbdK");
+   console.log("usdcDepositSolana",solana?.getSolanaBridgeAddress(SolanaProgramId.UsdcDepositId)=="9i8vhhLTARBCd7No8MPWqJLKCs3SEhrWKJ9buAjQn6EM");
+   console.log("memoProgramSolana",solana?.getSolanaBridgeAddress(SolanaProgramId.MemoProgramId)=="MemoSq4gqABAXKb96qnH8TysNcWxMyWCqXgDLGmfcHr");
+   console.log("UsdcMintSolana",solana?.getSolanaBridgeAddress(SolanaProgramId.UsdcMint) =="EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v");
+
+
+   console.log("asaOwnerAlgorand",algorand?.getAlgorandBridgeAddress(AlgorandProgramAccount.AsaOwnerAccount) =="A3OSGEZJVBXWNXHZREDBB5Y77HSUKA2VS7Y3BWHWRBDOWZ5N4CWXPVOHZE");
+   console.log("algoOwnerAlgorand",algorand?.getAlgorandBridgeAddress(AlgorandProgramAccount.AlgoOwnerAccount) =="5TFPIJ5AJLFL5IBOO2H7QXYLDNJNSQYTZJOKISGLT67JF6OYZS42TRHRJ4");
+   console.log("bridgeOwnerAlgorand",algorand?.getAlgorandBridgeAddress(AlgorandProgramAccount.BridgeOwnerAccount) =="HUPQIOAF3JZWHW553PGBKWXYSODFYUG5MF6V246TIBW66WVGOAEB7R6XAE");
+   console.log("feeReceiverAlgorand",algorand?.getAlgorandBridgeAddress(AlgorandProgramAccount.FeeRecieverAccount) =="A2GPNMIWXZDD3O3MP5UFQL6TKAZPBJEDZYHMFFITIAJZXLQH37SJZUWSZQ");
+   console.log("multiSig1Algorand",algorand?.getAlgorandBridgeAddress(AlgorandProgramAccount.MultiSig1Account) =="JPDV3CKFABIXDVH36E7ZBVJ2NC2EQJIBEHCKYTWVC4RDDOHHOPSBWH3QFY");
+   console.log("multiSig2Algorand",algorand?.getAlgorandBridgeAddress(AlgorandProgramAccount.MultiSig2Account) =="DFFTYAB6MWMRTZGHL2GAP7TMK7OUGHDD2AACSO7LXSZ7SY2VLO3OEOJBQU");
+   console.log("usdcReceiverAlgorand",algorand?.getAlgorandBridgeAddress(AlgorandProgramAccount.UsdcReceiverAccount) =="GUSN5SEZQTM77WE2RMNHXRAKP2ELDM7GRLOEE3GJWNS5BMACRK7JVS3PLE");
+   console.log("usdcDepositAlgorand",algorand?.getAlgorandBridgeAddress(AlgorandProgramAccount.UsdcDepositAccount) =="O7MYJZR3JQS5RYFJVMW4SMXEBXNBPQCEHDAOKMXJCOUSH3ZRIBNRYNMJBQ");
+   console.log("bridgeAlgorand",algorand?.getAlgorandBridgeAddress(AlgorandProgramAccount.BridgeAccount) =="XJQ25THCV734QIUZARPZGG3NPRFZXTIIU77JSJBT23TJMGL3FXJWVR57OQ");
+   console.log("asaVaultAlgorand",algorand?.getAlgorandBridgeAddress(AlgorandProgramAccount.AsaVaultAccount) =="U4A3YARBVMT7PORTC3OWXNC75BMGF6TCHFOQY4ZSIIECC5RW25SVKNKV3U");
+   console.log("algoVaultAlgorand",algorand?.getAlgorandBridgeAddress(AlgorandProgramAccount.AlgoVaultAccount) =="R7VCOR74LCUIFH5WKCCMZOS7ADLSDBQJ42YURFPDT3VGYTVNBNG7AIYTCQ");
+
+
+    resolve(true)
+    }catch (err) {
+      reject(err)
+    }
+  })
+  
+}
+
+
+async function TransactionListTest():Promise<boolean> {
+
+  return new Promise(async(resolve,reject) =>{
+    try{
+
+
+      console.log("list1")
+
+            //Load SDK
+      const sdk = new GlitterBridgeSDK()
+      .setEnvironment(GlitterEnvironment.mainnet)
+      .connect([BridgeNetworks.algorand, BridgeNetworks.solana]);
+      console.log("list2")
+
+      //Reference variables locally for ease of use
+      const algorandAccounts = sdk.algorand?.accounts;
+      const solanaAccounts = sdk.solana?.accounts;
+      const algorand = sdk.algorand;
+      const solana = sdk.solana;     
+      const asset = BridgeTokens.get("solana", "usdc");
+      if(!asset) throw new Error("asset is not Defined");
+      const startTxnHash ="4Nh9LjSDVaiENULrhTxrKnVWtPWPHgCg54gxy2DNtcz9EBbZdPmvR4b5DNSF3jCQrbeem2TMCZci4ajZUU7wQV1U";
+      // const list =  await solana?.listDepositTransaction(10,asset,startTxnHash);
+      
+      // console.log(list)
+
+      // console.log("LAST TXN HASH",solana?._lastTxnHash)
+      // const Newlist =  await solana?.listDepositTransaction(10,asset);
+      // console.log(Newlist)
+
+       // const Solanalist1 =  await solana?.testListTxn();
+      // console.log(Solanalist1)
+      console.log("\n")
+      // console.log("===================")
+      // const Solanalist2 =  await solana?.listDepositTransaction(3,asset,"2kgL1goFVvMa9vvcQcS1wztn7NfezZSKQy6ADjcs2uNqXh1u9xVhsQEzdNTmsSxtRgkUTBoDPAK1RDQWrPgAQmZG");
+      // const Solanalist3 =  await solana?.listDepositTransaction(3,asset);
+      // // con
+      // console.log(Solanalist3)
+      // console.log("\n")
+      console.log("===================")
+      // const list = await algorand?.listDepositTransaction(3,asset);
+      // console.log(list);
+      // console.log("\n")
+      // console.log("===================")
+      const newlist = await algorand?.listDepositTransaction(3,asset);
+      // const newList =  await solana?.testListTxn()
+      console.log(newlist)
+    }catch(err){
+
+    }
+  })
+}
+
+
+// async function WalletTest():Promise<boolean> {
+
+//   return new Promise(async (resolve, reject) =>{
+
+//     try{
+//     //Load SDK
+//       const sdk = new GlitterBridgeSDK()
+//       .setEnvironment(GlitterEnvironment.mainnet)
+//       .connect([BridgeNetworks.algorand, BridgeNetworks.solana]);
+
+//       //Reference variables locally for ease of use
+//       const algorandAccounts = sdk.algorand?.accounts;
+//       const solanaAccounts = sdk.solana?.accounts;
+//       const algorand = sdk.algorand;
+//       const solana = sdk.solana;     
+      
+//      const phantomWallet = solana?.getPhantomWalletAdapter();
+//      const solfareWallet = solana?.getSolfareWalletAdapter();
+
+//      phantomWallet?.initWallet();
+//      solfareWallet?.initWallet();
+//      const pubkeyPhantom = phantomWallet?.walletPublicKey?.toBase58()
+//      const pubkeySolfare = solfareWallet?.walletPublicKey?.toBase58()
+      
+//      console.log("phantomPubkey",pubkeyPhantom);
+//      console.log("solfarePubkey",pubkeySolfare);
+
+//      resolve(true)
+
+//     }catch(err) {
+
+//       reject(err)
+//     }
+//   })
+// }
+
+
 
 async function runMain(): Promise<boolean> {7
     return new Promise(async (resolve, reject) => {

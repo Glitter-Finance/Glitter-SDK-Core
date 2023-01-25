@@ -1,12 +1,17 @@
 import * as algosdk from 'algosdk';
 import { Account, Transaction } from "algosdk";
 import { AlgorandAccount, AlgorandAccounts } from "./accounts";
-import { AlgorandConfig } from "./config";
+import { AlgorandConfig, AlgorandProgramAccount } from "./config";
 import { AlgorandTxns } from "./txns/txns";
 import { AlgorandAssets } from "./assets";
 import { AlgorandBridgeTxnsV1 } from "./txns/bridge";
 import * as fs from 'fs';
 import { BridgeToken, BridgeTokens, LogProgress, Routing, RoutingDefault, Sleep } from '../../common';
+import { PartialBridgeTxn, TransactionType } from '../../common/transactions/transactions';
+import { add } from 'winston';
+import SearchForTransactions from 'algosdk/dist/types/client/v2/indexer/searchForTransactions';
+import { DepositNote } from '../solana/utils';
+import { AlgorandPoller } from './poller';
 
 /**
  * Connection to the Algorand network
@@ -16,20 +21,21 @@ export class AlgorandConnect {
 
     private _clientIndexer: algosdk.Indexer | undefined = undefined;
     private _client: algosdk.Algodv2 | undefined = undefined;
-
     private _accounts: AlgorandAccounts | undefined = undefined;
     private _assets: AlgorandAssets | undefined = undefined;
     private _transactions: AlgorandTxns | undefined = undefined;
     private _bridgeTxnsV1: AlgorandBridgeTxnsV1 | undefined = undefined;
+    private _poller:AlgorandPoller|undefined
+    _lastTxnHash: string = "";
 
     constructor(config: AlgorandConfig) {
         this._client = GetAlgodClient(config.serverUrl, config.serverPort, config.nativeToken);
         this._clientIndexer = GetAlgodIndexer(config.indexerUrl, config.indexerUrl, config.nativeToken);
-
         this._accounts = new AlgorandAccounts(this._client);
         this._assets = new AlgorandAssets(this._client);
         this._transactions = new AlgorandTxns(this._client,config.accounts);
         this._bridgeTxnsV1 = new AlgorandBridgeTxnsV1(this._client, config.appProgramId, this._transactions, config.accounts);
+        this._poller = new AlgorandPoller(this._client,this._clientIndexer,this._bridgeTxnsV1)
     }
 
     //Getters
@@ -70,6 +76,106 @@ export class AlgorandConnect {
         });
     }
 
+    public async listDepositTransaction(limit:number,asset:BridgeToken, starthash?:string  ):Promise<PartialBridgeTxn[] | undefined> {
+        return new Promise(async(resolve, reject) =>{
+            try {
+                if(!asset) throw new Error("Asset Not Found")
+                const symbol = asset.symbol  ;
+                let depositaddress:string | number |undefined ;
+                if (symbol.toLocaleLowerCase() == "xsol" || symbol.toLocaleLowerCase() == "sol"  ) {
+                    depositaddress = this.getAlgorandBridgeAddress(AlgorandProgramAccount.BridgeAccount);
+                }else if (symbol.toLocaleLowerCase() =="xalgo" || symbol.toLocaleLowerCase() =="algo" ){
+                    depositaddress = this.getAlgorandBridgeAddress(AlgorandProgramAccount.BridgeAccount);
+                }else if (symbol.toLocaleLowerCase() == "usdc"){
+                    depositaddress = this.getAlgorandBridgeAddress(AlgorandProgramAccount.UsdcDepositAccount);
+                }
+                console.log(depositaddress)
+                if(!starthash){
+                    starthash = this._lastTxnHash == "" ?undefined:this._lastTxnHash
+                }
+                // const txnList = this.testListTxn(depositaddress as string,limit,asset,starthash)
+              const txnList =  this.listDepositTransactionHandler(depositaddress as string,limit,asset);
+              if(!txnList) throw new Error("txn List undefined")
+                resolve(txnList)
+
+            } catch (err) {
+                reject(err)
+            }
+        })
+}
+
+private async listDepositTransactionHandler(address:string,limit:number ,asset:BridgeToken, startHash?:string):Promise<PartialBridgeTxn[]>  {
+        return new Promise(async (resolve,reject) =>{
+            try{
+          if(!address) throw new Error("address not defined")   ;
+          if(!this._client) throw new Error("Algo Client Not Defined");
+          if(!this._clientIndexer)  throw new Error("Indexer Not Set")
+          if(!asset) throw new Error("asset not defined");
+          const txnlist = await this.clientIndexer?.lookupAccountTransactions(address).do();
+          if(!txnlist) throw new Error("txn list not defined");
+          let partialbridgeTxnList:PartialBridgeTxn[] = [];   
+          let lastTxnHash = "";
+          let checkLimit = 0;       
+          for(let result of txnlist.transactions){
+            if(checkLimit == limit) break;
+            if(startHash==undefined){
+            let partialBtxn:PartialBridgeTxn =  {
+                TxnId:result.id,
+                TxnType:TransactionType.Deposit,
+            };
+            partialbridgeTxnList.push(partialBtxn)
+            lastTxnHash = result.id;
+            checkLimit++;
+
+            }else {
+            if(startHash == result.id){
+                //+1 
+            let partialBtxn:PartialBridgeTxn =  {
+                TxnId:result.id,
+                TxnType:TransactionType.Deposit,
+            };
+            partialbridgeTxnList.push(partialBtxn)
+            lastTxnHash = result.id
+            startHash =undefined;
+            checkLimit++;
+            }
+            }   
+         }
+
+         this._lastTxnHash = lastTxnHash
+            resolve(partialbridgeTxnList)
+            } catch(err){
+                reject(err)    
+            }
+        })
+    }
+
+    public get lastTxnHash() {
+        return this._lastTxnHash
+    }
+
+    public async listReleaseTransaction( ):Promise<PartialBridgeTxn[]> {
+        return new Promise(async(resolve, reject) =>{
+            try {
+                
+            } catch (err) {
+
+            }
+        })
+    }
+
+
+
+    /**
+     * 
+     * @param fromAddress 
+     * @param fromSymbol 
+     * @param toNetwork 
+     * @param toAddress 
+     * @param tosymbol 
+     * @param amount 
+     * @returns 
+     */
  public async bridgeTransaction(
     fromAddress:string, 
     fromSymbol:string,
@@ -849,8 +955,15 @@ export class AlgorandConnect {
         });
     }
 
+    public getAlgorandBridgeAddress(id:string):string |number|undefined{
+        
+        return this._bridgeTxnsV1?.getAlgorandProgramId(id);
+    }
+
 
 }
+
+
 
 export const GetAlgodIndexer = (url: string, port: string | number, token = ''): algosdk.Indexer => {
     // const server = config.algo_client;

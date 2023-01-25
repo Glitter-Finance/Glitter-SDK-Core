@@ -17,6 +17,8 @@ import {
 } from "./lib/chains/solana/accounts";
 import { SolanaAssets, SolanaAsset } from "./lib/chains/solana/assets";
 import { SolanaConfig } from "./lib/chains/solana/config";
+import { SolanaProgramId } from "./lib/chains/solana/config";
+import { AlgorandProgramAccount } from "./lib/chains/algorand/config";
 import { SolanaConnect } from "./lib/chains/solana/connect";
 
 import {
@@ -82,6 +84,8 @@ export {
   SolanaAssets,
   SolanaAsset,
   SolanaConfig,
+  SolanaProgramId,
+  AlgorandProgramAccount,
   SolanaConnect,
   AlgorandAccount,
   AlgorandMSigAccount,

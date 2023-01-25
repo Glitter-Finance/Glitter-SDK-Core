@@ -9,6 +9,7 @@ import {
 import { GlitterBridgeConfig, GlitterEnvironment } from "./lib/configs/config";
 import { BridgeMainnet } from "./lib/configs/networks/mainnet";
 import { BridgeTestnet } from "./lib/configs/networks/testnet";
+
 export class GlitterBridgeSDK {
   //Configs
   private _bridgeConfig: GlitterBridgeConfig | undefined;
