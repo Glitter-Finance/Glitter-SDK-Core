@@ -2,7 +2,6 @@
 import { Connection, PublicKey } from '@solana/web3.js'
 import { defaultCommitment } from '../../utils'
 
-
 /**
  * This Class Uses PhantomWalletAdapter from @solana/wallet-adapter-wallets which might have issues with React
  * So Until We test it with front-End Example I am Commenting it to cause any Isues with current Work

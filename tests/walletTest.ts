@@ -3,8 +3,6 @@ import { SolanaAccount, SolanaAccounts } from "../src/lib/chains/solana";
 import { BridgeToken, BridgeTokens, Sleep } from "../src/lib/common";
 import { GlitterEnvironment } from "../src/lib/configs/config";
 import { GlitterBridgeSDK } from "../src/GlitterBridgeSDK";
-import {SolanaWallets} from "../src/lib/chains/solana/wallet/index"
-import { SolanaWalletOption } from "../src/lib/chains/solana/wallet/config";
 import { BridgeNetworks } from "../src/lib/common/networks/networks";
 import { SolanaProgramId } from "../src/lib/chains/solana/config";
 import { AlgorandProgramAccount } from "../src/lib/chains/algorand/config";
@@ -15,7 +13,7 @@ const fs = require("fs");
 run();
 
 async function run() {
-  const result = await TransactionListTest();
+  const result = await testGetAddress();
   console.log(result);
 }
 
@@ -54,6 +52,8 @@ async function testGetAddress():Promise<boolean> {
    console.log("bridgeAlgorand",algorand?.getAlgorandBridgeAddress(AlgorandProgramAccount.BridgeAccount) =="XJQ25THCV734QIUZARPZGG3NPRFZXTIIU77JSJBT23TJMGL3FXJWVR57OQ");
    console.log("asaVaultAlgorand",algorand?.getAlgorandBridgeAddress(AlgorandProgramAccount.AsaVaultAccount) =="U4A3YARBVMT7PORTC3OWXNC75BMGF6TCHFOQY4ZSIIECC5RW25SVKNKV3U");
    console.log("algoVaultAlgorand",algorand?.getAlgorandBridgeAddress(AlgorandProgramAccount.AlgoVaultAccount) =="R7VCOR74LCUIFH5WKCCMZOS7ADLSDBQJ42YURFPDT3VGYTVNBNG7AIYTCQ");
+   console.log("usdcMint",algorand?.getAlgorandBridgeAddress(AlgorandProgramAccount.UsdcAssetId))
+   console.log("usdcMint",algorand?.getAlgorandBridgeAddress(AlgorandProgramAccount.BridgeProgramId))
 
 
     resolve(true)

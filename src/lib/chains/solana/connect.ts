@@ -7,8 +7,6 @@ import { SolanaTxns } from './txns/txns';
 import * as util from 'util';
 import { BridgeToken, BridgeTokens, LogProgress, Precise, Routing, RoutingDefault, Sleep, ValueUnits } from '../../common';
 import { COMMITMENT, DepositNote } from './utils';
-import { PartialBridgeTxn, TransactionType } from '../../common/transactions/transactions';
-import * as bs58 from 'bs58';
 import { SolanaPoller } from './poller';
 export class SolanaConnect {
 
