@@ -94,7 +94,7 @@ export class AlgorandPoller{
             this.polling = true;
             this.lastPolledTime = Date.now();
 
-            let  appID = this._bridgeTxnsV1?.getAlgorandProgramId(AlgorandProgramAccount.BridgeProgramId)
+            let  appID = this._bridgeTxnsV1?.getGlitterAccountAddress(AlgorandProgramAccount.BridgeProgramId)
             if (appID== "813301700"){
                 console.log("not app id",appID)
             }
@@ -204,7 +204,7 @@ export class AlgorandPoller{
         private async listusdcDepositTransactionHandler(address:string,limit:number ,asset:BridgeToken, startHash?:string):Promise<PartialBridgeTxn[]>  {
             return new Promise(async (resolve,reject) =>{
                 try{
-              const address = this._bridgeTxnsV1?.getAlgorandProgramId(AlgorandProgramAccount.UsdcDepositAccount);
+              const address = this._bridgeTxnsV1?.getGlitterAccountAddress(AlgorandProgramAccount.UsdcDepositAccount);
               if(!address) throw new Error("address not defined")   ;
               if(!this._client) throw new Error("Algo Client Not Defined");
               if(!this._clientIndexer)  throw new Error("Indexer Not Set")
@@ -270,7 +270,7 @@ export class AlgorandPoller{
         private async listusdcReleaseTransactionHandler(limit:number, startHash?:string):Promise<PartialBridgeTxn[]>  {
             return new Promise(async (resolve,reject) =>{
                 try{
-              const address = this._bridgeTxnsV1?.getAlgorandProgramId(AlgorandProgramAccount.UsdcReceiverAccount);
+              const address = this._bridgeTxnsV1?.getGlitterAccountAddress(AlgorandProgramAccount.UsdcReceiverAccount);
               if(!address) throw new Error("address not defined")   ;
               if(!this._client) throw new Error("Algo Client Not Defined");
               if(!this._clientIndexer)  throw new Error("Indexer Not Set")
@@ -332,7 +332,7 @@ export class AlgorandPoller{
                 }
             })
         }
-        
+
         public async getNote(transaction:any):Promise<Routing|undefined> {
            try{
             const note = transaction.note || ''

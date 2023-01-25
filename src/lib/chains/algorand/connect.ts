@@ -955,14 +955,11 @@ private async listDepositTransactionHandler(address:string,limit:number ,asset:B
         });
     }
 
-    public getAlgorandBridgeAddress(id:string):string |number|undefined{
+    public getAlgorandBridgeAddress(id:AlgorandProgramAccount):string |number|undefined{
         
-        return this._bridgeTxnsV1?.getAlgorandProgramId(id);
+        return this._bridgeTxnsV1?.getGlitterAccountAddress(id);
     }
-
-
 }
-
 
 
 export const GetAlgodIndexer = (url: string, port: string | number, token = ''): algosdk.Indexer => {

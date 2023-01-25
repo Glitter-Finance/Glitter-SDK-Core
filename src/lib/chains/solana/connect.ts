@@ -974,10 +974,9 @@ public async bridge(account: SolanaAccount,
     }
 
     // get Id
-    public getSolanaBridgeAddress(id:string):string|number|undefined{
-        return this._bridgeTxnsV1?.getSolanaProgramId(id);
+    public getSolanaBridgeAddress(id:SolanaProgramId):string|number|undefined{
+        return this._bridgeTxnsV1?.getGlitterAccountAddress(id);
     }
-
 
 }
 

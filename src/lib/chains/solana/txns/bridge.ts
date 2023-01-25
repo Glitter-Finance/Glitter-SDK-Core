@@ -22,7 +22,7 @@ import {
   } from "@solana/spl-token";
 import { DepositNote } from "../utils";
 import { BridgeToken, BridgeTokens, Routing, ValueUnits } from "../../../common";
-import { SolanaAccountsConfig } from "../config";
+import { SolanaAccountsConfig, SolanaProgramId } from "../config";
 
 export class SolanaBridgeTxnsV1 {
 
@@ -502,7 +502,7 @@ export class SolanaBridgeTxnsV1 {
     }
 
     // get Id
-    public  getSolanaProgramId(input:string):string |number | undefined {
+    public  getGlitterAccountAddress(input:SolanaProgramId):string |number | undefined {
 
         let res:string | number | undefined; 
           switch(input) {

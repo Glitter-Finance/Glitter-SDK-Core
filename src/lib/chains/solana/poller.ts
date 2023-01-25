@@ -48,7 +48,7 @@ export class SolanaPoller{
     private async listDepositTransactionHandler(beginAt:string,endAt:string,take:number):Promise<PartialBridgeTxn[]>  {
         return new Promise(async (resolve,reject) =>{
             try{
-        const address = this._bridgeTxnsV1?.getSolanaProgramId(SolanaProgramId.BridgeProgramId)
+        const address = this._bridgeTxnsV1?.getGlitterAccountAddress(SolanaProgramId.BridgeProgramId)
             if(!address) throw new Error("address not defined")   ;
             if(!this._client) throw new Error("Solana Client Not Defined");
 
@@ -120,7 +120,7 @@ export class SolanaPoller{
     private async listusdcDepositTransactionHandler(beginAt:string,endAt:string,take:number):Promise<PartialBridgeTxn[]>  {
         return new Promise(async (resolve,reject) =>{
             try{
-        const address = this._bridgeTxnsV1?.getSolanaProgramId(SolanaProgramId.BridgeProgramId)
+        const address = this._bridgeTxnsV1?.getGlitterAccountAddress(SolanaProgramId.BridgeProgramId)
             if(!address) throw new Error("address not defined")   ;
             if(!this._client) throw new Error("Solana Client Not Defined");
 
@@ -192,7 +192,7 @@ export class SolanaPoller{
     private async listusdcReleaseTransactionHandler(beginAt:string,endAt:string,take:number):Promise<PartialBridgeTxn[]>  {
         return new Promise(async (resolve,reject) =>{
             try{
-        const address = this._bridgeTxnsV1?.getSolanaProgramId(SolanaProgramId.BridgeProgramId)
+        const address = this._bridgeTxnsV1?.getGlitterAccountAddress(SolanaProgramId.BridgeProgramId)
             if(!address) throw new Error("address not defined")   ;
             if(!this._client) throw new Error("Solana Client Not Defined");
 

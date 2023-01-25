@@ -4,7 +4,7 @@ import * as util from "util";
 //@ts-ignore
 import AlgodClient from "algosdk";
 import {  BridgeToken, BridgeTokens, Routing, RoutingDefault, RoutingString, SetRoutingUnits } from "../../../common";
-import {AlgorandAccountsConfig} from "../config";
+import {AlgorandAccountsConfig, AlgorandProgramAccount} from "../config";
 
 export enum AlgorandBridgeTxnType {
     none,
@@ -460,7 +460,7 @@ export class AlgorandBridgeTxnsV1 {
     }
 
      // get Id
-     public  getAlgorandProgramId(input:string):string |number | undefined {
+     public  getGlitterAccountAddress(input:AlgorandProgramAccount):string |number | undefined {
 
         let res:string | number | undefined; 
           switch(input) {
