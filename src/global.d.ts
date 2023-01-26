@@ -1,6 +1,6 @@
 namespace NodeJS {
     interface ProcessEnv {
-      LAST_MIN_ROUND: number;
+      LAST_MIN_ROUND: string;
       LAST_TXN_ID: string;
       ETH_API_KEY:string;
       ETH_API_URL:string;
@@ -10,3 +10,5 @@ namespace NodeJS {
       POLYGON_API_URL:string;
     }
   }
+
+  
