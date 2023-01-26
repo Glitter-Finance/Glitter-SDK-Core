@@ -52,7 +52,7 @@ export function RoutingPointDefault(copyFrom: RoutingPoint | undefined = undefin
     }
 }
 
-export function RoutingString(routing: Routing): String {
+export function RoutingString(routing: Routing): string {
     return JSON.stringify(routing, (key, value) =>
         typeof value === 'bigint'
             ? value.toString()

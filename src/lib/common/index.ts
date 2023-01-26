@@ -19,6 +19,7 @@ import {
     InputParams,
     Sleep,
     Precise,
+    PreciseDecimals,
     LogProgress
 } from "./utils/utils";
 import {
@@ -40,6 +41,7 @@ export{
     InputParams,
     Sleep,
     Precise,
+    PreciseDecimals,
     ValueUnits,
     LogProgress
 }
