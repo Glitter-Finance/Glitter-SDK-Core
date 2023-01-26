@@ -3,7 +3,7 @@ import { Routing } from "../routing/routing"
 export enum TransactionType{
     Unknown = "Unknown",
     Deposit = "Deposit",
-    Release = "Release ",
+    Release = "Release",
     Refund =  "Refund",
     Transfer = "Transfer",
 }
