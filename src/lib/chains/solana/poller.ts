@@ -97,8 +97,8 @@ export class SolanaPoller{
                       depositNote = object;
                     }
                     let partialBtxn:PartialBridgeTxn =  {
-                        TxnId:signatures[i],
-                        TxnType:TransactionType.Deposit,
+                        txnID:signatures[i],
+                        txnType:TransactionType.Deposit,
                         // routing:
     
                     }; 
@@ -169,8 +169,8 @@ export class SolanaPoller{
                       depositNote = object;
                     }
                     let partialBtxn:PartialBridgeTxn =  {
-                        TxnId:signatures[i],
-                        TxnType:TransactionType.Deposit,
+                        txnID:signatures[i],
+                        txnType:TransactionType.Deposit,
                         // routing:
     
                     }; 
@@ -241,8 +241,8 @@ export class SolanaPoller{
                       depositNote = object;
                     }
                     let partialBtxn:PartialBridgeTxn =  {
-                        TxnId:signatures[i],
-                        TxnType:TransactionType.Release,
+                        txnID:signatures[i],
+                        txnType:TransactionType.Release,
                         // routing:
     
                     }; 

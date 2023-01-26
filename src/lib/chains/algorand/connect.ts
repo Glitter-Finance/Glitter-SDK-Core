@@ -120,8 +120,8 @@ private async listDepositTransactionHandler(address:string,limit:number ,asset:B
             if(checkLimit == limit) break;
             if(startHash==undefined){
             let partialBtxn:PartialBridgeTxn =  {
-                TxnId:result.id,
-                TxnType:TransactionType.Deposit,
+                txnID:result.id,
+                txnType:TransactionType.Deposit,
             };
             partialbridgeTxnList.push(partialBtxn)
             lastTxnHash = result.id;
@@ -131,8 +131,8 @@ private async listDepositTransactionHandler(address:string,limit:number ,asset:B
             if(startHash == result.id){
                 //+1 
             let partialBtxn:PartialBridgeTxn =  {
-                TxnId:result.id,
-                TxnType:TransactionType.Deposit,
+                txnID:result.id,
+                txnType:TransactionType.Deposit,
             };
             partialbridgeTxnList.push(partialBtxn)
             lastTxnHash = result.id

@@ -167,8 +167,8 @@ export class AlgorandPoller{
                         this.lastTxnID = tx['id'];
                         // need to create the PartialBridgeTxn
                         let partialBridgeTxn:PartialBridgeTxn = {
-                            TxnId: tx['id'],
-                            TxnType:TransactionType.Deposit,
+                            txnID: tx['id'],
+                            txnType:TransactionType.Deposit,
                             
                         }
                         txnList.push(partialBridgeTxn);
@@ -222,13 +222,13 @@ export class AlgorandPoller{
                 const routing = await this.getNote(result);
                 if(!routing){
                     partialBtxn   =  {
-                        TxnId:result.id,
-                        TxnType:TransactionType.Release,
+                        txnID:result.id,
+                        txnType:TransactionType.Release,
                     };
                 }else{
                      partialBtxn =  {
-                        TxnId:result.id,
-                        TxnType:TransactionType.Release,
+                        txnID:result.id,
+                        txnType:TransactionType.Release,
                         routing:routing
                     };
                 }    
@@ -241,13 +241,13 @@ export class AlgorandPoller{
                 const routing = await this.getNote(result);
                     if(!routing){
                         partialBtxn   =  {
-                            TxnId:result.id,
-                            TxnType:TransactionType.Release,
+                            txnID:result.id,
+                            txnType:TransactionType.Release,
                         };
                     }else{
                          partialBtxn =  {
-                            TxnId:result.id,
-                            TxnType:TransactionType.Release,
+                            txnID:result.id,
+                            txnType:TransactionType.Release,
                             routing:routing
                         };
                     }    
@@ -287,13 +287,13 @@ export class AlgorandPoller{
 
                 if(!routing){
                     partialBtxn   =  {
-                        TxnId:result.id,
-                        TxnType:TransactionType.Release,
+                        txnID:result.id,
+                        txnType:TransactionType.Release,
                     };
                 }else{
                      partialBtxn =  {
-                        TxnId:result.id,
-                        TxnType:TransactionType.Release,
+                        txnID:result.id,
+                        txnType:TransactionType.Release,
                         routing:routing
                     };
                 }    
@@ -306,13 +306,13 @@ export class AlgorandPoller{
 
                     if(!routing){
                         partialBtxn   =  {
-                            TxnId:result.id,
-                            TxnType:TransactionType.Release,
+                            txnID:result.id,
+                            txnType:TransactionType.Release,
                         };
                     }else{
                          partialBtxn =  {
-                            TxnId:result.id,
-                            TxnType:TransactionType.Release,
+                            txnID:result.id,
+                            txnType:TransactionType.Release,
                             routing:routing
                         };
                     }      
