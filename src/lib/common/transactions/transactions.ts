@@ -23,7 +23,8 @@ export type PartialBridgeTxn ={
     network?:string|null,
     tokenSymbol?:string|null,
     address?:string|null,
-    amount?:bigint|null,
+    units?:bigint|null,
+    amount?:number|null,
     routing?:Routing |null    
 };
 
