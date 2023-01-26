@@ -11,15 +11,15 @@ import {
     SystemProgram,
     Transaction,
     TransactionInstruction,
-  } from "@solana/web3.js";
-  import {
+} from "@solana/web3.js";
+import {
     getMint,
     ASSOCIATED_TOKEN_PROGRAM_ID,
     getOrCreateAssociatedTokenAccount,
     TOKEN_PROGRAM_ID,
     createTransferInstruction,
     getAssociatedTokenAddress,
-  } from "@solana/spl-token";
+} from "@solana/spl-token";
 import { DepositNote } from "../utils";
 import { BridgeToken, BridgeTokens, Routing, ValueUnits } from "../../../common";
 import { SolanaAccountsConfig, SolanaProgramId } from "../config";
@@ -147,68 +147,68 @@ export class SolanaBridgeTxnsV1 {
         });
     }
 
-    public async HandleUsdcSwap(account:SolanaAccount, routing:Routing):Promise<Transaction | undefined> {
+    public async HandleUsdcSwap(account: SolanaAccount, routing: Routing): Promise<Transaction | undefined> {
         return new Promise(async (resolve, reject) => {
-            try{
+            try {
 
-                let transferAmount:number ;
+                let transferAmount: number;
                 if (!routing.from.address) throw new Error('Source address can not be found');
                 if (!routing.to.address) throw new Error('Destination address can not be found');
                 let asset = BridgeTokens.get("solana", routing.from.token);
-                if (!asset || asset.symbol.toLocaleLowerCase() !== "usdc"){
+                if (!asset || asset.symbol.toLocaleLowerCase() !== "usdc") {
                     throw new Error("Token Not Found")
                 }
 
                 if (!routing.amount) {
                     throw new Error("amount can not be null");
-                }else {
-                    transferAmount = routing.amount * 10**asset.decimals
+                } else {
+                    transferAmount = routing.amount * 10 ** asset.decimals
                 }
-          
-                if(routing.amount <1 ) {
+
+                if (routing.amount < 1) {
                     throw new Error("Minimum Deposit Amount should be >= 1")
                 }
 
-                const USDCroutingData = {   
+                const USDCroutingData = {
                     from: {
-                      token: "USDC",
-                      network: routing.from.network,
-                      address: routing.from.address,
-                      txn_signature: "",
+                        token: "USDC",
+                        network: routing.from.network,
+                        address: routing.from.address,
+                        txn_signature: "",
                     },
                     to: {
-                      token: "USDC",
-                      network: routing.to.network,
-                      address: routing.to.address,
-                      txn_signature: "",
+                        token: "USDC",
+                        network: routing.to.network,
+                        address: routing.to.address,
+                        txn_signature: "",
                     },
                     amount: transferAmount / 1000000,
                     units: BigInt(transferAmount),
-                  } as Routing; 
-                  
-                  const bridgeNodeInstructionData:DepositNote = {
+                } as Routing;
+
+                const bridgeNodeInstructionData: DepositNote = {
                     system: JSON.stringify({
-                      from: USDCroutingData.from,
-                      to: USDCroutingData.to,
-                      amount: USDCroutingData.amount,
-                      units: USDCroutingData.units?.toString(),
+                        from: USDCroutingData.from,
+                        to: USDCroutingData.to,
+                        amount: USDCroutingData.amount,
+                        units: USDCroutingData.units?.toString(),
                     }),
                     date: "".concat(new Date().toString()),
-                  };  
+                };
 
                 const PubKeywallet = new PublicKey(USDCroutingData.from.address);
-                const usdcMint =  BridgeTokens.get("solana","usdc")?.address;
+                const usdcMint = BridgeTokens.get("solana", "usdc")?.address;
                 if (!usdcMint) throw new Error('USDC mint not found');
-                const destination =  this._accounts?.usdcDeposit;
+                const destination = this._accounts?.usdcDeposit;
                 if (!destination) throw new Error('USDC destination not found');
-                const memoProgram =  this._accounts?.memoProgram; 
+                const memoProgram = this._accounts?.memoProgram;
                 if (!memoProgram) throw new Error('Memo Program not found');
-                if ( ! this._client){
+                if (!this._client) {
                     throw new Error("connection not set up")
                 }
                 const usdcMint_ = await getMint(this._client, new PublicKey(usdcMint));
-                const destinationPubkey = new PublicKey(destination);   
-                
+                const destinationPubkey = new PublicKey(destination);
+
                 const fromTokenAccount = await getOrCreateAssociatedTokenAccount(
                     this._client,
                     Keypair.fromSecretKey(account.sk),
@@ -216,14 +216,14 @@ export class SolanaBridgeTxnsV1 {
                     PubKeywallet,
                 )
 
-                if (!fromTokenAccount){
+                if (!fromTokenAccount) {
                     throw new Error("fromTokenAccount does not exist")
                 }
                 let tx = new Transaction();
-                if (!(await this._client.getAccountInfo(fromTokenAccount.address))){
-                    
+                if (!(await this._client.getAccountInfo(fromTokenAccount.address))) {
+
                     throw new Error('USDC not opted in, please Opt in');
-                } 
+                }
 
                 tx.add(
                     createTransferInstruction(
@@ -233,129 +233,129 @@ export class SolanaBridgeTxnsV1 {
                         transferAmount,
                         [],
                         TOKEN_PROGRAM_ID
-                      
+
                     )
                 );
                 tx.add(
                     new TransactionInstruction({
-                    keys: [
-                        { pubkey: PubKeywallet, isSigner: true, isWritable: true },
-                    ],
-                    data: Buffer.from(JSON.stringify(bridgeNodeInstructionData), "utf-8"),
-                    programId: new PublicKey(memoProgram),
+                        keys: [
+                            { pubkey: PubKeywallet, isSigner: true, isWritable: true },
+                        ],
+                        data: Buffer.from(JSON.stringify(bridgeNodeInstructionData), "utf-8"),
+                        programId: new PublicKey(memoProgram),
                     })
 
                 );
-             
-                 resolve(tx)  
-                }
-                catch(err){
-                    reject(err)
-                }
 
-            });
+                resolve(tx)
+            }
+            catch (err) {
+                reject(err)
+            }
+
+        });
 
     }
 
-    public async HandleUsdcSwapUnsigned(routing:Routing,token:BridgeToken):Promise<Transaction | undefined> {
-        return new Promise(async (resolve,reject) =>{
-          try {
-            let transferAmount:number ;
-            if (!routing.from.address) throw new Error('Source address can not be found');
-            if (!routing.to.address) throw new Error('Destination address can not be found');
-            let asset = BridgeTokens.get("solana", routing.from.token);
-            if (!asset || asset.symbol.toLocaleLowerCase() !== "usdc"){
-                throw new Error("Token Not Found")
-            }
+    public async HandleUsdcSwapUnsigned(routing: Routing, token: BridgeToken): Promise<Transaction | undefined> {
+        return new Promise(async (resolve, reject) => {
+            try {
+                let transferAmount: number;
+                if (!routing.from.address) throw new Error('Source address can not be found');
+                if (!routing.to.address) throw new Error('Destination address can not be found');
+                let asset = BridgeTokens.get("solana", routing.from.token);
+                if (!asset || asset.symbol.toLocaleLowerCase() !== "usdc") {
+                    throw new Error("Token Not Found")
+                }
 
-            if (!routing.amount) {
-                throw new Error("amount can not be null");
-            }else {
-                transferAmount = routing.amount * 10**asset.decimals
-            }
-            if(routing.amount <1 ) {
-                throw new Error("Minimum Deposit Amount should be >= 1")
-            }
-            const USDCroutingData = {   
-                from: {
-                  token: "USDC",
-                  network: routing.from.network,
-                  address: routing.from.address,
-                  txn_signature: "",
-                },
-                to: {
-                  token: "USDC",
-                  network: routing.to.network,
-                  address: routing.to.address,
-                  txn_signature: "",
-                },
-                amount: transferAmount / 1000000,
-                units: BigInt(transferAmount),
-              } as Routing; 
-              
-              const bridgeNodeInstructionData:DepositNote = {
-                system: JSON.stringify({
-                  from: USDCroutingData.from,
-                  to: USDCroutingData.to,
-                  amount: USDCroutingData.amount,
-                  units: USDCroutingData.units?.toString(),
-                }),
-                date: "".concat(new Date().toString()),
-              };  
+                if (!routing.amount) {
+                    throw new Error("amount can not be null");
+                } else {
+                    transferAmount = routing.amount * 10 ** asset.decimals
+                }
+                if (routing.amount < 1) {
+                    throw new Error("Minimum Deposit Amount should be >= 1")
+                }
+                const USDCroutingData = {
+                    from: {
+                        token: "USDC",
+                        network: routing.from.network,
+                        address: routing.from.address,
+                        txn_signature: "",
+                    },
+                    to: {
+                        token: "USDC",
+                        network: routing.to.network,
+                        address: routing.to.address,
+                        txn_signature: "",
+                    },
+                    amount: transferAmount / 1000000,
+                    units: BigInt(transferAmount),
+                } as Routing;
 
-            const PubKeywallet = new PublicKey(USDCroutingData.from.address);
-            const usdcMint =  BridgeTokens.get("solana","usdc")?.address;
-            if (!usdcMint) throw new Error('USDC mint not found');
-            const destination =  this._accounts?.usdcDeposit;
-            if (!destination) throw new Error('USDC destination not found');
-            const memoProgram =  this._accounts?.memoProgram; 
-            if (!memoProgram) throw new Error('Memo Program not found');
-            if ( ! this._client){
-                throw new Error("connection not set up")
-            }
-            const usdcMint_ = await getMint(this._client, new PublicKey(usdcMint));
-            const destinationPubkey = new PublicKey(destination);   
-            
-            const fromTokenAccount = await getAssociatedTokenAddress(
-                usdcMint_.address,
-                PubKeywallet,
-            );
+                const bridgeNodeInstructionData: DepositNote = {
+                    system: JSON.stringify({
+                        from: USDCroutingData.from,
+                        to: USDCroutingData.to,
+                        amount: USDCroutingData.amount,
+                        units: USDCroutingData.units?.toString(),
+                    }),
+                    date: "".concat(new Date().toString()),
+                };
 
-            if (!fromTokenAccount){
-                throw new Error("fromTokenAccount does not exist")
-            }
-            let tx = new Transaction();
-            if (!(await this._client.getAccountInfo(fromTokenAccount))){
-                
-                throw new Error('USDC not opted in, please Opt in');
-            } 
+                const PubKeywallet = new PublicKey(USDCroutingData.from.address);
+                const usdcMint = BridgeTokens.get("solana", "usdc")?.address;
+                if (!usdcMint) throw new Error('USDC mint not found');
+                const destination = this._accounts?.usdcDeposit;
+                if (!destination) throw new Error('USDC destination not found');
+                const memoProgram = this._accounts?.memoProgram;
+                if (!memoProgram) throw new Error('Memo Program not found');
+                if (!this._client) {
+                    throw new Error("connection not set up")
+                }
+                const usdcMint_ = await getMint(this._client, new PublicKey(usdcMint));
+                const destinationPubkey = new PublicKey(destination);
 
-            tx.add(
-                createTransferInstruction(
-                    fromTokenAccount,
-                    destinationPubkey,
+                const fromTokenAccount = await getAssociatedTokenAddress(
+                    usdcMint_.address,
                     PubKeywallet,
-                    transferAmount,
-                    [],
-                    TOKEN_PROGRAM_ID
-                  
-                )
-            );
-            tx.add(
-                new TransactionInstruction({
-                keys: [
-                    { pubkey: PubKeywallet, isSigner: true, isWritable: true },
-                ],
-                data: Buffer.from(JSON.stringify(bridgeNodeInstructionData), "utf-8"),
-                programId: new PublicKey(memoProgram),
-                })
+                );
 
-            );
-         
-             resolve(tx)  
-          }catch (err) {
-            reject(err)
-          }
+                if (!fromTokenAccount) {
+                    throw new Error("fromTokenAccount does not exist")
+                }
+                let tx = new Transaction();
+                if (!(await this._client.getAccountInfo(fromTokenAccount))) {
+
+                    throw new Error('USDC not opted in, please Opt in');
+                }
+
+                tx.add(
+                    createTransferInstruction(
+                        fromTokenAccount,
+                        destinationPubkey,
+                        PubKeywallet,
+                        transferAmount,
+                        [],
+                        TOKEN_PROGRAM_ID
+
+                    )
+                );
+                tx.add(
+                    new TransactionInstruction({
+                        keys: [
+                            { pubkey: PubKeywallet, isSigner: true, isWritable: true },
+                        ],
+                        data: Buffer.from(JSON.stringify(bridgeNodeInstructionData), "utf-8"),
+                        programId: new PublicKey(memoProgram),
+                    })
+
+                );
+
+                resolve(tx)
+            } catch (err) {
+                reject(err)
+            }
         });
     }
 
@@ -371,7 +371,7 @@ export class SolanaBridgeTxnsV1 {
                 if (!this._bridgeProgramAddress) throw new Error("Bridge Program Address is not set");
                 if (!this._client) throw new Error("Client is not set");
 
-              
+
 
                 //Get Bridge Program PubKey
                 const bridgeProgram = new PublicKey(this._bridgeProgramAddress!);
@@ -426,13 +426,13 @@ export class SolanaBridgeTxnsV1 {
 
     }
 
-    
+
     public async tokenBridgeTransaction(account: PublicKey, routing: Routing, token: BridgeToken): Promise<Transaction | undefined> {
         return new Promise(async (resolve, reject) => {
             try {
 
                 //Fail Safe
-                 if (token.symbol.toLowerCase() == "sol") throw new Error("Token must be SOL");
+                if (token.symbol.toLowerCase() == "sol") throw new Error("Token must be SOL");
                 if (!token.address) throw new Error("mint address is required");
                 if (typeof token.address !== "string") throw new Error("token address is required in string format");
                 if (!routing.amount) throw new Error("amount is required");
@@ -446,7 +446,7 @@ export class SolanaBridgeTxnsV1 {
                 const solEscrowAccount = await this.getSolEscrowAccount(account);
                 const tokenEscrowAccount = await this.getTokenEscrowAccount(account);
                 const userTokenAccount = await this.getTokenAccount(account, new PublicKey(token.address));
-                const mintToken= new PublicKey(token.address);
+                const mintToken = new PublicKey(token.address);
                 //const solanaEscrowA = await this._client.getAccountInfo(solanaEscrowAccount  )
                 //console.log(util.inspect(solanaEscrowA, false, 5, true /* enable colors */))
 
@@ -483,7 +483,7 @@ export class SolanaBridgeTxnsV1 {
                         { pubkey: SystemProgram.programId, isSigner: false, isWritable: false },
                     ],
                     data: Buffer.from(data)
-                });                
+                });
 
                 const latestBlockhash = await this._client.getLatestBlockhash('finalized')
                 const transaction = new Transaction({
@@ -502,48 +502,48 @@ export class SolanaBridgeTxnsV1 {
     }
 
     // get Id
-    public  getGlitterAccountAddress(input:SolanaProgramId):string |number | undefined {
+    public getGlitterAccountAddress(input: SolanaProgramId): string | number | undefined {
 
-        let res:string | number | undefined; 
-          switch(input) {
-            case "bridgeProgram":{
+        let res: string | number | undefined;
+        switch (input) {
+            case "bridgeProgram": {
                 res = this._accounts?.bridgeProgram;
                 break;
             }
-            case "vestingProgram":{
+            case "vestingProgram": {
                 res = this._accounts?.vestingProgram;
                 break;
             }
-            case "owner":{
+            case "owner": {
                 res = this._accounts?.owner;
                 break;
             }
-            case "usdcReceiver":{
+            case "usdcReceiver": {
                 res = this._accounts?.usdcReceiver;
                 break;
             }
-            case "usdcDeposit":{
+            case "usdcDeposit": {
                 res = this._accounts?.usdcDeposit;
                 break;
             }
-            case "memoProgram":{
+            case "memoProgram": {
                 res = this._accounts?.memoProgram;
                 break;
             }
-            case "UsdcMint":{
-                res = BridgeTokens.get("solana","usdc")?.address;
+            case "UsdcMint": {
+                res = BridgeTokens.get("solana", "usdc")?.address;
                 break;
             }
-            default: { 
-                console.log("Invalid Address"); 
+            default: {
+                console.log("Invalid Address");
                 res = undefined;
-                break;              
-             } 
-          }
+                break;
+            }
+        }
 
-     return  res ;
-    
-}
+        return res;
+
+    }
 
 }
 
@@ -573,7 +573,6 @@ class BridgeSetSchema {
 
     constructor(properties: { validator_address: Uint8Array }) {
         this.validator_address = properties.validator_address
-
     }
 
     static set_schema = new Map([
@@ -588,4 +587,78 @@ class BridgeSetSchema {
         ],
     ]);
 }
+class BridgeReleaseSchema {
+    readonly algo_address: Uint8Array
+    readonly algo_txn_id: Uint8Array
+    readonly amount: number
+
+    constructor(properties: {
+        algo_address: Uint8Array,
+        algo_txn_id: Uint8Array,
+        amount: number
+    }) {
+        this.algo_address = properties.algo_address
+        this.algo_txn_id = properties.algo_txn_id
+        this.amount = properties.amount;
+    }
+
+    static release_schema = new Map([
+        [
+            BridgeReleaseSchema,
+            {
+                kind: "struct",
+                fields: [
+                    ["algo_address", [32]],
+                    ["algo_txn_id", [52]],
+                    ["amount", "u64"],
+                ],
+            },
+        ],
+    ]);
+}
+class BridgeApproveSchema {
+    readonly algo_address: Uint8Array
+    readonly algo_txn_id: Uint8Array
+
+    constructor(properties: {
+        algo_address: Uint8Array,
+        algo_txn_id: Uint8Array
+    }) {
+        this.algo_address = properties.algo_address
+        this.algo_txn_id = properties.algo_txn_id
+    }
+
+    static approve_schema = new Map([
+        [
+            BridgeApproveSchema,
+            {
+                kind: "struct",
+                fields: [
+                    ["algo_address", [32]],
+                    ["algo_txn_id", [52]],
+                ],
+            },
+        ],
+    ]);
+}
+class BridgeCancelSchema {
+    readonly algo_address: Uint8Array
+
+    constructor(properties: {
+        algo_address: Uint8Array
+    }) {
+        this.algo_address = properties.algo_address
+    }
+
+    static cancel_schema = new Map([
+        [
+            BridgeCancelSchema,
+            {
+                kind: "struct",
+                fields: [["algo_address", [32]]],
+            },
+        ],
+    ]);
+}
+
 
