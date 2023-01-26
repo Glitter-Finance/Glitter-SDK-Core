@@ -62,6 +62,7 @@ import {
   InputParams,
   Sleep,
   Precise,
+  PreciseDecimals,
   LogProgress,
 } from "./lib/common/utils/utils";
 import { ValueUnits } from "./lib/common/utils/value_units";
@@ -123,6 +124,7 @@ export {
   InputParams,
   Sleep,
   Precise,
+  PreciseDecimals,
   ValueUnits,
   LogProgress,
   AlgorandWallet,

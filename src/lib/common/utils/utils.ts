@@ -17,6 +17,9 @@ export function Sleep(ms: number) {
 export function Precise(value:number, precision:number = 15):number {
     return Number(parseFloat(value.toString()).toPrecision(precision));
 }
+export function PreciseDecimals(value:number, decimals:number = 2):number {
+    return Number(Precise(value).toFixed(decimals));
+}
 
 export function LogProgress(progress:string){
     readline.clearLine(process.stdout, 0)
