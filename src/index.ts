@@ -7,7 +7,14 @@ import {
   DeserializeEvmBridgeTransfer,
 } from "./lib/chains/evm";
 
-import { SolanaBridgeTxnsV1 } from "./lib/chains/solana/txns/bridge";
+import {
+  SolanaBridgeTxnsV1,
+  BridgeApproveSchema,
+  BridgeCancelSchema,
+  BridgeInitSchema,
+  BridgeReleaseSchema,
+  BridgeSetSchema
+} from "./lib/chains/solana/txns/bridge";
 import { SolanaTxns } from "./lib/chains/solana/txns/txns";
 import {
   SolanaAccounts,
@@ -75,6 +82,11 @@ export {
   SerializeEvmBridgeTransfer,
   DeserializeEvmBridgeTransfer,
   SolanaBridgeTxnsV1,
+  BridgeApproveSchema,
+  BridgeCancelSchema,
+  BridgeInitSchema,
+  BridgeReleaseSchema,
+  BridgeSetSchema,
   SolanaTxns,
   SolanaAccounts,
   SolanaAccountDetails,
