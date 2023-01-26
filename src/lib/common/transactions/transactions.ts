@@ -18,7 +18,7 @@ export enum ChainStatus{
 export type PartialBridgeTxn ={
     TxnId:String, 
     TxnType:TransactionType, 
-    ChainStatus:ChainStatus,
+    ChainStatus?:ChainStatus|null,
     routing?:Routing |null    
 };
 
