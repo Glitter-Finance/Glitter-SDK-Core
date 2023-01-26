@@ -18,6 +18,7 @@ export enum ChainStatus{
 
 export type PartialBridgeTxn ={
     txnID:string, 
+    txnTimestamp:Date,
     txnType:TransactionType, 
     chainStatus?:ChainStatus|null,
     network?:string|null,
