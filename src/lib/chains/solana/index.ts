@@ -1,4 +1,11 @@
-import { SolanaBridgeTxnsV1 } from "./txns/bridge";
+import {
+  SolanaBridgeTxnsV1,
+  BridgeApproveSchema,
+  BridgeCancelSchema,
+  BridgeInitSchema,
+  BridgeReleaseSchema,
+  BridgeSetSchema
+} from "./txns/bridge";
 import { SolanaTxns } from "./txns/txns";
 import {
   SolanaAccounts,
@@ -21,4 +28,9 @@ export {
   SolanaAsset,
   SolanaConfig,
   SolanaConnect,
+  BridgeApproveSchema,
+  BridgeCancelSchema,
+  BridgeInitSchema,
+  BridgeReleaseSchema,
+  BridgeSetSchema
 };

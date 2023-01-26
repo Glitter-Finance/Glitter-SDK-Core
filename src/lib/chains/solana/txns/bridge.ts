@@ -547,7 +547,7 @@ export class SolanaBridgeTxnsV1 {
 
 }
 
-class BridgeInitSchema {
+export class BridgeInitSchema {
     readonly algo_address: Uint8Array
     readonly amount: number
     constructor(properties: { algo_address: Uint8Array, amount: number }) {
@@ -568,7 +568,7 @@ class BridgeInitSchema {
         ],
     ]);
 }
-class BridgeSetSchema {
+export class BridgeSetSchema {
     readonly validator_address: Uint8Array
 
     constructor(properties: { validator_address: Uint8Array }) {
@@ -587,7 +587,7 @@ class BridgeSetSchema {
         ],
     ]);
 }
-class BridgeReleaseSchema {
+export class BridgeReleaseSchema {
     readonly algo_address: Uint8Array
     readonly algo_txn_id: Uint8Array
     readonly amount: number
@@ -616,7 +616,7 @@ class BridgeReleaseSchema {
         ],
     ]);
 }
-class BridgeApproveSchema {
+export class BridgeApproveSchema {
     readonly algo_address: Uint8Array
     readonly algo_txn_id: Uint8Array
 
@@ -641,7 +641,7 @@ class BridgeApproveSchema {
         ],
     ]);
 }
-class BridgeCancelSchema {
+export class BridgeCancelSchema {
     readonly algo_address: Uint8Array
 
     constructor(properties: {
