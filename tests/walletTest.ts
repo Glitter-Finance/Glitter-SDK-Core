@@ -123,7 +123,7 @@ if(!new_list_algorand){
       console.log("===========================||=============================")
       Sleep(30000) // 30 sec sleep 
 
-      const endAt = new_list[0].TxnId
+      const endAt = new_list[0].txnID
       const new_list_before = await solana?.listBridgetransactions(take,undefined,endAt); 
       if(!new_list_before){
         throw new Error("new_list_before undefiend")

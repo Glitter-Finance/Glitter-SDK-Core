@@ -6,6 +6,7 @@ export enum TransactionType{
     Release = "Release ",
     Refund =  "Refund",
     Transfer = "Transfer",
+    Finalize ="FInalize"
 }
 export enum ChainStatus{
     Unknown = "Unknown",
@@ -16,9 +17,13 @@ export enum ChainStatus{
 }
 
 export type PartialBridgeTxn ={
-    TxnId:string, 
-    TxnType:TransactionType, 
-    ChainStatus?:ChainStatus|null,
+    txnID:String, 
+    txnType:TransactionType, 
+    chainStatus?:ChainStatus|null,
+    network?:String|null,
+    tokenSymbol?:String|null,
+    address?:String|null,
+    amount?:number|null,
     routing?:Routing |null    
 };
 

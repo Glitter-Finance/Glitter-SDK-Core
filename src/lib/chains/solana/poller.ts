@@ -84,27 +84,27 @@ export class SolanaPoller{
                 let l = chunk[i]!.transaction.message.instructions.length
               const txnID = RevSignatures[i];
                 let partialBtxn:PartialBridgeTxn ={
-                TxnId:txnID,
-                TxnType:TransactionType.Unknown,
+                txnID:txnID,
+                txnType:TransactionType.Unknown,
               };  
               const txnData = chunk[i]!.transaction.message.instructions[0].data;
               let data_bytes = bs58.decode(txnData);
               if (Number(data_bytes[0]) === 10) {
               depositNote = this.solDeposit(txn, data_bytes, txnID);
-              partialBtxn.TxnType = TransactionType.Deposit
+              partialBtxn.txnID = TransactionType.Deposit
             } else if (Number(data_bytes[0]) === 11) {
-                partialBtxn.TxnType = TransactionType.Finalize;
+                partialBtxn.txnType = TransactionType.Finalize;
             } else if (Number(data_bytes[0]) === 13) {
               depositNote = this.SOLRelease(txn, data_bytes, txnID);
-              partialBtxn.TxnType = TransactionType.Release
+              partialBtxn.txnType = TransactionType.Release
             } else if (Number(data_bytes[0]) === 20) {
               depositNote = this.xALGODeposit(txn, data_bytes, txnID);
-              partialBtxn.TxnType = TransactionType.Deposit
+              partialBtxn.txnType = TransactionType.Deposit
             } else if (Number(data_bytes[0]) === 21) {
-                partialBtxn.TxnType = TransactionType.Finalize;
+                partialBtxn.txnType = TransactionType.Finalize;
             } else if (Number(data_bytes[0]) === 23) {
               depositNote = this.xALGORelease(txn, data_bytes, txnID);
-              partialBtxn.TxnType = TransactionType.Release
+              partialBtxn.txnType = TransactionType.Release
             } else {
                 console.log(`Transaction ${txnID} is not a bridge transaction`);
             }
@@ -178,13 +178,13 @@ public async ListUSDCDepositTransactionHandler(take:number,beginAt?:string,endAt
                   }
                   if(!depositNote){
                     partialBtxn =  {
-                     TxnId:RevSignatures[i],
-                     TxnType:TransactionType.Deposit,
+                     txnID:RevSignatures[i],
+                     txnType:TransactionType.Deposit,
                    }; 
                    }else{
                       partialBtxn =  {
-                       TxnId:RevSignatures[i],
-                       TxnType:TransactionType.Deposit,
+                       txnID:RevSignatures[i],
+                       txnType:TransactionType.Deposit,
                        routing:depositNote
                      }; 
                    }
@@ -255,13 +255,13 @@ public async ListUSDCDepositTransactionHandler(take:number,beginAt?:string,endAt
                 }
                 if(!depositNote){
                   partialBtxn =  {
-                   TxnId:RevSignatures[i],
-                   TxnType:TransactionType.Release,
+                   txnID:RevSignatures[i],
+                   txnType:TransactionType.Release,
                  }; 
                  }else{
                     partialBtxn =  {
-                     TxnId:RevSignatures[i],
-                     TxnType:TransactionType.Release,
+                     txnID:RevSignatures[i],
+                     txnType:TransactionType.Release,
                      routing:depositNote
                    }; 
                  }

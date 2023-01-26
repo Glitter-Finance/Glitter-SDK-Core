@@ -715,7 +715,7 @@ export class AlgorandConnect {
                 //Make sure root path is defined
                 if (!rootPath) resolve(false);
 
-                let dryRun = null;
+                let dryRun:any = null;
 
                 const txnsDecoded = rawSignedTxnBuff.map((txn) => {
                     return algosdk.decodeSignedTransaction(txn);

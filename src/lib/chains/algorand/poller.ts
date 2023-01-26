@@ -155,13 +155,13 @@ export class AlgorandPoller{
                 const routing = await this.getNote(result);
                 if(!routing){
                     partialBtxn   =  {
-                        TxnId:result.id,
-                        TxnType:TransactionType.Release,
+                        txnID:result.id,
+                        txnType:TransactionType.Release,
                     };
                 }else{
                      partialBtxn =  {
                         txnID:result.id,
-                        TxnType:TransactionType.Release,
+                        txnType:TransactionType.Release,
                         routing:routing
                     };
                 }    
@@ -175,12 +175,12 @@ export class AlgorandPoller{
                     if(!routing){
                         partialBtxn   =  {
                             txnID:result.id,
-                            TxnType:TransactionType.Release,
+                            txnType:TransactionType.Release,
                         };
                     }else{
                          partialBtxn =  {
                             txnID:result.id,
-                            TxnType:TransactionType.Release,
+                            txnType:TransactionType.Release,
                             routing:routing
                         };
                     }    
@@ -231,12 +231,12 @@ export class AlgorandPoller{
                 if(!routing){
                     partialBtxn   =  {
                         txnID:result.id,
-                        TxnType:TransactionType.Release,
+                        txnType:TransactionType.Release,
                     };
                 }else{
                      partialBtxn =  {
                         txnID:result.id,
-                        TxnType:TransactionType.Release,
+                        txnType:TransactionType.Release,
                         routing:routing
                     };
                 }    
@@ -250,12 +250,12 @@ export class AlgorandPoller{
                     if(!routing){
                         partialBtxn   =  {
                             txnID:result.id,
-                            TxnType:TransactionType.Release,
+                            txnType:TransactionType.Release,
                         };
                     }else{
                          partialBtxn =  {
                             txnID:result.id,
-                            TxnType:TransactionType.Release,
+                            txnType:TransactionType.Release,
                             routing:routing
                         };
                     }      
@@ -393,7 +393,7 @@ export class AlgorandPoller{
 
                 partialBTxn = {
                     txnID:txnID,
-                    TxnType:txnType,
+                    txnType:txnType,
                     routing:routing
                 }
              return partialBTxn;   
@@ -423,7 +423,7 @@ export class AlgorandPoller{
 
                 partialBTxn = {
                     txnID:txnID,
-                    TxnType:txnType,
+                    txnType:txnType,
                     routing:routing
                 }
               
@@ -454,7 +454,7 @@ export class AlgorandPoller{
 
                 partialBTxn = {
                     txnID:txnID,
-                    TxnType:txnType,
+                    txnType:txnType,
                     routing:routing
                 }
               
@@ -485,7 +485,7 @@ export class AlgorandPoller{
 
                 partialBTxn = {
                     txnID:txnID,
-                    TxnType:txnType,
+                    txnType:txnType,
                     routing:routing
                 }
               
@@ -516,7 +516,7 @@ export class AlgorandPoller{
 
                 partialBTxn = {
                     txnID:txnID,
-                    TxnType:txnType,
+                    txnType:txnType,
                     routing:routing
                 }
               
