@@ -110,7 +110,7 @@ export const BridgeTestnet: GlitterBridgeConfig = {
   evm: {
     [BridgeNetworks.Avalanche]: {
       bridge: "0x07c48413bEA695Ef37a75Be8A09ec84A4c8a6bc1",
-      rpcUrl: "",
+      rpcUrl: "https://rpc.ankr.com/avalanche_fuji",
       tokens: [
         {
           address: "0x5425890298aed601595a70AB815c96711a31Bc65",
@@ -125,7 +125,7 @@ export const BridgeTestnet: GlitterBridgeConfig = {
     },
     [BridgeNetworks.Ethereum]: {
       bridge: "0xc918b9719A0e04Df45842eec88FC84480266b568",
-      rpcUrl: "",
+      rpcUrl: "https://rpc.ankr.com/eth_goerli",
       tokens: [
         {
           address: "0x07865c6E87B9F70255377e024ace6630C1Eaa37F",
@@ -140,7 +140,7 @@ export const BridgeTestnet: GlitterBridgeConfig = {
     },
     [BridgeNetworks.Polygon]: {
       bridge: "0xA870B28c23F2358971dC1FF93bC2a2Ec908A6D33",
-      rpcUrl: "",
+      rpcUrl: "https://rpc.ankr.com/polygon_mumbai",
       tokens: [
         {
           address: "0x0fa8781a83e46826621b3bc094ea2a0212e71b23",
