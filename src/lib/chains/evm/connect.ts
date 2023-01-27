@@ -273,14 +273,21 @@ export class EvmConnect {
     }
   }
 
-  public async listBridgeTransaction(limit:number,asset:BridgeToken, starthash?:string ):Promise<PartialBridgeTxn[]> {
-    return new Promise(async(resolve,reject) =>{
-      try{
-          
-      }catch(err) {
+  public async listBridgeTransaction(limit: number, asset: BridgeToken, starthash?: string): Promise<PartialBridgeTxn[]> {
+    return new Promise(async (resolve, reject) => {
+      try {
+
+      } catch (err) {
         reject(err)
       }
     })
+  }
+
+  public tokenBridgePollerAddress(): string | number | undefined {
+    return undefined;
+  }
+  public usdcBridgeAddress(network: BridgeEvmNetworks): string | number | undefined {
+    return this.__config?.bridge;
   }
 
 }

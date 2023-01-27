@@ -26,9 +26,11 @@ export class AlgorandConnect {
     private _transactions: AlgorandTxns | undefined = undefined;
     private _bridgeTxnsV1: AlgorandBridgeTxnsV1 | undefined = undefined;
     private _poller:AlgorandPoller|undefined
+    private _config: AlgorandConfig | undefined = undefined;
     _lastTxnHash: string = "";
 
     constructor(config: AlgorandConfig) {
+        this._config = config;
         this._client = GetAlgodClient(config.serverUrl, config.serverPort, config.nativeToken);
         this._clientIndexer = GetAlgodIndexer(config.indexerUrl, config.indexerUrl, config.nativeToken);
         this._accounts = new AlgorandAccounts(this._client);
@@ -958,6 +960,13 @@ private async listDepositTransactionHandler(address:string,limit:number ,asset:B
     public getAlgorandBridgeAddress(id:AlgorandProgramAccount):string |number|undefined{
         
         return this._bridgeTxnsV1?.getGlitterAccountAddress(id);
+    }
+
+    public tokenBridgePollerAddress():string|number|undefined{
+        return this._config?.accounts?.bridge;
+    }
+    public usdcBridgePollerAddress():string|number|undefined{
+        return this._config?.accounts?.usdcDeposit;
     }
 }
 
