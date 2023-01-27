@@ -293,7 +293,7 @@ export class EvmConnect {
   public tokenBridgePollerAddress(): string | number | undefined {
     return undefined;
   }
-  public usdcBridgeAddress(network: BridgeEvmNetworks): string | number | undefined {
+  public usdcBridgePollerAddress(network: BridgeEvmNetworks): string | number | undefined {
     return this.__config?.bridge;
   }
 
