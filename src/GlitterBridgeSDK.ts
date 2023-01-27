@@ -160,4 +160,14 @@ export class GlitterBridgeSDK {
   get solana(): SolanaConnect | undefined {
     return this._solana;
   }
+  get ethereum(): EvmConnect | undefined {
+    return this._evm[BridgeNetworks.Ethereum];
+  }
+  get polygon(): EvmConnect | undefined {
+    return this._evm[BridgeNetworks.Polygon];
+  }
+  get avalanche(): EvmConnect | undefined {
+    return this._evm[BridgeNetworks.Avalanche];
+  }   
+
 }

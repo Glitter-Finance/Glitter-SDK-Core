@@ -17,8 +17,10 @@ export class SolanaConnect {
     private _transactions: SolanaTxns | undefined = undefined;
     private _bridgeTxnsV1: SolanaBridgeTxnsV1 | undefined = undefined;
     private _poller:SolanaPoller | undefined;
+    private _config: SolanaConfig | undefined = undefined;
     _lastTxnHash: string = "";
     constructor(config: SolanaConfig) {
+        this._config = config;
         this._client = new Connection(config.server);
         this._accounts = new SolanaAccounts(this._client);
         this._assets = new SolanaAssets(this._client);
@@ -1048,8 +1050,11 @@ public async bridge(account: SolanaAccount,
     public getSolanaBridgeAddress(id:SolanaProgramId):string|number|undefined{
         return this._bridgeTxnsV1?.getGlitterAccountAddress(id);
     }
+    public tokenBridgePollerAddress():string|number|undefined{
+        return this._config?.accounts?.bridgeProgram;
+    }
+    public usdcBridgePollerAddress():string|number|undefined{
+        return this._config?.accounts?.usdcDeposit;
+    }
 
 }
-
-
-
