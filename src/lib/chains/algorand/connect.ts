@@ -962,10 +962,10 @@ private async listDepositTransactionHandler(address:string,limit:number ,asset:B
         return this._bridgeTxnsV1?.getGlitterAccountAddress(id);
     }
 
-    public tokenBridgePollerAddress():string|number|undefined{
+    public get tokenBridgePollerAddress():string|number|undefined{
         return this._config?.accounts?.bridge;
     }
-    public usdcBridgePollerAddress():string|number|undefined{
+    public get usdcBridgePollerAddress():string|number|undefined{
         return this._config?.accounts?.usdcDeposit;
     }
 }

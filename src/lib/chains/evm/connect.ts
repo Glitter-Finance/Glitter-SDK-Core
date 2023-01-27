@@ -283,10 +283,10 @@ export class EvmConnect {
     })
   }
 
-  public tokenBridgePollerAddress(): string | number | undefined {
+  public get tokenBridgePollerAddress(): string | number | undefined {
     return undefined;
   }
-  public usdcBridgePollerAddress(network: BridgeEvmNetworks): string | number | undefined {
+  public get usdcBridgePollerAddress(): string | number | undefined {
     return this.__config?.bridge;
   }
 

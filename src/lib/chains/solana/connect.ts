@@ -977,10 +977,10 @@ public async bridge(account: SolanaAccount,
     public getSolanaBridgeAddress(id:SolanaProgramId):string|number|undefined{
         return this._bridgeTxnsV1?.getGlitterAccountAddress(id);
     }
-    public tokenBridgePollerAddress():string|number|undefined{
+    public get tokenBridgePollerAddress():string|number|undefined{
         return this._config?.accounts?.bridgeProgram;
     }
-    public usdcBridgePollerAddress():string|number|undefined{
+    public get usdcBridgePollerAddress():string|number|undefined{
         return this._config?.accounts?.usdcDeposit;
     }
 
