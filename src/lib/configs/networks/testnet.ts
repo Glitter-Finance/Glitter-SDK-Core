@@ -2,9 +2,9 @@ import { BridgeNetworks } from "../../common/networks/networks";
 import { GlitterBridgeConfig } from "../config";
 
 export const BridgeTestnet: GlitterBridgeConfig = {
-  name: "mainnet",
+  name: "testnet",
   algorand: {
-    name: "mainnet",
+    name: "Algorand",
     serverUrl: "https://node.testnet.algoexplorerapi.io",
     serverPort: "",
     indexerUrl: "https://algoindexer.testnet.algoexplorerapi.io",
@@ -18,8 +18,9 @@ export const BridgeTestnet: GlitterBridgeConfig = {
       feeReceiver: "A2GPNMIWXZDD3O3MP5UFQL6TKAZPBJEDZYHMFFITIAJZXLQH37SJZUWSZQ",
       multiSig1: "JPDV3CKFABIXDVH36E7ZBVJ2NC2EQJIBEHCKYTWVC4RDDOHHOPSBWH3QFY",
       multiSig2: "DFFTYAB6MWMRTZGHL2GAP7TMK7OUGHDD2AACSO7LXSZ7SY2VLO3OEOJBQU",
-      usdcReceiver: "",
-      usdcDeposit: "",
+      usdcReceiver:
+        "JJWJKLUIMX3THW3CT6ZQMBRPBQ34MUFNS7PFV4YU7CCLS2KPUBOS7XFJDY",
+      usdcDeposit: "BPINJM3HKNDA2XU3FUARSRTXDZXYSK5AQXITGDED4T6RRLQPZX7SRRKXHI",
       bridge: "XJQ25THCV734QIUZARPZGG3NPRFZXTIIU77JSJBT23TJMGL3FXJWVR57OQ",
       asaVault: "U4A3YARBVMT7PORTC3OWXNC75BMGF6TCHFOQY4ZSIIECC5RW25SVKNKV3U",
       algoVault: "R7VCOR74LCUIFH5WKCCMZOS7ADLSDBQJ42YURFPDT3VGYTVNBNG7AIYTCQ",
@@ -39,7 +40,7 @@ export const BridgeTestnet: GlitterBridgeConfig = {
       {
         network: "algorand",
         symbol: "USDC",
-        address: undefined,
+        address: 10458941,
         decimals: 6,
         min_transfer: 5,
         fee_divisor: 200,
@@ -61,15 +62,15 @@ export const BridgeTestnet: GlitterBridgeConfig = {
     ],
   },
   solana: {
-    name: "mainnet-beta",
-    server: "https://api.mainnet-beta.solana.com",
+    name: "Solana",
+    server: "https://api.devnet.solana.com",
     accounts: {
       bridgeProgram: "GLittnj1E7PtSF5thj6nYgjtMvobyBuZZMuoemXpnv3G",
       vestingProgram: "EMkD74T2spV3A71qfY5PNqVNrNrpbFcdwMF2TerRMr9n",
       owner: "hY5PXHYm58H5KtJW4GrtegxXnpMruoX3LLP6CufHoHj",
       usdcReceiver: "Av47VxT8GpGXHYc3aG7fKddgZjCuZEb5yF3BCaXyE7wu",
-      usdcDeposit: "C4ZaLj7a5CPQ4r7TwXJc8cAyubXUx9XcN2zEHoP7peED",
-      memoProgram: "",
+      usdcDeposit: "8Cb6eKCiowqsfYoLeaQf9voTHv1nV6rKjBvMQwLEGoDJ",
+      memoProgram: "MemoSq4gqABAXKb96qnH8TysNcWxMyWCqXgDLGmfcHr",
     },
     tokens: [
       {
@@ -97,7 +98,7 @@ export const BridgeTestnet: GlitterBridgeConfig = {
       {
         network: "solana",
         symbol: "USDC",
-        address: "",
+        address: "4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU",
         decimals: 6,
         min_transfer: 1,
         fee_divisor: 200,
@@ -110,7 +111,7 @@ export const BridgeTestnet: GlitterBridgeConfig = {
   evm: {
     [BridgeNetworks.Avalanche]: {
       bridge: "0x07c48413bEA695Ef37a75Be8A09ec84A4c8a6bc1",
-      rpcUrl: "",
+      rpcUrl: "https://rpc.ankr.com/avalanche_fuji",
       tokens: [
         {
           address: "0x5425890298aed601595a70AB815c96711a31Bc65",
@@ -125,7 +126,7 @@ export const BridgeTestnet: GlitterBridgeConfig = {
     },
     [BridgeNetworks.Ethereum]: {
       bridge: "0xc918b9719A0e04Df45842eec88FC84480266b568",
-      rpcUrl: "",
+      rpcUrl: "https://rpc.ankr.com/eth_goerli",
       tokens: [
         {
           address: "0x07865c6E87B9F70255377e024ace6630C1Eaa37F",
@@ -140,7 +141,7 @@ export const BridgeTestnet: GlitterBridgeConfig = {
     },
     [BridgeNetworks.Polygon]: {
       bridge: "0xA870B28c23F2358971dC1FF93bC2a2Ec908A6D33",
-      rpcUrl: "",
+      rpcUrl: "https://rpc.ankr.com/polygon_mumbai",
       tokens: [
         {
           address: "0x0fa8781a83e46826621b3bc094ea2a0212e71b23",
