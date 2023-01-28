@@ -1131,6 +1131,12 @@ export class AlgorandConnect {
     public get usdcBridgePollerAddress():string|number|undefined{
         return this._config?.accounts?.usdcDeposit;
     }
+    public get usdcBridgeDepositAddress():string|number|undefined{
+        return this._config?.accounts?.usdcDeposit;
+    }   
+    public get usdcBridgeReceiverAddress():string|number|undefined{
+        return this._config?.accounts?.usdcReceiver;
+    }
 }
 
 export const GetAlgodIndexer = (url: string, port: string | number, token = ''): algosdk.Indexer => {
