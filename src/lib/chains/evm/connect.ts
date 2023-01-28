@@ -340,8 +340,8 @@ export class EvmConnect {
     const logs = await this.parseLogs(txnID);
 
     //Get Timestamp
-    const timestamp_ms = await this.getTimeStamp(txnID);
-    const timestamp = new Date(timestamp_ms);
+    const timestamp_s = await this.getTimeStamp(txnID);
+    const timestamp = new Date(timestamp_s*1000);
 
     //Check deposit/transfer/release
     const releaseEvent = logs?.find(
