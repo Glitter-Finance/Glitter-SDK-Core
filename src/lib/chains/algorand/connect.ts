@@ -9,6 +9,8 @@ import * as fs from 'fs';
 import { BridgeToken, BridgeTokens, LogProgress, Routing, RoutingDefault, Sleep } from '../../common';
 import { PartialBridgeTxn, TransactionType } from '../../common/transactions/transactions';
 import { AlgorandPoller } from './poller';
+import { ethers } from 'ethers';
+import { base64ToString } from '../../common/utils/utils';
 
 /**
  * 
@@ -1119,6 +1121,9 @@ export class AlgorandConnect {
         
         return this._bridgeTxnsV1?.getGlitterAccountAddress(id);
     }
+    public getTxnHashed(txnID: string): string {
+        return ethers.utils.keccak256(base64ToString(txnID));
+      }
 
     public get tokenBridgePollerAddress():string|number|undefined{
         return this._config?.accounts?.bridge;

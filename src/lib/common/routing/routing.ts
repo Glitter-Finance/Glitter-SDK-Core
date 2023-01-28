@@ -11,7 +11,8 @@ export type RoutingPoint = {
     network: string;
     address: string;
     token: string;
-    txn_signature: string;
+    txn_signature?: string;
+    txn_signature_hashed?: string;
 }
 
 export function RoutingDefault(copyFrom: Routing | undefined = undefined): Routing {
