@@ -348,7 +348,7 @@ export class EvmConnect {
 
     //Get Timestamp
     const timestamp_s = await this.getTimeStamp(txnID);
-    const timestamp = new Date(timestamp_s*1000);
+    const timestamp = new Date(timestamp_s * 1000);
 
     //Check deposit/transfer/release
     const releaseEvent = logs?.find(
@@ -437,7 +437,7 @@ export class EvmConnect {
       returnTxn.routing = routing;
 
     }
-    return Promise.resolve(returnTxn);   
+    return Promise.resolve(returnTxn);
   }
 
   public get tokenBridgePollerAddress(): string | number | undefined {
@@ -446,11 +446,11 @@ export class EvmConnect {
   public get usdcBridgePollerAddress(): string | number | undefined {
     return this.__config?.bridge;
   }
-  public get usdcBridgeDepositAddress():string|number|undefined{
+  public get usdcBridgeDepositAddress(): string | number | undefined {
     return this.__config?.depositWallet;
-}   
-public get usdcBridgeReceiverAddress():string|number|undefined{
+  }
+  public get usdcBridgeReceiverAddress(): string | number | undefined {
     return this.__config?.releaseWallet;
-}
+  }
 
 }
