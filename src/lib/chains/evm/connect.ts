@@ -20,7 +20,7 @@ import {
   BridgeNetworks,
   NetworkIdentifiers,
 } from "../../common/networks/networks";
-import { ChainStatus, PartialBridgeTxn, TransactionType } from "../../common/transactions/transactions";
+import { BridgeType, ChainStatus, PartialBridgeTxn, TransactionType } from "../../common/transactions/transactions";
 import { BridgeToken } from "../../common/tokens/tokens";
 import { Routing, ValueUnits } from "../../common";
 
@@ -370,6 +370,7 @@ export class EvmConnect {
     let returnTxn: PartialBridgeTxn = {
       txnID: txnID,
       txnIDHashed: this.getTxnHashed(txnID),
+      bridgeType: BridgeType.USDC,
       txnType: type,
       txnTimestamp: timestamp,
       chainStatus: await this.getTxnStatus(txnID),

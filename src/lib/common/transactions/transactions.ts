@@ -15,10 +15,16 @@ export enum ChainStatus{
     Failed = "Failed",
     Cancelled = "Cancelled",
 }
+export enum BridgeType{
+    Unknown = "Unknown",
+    USDC = "USDC",
+    Token = "Token",
+}
 
 export type PartialBridgeTxn ={
     txnID:string, 
     txnIDHashed?:string,
+    bridgeType?:BridgeType,
     txnTimestamp?:Date,
     txnType:TransactionType, 
     chainStatus?:ChainStatus|null,
