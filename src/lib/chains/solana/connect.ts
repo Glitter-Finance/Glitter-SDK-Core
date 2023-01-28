@@ -988,5 +988,11 @@ public async bridge(account: SolanaAccount,
     public get usdcBridgePollerAddress():string|number|undefined{
         return this._config?.accounts?.usdcDeposit;
     }
+    public get usdcBridgeDepositAddress():string|number|undefined{
+        return this._config?.accounts?.usdcDeposit;
+    }   
+    public get usdcBridgeReceiverAddress():string|number|undefined{
+        return this._config?.accounts?.usdcReceiver;
+    }
 
 }

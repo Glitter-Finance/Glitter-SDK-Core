@@ -439,5 +439,11 @@ export class EvmConnect {
   public get usdcBridgePollerAddress(): string | number | undefined {
     return this.__config?.bridge;
   }
+  public get usdcBridgeDepositAddress():string|number|undefined{
+    return this.__config?.depositWallet;
+}   
+public get usdcBridgeReceiverAddress():string|number|undefined{
+    return this.__config?.releaseWallet;
+}
 
 }
