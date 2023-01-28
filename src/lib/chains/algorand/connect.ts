@@ -439,6 +439,22 @@ private async listDepositTransactionHandler(address:string,limit:number ,asset:B
             }
         });
     }
+
+    async OptedinAccountExists(address:string,asset:string):Promise<boolean> {
+        return new Promise(async(resolve,reject) =>{
+            try{
+                if(!this._client) throw new Error("algoclient not set");
+                
+                const info = await this._client.accountInformation(address).query;
+
+                
+
+            }catch(err){
+                reject(err)
+            }
+        })
+    }
+
     async closeOutTokenAccount(signer: Account,
         receiver: string,
         symbol: string): Promise<boolean> {
@@ -960,7 +976,6 @@ private async listDepositTransactionHandler(address:string,limit:number ,asset:B
         return this._bridgeTxnsV1?.getGlitterAccountAddress(id);
     }
 }
-
 
 export const GetAlgodIndexer = (url: string, port: string | number, token = ''): algosdk.Indexer => {
     // const server = config.algo_client;

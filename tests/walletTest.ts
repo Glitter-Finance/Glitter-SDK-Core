@@ -13,7 +13,7 @@ const fs = require("fs");
 run();
 
 async function run() {
-  const result = await testGetAddress();
+  const result = await TransactionListTest();
   console.log(result);
 }
 
@@ -64,20 +64,15 @@ async function testGetAddress():Promise<boolean> {
   
 }
 
-
 async function TransactionListTest():Promise<boolean> {
 
   return new Promise(async(resolve,reject) =>{
     try{
 
-
-      console.log("list1")
-
-            //Load SDK
+      //Load SDK
       const sdk = new GlitterBridgeSDK()
       .setEnvironment(GlitterEnvironment.mainnet)
       .connect([BridgeNetworks.algorand, BridgeNetworks.solana]);
-      console.log("list2")
 
       //Reference variables locally for ease of use
       const algorandAccounts = sdk.algorand?.accounts;
@@ -86,32 +81,54 @@ async function TransactionListTest():Promise<boolean> {
       const solana = sdk.solana;     
       const asset = BridgeTokens.get("solana", "usdc");
       if(!asset) throw new Error("asset is not Defined");
-      const startTxnHash ="4Nh9LjSDVaiENULrhTxrKnVWtPWPHgCg54gxy2DNtcz9EBbZdPmvR4b5DNSF3jCQrbeem2TMCZci4ajZUU7wQV1U";
-      // const list =  await solana?.listDepositTransaction(10,asset,startTxnHash);
-      
-      // console.log(list)
 
-      // console.log("LAST TXN HASH",solana?._lastTxnHash)
-      // const Newlist =  await solana?.listDepositTransaction(10,asset);
-      // console.log(Newlist)
+      console.log("BRIDGE TRANSACTION LIST")
+      const take  = 100; 
+      const new_list = await solana?.listBridgetransactions(take,undefined,undefined); 
+      if(!new_list){
+        throw new Error("new_list undefiend")
+      }
+      console.log("\n"); 
+      console.log(new_list)
 
-       // const Solanalist1 =  await solana?.testListTxn();
-      // console.log(Solanalist1)
-      console.log("\n")
-      // console.log("===================")
-      // const Solanalist2 =  await solana?.listDepositTransaction(3,asset,"2kgL1goFVvMa9vvcQcS1wztn7NfezZSKQy6ADjcs2uNqXh1u9xVhsQEzdNTmsSxtRgkUTBoDPAK1RDQWrPgAQmZG");
-      // const Solanalist3 =  await solana?.listDepositTransaction(3,asset);
-      // // con
-      // console.log(Solanalist3)
-      // console.log("\n")
-      console.log("===================")
-      // const list = await algorand?.listDepositTransaction(3,asset);
-      // console.log(list);
-      // console.log("\n")
-      // console.log("===================")
-      const newlist = await algorand?.listDepositTransaction(3,asset);
-      // const newList =  await solana?.testListTxn()
-      console.log(newlist)
+      console.log("===========================||=============================")
+      Sleep(30000) // 30 sec sleep 
+
+      const endAt = new_list[0].TxnId
+      const new_list_before = await solana?.listBridgetransactions(take,undefined,endAt); 
+      if(!new_list_before){
+        throw new Error("new_list_before undefiend")
+      }
+      console.log("\n"); 
+      console.log(new_list_before)
+
+
+      console.log("===========================||=============================")
+      console.log("USDC DEPOSIT LIST")
+
+      Sleep(30000) // 30 sec sleep 
+
+      const usdc_deposit_list = await solana?.getUSDCDepositTransactions(take,undefined,undefined)
+      if(!usdc_deposit_list){
+        throw new Error("usdc_deposit_list undefiend")
+      }
+      console.log("\n"); 
+      console.log(usdc_deposit_list)
+
+
+      console.log("===========================||=============================")
+      console.log("USDC RELEASE LIST")
+
+      Sleep(30000) // 30 sec sleep 
+
+      const usdc_release_list = await solana?.getUSDCDReleaseTransactions(take,undefined,undefined)
+      if(!usdc_release_list){
+        throw new Error("usdc_release_list undefiend")
+      }
+      console.log("\n"); 
+      console.log(usdc_deposit_list)
+
+
     }catch(err){
 
     }

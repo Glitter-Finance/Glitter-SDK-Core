@@ -8,6 +8,7 @@ import * as util from 'util';
 import { BridgeToken, BridgeTokens, LogProgress, Precise, Routing, RoutingDefault, Sleep, ValueUnits } from '../../common';
 import { COMMITMENT, DepositNote } from './utils';
 import { SolanaPoller } from './poller';
+import { PartialBridgeTxn } from '../../common/transactions/transactions';
 export class SolanaConnect {
 
     private _client?: Connection;
@@ -26,8 +27,10 @@ export class SolanaConnect {
         this._poller = new SolanaPoller(this._client,this._bridgeTxnsV1) 
     }
 
-  
- /**
+
+
+
+/**
   * @method bridgeTransactions
   * @param fromAddress 
   * @param fromSymbol 
@@ -904,7 +907,76 @@ public async bridge(account: SolanaAccount,
         });
     }
 
-    //Helper Functions
+        /**
+         * 
+         * @method listsBridgetransactions
+         * @param take 
+         * @param [beginAt] 
+         * @param [endAt] 
+         * @returns bridgetransactions 
+         */
+        public async listBridgetransactions(take:number, beginAt?:string,endAt?:string):Promise<PartialBridgeTxn[]|undefined>{
+            return new Promise(async(resolve, reject) =>{
+            try{
+
+                const list = this._poller?.listBridgeTransaction(take,beginAt,endAt); 
+                if(!list){
+                    throw new Error("unable to list Bridge PartialBridgeTxn")
+                }
+                resolve(list)    
+            }catch(err){
+                reject(err)
+            }
+        })  
+        }
+
+        /**
+        *
+        * @method getUSDCDepositTransactions
+        * @param take 
+        * @param [beginAt] 
+        * @param [endAt] 
+        * @returns List of usdcdeposit transactions 
+        */
+        public async getUSDCDepositTransactions(take:number, beginAt?:string,endAt?:string):Promise<PartialBridgeTxn[]|undefined>{
+        return new Promise(async(resolve, reject) =>{
+        try{
+
+            const list = this._poller?.ListUSDCDepositTransactionHandler(take,beginAt,endAt); 
+            if(!list){
+                throw new Error("unable to list USDC Deposit PartialBridgeTxn")
+            }
+            resolve(list)    
+        }catch(err){
+            reject(err)
+        }
+        })  
+        }
+
+        /**
+        *
+        * @method getUSDCDReleaseTransactions
+        * @param take 
+        * @param [beginAt] 
+        * @param [endAt] 
+        * @returns List of usdcdeposit transactions 
+        */
+        public async getUSDCDReleaseTransactions(take:number, beginAt?:string,endAt?:string):Promise<PartialBridgeTxn[]|undefined>{
+        return new Promise(async(resolve, reject) =>{
+        try{
+
+            const list = this._poller?.ListUSDCReleaseTransactionHandler(take,beginAt,endAt); 
+            if(!list){
+                throw new Error("unable to list USDC Release PartialBridgeTxn")
+            }
+            resolve(list)    
+        }catch(err){
+            reject(err)
+        }
+        })  
+        }
+
+        //Helper Functions
     async getTestAirDrop(signer: SolanaAccount): Promise<boolean> {
         // eslint-disable-next-line no-async-promise-executor
         return new Promise(async (resolve, reject) => {

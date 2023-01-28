@@ -219,7 +219,6 @@ async function runMain(): Promise<boolean> {
   });
 }
 
-
 async function getAlgorandAccount(
   algorandAccounts: AlgorandAccounts
 ): Promise<AlgorandAccount | undefined> {

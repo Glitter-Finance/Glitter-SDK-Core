@@ -3,11 +3,13 @@ import { Routing } from "../routing/routing"
 export enum TransactionType{
     Deposit = "Deposit",
     Release = "Release ",
-    Refund =  "Refund"
+    Refund =  "Refund",
+    Unknown = "Unknown",
+    Finalize = "Finalize"
 }
 
 export type PartialBridgeTxn ={
-    TxnId:String, 
+    TxnId:string, 
     TxnType:TransactionType, 
     routing?:Routing |null 
 };

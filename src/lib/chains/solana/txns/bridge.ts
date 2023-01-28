@@ -371,8 +371,6 @@ export class SolanaBridgeTxnsV1 {
                 if (!this._bridgeProgramAddress) throw new Error("Bridge Program Address is not set");
                 if (!this._client) throw new Error("Client is not set");
 
-              
-
                 //Get Bridge Program PubKey
                 const bridgeProgram = new PublicKey(this._bridgeProgramAddress!);
 
@@ -503,7 +501,6 @@ export class SolanaBridgeTxnsV1 {
 
     // get Id
     public  getGlitterAccountAddress(input:SolanaProgramId):string |number | undefined {
-
         let res:string | number | undefined; 
           switch(input) {
             case "bridgeProgram":{
@@ -540,9 +537,7 @@ export class SolanaBridgeTxnsV1 {
                 break;              
              } 
           }
-
      return  res ;
-    
 }
 
 }

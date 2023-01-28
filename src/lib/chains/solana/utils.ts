@@ -5,7 +5,7 @@ import { Commitment } from '@solana/web3.js';
 
 export type DepositNote = {
     system: string, // RoutingData json format
-    date: string,
+    date?: string,
   }
 
 export const COMMITMENT = "singleGossip";
