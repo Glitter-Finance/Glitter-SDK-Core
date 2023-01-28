@@ -27,3 +27,7 @@ export function LogProgress(progress:string){
     process.stdout.write(progress)
 }
 
+export const base64ToString = (encoded: any) => {
+    return Buffer.from(encoded, "base64").toString();
+  };
+

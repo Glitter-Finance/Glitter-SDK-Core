@@ -14,13 +14,15 @@ import {
 import { EvmBridgeEventsParser } from "./events";
 import { PublicKey } from "@solana/web3.js";
 import algosdk from "algosdk";
-import { SerializeEvmBridgeTransfer } from "./serde";
+import { DeserializeEvmBridgeTransfer, SerializeEvmBridgeTransfer } from "./serde";
 import {
   BridgeEvmNetworks,
   BridgeNetworks,
+  NetworkIdentifiers,
 } from "../../common/networks/networks";
-import { PartialBridgeTxn } from "../../common/transactions/transactions";
+import { ChainStatus, PartialBridgeTxn, TransactionType } from "../../common/transactions/transactions";
 import { BridgeToken } from "../../common/tokens/tokens";
+import { Routing, ValueUnits } from "../../common";
 
 type Connection = {
   rpcProvider: providers.BaseProvider;
@@ -202,6 +204,49 @@ export class EvmConnect {
       return Promise.reject(error.message);
     }
   }
+  async getTimeStamp(txHash: string): Promise<number> {
+    try {
+      const transactionReceipt = await this.__providers.rpcProvider.getTransactionReceipt(txHash);
+      const blockNumber = transactionReceipt.blockNumber;
+      const block = await this.__providers.rpcProvider.getBlock(blockNumber);
+      const timestamp = block.timestamp;
+      return timestamp;
+    } catch (error: any) {
+      return Promise.reject(error.message);
+    }
+  }
+  async getTxnStatus(txHash: string): Promise<ChainStatus> {
+    try {
+      const txnReceipt = await this.__providers.rpcProvider.getTransactionReceipt(txHash);
+      let returnValue: ChainStatus = ChainStatus.Unknown;
+      if (txnReceipt.status === 1) {
+        returnValue = ChainStatus.Completed;
+      } else if (txnReceipt.status === 0) {
+        returnValue = ChainStatus.Failed;
+      } else {
+        returnValue = ChainStatus.Pending;
+      }
+      return Promise.resolve(returnValue);
+    } catch (error: any) {
+      return Promise.reject(error.message);
+    }
+  }
+
+  getChainFromID(chainId: number): BridgeNetworks | undefined {
+    try {
+
+      let returnValue = Object.entries(NetworkIdentifiers).find(
+        ([_id, _network]) => {
+          return Number(_id) === chainId;
+        }
+      );
+      return (returnValue ? returnValue[1] : undefined);
+
+    } catch (error: any) {
+      return undefined;
+    }
+  }
+
   /**
    * Check if provided wallet is
    * connected to same chain as EvmConnect
@@ -272,6 +317,9 @@ export class EvmConnect {
       return Promise.reject(error);
     }
   }
+  public getTxnHashed(txnID: string): string {
+    return ethers.utils.keccak256(txnID);
+  }
 
   public async listBridgeTransaction(limit: number, asset: BridgeToken, starthash?: string): Promise<PartialBridgeTxn[]> {
     return new Promise(async (resolve, reject) => {
@@ -281,6 +329,107 @@ export class EvmConnect {
         reject(err)
       }
     })
+  }
+
+  public async getUSDCPartialTxn(txnID: string): Promise<PartialBridgeTxn> {
+
+    //USDC decimals
+    let decimals = 6;
+
+    //Get logs
+    const logs = await this.parseLogs(txnID);
+
+    //Get Timestamp
+    const timestamp_ms = await this.getTimeStamp(txnID);
+    const timestamp = new Date(timestamp_ms);
+
+    //Check deposit/transfer/release
+    const releaseEvent = logs?.find(
+      (log) => log.__type === "BridgeRelease"
+    ) as BridgeReleaseEvent;
+
+    const depositEvent = logs?.find(
+      (log) => log.__type === "BridgeDeposit"
+    ) as BridgeDepositEvent;
+
+    const transferEvent = logs?.find(
+      (log) => log.__type === "Transfer"
+    ) as TransferEvent;
+
+    //Get transaction type
+    let type: TransactionType;
+    if (releaseEvent) {
+      type = TransactionType.Release;
+    } else if (depositEvent) {
+      type = TransactionType.Deposit;
+    } else {
+      type = TransactionType.Unknown;
+    }
+
+    //Get return object
+    let returnTxn: PartialBridgeTxn = {
+      txnID: txnID,
+      txnIDHashed: this.getTxnHashed(txnID),
+      txnType: type,
+      txnTimestamp: timestamp,
+      chainStatus: await this.getTxnStatus(txnID),
+      network: this.__network,
+      tokenSymbol: "usdc",
+    };
+
+    //Get txn params
+    if (type === TransactionType.Deposit && transferEvent) {
+      returnTxn.address = transferEvent.from;
+      returnTxn.units = BigInt(depositEvent.amount.toString());
+      returnTxn.amount = ValueUnits.fromUnits(BigInt(returnTxn.units), decimals).value;
+
+      //Get Routing
+      let toNetwork = this.getChainFromID(depositEvent.destinationChainId);
+      let toAddress = toNetwork ? DeserializeEvmBridgeTransfer.deserializeAddress(toNetwork, depositEvent.destinationWallet) : "";
+      let routing: Routing = {
+        from: {
+          network: this.__network,
+          address: transferEvent.from,
+          token: "usdc",
+          txn_signature: txnID,
+        },
+        to: {
+          network: toNetwork?.toString() || "",
+          address: toAddress,
+          token: "usdc"
+        },
+        amount: returnTxn.amount,
+        units: returnTxn.units,
+      };
+      returnTxn.routing = routing;
+
+    } else if (type === TransactionType.Release && transferEvent) {
+
+      returnTxn.address = releaseEvent.destinationWallet;
+      returnTxn.units = BigInt(releaseEvent.amount.toString());
+      returnTxn.amount = ValueUnits.fromUnits(BigInt(returnTxn.units), decimals).value;
+
+      //Get Routing
+      let routing: Routing = {
+        from: {
+          network: "",
+          address: "",
+          token: "usdc",
+          txn_signature_hashed: releaseEvent.depositTransactionHash,
+        },
+        to: {
+          network: this.__network,
+          address: returnTxn.address,
+          token: "usdc",
+          txn_signature: txnID,
+        },
+        amount: returnTxn.amount,
+        units: returnTxn.units,
+      };
+      returnTxn.routing = routing;
+
+    }
+    return Promise.resolve(returnTxn);   
   }
 
   public get tokenBridgePollerAddress(): string | number | undefined {

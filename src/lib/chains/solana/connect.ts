@@ -8,6 +8,8 @@ import * as util from 'util';
 import { BridgeToken, BridgeTokens, LogProgress, Precise, Routing, RoutingDefault, Sleep, ValueUnits } from '../../common';
 import { COMMITMENT, DepositNote } from './utils';
 import { SolanaPoller } from './poller';
+import { ethers } from 'ethers';
+import base58 from 'bs58';
 export class SolanaConnect {
 
     private _client?: Connection;
@@ -974,6 +976,9 @@ public async bridge(account: SolanaAccount,
     }
 
     // get Id
+    public getTxnHashed(txnID: string): string {
+        return ethers.utils.keccak256(base58.decode(txnID));
+      }
     public getSolanaBridgeAddress(id:SolanaProgramId):string|number|undefined{
         return this._bridgeTxnsV1?.getGlitterAccountAddress(id);
     }
