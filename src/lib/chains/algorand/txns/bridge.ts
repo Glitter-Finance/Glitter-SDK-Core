@@ -104,7 +104,7 @@ export class AlgorandBridgeTxnsV1 {
                     appArgs.push(new Uint8Array(Buffer.from(solana_asset))); //2 (Solana Asset)
                     appArgs.push(new Uint8Array(Buffer.from(app_asset_type))); //3 (Algorand Asset)
                     appArgs.push(new Uint8Array(Buffer.from(functionName.toString()))); //4 (App Call)
-                    appArgs.push(new Uint8Array(Buffer.from(routing.to.txn_signature))); //5 (Solana Signature)
+                    appArgs.push(new Uint8Array(Buffer.from(routing.to.txn_signature || ""))); //5 (Solana Signature)
                     appArgs.push(algosdk.encodeUint64(Number(routing.units))); //6 (Amount)
                 }
                 break;
@@ -146,7 +146,7 @@ export class AlgorandBridgeTxnsV1 {
                     appArgs.push(new Uint8Array(Buffer.from(solana_asset))); //2 (Solana Asset)
                     appArgs.push(new Uint8Array(Buffer.from(app_asset_type))); //3 (Algorand Asset)
                     appArgs.push(new Uint8Array(Buffer.from(functionName.toString()))); //4 (App Call)
-                    appArgs.push(new Uint8Array(Buffer.from(routing.to.txn_signature))); //5 (Solana Signature)
+                    appArgs.push(new Uint8Array(Buffer.from(routing.to.txn_signature || ""))); //5 (Solana Signature)
                     appArgs.push(algosdk.encodeUint64(Number(routing.units))); //6 (Amount)
                 }
                 break;
