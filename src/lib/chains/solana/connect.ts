@@ -10,6 +10,13 @@ import { COMMITMENT, DepositNote } from './utils';
 import { SolanaPoller } from './poller';
 import { ethers } from 'ethers';
 import base58 from 'bs58';
+
+export enum SolanaPublicNetworks  {
+    mainnet_beta = "https://api.mainnet-beta.solana.com",
+    testnet = "https://api.testnet.solana.com",
+    devnet = "https://api.devnet.solana.com"
+}
+
 export class SolanaConnect {
 
     private _client?: Connection;
@@ -20,6 +27,8 @@ export class SolanaConnect {
     private _poller:SolanaPoller | undefined;
     private _config: SolanaConfig | undefined = undefined;
     _lastTxnHash: string = "";
+
+
     constructor(config: SolanaConfig) {
         this._config = config;
         this._client = new Connection(config.server);
@@ -29,8 +38,11 @@ export class SolanaConnect {
         this._bridgeTxnsV1 = new SolanaBridgeTxnsV1(this._client,config.accounts.bridgeProgram, config.accounts );
         this._poller = new SolanaPoller(this._client,this._bridgeTxnsV1) 
     }
+    
+    public getPublicConnection(network: SolanaPublicNetworks): Connection {
+        return new Connection(network.toString());
+    }
 
-  
  /**
   * @method bridgeTransactions
   * @param fromAddress 

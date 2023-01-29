@@ -63,7 +63,7 @@ export const BridgeTestnet: GlitterBridgeConfig = {
   },
   solana: {
     name: "Solana",
-    server: "https://api.devnet.solana.com",
+    server: "https://api.testnet.solana.com",
     accounts: {
       bridgeProgram: "GLittnj1E7PtSF5thj6nYgjtMvobyBuZZMuoemXpnv3G",
       vestingProgram: "EMkD74T2spV3A71qfY5PNqVNrNrpbFcdwMF2TerRMr9n",
