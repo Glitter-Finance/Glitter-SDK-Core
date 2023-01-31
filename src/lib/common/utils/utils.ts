@@ -30,4 +30,7 @@ export function LogProgress(progress:string){
 export const base64ToString = (encoded: any) => {
     return Buffer.from(encoded, "base64").toString();
   };
+export const base64ToBigUIntString = (encoded:any) => {
+    return Buffer.from(encoded, "base64").readBigUInt64BE().toString();
+  };
 
