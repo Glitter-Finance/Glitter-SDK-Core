@@ -13,7 +13,7 @@ import SearchForTransactions from 'algosdk/dist/types/client/v2/indexer/searchFo
 import { DepositNote } from '../solana/utils';
 import { AlgorandPoller } from './poller';
 import { ethers } from 'ethers';
-import { base64ToString } from '../../common/utils/utils';
+import { base64To0xString, base64ToString } from '../../common/utils/utils';
 
 /**
  * Connection to the Algorand network
@@ -964,11 +964,9 @@ private async listDepositTransactionHandler(address:string,limit:number ,asset:B
         return this._bridgeTxnsV1?.getGlitterAccountAddress(id);
     }
     public getTxnHashedFromBase64(txnID: string): string {
-        return ethers.utils.keccak256(base64ToString(txnID));
+        return ethers.utils.keccak256(base64To0xString(txnID));
       }
-      public getTxnHashed(txnID: string): string {
-        return ethers.utils.keccak256(txnID);
-      }
+ 
 
     public get tokenBridgePollerAddress():string|number|undefined{
         return this._config?.accounts?.bridge;

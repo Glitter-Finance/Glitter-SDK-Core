@@ -11,17 +11,17 @@ export class InputParams {
 }
 
 export function Sleep(ms: number) {
-    return new Promise( resolve => setTimeout(resolve, ms) );
+    return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-export function Precise(value:number, precision:number = 15):number {
+export function Precise(value: number, precision: number = 15): number {
     return Number(parseFloat(value.toString()).toPrecision(precision));
 }
-export function PreciseDecimals(value:number, decimals:number = 2):number {
+export function PreciseDecimals(value: number, decimals: number = 2): number {
     return Number(Precise(value).toFixed(decimals));
 }
 
-export function LogProgress(progress:string){
+export function LogProgress(progress: string) {
     readline.clearLine(process.stdout, 0)
     readline.cursorTo(process.stdout, 0)
     process.stdout.write(progress)
@@ -29,8 +29,11 @@ export function LogProgress(progress:string){
 
 export const base64ToString = (encoded: any) => {
     return Buffer.from(encoded, "base64").toString();
-  };
-export const base64ToBigUIntString = (encoded:any) => {
+};
+export const base64To0xString = (encoded: any) => {
+    return `0x${Buffer.from(encoded, "base64").toString("hex")}`;
+};
+export const base64ToBigUIntString = (encoded: any) => {
     return Buffer.from(encoded, "base64").readBigUInt64BE().toString();
-  };
+};
 
