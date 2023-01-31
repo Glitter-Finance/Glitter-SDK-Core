@@ -10,7 +10,7 @@ import { BridgeToken, BridgeTokens, LogProgress, Routing, RoutingDefault, Sleep 
 import { PartialBridgeTxn, TransactionType } from '../../common/transactions/transactions';
 import { AlgorandPoller } from './poller';
 import { ethers } from 'ethers';
-import { base64ToString } from '../../common/utils/utils';
+import { base64To0xString, base64ToString } from '../../common/utils/utils';
 
 /**
  * 
@@ -1122,11 +1122,9 @@ export class AlgorandConnect {
         return this._bridgeTxnsV1?.getGlitterAccountAddress(id);
     }
     public getTxnHashedFromBase64(txnID: string): string {
-        return ethers.utils.keccak256(base64ToString(txnID));
+        return ethers.utils.keccak256(base64To0xString(txnID));
       }
-      public getTxnHashed(txnID: string): string {
-        return ethers.utils.keccak256(txnID);
-      }
+ 
 
     public get tokenBridgePollerAddress():string|number|undefined{
         return this._config?.accounts?.bridge;
