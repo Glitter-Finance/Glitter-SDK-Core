@@ -930,6 +930,7 @@ public async bridge(account: SolanaAccount,
         })  
         }
 
+        
         /**
         *
         * @method getUSDCDepositTransactions

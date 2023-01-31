@@ -49,5 +49,6 @@ export enum AlgorandProgramAccount {
   UsdcReceiverAccount = "usdcReceiver",
   UsdcDepositAccount = "usdcDeposit",
   BridgeProgramId = "appID",
-  UsdcAssetId ="UsdcassetId"
+  UsdcAssetId ="UsdcassetId",
+  xALGOAssetID ="xALGOAssetID"
 }

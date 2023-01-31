@@ -8,6 +8,7 @@ import { SolanaBridgeTxnsV1 } from "./txns/bridge";
 import { deserialize } from "borsh";
 import algosdk from "algosdk";
 import { DepositNote } from "./utils";
+
 export class SolanaPoller{
 
     private _client:Connection;

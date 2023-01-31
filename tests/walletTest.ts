@@ -79,8 +79,35 @@ async function TransactionListTest():Promise<boolean> {
       const solanaAccounts = sdk.solana?.accounts;
       const algorand = sdk.algorand;
       const solana = sdk.solana;     
-      const asset = BridgeTokens.get("solana", "usdc");
+      const asset = BridgeTokens.get("algorand", "algo");
       if(!asset) throw new Error("asset is not Defined");
+
+
+    console.log("TEST")  
+    const list = await  algorand?.getPartialBridgeTransactions();
+
+     if(!list){
+      throw new Error("LIST UNDEFINED")
+     }
+      list.forEach((data) =>{
+
+        console.log(data)
+
+      })
+
+
+console.log("=====================||=====================")
+
+const new_list_algorand = await  algorand?.getPartialBridgeTransactions(26646129);
+if(!new_list_algorand){
+  throw new Error("LIST UNDEFINED")
+ }
+ new_list_algorand.forEach((data) =>{
+
+    console.log(data)
+
+  })
+
 
       console.log("BRIDGE TRANSACTION LIST")
       const take  = 100; 
@@ -127,6 +154,9 @@ async function TransactionListTest():Promise<boolean> {
       }
       console.log("\n"); 
       console.log(usdc_deposit_list)
+     
+
+
 
 
     }catch(err){

@@ -8,14 +8,11 @@ import { AlgorandBridgeTxnsV1 } from "./txns/bridge";
 import * as fs from 'fs';
 import { BridgeToken, BridgeTokens, LogProgress, Routing, RoutingDefault, Sleep } from '../../common';
 import { PartialBridgeTxn, TransactionType } from '../../common/transactions/transactions';
-import { add } from 'winston';
-import SearchForTransactions from 'algosdk/dist/types/client/v2/indexer/searchForTransactions';
-import { DepositNote } from '../solana/utils';
 import { AlgorandPoller } from './poller';
 
 /**
- * Connection to the Algorand network
  * 
+ * Algorand connect
  */
 export class AlgorandConnect {
 
@@ -37,6 +34,9 @@ export class AlgorandConnect {
         this._bridgeTxnsV1 = new AlgorandBridgeTxnsV1(this._client, config.appProgramId, this._transactions, config.accounts);
         this._poller = new AlgorandPoller(this._client,this._clientIndexer,this._bridgeTxnsV1)
     }
+
+
+
 
     //Getters
     public get client() {
@@ -76,95 +76,30 @@ export class AlgorandConnect {
         });
     }
 
-    public async listDepositTransaction(limit:number,asset:BridgeToken, starthash?:string  ):Promise<PartialBridgeTxn[] | undefined> {
-        return new Promise(async(resolve, reject) =>{
-            try {
-                if(!asset) throw new Error("Asset Not Found")
-                const symbol = asset.symbol  ;
-                let depositaddress:string | number |undefined ;
-                if (symbol.toLocaleLowerCase() == "xsol" || symbol.toLocaleLowerCase() == "sol"  ) {
-                    depositaddress = this.getAlgorandBridgeAddress(AlgorandProgramAccount.BridgeAccount);
-                }else if (symbol.toLocaleLowerCase() =="xalgo" || symbol.toLocaleLowerCase() =="algo" ){
-                    depositaddress = this.getAlgorandBridgeAddress(AlgorandProgramAccount.BridgeAccount);
-                }else if (symbol.toLocaleLowerCase() == "usdc"){
-                    depositaddress = this.getAlgorandBridgeAddress(AlgorandProgramAccount.UsdcDepositAccount);
-                }
-                console.log(depositaddress)
-                if(!starthash){
-                    starthash = this._lastTxnHash == "" ?undefined:this._lastTxnHash
-                }
-                // const txnList = this.testListTxn(depositaddress as string,limit,asset,starthash)
-              const txnList =  this.listDepositTransactionHandler(depositaddress as string,limit,asset);
-              if(!txnList) throw new Error("txn List undefined")
-                resolve(txnList)
 
-            } catch (err) {
+    /**
+     * 
+     * 
+     * Gets partial bridge transactions
+     * @param [minRound] 
+     * @returns partial bridge transactions 
+     */
+    public async getPartialBridgeTransactions(minRound?:number):Promise<PartialBridgeTxn[]>{
+       
+        return new Promise(async(resolve,reject) =>{
+            try{
+                if (!this._poller) throw new Error("POLLER IS NOT INITILALIZED")
+
+                const BridgeTxnlist = await this._poller.ListPartialBridgeTxn(minRound);
+                
+                resolve(BridgeTxnlist)
+
+            }catch(err){
                 reject(err)
             }
         })
-}
-
-private async listDepositTransactionHandler(address:string,limit:number ,asset:BridgeToken, startHash?:string):Promise<PartialBridgeTxn[]>  {
-        return new Promise(async (resolve,reject) =>{
-            try{
-          if(!address) throw new Error("address not defined")   ;
-          if(!this._client) throw new Error("Algo Client Not Defined");
-          if(!this._clientIndexer)  throw new Error("Indexer Not Set")
-          if(!asset) throw new Error("asset not defined");
-          const txnlist = await this.clientIndexer?.lookupAccountTransactions(address).do();
-          if(!txnlist) throw new Error("txn list not defined");
-          let partialbridgeTxnList:PartialBridgeTxn[] = [];   
-          let lastTxnHash = "";
-          let checkLimit = 0;       
-          for(let result of txnlist.transactions){
-            if(checkLimit == limit) break;
-            if(startHash==undefined){
-            let partialBtxn:PartialBridgeTxn =  {
-                TxnId:result.id,
-                TxnType:TransactionType.Deposit,
-            };
-            partialbridgeTxnList.push(partialBtxn)
-            lastTxnHash = result.id;
-            checkLimit++;
-
-            }else {
-            if(startHash == result.id){
-                //+1 
-            let partialBtxn:PartialBridgeTxn =  {
-                TxnId:result.id,
-                TxnType:TransactionType.Deposit,
-            };
-            partialbridgeTxnList.push(partialBtxn)
-            lastTxnHash = result.id
-            startHash =undefined;
-            checkLimit++;
-            }
-            }   
-         }
-
-         this._lastTxnHash = lastTxnHash
-            resolve(partialbridgeTxnList)
-            } catch(err){
-                reject(err)    
-            }
-        })
+        
     }
-
-    public get lastTxnHash() {
-        return this._lastTxnHash
-    }
-
-    public async listReleaseTransaction( ):Promise<PartialBridgeTxn[]> {
-        return new Promise(async(resolve, reject) =>{
-            try {
-                
-            } catch (err) {
-
-            }
-        })
-    }
-
-
 
     /**
      * 
@@ -227,7 +162,18 @@ private async listDepositTransactionHandler(address:string,limit:number ,asset:B
 
  }   
 
-    //Bridge Actions
+    /**
+     * 
+     * 
+     * Bridges algorand connect
+     * @param account 
+     * @param fromSymbol 
+     * @param toNetwork 
+     * @param toAddress 
+     * @param tosymbol 
+     * @param amount 
+     * @returns true if transactions are signed  
+     */
     public async bridge(account: AlgorandAccount, fromSymbol: string, toNetwork: string, toAddress: string, tosymbol: string, amount: number): Promise<boolean> {
         return new Promise(async (resolve, reject) => {
             try {
@@ -271,7 +217,15 @@ private async listDepositTransactionHandler(address:string,limit:number ,asset:B
     }
 
 
-    //Account Actions
+    /**
+     * 
+     * 
+     * Funds account
+     * @param funder 
+     * @param account 
+     * @param amount 
+     * @returns  
+     */
     public async fundAccount(funder: AlgorandAccount, account: AlgorandAccount, amount: number): Promise<boolean> {
         return new Promise(async (resolve, reject) => {
             try {
@@ -296,6 +250,16 @@ private async listDepositTransactionHandler(address:string,limit:number ,asset:B
             }
         });
     }
+
+    /**
+     * 
+     * Funds account token
+     * @param funder 
+     * @param account 
+     * @param amount 
+     * @param symbol 
+     * @returns 
+     */
     public async fundAccountToken(funder: AlgorandAccount, account: AlgorandAccount, amount: number, symbol: string): Promise<boolean> {
         return new Promise(async (resolve, reject) => {
             try {
@@ -325,7 +289,13 @@ private async listDepositTransactionHandler(address:string,limit:number ,asset:B
         });
     }
 
-    //Txn Actions
+    /**
+     * Sends algo
+     * @param routing 
+     * @param signer 
+     * @param [debug_rootPath] 
+     * @returns  
+     */
     async sendAlgo(routing: Routing,
         signer: Account,
         debug_rootPath?: string): Promise<boolean> {
@@ -351,6 +321,16 @@ private async listDepositTransactionHandler(address:string,limit:number ,asset:B
         });
 
     }
+
+    /**
+     * 
+     * Sends tokens
+     * @param routing 
+     * @param signer 
+     * @param token 
+     * @param [debug_rootPath] 
+     * @returns  
+     */
     async sendTokens(routing: Routing,
         signer: Account,
         token: BridgeToken,
@@ -380,6 +360,17 @@ private async listDepositTransactionHandler(address:string,limit:number ,asset:B
         });
 
     }
+
+    /**
+     * 
+     * Mints tokens
+     * @param signers 
+     * @param msigParams 
+     * @param routing 
+     * @param token 
+     * @param [debug_rootPath] 
+     * @returns  
+     */
     async mintTokens(signers: Account[],
         msigParams: algosdk.MultisigMetadata,
         routing: Routing,
@@ -408,6 +399,14 @@ private async listDepositTransactionHandler(address:string,limit:number ,asset:B
         });
 
     }
+
+    /**
+     * 
+     * Optins token
+     * @param signer 
+     * @param symbol 
+     * @returns  
+     */
     async optinToken(signer: Account,
         symbol: string): Promise<boolean> {
         // eslint-disable-next-line no-async-promise-executor
@@ -440,6 +439,13 @@ private async listDepositTransactionHandler(address:string,limit:number ,asset:B
         });
     }
 
+    /**
+     * 
+     * Optedins account exists
+     * @param address 
+     * @param asset 
+     * @returns 
+     */
     async OptedinAccountExists(address:string,asset:string):Promise<boolean> {
         return new Promise(async(resolve,reject) =>{
             try{
@@ -455,6 +461,14 @@ private async listDepositTransactionHandler(address:string,limit:number ,asset:B
         })
     }
 
+
+    /**
+     * Closes out token account
+     * @param signer 
+     * @param receiver 
+     * @param symbol 
+     * @returns out token account 
+     */
     async closeOutTokenAccount(signer: Account,
         receiver: string,
         symbol: string): Promise<boolean> {
@@ -487,6 +501,15 @@ private async listDepositTransactionHandler(address:string,limit:number ,asset:B
             }
         });
     }
+
+
+    /**
+     * 
+     * Closes out account
+     * @param signer 
+     * @param receiver 
+     * @returns 
+     */
     async closeOutAccount(signer: AlgorandAccount,
         receiver: string): Promise<boolean> {
         // eslint-disable-next-line no-async-promise-executor
@@ -513,8 +536,15 @@ private async listDepositTransactionHandler(address:string,limit:number ,asset:B
         });
     }
 
-    //Txn Helpers
-    async signAndSend_SingleSigner(groupedTxns: Transaction[],
+   /**
+    * 
+    * Signs and send single signer
+    * @param groupedTxns 
+    * @param signer 
+    * @param [debug_rootPath] 
+    * @returns
+    */
+   async signAndSend_SingleSigner(groupedTxns: Transaction[],
         signer: Account,
         debug_rootPath?: string): Promise<boolean> {
         // eslint-disable-next-line no-async-promise-executor
@@ -564,7 +594,13 @@ private async listDepositTransactionHandler(address:string,limit:number ,asset:B
         });
     }
 
-    //wallet-txn helper
+    /**
+     * 
+     * Sends signed transaction
+     * @param rawsignedTxns 
+     * @param [debug_rootPath] 
+     * @returns signed transaction 
+     */
     async sendSignedTransaction(
     rawsignedTxns:Uint8Array[],
     debug_rootPath?:string                
@@ -591,6 +627,16 @@ private async listDepositTransactionHandler(address:string,limit:number ,asset:B
         })
     }
 
+
+    /**
+     * 
+     * Signs and send multi sig
+     * @param groupedTxns 
+     * @param signers 
+     * @param mParams 
+     * @param [debug_rootPath] 
+     * @returns  
+     */
     async signAndSend_MultiSig(groupedTxns: Transaction[],
         signers: Account[],
         mParams: algosdk.MultisigMetadata,
@@ -649,6 +695,15 @@ private async listDepositTransactionHandler(address:string,limit:number ,asset:B
             }
         });
     }
+
+
+    /**
+     * 
+     * Creates dryrun
+     * @param rawSignedTxnBuff 
+     * @param [rootPath] 
+     * @returns  
+     */
     async createDryrun(rawSignedTxnBuff: Uint8Array[], rootPath?: string): Promise<boolean> {
         // eslint-disable-next-line no-async-promise-executor
         return new Promise(async (resolve) => {
@@ -685,7 +740,12 @@ private async listDepositTransactionHandler(address:string,limit:number ,asset:B
         });
     }
 
-    //Account Info
+    /**
+     * 
+     * Gets balance
+     * @param address 
+     * @returns balance 
+     */
     public async getBalance(address: string): Promise<number> {
         return new Promise(async (resolve, reject) => {
             try {
@@ -698,6 +758,19 @@ private async listDepositTransactionHandler(address:string,limit:number ,asset:B
             }
         });
     }
+
+
+    /**
+     * 
+     * Waits for balance
+     * @param address 
+     * @param expectedAmount 
+     * @param [timeoutSeconds] 
+     * @param [threshold] 
+     * @param [anybalance] 
+     * @param [noBalance] 
+     * @returns 
+     */
     public async waitForBalance(address: string, expectedAmount: number, timeoutSeconds: number = 60, threshold: number = 0.001, anybalance: boolean = false, noBalance: boolean = false): Promise<number> {
         return new Promise(async (resolve, reject) => {
             try {
@@ -743,6 +816,15 @@ private async listDepositTransactionHandler(address:string,limit:number ,asset:B
             }
         });
     }
+
+    /**
+     * 
+     * Waits for min balance
+     * @param address 
+     * @param minAmount 
+     * @param [timeoutSeconds] 
+     * @returns for min balance 
+     */
     public async waitForMinBalance(address: string, minAmount: number, timeoutSeconds: number = 60): Promise<number> {
         return new Promise(async (resolve, reject) => {
             try {
@@ -785,6 +867,14 @@ private async listDepositTransactionHandler(address:string,limit:number ,asset:B
         });
     }
 
+    /**
+     * 
+     * Waits for balance change
+     * @param address 
+     * @param startingAmount 
+     * @param [timeoutSeconds] 
+     * @returns for balance change 
+     */
     public async waitForBalanceChange(address: string, startingAmount: number, timeoutSeconds: number = 60): Promise<number> {
         return new Promise(async (resolve, reject) => {
             try {
@@ -826,6 +916,15 @@ private async listDepositTransactionHandler(address:string,limit:number ,asset:B
             }
         });
     }
+
+
+    /**
+     * 
+     * Gets token balance
+     * @param address 
+     * @param symbol 
+     * @returns 
+     */
     public async getTokenBalance(address: string, symbol: string): Promise<number> {
         return new Promise(async (resolve, reject) => {
             try {
@@ -845,6 +944,19 @@ private async listDepositTransactionHandler(address:string,limit:number ,asset:B
             }
         });
     }
+
+    /**
+     * 
+     * Waits for token balance
+     * @param address 
+     * @param symbol 
+     * @param expectedAmount 
+     * @param [timeoutSeconds] 
+     * @param [threshold] 
+     * @param [anybalance] 
+     * @param [noBalance] 
+     * @returns for token balance 
+     */
     public async waitForTokenBalance(address: string, symbol: string, expectedAmount: number, timeoutSeconds: number = 60, threshold: number = 0.001,anybalance: boolean = false, noBalance: boolean = false): Promise<number> {
         return new Promise(async (resolve, reject) => {
             try {
@@ -890,6 +1002,18 @@ private async listDepositTransactionHandler(address:string,limit:number ,asset:B
             }
         });
     }
+
+
+    /**
+     * 
+     * 
+     * Waits for min token balance
+     * @param address 
+     * @param symbol 
+     * @param minAmount 
+     * @param [timeoutSeconds] 
+     * @returns for min token balance 
+     */
     public async waitForMinTokenBalance(address: string, symbol: string, minAmount: number, timeoutSeconds: number = 60): Promise<number> {
         return new Promise(async (resolve, reject) => {
             try {
@@ -930,6 +1054,17 @@ private async listDepositTransactionHandler(address:string,limit:number ,asset:B
             }
         });
     }
+
+
+    /**
+     * 
+     * Waits for token balance change
+     * @param address 
+     * @param symbol 
+     * @param startingAmount 
+     * @param [timeoutSeconds] 
+     * @returns for token balance change 
+     */
     public async waitForTokenBalanceChange(address: string, symbol: string, startingAmount: number, timeoutSeconds: number = 60): Promise<number> {
         return new Promise(async (resolve, reject) => {
             try {
@@ -971,6 +1106,13 @@ private async listDepositTransactionHandler(address:string,limit:number ,asset:B
         });
     }
 
+    /**
+     * 
+     * 
+     * Gets algorand bridge address
+     * @param id 
+     * @returns algorand bridge address 
+     */
     public getAlgorandBridgeAddress(id:AlgorandProgramAccount):string |number|undefined{
         
         return this._bridgeTxnsV1?.getGlitterAccountAddress(id);
