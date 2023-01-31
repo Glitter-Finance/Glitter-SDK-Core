@@ -78,9 +78,7 @@ async function TransactionListTest():Promise<boolean> {
       const algorandAccounts = sdk.algorand?.accounts;
       const solanaAccounts = sdk.solana?.accounts;
       const algorand = sdk.algorand;
-      const solana = sdk.solana;  
-      // const evm = sdk.getEvmNetwork(BridgeEvmNetworks)
-
+      const solana = sdk.solana;     
       const asset = BridgeTokens.get("algorand", "algo");
       if(!asset) throw new Error("asset is not Defined");
 
