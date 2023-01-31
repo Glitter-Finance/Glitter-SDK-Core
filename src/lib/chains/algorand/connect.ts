@@ -1121,8 +1121,11 @@ export class AlgorandConnect {
         
         return this._bridgeTxnsV1?.getGlitterAccountAddress(id);
     }
-    public getTxnHashed(txnID: string): string {
+    public getTxnHashedFromBase64(txnID: string): string {
         return ethers.utils.keccak256(base64ToString(txnID));
+      }
+      public getTxnHashed(txnID: string): string {
+        return ethers.utils.keccak256(txnID);
       }
 
     public get tokenBridgePollerAddress():string|number|undefined{

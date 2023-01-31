@@ -1059,8 +1059,11 @@ public async bridge(account: SolanaAccount,
     }
 
     // get Id
-    public getTxnHashed(txnID: string): string {
+    public getTxnHashedFromBase58(txnID: string): string {
         return ethers.utils.keccak256(base58.decode(txnID));
+      }
+      public getTxnHashed(txnID: string): string {
+        return ethers.utils.keccak256(txnID);
       }
     public getSolanaBridgeAddress(id:SolanaProgramId):string|number|undefined{
         return this._bridgeTxnsV1?.getGlitterAccountAddress(id);
