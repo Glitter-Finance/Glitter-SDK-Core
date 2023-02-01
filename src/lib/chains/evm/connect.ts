@@ -21,6 +21,7 @@ import {
 } from "../../common/networks/networks";
 import { PartialBridgeTxn } from "../../common/transactions/transactions";
 import { BridgeToken } from "../../common/tokens/tokens";
+import { EvmPoller } from "./poller";
 
 type Connection = {
   rpcProvider: providers.BaseProvider;
@@ -32,6 +33,7 @@ export class EvmConnect {
   protected readonly __network: BridgeEvmNetworks;
   protected readonly __providers: Connection;
   protected readonly __config: EvmNetworkConfig;
+  private _poller:EvmPoller|undefined
 
   private createConnections(
     rpcUrl: string,
@@ -53,10 +55,12 @@ export class EvmConnect {
     };
   }
 
+
   constructor(network: BridgeEvmNetworks, config: EvmNetworkConfig) {
     this.__config = config;
     this.__network = network;
     this.__providers = this.createConnections(config.rpcUrl, config);
+    this._poller = new EvmPoller(this.__config,this.__network);
   }
 
   get provider(): ethers.providers.BaseProvider {
@@ -94,6 +98,7 @@ export class EvmConnect {
 
     return this.__config[entity].toLowerCase();
   }
+
 
   private isValidToken(tokenSymbol: string): boolean {
     return !!this.__providers.tokens[tokenSymbol.toLowerCase()];
@@ -226,7 +231,9 @@ export class EvmConnect {
   public async listBridgeTransaction(limit:number,asset:BridgeToken, starthash?:string ):Promise<PartialBridgeTxn[]> {
     return new Promise(async(resolve,reject) =>{
       try{
-          
+  
+        if(!this._poller) throw new Error("poller not defined")
+        const res = this._poller.UsdcPoller();
       }catch(err) {
         reject(err)
       }
