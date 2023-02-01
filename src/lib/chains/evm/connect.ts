@@ -24,6 +24,7 @@ import { BridgeType, ChainStatus, PartialBridgeTxn, TransactionType } from "../.
 import { BridgeToken } from "../../common/tokens/tokens";
 import { EvmPoller } from "./poller";
 import { Routing, ValueUnits } from "../../common";
+import { EvmPoller } from "./poller";
 
 type Connection = {
   rpcProvider: providers.BaseProvider;
@@ -329,9 +330,13 @@ export class EvmConnect {
   public async listBridgeTransaction(limit:number,asset:BridgeToken, starthash?:string ):Promise<PartialBridgeTxn[]> {
     return new Promise(async(resolve,reject) =>{
       try{
+<<<<<<< HEAD
   
         if(!this._poller) throw new Error("poller not defined")
         const res = this._poller.UsdcPoller();
+=======
+          
+>>>>>>> de71563e (evm poller in progress)
       }catch(err) {
         reject(err)
       }

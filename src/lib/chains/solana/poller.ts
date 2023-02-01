@@ -284,10 +284,10 @@ public async ListUSDCDepositTransactionHandler(take:number,beginAt?:string,endAt
  * Sols deposit
  * @param txn 
  * @param data_bytes 
- * @param txnId 
+ * @param txnID 
  * @returns Sol Deposit Routing 
  */
-public solDeposit(txn: TransactionResponse, data_bytes: Uint8Array,txnId:string): Routing {
+public solDeposit(txn: TransactionResponse, data_bytes: Uint8Array,txnID:string): Routing {
 
       let decimals = 9;
       //Set type
@@ -319,7 +319,7 @@ public solDeposit(txn: TransactionResponse, data_bytes: Uint8Array,txnId:string)
               network: "solana",
               address: address || "",
               token: "sol",
-              txn_signature: txnId
+              txn_signature: txnID
           },
           to: {
               network: "algorand",
@@ -348,10 +348,10 @@ public solDeposit(txn: TransactionResponse, data_bytes: Uint8Array,txnId:string)
    * Solreleases 
    * @param txn 
    * @param data_bytes 
-   * @param txnId 
+   * @param txnID 
    * @returns solrelease Routing
    */
-  public SOLRelease(txn: TransactionResponse, data_bytes: Uint8Array, txnId:string): Routing {
+  public SOLRelease(txn: TransactionResponse, data_bytes: Uint8Array, txnID:string): Routing {
 
           let decimals = 9;
 
@@ -387,7 +387,7 @@ public solDeposit(txn: TransactionResponse, data_bytes: Uint8Array,txnId:string)
                   network: "solana",
                   address: address || "",
                   token: "sol",
-                  txn_signature: txnId
+                  txn_signature: txnID
               },
               units:units_,
               amount:amount,
@@ -402,10 +402,10 @@ public solDeposit(txn: TransactionResponse, data_bytes: Uint8Array,txnId:string)
        * Xalgodeposit
        * @param txn 
        * @param data_bytes 
-       * @param txnId 
+       * @param txnID 
        * @returns algodeposit  Routing
        */
-      public xALGODeposit(txn: TransactionResponse, data_bytes: Uint8Array, txnId: string): Routing {
+      public xALGODeposit(txn: TransactionResponse, data_bytes: Uint8Array, txnID: string): Routing {
         let decimals = 6;
         //Set type
         //Deserialize Instructions
@@ -433,7 +433,7 @@ public solDeposit(txn: TransactionResponse, data_bytes: Uint8Array,txnId:string)
                 network: "solana",
                 address: address || "",
                 token: "algo",
-                txn_signature: txnId
+                txn_signature: txnID
             },
             to: {
                 network: "algorand",
@@ -455,10 +455,10 @@ public solDeposit(txn: TransactionResponse, data_bytes: Uint8Array,txnId:string)
        * Xalgorelease
        * @param txn 
        * @param data_bytes 
-       * @param txnId 
+       * @param txnID 
        * @returns algorelease Routing
        */
-      public xALGORelease(txn: TransactionResponse, data_bytes: Uint8Array, txnId: string): Routing {
+      public xALGORelease(txn: TransactionResponse, data_bytes: Uint8Array, txnID: string): Routing {
         let decimals = 6;
 
         //Set type
@@ -497,7 +497,7 @@ public solDeposit(txn: TransactionResponse, data_bytes: Uint8Array,txnId:string)
                 network: "solana",
                 address: address || "",
                 token: "xalgo",
-                txn_signature: txnId
+                txn_signature: txnID
             },
             units: units_,
             amount: amount,

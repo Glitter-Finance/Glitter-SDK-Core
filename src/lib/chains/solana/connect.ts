@@ -44,6 +44,7 @@ export class SolanaConnect {
         return new Connection(network.toString());
     }
 
+    
  /**
   * @method bridgeTransactions
   * @param fromAddress 
