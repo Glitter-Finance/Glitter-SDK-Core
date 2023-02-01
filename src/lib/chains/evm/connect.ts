@@ -358,7 +358,8 @@ export class EvmConnect {
     const logs = await this.parseLogs(txnID);
 
     //Get Timestamp
-    const timestamp_s = await this.getTimeStamp(txnID);
+    const blockNumber = await this.getBlockNumber(txnID);
+    const timestamp_s = await this.getTimeStampFromBlockNumber(blockNumber);
     const timestamp = new Date(timestamp_s * 1000);
 
     //Check deposit/transfer/release
@@ -394,6 +395,7 @@ export class EvmConnect {
       chainStatus: await this.getTxnStatus(txnID),
       network: this.__network,
       tokenSymbol: "usdc",
+      block: blockNumber,
     };
 
     //Get txn params
