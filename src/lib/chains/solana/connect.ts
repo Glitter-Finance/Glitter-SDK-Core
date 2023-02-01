@@ -1006,7 +1006,7 @@ public async bridge(account: SolanaAccount,
     public get usdcBridgeReceiverAddress():string|number|undefined{
         return this._config?.accounts?.usdcReceiver;
     }
-    public getMintAddress(symbol: string): number | undefined {
+    public getMintAddress(symbol: string): string | undefined {
         try {
             if (!this._accounts) throw new Error("Solana Accounts not defined");
 
@@ -1014,7 +1014,7 @@ public async bridge(account: SolanaAccount,
             const token = BridgeTokens.get("solana", symbol);
             if (!token) throw new Error("Token not found");
             if (!token.address) throw new Error("mint address is required");
-            if (typeof token.address !== "number") throw new Error("token address is required in number format");
+            if (typeof token.address !== "string") throw new Error("token address is required in string format");
             return token.address;
         } catch (error) {
             console.log(error);
