@@ -204,6 +204,24 @@ export class EvmConnect {
       return Promise.reject(error.message);
     }
   }
+  async getBlockNumber(txHash: string): Promise<number> {
+    try {
+      const transactionReceipt = await this.__providers.rpcProvider.getTransactionReceipt(txHash);
+      const blockNumber = transactionReceipt.blockNumber;
+      return blockNumber;
+    } catch (error: any) {
+      return Promise.reject(error.message);
+    }
+  }
+  async getTimeStampFromBlockNumber(blockNumber: number): Promise<number> {
+    try {
+      const block = await this.__providers.rpcProvider.getBlock(blockNumber);
+      const timestamp = block.timestamp;
+      return timestamp;
+    } catch (error: any) {
+      return Promise.reject(error.message);
+    }
+  }
   async getTimeStamp(txHash: string): Promise<number> {
     try {
       const transactionReceipt = await this.__providers.rpcProvider.getTransactionReceipt(txHash);
