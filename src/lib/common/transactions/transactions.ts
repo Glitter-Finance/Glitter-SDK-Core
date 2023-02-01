@@ -26,6 +26,7 @@ export type PartialBridgeTxn ={
     txnIDHashed?:string,
     bridgeType?:BridgeType,
     txnTimestamp?:Date,
+    block?:number,
     txnType:TransactionType, 
     chainStatus?:ChainStatus|null,
     network?:string|null,
