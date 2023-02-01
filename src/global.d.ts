@@ -1,4 +1,8 @@
-namespace NodeJS {
+
+export {};
+
+declare global {
+  namespace NodeJS {
     interface ProcessEnv {
       LAST_MIN_ROUND: string;
       LAST_TXN_ID: string;
@@ -7,8 +11,8 @@ namespace NodeJS {
       AVAX_API_KEY:string;
       AVAX_API_URL:string;
       POLYGON_API_KEY:string;
-      POLYGON_API_URL:string;
+      POLYGON_API_URL:string
     }
   }
+}
 
-  

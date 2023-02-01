@@ -5,7 +5,6 @@ import { BridgeToken } from "../../common/tokens/tokens";
 import { PartialBridgeTxn, TransactionType } from "../../common/transactions/transactions";
 import { AlgorandProgramAccount } from "./config";
 import { AlgorandBridgeTxnsV1 } from "./txns/bridge";
-import fs from 'fs';
 import * as dotenv from 'dotenv'
 
 dotenv.config({ path:'src/.env' });

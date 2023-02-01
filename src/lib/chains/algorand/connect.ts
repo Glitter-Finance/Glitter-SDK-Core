@@ -40,8 +40,6 @@ export class AlgorandConnect {
     }
 
 
-
-
     //Getters
     public get client() {
         return this._client;

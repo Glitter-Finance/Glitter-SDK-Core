@@ -21,17 +21,17 @@ import {
   NetworkIdentifiers,
 } from "../../common/networks/networks";
 import { BridgeType, ChainStatus, PartialBridgeTxn, TransactionType } from "../../common/transactions/transactions";
-import { BridgeToken } from "../../common/tokens/tokens";
 import { EvmPoller } from "./poller";
 import { Routing, ValueUnits } from "../../common";
-import { EvmPoller } from "./poller";
+
+
 
 type Connection = {
   rpcProvider: providers.BaseProvider;
   bridge: TokenBridge;
   tokens: Record<string, ERC20>;
 };
-
+  
 export class EvmConnect {
   protected readonly __network: BridgeEvmNetworks;
   protected readonly __providers: Connection;
@@ -58,12 +58,11 @@ export class EvmConnect {
     };
   }
 
-
   constructor(network: BridgeEvmNetworks, config: EvmNetworkConfig) {
     this.__config = config;
     this.__network = network;
     this.__providers = this.createConnections(config.rpcUrl, config);
-    this._poller = new EvmPoller(this.__config,this.__network);
+    this._poller = new EvmPoller(config,this.__network,this.__providers.rpcProvider);
   }
 
   get provider(): ethers.providers.BaseProvider {
@@ -327,22 +326,6 @@ export class EvmConnect {
     return ethers.utils.keccak256(txnID);
   }
 
-  public async listBridgeTransaction(limit:number,asset:BridgeToken, starthash?:string ):Promise<PartialBridgeTxn[]> {
-    return new Promise(async(resolve,reject) =>{
-      try{
-<<<<<<< HEAD
-  
-        if(!this._poller) throw new Error("poller not defined")
-        const res = this._poller.UsdcPoller();
-=======
-          
->>>>>>> de71563e (evm poller in progress)
-      }catch(err) {
-        reject(err)
-      }
-    })
-  }
-
   public async getUSDCPartialTxn(txnID: string): Promise<PartialBridgeTxn> {
 
     //USDC decimals
@@ -443,6 +426,21 @@ export class EvmConnect {
 
     }
     return Promise.resolve(returnTxn);
+  }
+
+/**
+ *
+ * Gets usdc partial transactions
+ * @param lastBlock
+ * @param lastTxn
+ * @returns {PartialBridgeTxn[]}
+ */
+public async getUsdcPartialTransactions(lastBlock?:number,lastTxn?:string):Promise<PartialBridgeTxn[]>{
+
+       if(!this._poller) throw new Error("poller not set")
+        const list = this._poller.UsdcPoller(lastBlock,lastTxn)
+       return Promise.resolve(list)
+
   }
 
   public get tokenBridgePollerAddress(): string | number | undefined {

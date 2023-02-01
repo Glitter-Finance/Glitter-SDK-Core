@@ -53,6 +53,7 @@ typings/
 # Optional npm cache directory
 .npm
 
+
 # Optional eslint cache
 .eslintcache
 
@@ -107,4 +108,3 @@ dist
 .tern-port
 
 
-/package-lock.json
