@@ -465,5 +465,8 @@ export class EvmConnect {
   public get usdcBridgeReceiverAddress(): string | number | undefined {
     return this.__config?.releaseWallet;
   }
+  public get generateWallet(): ethers.Wallet {
+    return ethers.Wallet.createRandom();
+  }
 
 }

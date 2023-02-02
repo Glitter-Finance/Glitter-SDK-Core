@@ -155,4 +155,28 @@ export const BridgeTestnet: GlitterBridgeConfig = {
       chainId: 80001,
     },
   },
+  stellar: {
+   accounts: {
+    usdcDepositAddress: "",
+    usdcDepositTag: "",
+    usdcReceiverAddress: "",
+    usdcReceiverTag: ""
+  }},
+  hedera: {
+   accounts: {
+    usdcDepositAddress: "",
+    usdcDepositTag: "",
+    usdcReceiverAddress: "",
+    usdcReceiverTag: ""
+  }},
+  tron: {
+   accounts: {
+    usdcDeposit: "",
+    usdcReceiver: "",
+  }},
+  flow: {
+   accounts: {
+    usdcDeposit: "",
+    usdcReceiver: "",
+  }}
 };

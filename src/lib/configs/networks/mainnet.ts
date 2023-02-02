@@ -113,24 +113,48 @@ export const BridgeMainnet: GlitterBridgeConfig = {
       bridge: "",
       rpcUrl: "",
       tokens: [],
-      depositWallet: "",
-      releaseWallet: "",
+      depositWallet: "0xa89a90a11e20b61814da283ba906f30742a99492",
+      releaseWallet: "0xfdc25702b67201107ab4aFDb4DC87E3F8F50a7b8",
     },
     [BridgeNetworks.Ethereum]: {
       chainId: 1,
       bridge: "",
       rpcUrl: "",
       tokens: [],
-      depositWallet: "",
-      releaseWallet: "",
+      depositWallet: "0xa89a90a11e20b61814da283ba906f30742a99492",
+      releaseWallet: "0xfdc027af59e3D118a19B8D1E754a090c95587438",
     },
     [BridgeNetworks.Polygon]: {
       chainId: 137,
       bridge: "",
       rpcUrl: "",
       tokens: [],
-      depositWallet: "",
-      releaseWallet: "",
+      depositWallet: "0xa89a90a11e20b61814da283ba906f30742a99492",
+      releaseWallet: "0xfdc9Af7852F9b2d234b96B1F53804BC781Ce26b3",
     },
   },
+  stellar: {
+   accounts: {
+    usdcDepositAddress: "GAFK7XFZHMLSNV7OJTBO7BAIZA66X6QIBV5RMZZYXK4Q7ZSO52J5C3WQ",
+    usdcDepositTag: "5794940577887230301",
+    usdcReceiverAddress: "",
+    usdcReceiverTag: ""
+  }},
+  hedera: {
+   accounts: {
+    usdcDepositAddress: "0.0.439415",
+    usdcDepositTag: "6461445716",
+    usdcReceiverAddress: "",
+    usdcReceiverTag: ""
+  }},
+  tron: {
+   accounts: {
+    usdcDeposit: "TAG83nhpF82P3r9XhFTwNamgv1BsjTcz6v",
+    usdcReceiver: "",
+  }},
+  flow: {
+   accounts: {
+    usdcDeposit: "0x1fafdb9e814dfe06",
+    usdcReceiver: "",
+  }}
 };
