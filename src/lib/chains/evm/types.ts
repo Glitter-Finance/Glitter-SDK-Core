@@ -38,7 +38,7 @@ export type BridgeReleaseEvent = {
 export type TransferEvent = {
   from: string;
   to: string;
-  amount: ethers.BigNumber;
+  value: ethers.BigNumber;
   __type: "Transfer";
 };
 
