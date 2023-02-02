@@ -2,12 +2,16 @@ import algosdk from "algosdk";
 import { BridgeTokens, Sleep } from "glitter-bridge-sdk-dev/dist";
 import { Routing, ValueUnits } from "../../common";
 import { BridgeToken } from "../../common/tokens/tokens";
-import { PartialBridgeTxn, TransactionType } from "../../common/transactions/transactions";
+import { BridgeType, ChainStatus, PartialBridgeTxn, TransactionType } from "../../common/transactions/transactions";
 import { AlgorandProgramAccount } from "./config";
 import { AlgorandBridgeTxnsV1 } from "./txns/bridge";
 import * as dotenv from 'dotenv'
+import winston from "winston";
+import { ethers } from "ethers";
+import { base64To0xString } from "../../common/utils/utils";
 
 dotenv.config({ path:'src/.env' });
+const DEFAULT_LIMIT =1000;          
 
 export class AlgorandPoller{
 
@@ -26,14 +30,17 @@ export class AlgorandPoller{
         //Interval
         pollerLoop = null;
         //Local Vars
-        
-        lastContractCount = 0;
-        lastRound = 0;
-        lastTxnID = "";
+        _pollerCountflag =0;    
+        _lastContractCount = 0;
+        _lastRound = 0;
+        _UsdclastRound=0;
+        _lastTxnID = "";
+        _UsdclastTxnID="";
         _lastusdcTxnHash ="";
-        totalTxInRound = 0;
+        _totalTxInRound = 0;
         nextToken = '';
-        polling = false;
+        _polling = false;
+        _USDCpolling=false;
         isStarted = false;
         lastPauseMessageTime:number | null =null;
         lastPollMessageTime = 0;
@@ -42,7 +49,6 @@ export class AlgorandPoller{
         lastPolledTime = 0;
         //Pause
         paused = false;
-        
         public pausePoller() {
             this.paused = true;
         }
@@ -50,23 +56,63 @@ export class AlgorandPoller{
             this.paused = false;
         }
 
-
  /**
   * @methof ListPartialBridgeTxn
   * @param minRound 
   * @returns 
   */        
-    public async ListPartialBridgeTxn(minRound?:number):Promise<PartialBridgeTxn[]>{
+    public async ListPartialBridgeTxn(minRound?:number,limit?:number):Promise<PartialBridgeTxn[]|undefined>{
          return new Promise(async (resolve,reject) =>{
             
         try{
+
             if(!this._client) throw new Error("Algo Client Not Defined");
             if(!this._clientIndexer)  throw new Error("Indexer Not Set")
             let nextToken = null;
-            // get the last ended round
-            let nextMinRound = minRound==undefined ? this.lastRound:minRound;
+            //set polling flag
+            this._polling = true; 
+            this._pollerCountflag=1;
+            // set the lastPolledTime 
+            this.lastPolledTime = Date.now();
+            let appId = this._bridgeTxnsV1?.getGlitterAccountAddress(AlgorandProgramAccount.appID);
+            if(!appId) {
+                throw new Error("APP ID NOT DEFINED")
+            }
+            //Check app 
+            let app = await this._client.getApplicationByID(appId as number).do();
+            let globalState = app['params']['global-state'];
+            //Count all bridge transactions
+            let algoDepositCounter = globalState.find((x: { key: string; }) => x.key === "YWxnby1kZXBvc2l0LWNvdW50ZXI=")['value']['uint'];
+            let algoReleaseCounter = globalState.find((x: { key: string; }) => x.key === "YWxnby1yZWxlYXNlLWNvdW50ZXI=")['value']['uint'];
+            let algoRefundCounter = globalState.find((x: { key: string; }) => x.key === "YWxnby1yZWZ1bmQtY291bnRlcg==")['value']['uint'];
+            let solDepositCounter = globalState.find((x: { key: string; }) => x.key === "eFNPTC1kZXBvc2l0LWNvdW50ZXI=")['value']['uint'];
+            let solReleaseCounter = globalState.find((x: { key: string; }) => x.key === "eFNPTC1yZWxlYXNlLWNvdW50ZXI=")['value']['uint'];
+            let solRefundCounter = globalState.find((x: { key: string; }) => x.key === "eFNPTC1yZWZ1bmQtY291bnRlcg==")['value']['uint'];
+            let count = algoDepositCounter + algoReleaseCounter + algoRefundCounter + solDepositCounter + solReleaseCounter + solRefundCounter;
+        //Check if new transactions
+        if (count === this._lastContractCount) {
+            //No new transactions
 
+                if (Date.now() - this.lastNoNewTxMessageTime >= 5 * 1000) {
+                    if (this.lastTxnTime == null) {
+                        console.log("No new transactions.  Last transaction: Never");
+                    } else {
+                        console.log("No new transactions.  Last transaction: " + (Date.now() / this.lastTxnTime) + " seconds ago");
+                    }
+                    //if (logger !== undefined) console.log("Poller is still running after " + getLastTxnTimeDelta() + " seconds.");
+                    this.lastNoNewTxMessageTime = Date.now();
+                }
+            
+            this._polling = false;
+            return undefined;
+        }
+
+            // get the last ended round
+            let nextMinRound = minRound==undefined ? this._lastRound:minRound;
+            let lastTxnId = "";
             let PartialBtxnList:PartialBridgeTxn[] = [];
+            const TxnLimit = limit==undefined?DEFAULT_LIMIT:limit
+
             do{
 
                 try{
@@ -76,7 +122,7 @@ export class AlgorandPoller{
                 .searchForTransactions()
                 .nextToken(this.nextToken)
                 .applicationID(813301700)
-                .limit(1000)
+                .limit(TxnLimit)
                 .minRound(nextMinRound)
                 .do()
                 
@@ -88,11 +134,11 @@ export class AlgorandPoller{
                         let txRound = tx['confirmed-round'];
                         if (txRound > nextMinRound) nextMinRound = txRound;
                         //Check if this is last transaction, if so, we've caught up
-                        if (tx['id'] === this.lastTxnID) {
+                        if (tx['id'] === lastTxnId) {
                             break;
                         }
 
-                        this.lastTxnID = tx['id'];
+                        lastTxnId = tx['id'];
                         const PartialBtxn = this.getPartialBTxn(tx)
 
                         if(PartialBtxn!=null){
@@ -100,6 +146,8 @@ export class AlgorandPoller{
                             PartialBtxnList.push(PartialBtxn);
 
                         }
+
+                        this._lastTxnID = lastTxnId;
                     }
                 } else {
                     //No transactions in this round
@@ -108,20 +156,68 @@ export class AlgorandPoller{
             }catch(err){
                    
             }
+                //Save state
+                // setLastCompletedRound("../SaveStates", nextMinRound);
+                // setLastCompletedTxnID("../SaveStates", lastTxnID);
+                this._lastRound = nextMinRound;
+                this._lastTxnID = lastTxnId;
+                console.log("NEXTMINROUND",this._lastRound)
+                console.log("LASTTXN",this._lastTxnID)
 
         }while(true)
             //Set last Contract Count
-            this.lastRound = nextMinRound;
-            // this.lastContractCount = count;  
+            this._lastRound = nextMinRound;
+            this._lastContractCount = count;  
+            
         resolve(PartialBtxnList);     
     }catch(err){
         reject(err)
     }
 
+
+    //Clear Polling Flag 
+
+    this._polling = false;
+    this._pollerCountflag=2
 })
   
 
 }
+
+
+    getLastMinRound(){
+        let  res:number|undefined ; 
+       if(this._pollerCountflag=2) {
+        res = this._lastRound
+       }else {
+        throw new Error("POLLER IS NOT SET")
+       }
+
+        return res 
+    }
+
+    getLastTxnId(){
+        let res:string|undefined ; 
+       if(this._pollerCountflag=2) {
+        res = this._lastTxnID
+       }else{
+        throw new Error("POLLER IS NOT SET")
+       }
+
+        return res 
+    }
+
+    getLastTxnCount() {
+        let res:number|undefined ; 
+        if(this._pollerCountflag=2) {
+         res = this._lastContractCount
+        }else{
+         throw new Error("POLLER IS NOT SET")
+        }
+ 
+         return res 
+    }
+
 
      /**
       * 
@@ -130,150 +226,242 @@ export class AlgorandPoller{
       * @param address 
       * @param limit 
       * @param asset 
-      * @param [startHash] 
+      * @param startHash
       * @returns Partial USDC deposit transactions  
       */
-     private async listusdcDepositTransactionHandler(address:string,limit:number ,asset:BridgeToken, startHash?:string):Promise<PartialBridgeTxn[]>  {
-            return new Promise(async (resolve,reject) =>{
-                try{
-              const address = this._bridgeTxnsV1?.getGlitterAccountAddress(AlgorandProgramAccount.UsdcDepositAccount);
-              if(!address) throw new Error("address not defined")   ;
-              if(!this._client) throw new Error("Algo Client Not Defined");
-              if(!this._clientIndexer)  throw new Error("Indexer Not Set")
-              if(!asset) throw new Error("asset not defined");
-              const txnlist = await this._clientIndexer?.searchForTransactions().address(address as string).limit(limit).do();
-              if(!txnlist) throw new Error("txn list not defined");
-              let partialbridgeTxnList:PartialBridgeTxn[] = [];  
-              let partialBtxn:PartialBridgeTxn 
-              let lastTxnHash = "";
-              let checkLimit = 0;       
-              for(let result of txnlist.transactions){
-                if(checkLimit == limit) break;
-                if(startHash==undefined){
+     public async ListusdcDepositTransactionHandler(limit:number,minRound?:number,startHash?:string):Promise<PartialBridgeTxn[]>  {
+        return new Promise(async (resolve,reject) =>{
+            try{
+                
+                    const address = this._bridgeTxnsV1?.getGlitterAccountAddress(AlgorandProgramAccount.UsdcDepositAccount) as string;
+                    if(!address) throw new Error("address not defined")   ;
+                    if(!this._client) throw new Error("Algo Client Not Defined");
+                    if(!this._clientIndexer)  throw new Error("Indexer Not Set")
+                    this._USDCpolling = true; 
+                    this._pollerCountflag=3;
 
-                const routing = await this.getNote(result);
-                if(!routing){
-                    partialBtxn   =  {
-                        txnID:result.id,
-                        txnType:TransactionType.Release,
-                    };
-                }else{
-                     partialBtxn =  {
-                        txnID:result.id,
-                        txnType:TransactionType.Release,
-                        routing:routing
-                    };
-                }    
-                partialbridgeTxnList.push(partialBtxn)
-                lastTxnHash = result.id;
-                checkLimit++;
-    
-                }else {
-                if(startHash == result.id){
-                const routing = await this.getNote(result);
-                    if(!routing){
-                        partialBtxn   =  {
-                            txnID:result.id,
-                            txnType:TransactionType.Release,
-                        };
-                    }else{
-                         partialBtxn =  {
-                            txnID:result.id,
-                            txnType:TransactionType.Release,
-                            routing:routing
-                        };
-                    }    
-                partialbridgeTxnList.push(partialBtxn)
-                lastTxnHash = result.id
-                startHash =undefined;
-                checkLimit++;
-                }
-                }   
-             }
-     
-              this._lastusdcTxnHash = lastTxnHash
-                resolve(partialbridgeTxnList)
+                    const txnlist = await this._clientIndexer?.searchForTransactions().address(address as string).limit(limit).do();
+                    if(!txnlist) throw new Error("txn list not defined");
+                    // get the last ended round
+
+                    let nextMinRound = minRound==undefined ? this._UsdclastRound:minRound;
+                    let lastTxnId = "";
+                    let PartialBtxnList:PartialBridgeTxn[] = [];
+                    const TxnLimit = limit==undefined?DEFAULT_LIMIT:limit
+
+                    do{
+
+                        try{
+
+                            var data = await this._clientIndexer
+                            .searchForTransactions()
+                            .address(address)
+                            .limit(TxnLimit)
+                            .minRound(nextMinRound)
+                            .do();
+
+                            this.nextToken = data['next-token'];
+                            if (data.transactions.length > 0) {
+                                //There are transactions in this round.  Add to Transaction Map    
+                                for (let i = 0; i < data.transactions.length; i++) {
+                                    let tx = data.transactions[i];
+                                    let txRound = tx['confirmed-round'];
+                                    if (txRound > nextMinRound) nextMinRound = txRound;
+                                    //Check if this is last transaction, if so, we've caught up
+                                    if (tx['id'] === lastTxnId) {
+                                        break;
+                                    }
+            
+                                    lastTxnId = tx['id'];
+                                    console.log("TX",tx);
+                                    //Get Algorand Transaction data
+                                    let partialTxn: PartialBridgeTxn = {
+                                        txnID: tx['id'],
+                                        txnIDHashed: this.getTxnHashedFromBase64(tx['id']),
+                                        bridgeType: BridgeType.USDC,
+                                        txnType: TransactionType.Unknown,
+                                        network: "algorand",
+                                        chainStatus: ChainStatus.Completed
+                                    }
+
+                                    const noteObj = tx.note ? algosdk.decodeObj(Buffer.from(tx.note, "base64")) as DepositNote : null;
+                                    const note = noteObj ? noteObj["system"] : null;
+                                    const routing: Routing | null = note ? JSON.parse(note) : null;
+                                
+                                    const PartialBtxn = await this.handleDeposit(tx,routing,partialTxn)
+            
+                                    if(PartialBtxn!=null){
+            
+                                        PartialBtxnList.push(PartialBtxn);
+            
+                                    }
+            
+                                    this._UsdclastTxnID = lastTxnId;
+                                }
+                            } else {
+                                //No transactions in this round
+                                break;
+                            }  
+                        }catch(err){
+
+                        }
+
+                        //Save state
+                        // setLastCompletedRound("../SaveStates", nextMinRound);
+                        // setLastCompletedTxnID("../SaveStates", lastTxnID);
+                        this._UsdclastRound = nextMinRound;
+                        this._UsdclastTxnID = lastTxnId;
+                        
+                        
+                    }while(true)
+
+                    //Set last Contract Count
+                    this._UsdclastRound = nextMinRound;
+                    // this._lastContractCount = count;  
+                    
+                        resolve(PartialBtxnList);     
+                    
                 } catch(err){
                     reject(err)    
                 }
+
+
+                //Clear Polling Flag 
+
+                this._polling = false;
+                this._pollerCountflag=4
             })
         }
 
-        /**
+
+        async  getUsdcPartialTxn(tx:any):Promise<PartialBridgeTxn>{
+
+            //algo decimals 
+            let decimals = 6; 
+            const partialBTxn:PartialBridgeTxn = {txnID:"",txnType:TransactionType.Deposit}
+            return Promise.resolve(partialBTxn)    
+            
+        }
+        
+        public getTxnHashedFromBase64(txnID: string): string {
+            return ethers.utils.keccak256(base64To0xString(txnID));
+          }
+     
+                    
+    /**
       * 
       * 
       * Listusdcs Release transaction handler
       * @param address 
       * @param limit 
       * @param asset 
-      * @param [startHash] 
+      * @param startHash
       * @returns Partial USDC Release transactions  
       */
-        private async listusdcReleaseTransactionHandler(limit:number, startHash?:string):Promise<PartialBridgeTxn[]>  {
+        private async ListusdcReleaseTransactionHandler(limit:number,minRound?:number,startHash?:string):Promise<PartialBridgeTxn[]>  {
             return new Promise(async (resolve,reject) =>{
                 try{
-              const address = this._bridgeTxnsV1?.getGlitterAccountAddress(AlgorandProgramAccount.UsdcReceiverAccount);
-              if(!address) throw new Error("address not defined")   ;
-              if(!this._client) throw new Error("Algo Client Not Defined");
-              if(!this._clientIndexer)  throw new Error("Indexer Not Set")
-              const txnlist = await this._clientIndexer?.searchForTransactions().address(address as string).limit(limit).do();
-              let partialBtxn:PartialBridgeTxn; 
-              if(!txnlist) throw new Error("txn list not defined");
-              let partialbridgeTxnList:PartialBridgeTxn[] = [];   
-              let lastTxnHash = "";
-              let checkLimit = 0;       
-              for(let result of txnlist.transactions){
-                if(checkLimit == limit) break;
-                if(startHash==undefined){
-                const routing = await this.getNote(result);
-
-                if(!routing){
-                    partialBtxn   =  {
-                        txnID:result.id,
-                        txnType:TransactionType.Release,
-                    };
-                }else{
-                     partialBtxn =  {
-                        txnID:result.id,
-                        txnType:TransactionType.Release,
-                        routing:routing
-                    };
-                }    
-                partialbridgeTxnList.push(partialBtxn)
-                lastTxnHash = result.id;
-                checkLimit++;
-                }else {
-                if(startHash == result.id){
-                    const routing = await this.getNote(result);
-
-                    if(!routing){
-                        partialBtxn   =  {
-                            txnID:result.id,
-                            txnType:TransactionType.Release,
-                        };
-                    }else{
-                         partialBtxn =  {
-                            txnID:result.id,
-                            txnType:TransactionType.Release,
-                            routing:routing
-                        };
-                    }      
-               
-                partialbridgeTxnList.push(partialBtxn)
-                lastTxnHash = result.id
-                startHash =undefined;
-                checkLimit++;
-                }
-                }   
-             }
+                    
+                        const address = this._bridgeTxnsV1?.getGlitterAccountAddress(AlgorandProgramAccount.UsdcDepositAccount) as string;
+                        if(!address) throw new Error("address not defined")   ;
+                        if(!this._client) throw new Error("Algo Client Not Defined");
+                        if(!this._clientIndexer)  throw new Error("Indexer Not Set")
+                        this._USDCpolling = true; 
+                        this._pollerCountflag=5;
     
-             this._lastusdcTxnHash = lastTxnHash
-                resolve(partialbridgeTxnList)
-                } catch(err){
-                    reject(err)    
-                }
-            })
+                        const txnlist = await this._clientIndexer?.searchForTransactions().address(address as string).limit(limit).do();
+                        if(!txnlist) throw new Error("txn list not defined");
+                        // get the last ended round
+    
+                        let nextMinRound = minRound==undefined ? this._UsdclastRound:minRound;
+                        let lastTxnId = "";
+                        let PartialBtxnList:PartialBridgeTxn[] = [];
+                        const TxnLimit = limit==undefined?DEFAULT_LIMIT:limit
+    
+                        do{
+    
+                            try{
+    
+                                var data = await this._clientIndexer
+                                .searchForTransactions()
+                                .address(address)
+                                .limit(TxnLimit)
+                                .minRound(nextMinRound)
+                                .do();
+    
+                                this.nextToken = data['next-token'];
+                                if (data.transactions.length > 0) {
+                                    //There are transactions in this round.  Add to Transaction Map    
+                                    for (let i = 0; i < data.transactions.length; i++) {
+                                        let tx = data.transactions[i];
+                                        let txRound = tx['confirmed-round'];
+                                        if (txRound > nextMinRound) nextMinRound = txRound;
+                                        //Check if this is last transaction, if so, we've caught up
+                                        if (tx['id'] === lastTxnId) {
+                                            break;
+                                        }
+                
+                                        lastTxnId = tx['id'];
+                                        console.log("TX",tx);
+                                        //Get Algorand Transaction data
+                                        let partialTxn: PartialBridgeTxn = {
+                                            txnID: tx['id'],
+                                            txnIDHashed: this.getTxnHashedFromBase64(tx['id']),
+                                            bridgeType: BridgeType.USDC,
+                                            txnType: TransactionType.Unknown,
+                                            network: "algorand",
+                                            chainStatus: ChainStatus.Completed
+                                        }
+    
+                                        const noteObj = tx.note ? algosdk.decodeObj(Buffer.from(tx.note, "base64")) as DepositNote : null;
+                                        const note = noteObj ? noteObj["system"] : null;
+                                        const routing: Routing | null = note ? JSON.parse(note) : null;
+                                    
+                                        const PartialBtxn = await this.handleRelease(tx,routing,partialTxn)
+                
+                                        if(PartialBtxn!=null){
+                
+                                            PartialBtxnList.push(PartialBtxn);
+                
+                                        }
+                
+                                        this._UsdclastTxnID = lastTxnId;
+                                    }
+                                } else {
+                                    //No transactions in this round
+                                    break;
+                                }  
+                            }catch(err){
+    
+                            }
+    
+                            //Save state
+                            // setLastCompletedRound("../SaveStates", nextMinRound);
+                            // setLastCompletedTxnID("../SaveStates", lastTxnID);
+                            this._UsdclastRound = nextMinRound;
+                            this._UsdclastTxnID = lastTxnId;
+                            
+                            
+                        }while(true)
+    
+                        //Set last Contract Count
+                        this._UsdclastRound = nextMinRound;
+                        // this._lastContractCount = count;  
+                        
+                            resolve(PartialBtxnList);     
+                        
+                    } catch(err){
+                        reject(err)    
+                    }
+    
+    
+                    //Clear Polling Flag 
+    
+                    this._polling = false;
+                    this._pollerCountflag=6
+                })
         }
+
 
         public async getNote(transaction:any):Promise<Routing|undefined> {
            try{
@@ -291,7 +479,7 @@ export class AlgorandPoller{
         };
 
         public getLastPolledRound() {
-            return this.lastRound;
+            return this._lastRound;
         }
         public getLastPolledTimeDelta() {
             return Math.round((Date.now() - this.lastPolledTime) / 1000 * 10) / 10;
@@ -304,6 +492,87 @@ export class AlgorandPoller{
             return Math.round((Date.now() - this.lastTxnTime) / 1000 * 10) / 10;
         }
 
+        async  handleDeposit(
+            txn: any,
+            routing: Routing | null,
+            partialTxn: PartialBridgeTxn,
+           ): Promise<PartialBridgeTxn> {
+            let decimals = 6;
+        
+        
+            //Set type
+            partialTxn.tokenSymbol = "usdc";
+        
+            //Get Address
+            let units = txn["asset-transfer-transaction"].amount;
+            let assetID = txn["asset-transfer-transaction"]["asset-id"];
+        
+            //Check if asset is USDC
+            if (assetID !== BridgeTokens.get("algorand","usdc")?.address) {
+                return Promise.resolve(partialTxn);
+            }
+        
+            let sender = txn.sender;
+            if (sender == this._bridgeTxnsV1?.getGlitterAccountAddress(AlgorandProgramAccount.UsdcDepositAccount)) {
+               
+                //This is a transfer or refund
+                if (!routing){
+                    partialTxn.txnType = TransactionType.Transfer;
+                } else {
+                   partialTxn.txnType = TransactionType.Refund;
+                }       
+                partialTxn.address = txn["asset-transfer-transaction"].receiver;
+           
+            } else {
+                //this is a deposit
+                partialTxn.address = txn.sender;
+                partialTxn.txnType = TransactionType.Deposit;
+            }
+        
+            partialTxn.units = units;
+            partialTxn.amount = ValueUnits.fromUnits(units, decimals).value;
+        
+            partialTxn.routing = routing;
+            return Promise.resolve(partialTxn);
+        }
+
+        async  handleRelease(
+            txn: any,
+            routing: Routing | null,
+            partialTxn: PartialBridgeTxn,
+            ): Promise<PartialBridgeTxn> {
+            let decimals = 6;
+        
+            //Set type
+            partialTxn.tokenSymbol = "usdc";
+        
+            //Get Address
+            let units = txn["asset-transfer-transaction"].amount;
+            let assetID = txn["asset-transfer-transaction"]["asset-id"];
+        
+            //Check if asset is USDC
+            if (assetID !== BridgeTokens.get("algorand","usdc")?.address) {
+                console.log(`Transaction ${txn['id']} is not a USDC transaction`);
+                return Promise.resolve(partialTxn);
+            }
+        
+            let receiver = txn["asset-transfer-transaction"].receiver;
+            if (receiver === this._bridgeTxnsV1?.getGlitterAccountAddress(AlgorandProgramAccount.UsdcReceiverAccount)) {
+                //This is a transfer
+                partialTxn.address = receiver;
+                partialTxn.txnType = TransactionType.Transfer;
+            } else {
+                //this is a release
+                partialTxn.address = receiver;
+                partialTxn.txnType = TransactionType.Release;
+            }
+        
+            partialTxn.units = units;
+            partialTxn.amount = ValueUnits.fromUnits(units, decimals).value;
+        
+            partialTxn.routing = routing;
+            return Promise.resolve(partialTxn);
+        }        
 
         /**
          * 
@@ -538,5 +807,11 @@ export class AlgorandPoller{
               return Number(str);
             }
           }
+
+          
 }
 
+export type DepositNote = {
+    system: string, // RoutingData json format
+    date: string,
+}

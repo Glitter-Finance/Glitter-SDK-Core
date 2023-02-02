@@ -1,13 +1,15 @@
-import { Connection, PublicKey, TransactionResponse } from "@solana/web3.js";
+import { Connection, PublicKey, TokenBalance, TransactionResponse } from "@solana/web3.js";
 import bs58 from "bs58";
-import {  ValueUnits } from "../../common";
+import {  BridgeTokens, ValueUnits } from "../../common";
 import { Routing } from "../../common/routing/routing";
-import { PartialBridgeTxn, TransactionType } from "../../common/transactions/transactions";
+import { BridgeType, ChainStatus, PartialBridgeTxn, TransactionType } from "../../common/transactions/transactions";
 import { SolanaProgramId } from "./config";
 import { SolanaBridgeTxnsV1 } from "./txns/bridge";
 import { deserialize } from "borsh";
 import algosdk from "algosdk";
 import { DepositNote } from "./utils";
+import { ethers } from "ethers";
+import base58 from "bs58";
 
 export class SolanaPoller{
 
@@ -91,7 +93,7 @@ export class SolanaPoller{
               let data_bytes = bs58.decode(txnData);
               if (Number(data_bytes[0]) === 10) {
               depositNote = this.solDeposit(txn, data_bytes, txnID);
-              partialBtxn.txnID = TransactionType.Deposit
+              partialBtxn.txnType = TransactionType.Deposit
             } else if (Number(data_bytes[0]) === 11) {
                 partialBtxn.txnType = TransactionType.Finalize;
             } else if (Number(data_bytes[0]) === 13) {
@@ -136,91 +138,14 @@ export class SolanaPoller{
 public async ListUSDCDepositTransactionHandler(take:number,beginAt?:string,endAt?:string):Promise<PartialBridgeTxn[]>  {
       return new Promise(async (resolve,reject) =>{
           try{
-            const address = this._bridgeTxnsV1?.getGlitterAccountAddress(SolanaProgramId.UsdcDepositId)
-            if(!address) throw new Error("address not defined")   ;
-            if(!this._client) throw new Error("Solana Client Not Defined");
-            const DepositPubKey = new PublicKey(address); 
-            let partialbridgeTxnList:PartialBridgeTxn[] = [];   
-            let lastTxnHash = "";
-            let depositNote:Routing|undefined;
-            const signatures: string[] = [];
-
-            let before =endAt; 
-            let until = beginAt ;
-            let partialBtxn:PartialBridgeTxn;  
-          /**
-           * startHash = until 
-           * endAt = before
-           */
-            const newSignatures = await this._client.getSignaturesForAddress(
-              DepositPubKey ,
-              {
-                limit: take,
-                before: before || undefined,
-                until: until || undefined,
-              }
-            );
-            signatures.push(...newSignatures.map((signature) => signature.signature));
-            const RevSignatures = signatures.reverse();
-            const chunk = await this._client.getTransactions(RevSignatures);
-            for(let i=0; i<chunk.length;i++){
-                let l = chunk[i]!.transaction.message.instructions.length
-                  for(let j= 0;j< l;j++){
-                    if (!chunk[i]||chunk[i]==null) break;
-                    const data_bytes = (bs58.decode(chunk[i]!.transaction.message.instructions[j].data) || "{}");
-                
-                    try {
-                      const object = JSON.parse(Buffer.from(data_bytes).toString('utf8'))
-                      if (object.system && object.date) {
-                        depositNote = object;
-                      }
-                      } catch(err) { }          
-                  }
-                  if(!depositNote){
-                    partialBtxn =  {
-                     txnID:RevSignatures[i],
-                     txnType:TransactionType.Deposit,
-                   }; 
-                   }else{
-                      partialBtxn =  {
-                       txnID:RevSignatures[i],
-                       txnType:TransactionType.Deposit,
-                       routing:depositNote
-                     }; 
-                   }
-                   lastTxnHash = RevSignatures[i]
-                   partialbridgeTxnList.push(partialBtxn)                
-              
-            }
-            this._lastTxnHashUsdcDeposit = lastTxnHash;
-          
-            resolve(partialbridgeTxnList)
-          } catch(err){
-              reject(err)    
-          }
-      })
-  }
-
-  /**
-   * 
-   * 
-   * Optymizedlistusdcs release transaction handler
-   * @param take 
-   * @param [beginAt] 
-   * @param [endAt] 
-   * @returns release transaction handler 
-   */
-  public async ListUSDCReleaseTransactionHandler(take:number,beginAt?:string,endAt?:string):Promise<PartialBridgeTxn[]>  {
-    return new Promise(async (resolve,reject) =>{
-        try{
-          const address = this._bridgeTxnsV1?.getGlitterAccountAddress(SolanaProgramId.UsdcReceiverId)
+            const address = this._bridgeTxnsV1?.getGlitterAccountAddress(SolanaProgramId.UsdcReceiverId)
           if(!address) throw new Error("address not defined")   ;
           if(!this._client) throw new Error("Solana Client Not Defined");
 
           const DepositPubKey = new PublicKey(address); 
           let partialbridgeTxnList:PartialBridgeTxn[] = [];   
           let lastTxnHash = "";
-          let depositNote:Routing|undefined;
+          let depositNote:DepositNote|undefined;
           const signatures: string[] = [];
 
           let before =endAt; 
@@ -243,30 +168,133 @@ public async ListUSDCDepositTransactionHandler(take:number,beginAt?:string,endAt
           const chunk = await this._client.getTransactions(RevSignatures);
           for(let i=0; i<chunk.length;i++){
               let l = chunk[i]!.transaction.message.instructions.length
+              const TxnId =  RevSignatures[i] 
+              const txn = chunk[i]!;
+              //Get Solana Transaction data
+              let partialTxn: PartialBridgeTxn = {
+                txnID: TxnId,
+                txnIDHashed: this.getTxnHashedFromBase58(TxnId),
+                bridgeType: BridgeType.USDC,
+                txnType: TransactionType.Unknown,
+                network: "solana",
+            }                  
                 for(let j= 0;j< l;j++){
                   if (!chunk[i]||chunk[i]==null) break;
-                  const data_bytes = (bs58.decode(chunk[i]!.transaction.message.instructions[j].data) || "{}");
+                    
+                      //Check txn status
+                        if (txn.meta?.err) {
+                          partialTxn.chainStatus = ChainStatus.Failed;
+                          console.log(`Transaction ${TxnId} failed`);
+                        } else {
+                          partialTxn.chainStatus = ChainStatus.Completed;
+                       }
+
+                   const data_bytes = (bs58.decode(chunk[i]!.transaction.message.instructions[j].data) || "{}");
+
                   try {
                     const object = JSON.parse(Buffer.from(data_bytes).toString('utf8'))
                     if (object.system && object.date) {
                       depositNote = object;
                     }
+
+                 const routing: Routing | null = depositNote ? JSON.parse(depositNote.system) : null;
+                 partialTxn = await this.handleDeposit(txn, routing, partialTxn);
+
                     } catch(err) { }          
                 }
-                if(!depositNote){
-                  partialBtxn =  {
-                   txnID:RevSignatures[i],
-                   txnType:TransactionType.Release,
-                 }; 
-                 }else{
-                    partialBtxn =  {
-                     txnID:RevSignatures[i],
-                     txnType:TransactionType.Release,
-                     routing:depositNote
-                   }; 
-                 }
+             
                  lastTxnHash = RevSignatures[i]
-                 partialbridgeTxnList.push(partialBtxn)                
+                 partialbridgeTxnList.push(partialTxn)                
+            
+          }
+          this._lastTxnHashUsdcRelease = lastTxnHash;
+        resolve(partialbridgeTxnList)
+          } catch(err){
+              reject(err)    
+          }
+      })
+  }
+
+
+  /**
+   * 
+   * 
+   * Optymizedlistusdcs release transaction handler
+   * @param take 
+   * @param [beginAt] 
+   * @param [endAt] 
+   * @returns release transaction handler 
+   */
+  public async ListUSDCReleaseTransactionHandler(take:number,beginAt?:string,endAt?:string):Promise<PartialBridgeTxn[]>  {
+    return new Promise(async (resolve,reject) =>{
+        try{
+          const address = this._bridgeTxnsV1?.getGlitterAccountAddress(SolanaProgramId.UsdcReceiverId)
+          if(!address) throw new Error("address not defined")   ;
+          if(!this._client) throw new Error("Solana Client Not Defined");
+
+          const DepositPubKey = new PublicKey(address); 
+          let partialbridgeTxnList:PartialBridgeTxn[] = [];   
+          let lastTxnHash = "";
+          let depositNote:DepositNote|undefined;
+          const signatures: string[] = [];
+
+          let before =endAt; 
+          let until = beginAt ;
+          let partialBtxn:PartialBridgeTxn;  
+        /**
+         * startHash = until 
+         * endAt = before
+         */
+          const newSignatures = await this._client.getSignaturesForAddress(
+            DepositPubKey ,
+            {
+              limit: take,
+              before: before || undefined,
+              until: until || undefined,
+            }
+          );
+          signatures.push(...newSignatures.map((signature) => signature.signature));
+          const RevSignatures = signatures.reverse();
+          const chunk = await this._client.getTransactions(RevSignatures);
+          for(let i=0; i<chunk.length;i++){
+              let l = chunk[i]!.transaction.message.instructions.length
+              const TxnId =  RevSignatures[i] 
+              const txn = chunk[i]!;
+              //Get Solana Transaction data
+              let partialTxn: PartialBridgeTxn = {
+                txnID: TxnId,
+                txnIDHashed: this.getTxnHashedFromBase58(TxnId),
+                bridgeType: BridgeType.USDC,
+                txnType: TransactionType.Unknown,
+                network: "solana",
+            }                  
+                for(let j= 0;j< l;j++){
+                  if (!chunk[i]||chunk[i]==null) break;
+                    
+                      //Check txn status
+                        if (txn.meta?.err) {
+                          partialTxn.chainStatus = ChainStatus.Failed;
+                          console.log(`Transaction ${TxnId} failed`);
+                        } else {
+                          partialTxn.chainStatus = ChainStatus.Completed;
+                       }
+
+                   const data_bytes = (bs58.decode(chunk[i]!.transaction.message.instructions[j].data) || "{}");
+
+                  try {
+                    const object = JSON.parse(Buffer.from(data_bytes).toString('utf8'))
+                    if (object.system && object.date) {
+                      depositNote = object;
+                    }
+
+                 const routing: Routing | null = depositNote ? JSON.parse(depositNote.system) : null;
+                 partialTxn = await this.handleRelease(txn, routing, partialTxn);
+
+                    } catch(err) { }          
+                }
+             
+                 lastTxnHash = RevSignatures[i]
+                 partialbridgeTxnList.push(partialTxn)                
             
           }
           this._lastTxnHashUsdcRelease = lastTxnHash;
@@ -349,7 +377,7 @@ public solDeposit(txn: TransactionResponse, data_bytes: Uint8Array,txnID:string)
    * @param txn 
    * @param data_bytes 
    * @param txnID 
-   * @returns solrelease Routing
+   * @returns {Routing}
    */
   public SOLRelease(txn: TransactionResponse, data_bytes: Uint8Array, txnID:string): Routing {
 
@@ -554,7 +582,186 @@ public solDeposit(txn: TransactionResponse, data_bytes: Uint8Array,txnID:string)
         return "";
       }
 
+          async  handleRelease(txn: TransactionResponse, routing: Routing | null, partialTxn: PartialBridgeTxn): Promise<PartialBridgeTxn> {
+            let decimals = 6;
+        
+            //Set type
+            if (!routing) {
+                partialTxn.txnType = TransactionType.Transfer;
+                partialTxn.tokenSymbol = "usdc";
+            } else {
+                partialTxn.txnType = TransactionType.Release;
+                partialTxn.tokenSymbol = "usdc";    
+            }
+          
+            //Get Address
+            const data = this.getSolanaAddressWithAmount(txn, "usdc", false);
+            partialTxn.address = data[0] || "";
+            let value = data[1] || 0;
+            partialTxn.amount = value;
+            partialTxn.units = ValueUnits.fromValue(value, decimals).units;
+        
+            partialTxn.routing = routing;
+            return Promise.resolve(partialTxn);
+        }
+        
+        
+        async  handleDeposit(txn: TransactionResponse, routing: Routing | null, partialTxn: PartialBridgeTxn): Promise<PartialBridgeTxn> {
+          let decimals = 6;
+        
+          //Set type
+          partialTxn.tokenSymbol = "usdc";
+      
+          //Get Address
+          const data = this.getSolanaAddressWithAmount(txn, "usdc", true);
+          partialTxn.address = data[0] || "";
+      
+          if (data[1] < 0) {
+              //negative delta is a deposit from the user or transfer out
+              if (!routing) {
+                  partialTxn.txnType = TransactionType.Transfer;
+              } else {
+                  partialTxn.txnType = TransactionType.Deposit;
+              }
+              let value = -data[1] || 0;
+              partialTxn.amount = value;
+              partialTxn.units = ValueUnits.fromValue(value, decimals).units;
+          } else if (data[1] > 0) {
+              partialTxn.txnType = TransactionType.Refund; //positive delta is a refund to the user
+              let value = data[1] || 0;
+              partialTxn.amount = value;
+              partialTxn.units = ValueUnits.fromValue(value, decimals).units;
+          }
+      
+          partialTxn.routing = routing;
+          return Promise.resolve(partialTxn);
       }
+
+
+            // get Id
+            public getTxnHashedFromBase58(txnID: string): string {
+              return ethers.utils.keccak256(base58.decode(txnID));
+            } 
+
+
+
+            public getMintAddress(symbol: string): string | undefined {
+              try {
+          
+                  //Get Token
+                  const token = BridgeTokens.get("solana", symbol);
+                  if (!token) throw new Error("Token not found");
+                  if (!token.address) throw new Error("mint address is required");
+                  if (typeof token.address !== "string") throw new Error("token address is required in string format");
+                  return token.address;
+              } catch (error) {
+                  console.log(error);
+                  return undefined;
+              }
+          } 
+
+           public getSolanaAddressWithAmount(txn: TransactionResponse, token: string | null, isDeposit: boolean): [string, number] {
+
+            //Parse All Addresses in Transaction
+            let max_address: string = "";
+            let max_delta: number = 0;
+        
+            if (token) {
+        
+                //Get mint address
+                let mintAddress = this.getMintAddress(token) || "";
+                if (mintAddress === "") {
+                    console.log("Mint Address not found for token: " + token);
+                    return ["", 0];
+                }
+        
+                //Parser all post balances
+                for (let i = 0; i < (txn?.meta?.postTokenBalances?.length || 0); i++) {
+        
+                    //Check mint address
+                    let postBalanceObj = txn?.meta?.postTokenBalances?.[i];
+                    if (postBalanceObj?.mint.toLocaleLowerCase() !== mintAddress.toLocaleLowerCase()) {
+                        console.log(`Pre ${postBalanceObj?.mint} !== ${mintAddress}`)
+                        continue;
+                    }
+                  
+                    let address = postBalanceObj?.owner || "";
+                    let preBalance = this.getPreBalance(txn, postBalanceObj);
+                    let postBalance = postBalanceObj?.uiTokenAmount.uiAmount;
+                    let delta = Number(Number(postBalance || 0) - Number(preBalance || 0));
+        
+                    if (isDeposit && delta < 0) {
+                        if (delta < max_delta) {
+                            max_delta = delta;
+                            max_address = address;
+                        }
+                    } else if (!isDeposit && delta > 0) {
+                        if (delta > max_delta) {
+                            max_delta = delta;
+                            max_address = address;
+                        }
+                    }
+                }
+            } else {
+                for (let i = 0; i < txn?.transaction?.message?.accountKeys.length; i++) {
+        
+                    //Get Address
+                    let address = txn?.transaction?.message?.accountKeys[i].toString();
+        
+                    let delta: number = Number(0);
+                    let preBalance: number | null | undefined = 0;
+                    let postBalance: number | null | undefined = 0;
+        
+                    //Check Sol delta
+                    preBalance = txn?.meta?.preBalances[i];
+                    postBalance = txn?.meta?.postBalances[i];
+                    delta = Number(postBalance || 0) - Number(preBalance || 0);
+        
+                    if (isDeposit && delta < 0) {
+        
+                        //Check if max delta
+                        if (delta < max_delta) {
+                            max_delta = delta;
+                            max_address = address;
+                        }
+                    } else if (!isDeposit && delta > 0) {
+        
+                        //Check if max delta
+                        if (delta > max_delta) {
+                            max_delta = delta;
+                            max_address = address;
+                        }
+        
+                    }
+                }
+            }
+        
+            return [max_address, max_delta];
+        }
+                
+
+
+          //Match a prebalance to a post balance object
+          getPreBalance(txn: TransactionResponse, postBalance: TokenBalance|undefined) {
+            if (!postBalance) {
+                return 0;
+            }
+
+            for (let i = 0; i < (txn?.meta?.preTokenBalances?.length || 0); i++) {
+                if (txn?.meta?.preTokenBalances?.[i].mint.toLocaleLowerCase() !== postBalance?.mint.toLocaleLowerCase()) {
+                    continue;
+                }
+                if (txn?.meta?.preTokenBalances?.[i].owner?.toLocaleLowerCase() !== postBalance?.owner?.toLocaleLowerCase()) {
+                    continue;
+                }
+                return txn?.meta?.preTokenBalances?.[i].uiTokenAmount.uiAmount;
+            }
+          }
+
+                    
+
+          
+}
 
 /**
  * 
@@ -602,3 +809,4 @@ class BridgeInstruction {
 
   }
 
+ 

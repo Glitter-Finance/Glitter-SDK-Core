@@ -516,6 +516,10 @@ export class AlgorandBridgeTxnsV1 {
                 res = BridgeTokens.get("algorand","usdc")?.address;
                 break;
             }
+            case "appID":{
+                res = this._accounts?.bridge;
+                break;                
+            }
             default: { 
                 console.log("Invalid Address"); 
                 res = undefined;

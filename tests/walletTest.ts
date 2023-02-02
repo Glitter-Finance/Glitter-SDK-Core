@@ -53,7 +53,7 @@ async function testGetAddress():Promise<boolean> {
    console.log("asaVaultAlgorand",algorand?.getAlgorandBridgeAddress(AlgorandProgramAccount.AsaVaultAccount) =="U4A3YARBVMT7PORTC3OWXNC75BMGF6TCHFOQY4ZSIIECC5RW25SVKNKV3U");
    console.log("algoVaultAlgorand",algorand?.getAlgorandBridgeAddress(AlgorandProgramAccount.AlgoVaultAccount) =="R7VCOR74LCUIFH5WKCCMZOS7ADLSDBQJ42YURFPDT3VGYTVNBNG7AIYTCQ");
    console.log("usdcMint",algorand?.getAlgorandBridgeAddress(AlgorandProgramAccount.UsdcAssetId))
-   console.log("usdcMint",algorand?.getAlgorandBridgeAddress(AlgorandProgramAccount.BridgeProgramId))
+   console.log("APPID",algorand?.getAlgorandBridgeAddress(AlgorandProgramAccount.appID))
 
 
     resolve(true)

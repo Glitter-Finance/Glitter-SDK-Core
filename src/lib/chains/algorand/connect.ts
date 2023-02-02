@@ -83,17 +83,16 @@ export class AlgorandConnect {
      * 
      * 
      * Gets partial bridge transactions
-     * @param [minRound] 
-     * @returns partial bridge transactions 
+     * @param minRound
+     * @returns {PartialBridgeTxn[]|undefined} 
      */
-    public async getPartialBridgeTransactions(minRound?:number):Promise<PartialBridgeTxn[]>{
+    public async getPartialBridgeTransactions(minRound?:number):Promise<PartialBridgeTxn[]|undefined>{
        
         return new Promise(async(resolve,reject) =>{
             try{
                 if (!this._poller) throw new Error("POLLER IS NOT INITILALIZED")
 
                 const BridgeTxnlist = await this._poller.ListPartialBridgeTxn(minRound);
-                
                 resolve(BridgeTxnlist)
 
             }catch(err){
@@ -102,6 +101,38 @@ export class AlgorandConnect {
         })
         
     }
+
+    public async getUsdcDepositPartialTransactions():Promise<PartialBridgeTxn[]>{
+
+        return new Promise(async(resolve,reject) =>{
+            try{
+                if(!this._poller) throw new Error("Poller not set");
+                const list = this._poller.ListusdcDepositTransactionHandler(1000);
+                resolve(list)
+            }catch(err){
+                reject(err)
+            }
+        })
+    }
+
+
+    getPollerLastRound(){
+    
+    if (!this._poller) throw new Error("POLLER IS NOT INITILALIZED")
+    const lastRound = this._poller.getLastMinRound();
+    return lastRound
+    
+    }
+    
+    getPollerLastTxn(){
+    
+    if (!this._poller) throw new Error("POLLER IS NOT INITILALIZED")
+    const lastTxn = this._poller.getLastTxnId();
+    return lastTxn
+    
+   }
+
+
 
     /**
      * 
@@ -1140,6 +1171,7 @@ export class AlgorandConnect {
         return this._config?.accounts?.usdcReceiver;
     }
 }
+
 
 export const GetAlgodIndexer = (url: string, port: string | number, token = ''): algosdk.Indexer => {
     // const server = config.algo_client;

@@ -6,9 +6,46 @@ import { BridgeNetworks } from "../src/lib/common/networks/networks";
 run();
 
 async function run() {
-  const result = await TransactionListTest();
+  const result = await AlgoPollerTest();
   console.log(result);
 }
+
+
+async function AlgoPollerTest() {
+
+        // Load SDK
+        const sdk = new GlitterBridgeSDK()
+        .setEnvironment(GlitterEnvironment.mainnet)
+        .connect([BridgeNetworks.algorand]);
+        
+        //Reference variables locally for ease of use
+        const algorandAccounts = sdk.algorand?.accounts;
+        const algorand = sdk.algorand;
+       /* const list_void = await algorand?.getPartialBridgeTransactions();
+
+        if(!list_void){
+          throw new Error("list_void in undefined")
+        }
+
+      console.log("LENGTHOFVOID!@#",list_void.length)
+
+      const lastRound = await algorand?.getPollerLastRound();
+      if(!lastRound) throw new Error("last round is undefined");
+      console.log("LASTROUNDINTEST",lastRound)  
+      const list_void_ = await algorand?.getPartialBridgeTransactions(lastRound);
+
+      if(!list_void_){
+        throw new Error("list_void_ in undefined")
+      }
+
+      console.log("LENGTHOFVOID!@#123",list_void_.length)
+      */
+
+      const list = algorand?.getUsdcDepositPartialTransactions()
+      
+
+  
+} 
 
 async function TransactionListTest():Promise<boolean> {
 
