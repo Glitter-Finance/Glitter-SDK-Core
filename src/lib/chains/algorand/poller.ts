@@ -655,7 +655,7 @@ export class AlgorandPoller{
                         token:solAssetID,
                         txn_signature:solSig
                     },
-                    units:units,
+                    units:units.toString(),
                     amount:amount_
                 } as Routing
 
@@ -685,7 +685,7 @@ export class AlgorandPoller{
                         token:algoAssetID,
                         txn_signature:txnID
                     },
-                    units:units,
+                    units:units.toString(),
                     amount:amount_
                 } as Routing
 
@@ -716,7 +716,7 @@ export class AlgorandPoller{
                         token:algoAssetID,
                         txn_signature:txnID
                     },
-                    units:units,
+                    units:units.toString(),
                     amount:amount_
                 } as Routing
 
@@ -747,7 +747,7 @@ export class AlgorandPoller{
                         token:solAssetID,
                         txn_signature:solSig
                     },
-                    units:units,
+                    units:units.toString(),
                     amount:amount_
                 } as Routing
 
@@ -778,7 +778,7 @@ export class AlgorandPoller{
                         token:solAssetID,
                         txn_signature:txnID
                     },
-                    units:units,
+                    units:units.toString(),
                     amount:amount_
                 } as Routing
 

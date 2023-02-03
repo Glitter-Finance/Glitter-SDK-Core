@@ -183,7 +183,7 @@ export class SolanaBridgeTxnsV1 {
                         txn_signature: "",
                     },
                     amount: transferAmount / 1000000,
-                    units: BigInt(transferAmount),
+                    units: BigInt(transferAmount).toString(),
                 } as Routing;
 
                 const bridgeNodeInstructionData: DepositNote = {
@@ -290,7 +290,7 @@ export class SolanaBridgeTxnsV1 {
                         txn_signature: "",
                     },
                     amount: transferAmount / 1000000,
-                    units: BigInt(transferAmount),
+                    units: BigInt(transferAmount).toString(),
                 } as Routing;
 
                 const bridgeNodeInstructionData: DepositNote = {

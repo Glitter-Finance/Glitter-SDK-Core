@@ -355,7 +355,7 @@ public solDeposit(txn: TransactionResponse, data_bytes: Uint8Array,txnID:string)
               token: "xsol",
               txn_signature: ""
           },
-          units: units_,
+          units: units_.toString(),
           amount: amount,
       }
       const bridgeNodeInstructionData:DepositNote = {
@@ -417,7 +417,7 @@ public solDeposit(txn: TransactionResponse, data_bytes: Uint8Array,txnID:string)
                   token: "sol",
                   txn_signature: txnID
               },
-              units:units_,
+              units:units_.toString(),
               amount:amount,
           }
 
@@ -469,7 +469,7 @@ public solDeposit(txn: TransactionResponse, data_bytes: Uint8Array,txnID:string)
                 token: "xalgo",
                 txn_signature: ""
             },
-            units: units_,
+            units: units_.toString(),
             amount: amount,
         }
 
@@ -527,7 +527,7 @@ public solDeposit(txn: TransactionResponse, data_bytes: Uint8Array,txnID:string)
                 token: "xalgo",
                 txn_signature: txnID
             },
-            units: units_,
+            units: units_.toString(),
             amount: amount,
         }
 
