@@ -5,7 +5,7 @@ export type Routing = {
     from: RoutingPoint;
     to: RoutingPoint;
     amount: number | undefined;
-    units: bigint | undefined;
+    units: string | undefined;
 }
 export type RoutingPoint = {
     network: string;
@@ -71,6 +71,6 @@ export function SetRoutingUnits(routing: Routing, token: BridgeToken | undefined
     if (!routing.amount) throw new Error("Routing amount not defined");
     if (!token.decimals) throw new Error("Routing decimals not defined");
 
-    routing.units = ValueUnits.fromValue(routing.amount, token.decimals).units
+    routing.units = ValueUnits.fromValue(routing.amount, token.decimals).units.toString();
 }
 

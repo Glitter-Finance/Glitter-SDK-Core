@@ -235,7 +235,7 @@ export class AlgorandBridgeTxnsV1 {
                       txn_signature: "",
                     },
                     amount: routing.amount,
-                    units: BigInt(amount_nanoUsdc),
+                    units: BigInt(amount_nanoUsdc).toString(),
                   };
 
                 let txn = this._transactions.initAlgorandUSDCTokenBridge(routingData,token);
