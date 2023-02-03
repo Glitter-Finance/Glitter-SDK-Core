@@ -102,18 +102,31 @@ export class AlgorandConnect {
         
     }
 
-    public async getUsdcDepositPartialTransactions():Promise<PartialBridgeTxn[]>{
+    public async getUsdcDepositPartialTransactions(minRound?:number):Promise<PartialBridgeTxn[]>{
 
         return new Promise(async(resolve,reject) =>{
             try{
                 if(!this._poller) throw new Error("Poller not set");
-                const list = this._poller.ListusdcDepositTransactionHandler(1000);
+                const list = this._poller.ListusdcDepositTransactionHandler(undefined,minRound,undefined);
                 resolve(list)
             }catch(err){
                 reject(err)
             }
         })
     }
+    public async getUsdcReleasePartialTransactions(minRound?:number):Promise<PartialBridgeTxn[]>{
+
+        return new Promise(async(resolve,reject) =>{
+            try{
+                if(!this._poller) throw new Error("Poller not set");
+                const list = this._poller.ListusdcReleaseTransactionHandler(undefined,minRound,undefined);
+                resolve(list)
+            }catch(err){
+                reject(err)
+            }
+        })
+    }
+
 
 
     getPollerLastRound(){
@@ -132,7 +145,16 @@ export class AlgorandConnect {
     
    }
 
-
+   getUsdcDepositPolletLastRound(){
+    if(!this._poller) throw new Error("poller is not initialized")
+    const lastRound = this._poller.getLastMinRoundUsdcDeposit();
+    return lastRound
+   }
+   getUsdcReleasePolletLastRound(){
+    if(!this._poller) throw new Error("poller is not initialized")
+    const lastRound = this._poller.getLastMinRoundUsdcRelease();
+    return lastRound
+   }
 
     /**
      * 

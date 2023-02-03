@@ -395,7 +395,7 @@ export class EvmConnect {
           token: "usdc"
         },
         amount: returnTxn.amount,
-        units: returnTxn.units,
+        units: returnTxn.units.toString(),
       };
       returnTxn.routing = routing;
 
@@ -420,7 +420,7 @@ export class EvmConnect {
           txn_signature: txnID,
         },
         amount: returnTxn.amount,
-        units: returnTxn.units,
+        units: returnTxn.units.toString(),
       };
       returnTxn.routing = routing;
 

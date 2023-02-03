@@ -26,26 +26,59 @@ async function AlgoPollerTest() {
         if(!list_void){
           throw new Error("list_void in undefined")
         }
-
-      console.log("LENGTHOFVOID!@#",list_void.length)
-
-      const lastRound = await algorand?.getPollerLastRound();
-      if(!lastRound) throw new Error("last round is undefined");
-      console.log("LASTROUNDINTEST",lastRound)  
-      const list_void_ = await algorand?.getPartialBridgeTransactions(lastRound);
+          const lastRound = await algorand?.getPollerLastRound();
+          if(!lastRound) throw new Error("last round is undefined");
+          console.log("LASTROUNDINTEST",lastRound)  
+          const list_void_ = await algorand?.getPartialBridgeTransactions(lastRound);
 
       if(!list_void_){
         throw new Error("list_void_ in undefined")
       }
 
-      console.log("LENGTHOFVOID!@#123",list_void_.length)
       */
-
-      const list = algorand?.getUsdcDepositPartialTransactions()
-      
-
-  
-} 
+      console.log("==========================||========================");
+      console.log("listUsdcPartialDepositTransactions")
+      const list_usdc_deposit = await algorand?.getUsdcDepositPartialTransactions()
+      if(!list_usdc_deposit) throw new Error("LIST IS UNDEFINED");
+      console.log("list_usdc_deposit_length",list_usdc_deposit.length)
+      console.log("\n")
+      list_usdc_deposit.forEach((data)=>{
+        console.log(data)
+      })
+      console.log("==========================||========================");
+      console.log("listUsdcDepositWithNewRoundPartialTransactions")
+      const lastRound_Deposit = algorand?.getUsdcDepositPolletLastRound(); 
+      if(!lastRound_Deposit) throw new Error("lastRound is undefined")
+      console.log("lastRound_Deposit",lastRound_Deposit)
+      const new_list_deposit = await algorand?.getUsdcDepositPartialTransactions(lastRound_Deposit);
+      if(!new_list_deposit) throw new Error("LIST IS UNDEFINED");
+      console.log("new_list_deposit_length",new_list_deposit.length)
+      console.log("\n")
+      new_list_deposit.forEach((data)=>{
+        console.log(data)
+      })
+      console.log("==========================||========================");
+      console.log("listUsdcReleasePartialTransactions")
+      const list_usdc_release = await algorand?.getUsdcReleasePartialTransactions()
+      if(!list_usdc_release) throw new Error("LIST IS UNDEFINED");
+      console.log("list_usdc_release_length",list_usdc_release.length)
+      console.log("\n")
+      list_usdc_release.forEach((data)=>{
+        console.log(data)
+      })
+      console.log("==========================||========================");
+      console.log("listUsdcReleaseWithNewRoundPartialTransactions")
+      const lastRound_Release = algorand?.getUsdcReleasePolletLastRound(); 
+      if(!lastRound_Release) throw new Error("lastRound is undefined")
+      console.log("lastRound_Release",lastRound_Release)
+      const new_list_release = await algorand?.getUsdcDepositPartialTransactions(lastRound_Release);
+      if(!new_list_release) throw new Error("LIST IS UNDEFINED");
+      console.log("new_list_release_length",new_list_release.length)
+      console.log("\n")
+      new_list_release.forEach((data)=>{
+        console.log(data)
+      })
+}
 
 async function TransactionListTest():Promise<boolean> {
 
