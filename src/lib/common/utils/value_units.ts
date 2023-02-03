@@ -1,4 +1,4 @@
-import { Precise } from "./utils";
+import { Precise, PreciseDecimals } from "./utils";
 
 export class ValueUnits {
   public value: number = 0;
@@ -10,7 +10,7 @@ export class ValueUnits {
       returnValue.value = value;
 
       //Note precise is used to avoid floating point errors
-      returnValue.units = BigInt(Precise(value * Math.pow(10, decimals)));
+      returnValue.units = BigInt(PreciseDecimals(value * Math.pow(10, decimals),0));
       return returnValue;
     }
   }
