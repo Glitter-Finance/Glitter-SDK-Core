@@ -1003,8 +1003,14 @@ public async bridge(account: SolanaAccount,
     public get usdcBridgeDepositAddress():string|number|undefined{
         return this._config?.accounts?.usdcDeposit;
     }   
+    public get usdcBridgeDepositTokenAddress():string|number|undefined{
+        return this._config?.accounts?.usdcDepositTokenAccount;
+    }   
     public get usdcBridgeReceiverAddress():string|number|undefined{
         return this._config?.accounts?.usdcReceiver;
+    }
+    public get usdcBridgeReceiverTokenAddress():string|number|undefined{
+        return this._config?.accounts?.usdcReceiverTokenAccount;
     }
     public getMintAddress(symbol: string): string | undefined {
         try {

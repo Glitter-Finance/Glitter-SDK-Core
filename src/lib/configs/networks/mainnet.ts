@@ -68,7 +68,9 @@ export const BridgeMainnet: GlitterBridgeConfig = {
       vestingProgram: "EMkD74T2spV3A71qfY5PNqVNrNrpbFcdwMF2TerRMr9n",
       owner: "hY5PXHYm58H5KtJW4GrtegxXnpMruoX3LLP6CufHoHj",
       usdcReceiver: "GUsVsb8R4pF4T7Bo83dkzhKeY5nGd1vdpK4Hw36ECbdK", // Release []
+      usdcReceiverTokenAccount:"",
       usdcDeposit: "9i8vhhLTARBCd7No8MPWqJLKCs3SEhrWKJ9buAjQn6EM", // Deposit | Outgoin [refund, transfer]
+      usdcDepositTokenAccount:"",
       memoProgram: "MemoSq4gqABAXKb96qnH8TysNcWxMyWCqXgDLGmfcHr",
     },
     tokens: [

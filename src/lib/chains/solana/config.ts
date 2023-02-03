@@ -11,7 +11,9 @@ export type SolanaConfig = {
     vestingProgram: string;
     owner: string;
     usdcReceiver: string;
+    usdcReceiverTokenAccount: string;
     usdcDeposit: string;
+    usdcDepositTokenAccount: string;
     memoProgram: string;
 }
 
