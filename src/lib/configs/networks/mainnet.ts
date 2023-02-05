@@ -142,9 +142,16 @@ export const BridgeMainnet: GlitterBridgeConfig = {
     },
     [BridgeNetworks.Polygon]: {
       chainId: 137,
-      bridge: "",
+      bridge: "0x3C649eed903d9770A5abDBA49C754AdfD1ed4172",
       rpcUrl: "",
-      tokens: [],
+      tokens: [
+        {
+          address: "0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174",
+          symbol: "USDC",
+          decimals: 6,
+          name: "USD Coin",
+        },
+      ],
       depositWallet: "0xa89a90a11e20b61814da283ba906f30742a99492",
       releaseWallet: "0xfdc9Af7852F9b2d234b96B1F53804BC781Ce26b3",
     },
