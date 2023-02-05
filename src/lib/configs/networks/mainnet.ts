@@ -18,9 +18,9 @@ export const BridgeMainnet: GlitterBridgeConfig = {
       feeReceiver: "A2GPNMIWXZDD3O3MP5UFQL6TKAZPBJEDZYHMFFITIAJZXLQH37SJZUWSZQ",
       multiSig1: "JPDV3CKFABIXDVH36E7ZBVJ2NC2EQJIBEHCKYTWVC4RDDOHHOPSBWH3QFY",
       multiSig2: "DFFTYAB6MWMRTZGHL2GAP7TMK7OUGHDD2AACSO7LXSZ7SY2VLO3OEOJBQU",
-      usdcReceiver:"GUSN5SEZQTM77WE2RMNHXRAKP2ELDM7GRLOEE3GJWNS5BMACRK7JVS3PLE",// Release
+      usdcReceiver: "GUSN5SEZQTM77WE2RMNHXRAKP2ELDM7GRLOEE3GJWNS5BMACRK7JVS3PLE",// Release
       usdcDeposit: "O7MYJZR3JQS5RYFJVMW4SMXEBXNBPQCEHDAOKMXJCOUSH3ZRIBNRYNMJBQ", // Deposit
-      bridge: "XJQ25THCV734QIUZARPZGG3NPRFZXTIIU77JSJBT23TJMGL3FXJWVR57OQ", 
+      bridge: "XJQ25THCV734QIUZARPZGG3NPRFZXTIIU77JSJBT23TJMGL3FXJWVR57OQ",
       asaVault: "U4A3YARBVMT7PORTC3OWXNC75BMGF6TCHFOQY4ZSIIECC5RW25SVKNKV3U",
       algoVault: "R7VCOR74LCUIFH5WKCCMZOS7ADLSDBQJ42YURFPDT3VGYTVNBNG7AIYTCQ",
     },
@@ -68,9 +68,9 @@ export const BridgeMainnet: GlitterBridgeConfig = {
       vestingProgram: "EMkD74T2spV3A71qfY5PNqVNrNrpbFcdwMF2TerRMr9n",
       owner: "hY5PXHYm58H5KtJW4GrtegxXnpMruoX3LLP6CufHoHj",
       usdcReceiver: "GUsVsb8R4pF4T7Bo83dkzhKeY5nGd1vdpK4Hw36ECbdK", // Release []
-      usdcReceiverTokenAccount:"",
+      usdcReceiverTokenAccount: "",
       usdcDeposit: "9i8vhhLTARBCd7No8MPWqJLKCs3SEhrWKJ9buAjQn6EM", // Deposit | Outgoin [refund, transfer]
-      usdcDepositTokenAccount:"",
+      usdcDepositTokenAccount: "",
       memoProgram: "MemoSq4gqABAXKb96qnH8TysNcWxMyWCqXgDLGmfcHr",
     },
     tokens: [
@@ -112,51 +112,76 @@ export const BridgeMainnet: GlitterBridgeConfig = {
   evm: {
     [BridgeNetworks.Avalanche]: {
       chainId: 43114,
-      bridge: "",
+      bridge: "0x19a230a99d520687d9858e427523e5d76342ad54",
       rpcUrl: "",
-      tokens: [],
+      tokens: [
+        {
+          address: "0xB97EF9Ef8734C71904D8002F8b6Bc66Dd9c48a6E",
+          symbol: "USDC",
+          decimals: 6,
+          name: "USD Coin",
+        },
+      ],
       depositWallet: "0xa89a90a11e20b61814da283ba906f30742a99492",
       releaseWallet: "0xfdc25702b67201107ab4aFDb4DC87E3F8F50a7b8",
     },
     [BridgeNetworks.Ethereum]: {
       chainId: 1,
-      bridge: "",
+      bridge: "0x8b1B445749B14a6a01B062271EB28Cd119ce9a98",
       rpcUrl: "",
-      tokens: [],
+      tokens: [
+        {
+          address: "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48",
+          symbol: "USDC",
+          decimals: 6,
+          name: "USD Coin",
+        },
+      ],
       depositWallet: "0xa89a90a11e20b61814da283ba906f30742a99492",
       releaseWallet: "0xfdc027af59e3D118a19B8D1E754a090c95587438",
     },
     [BridgeNetworks.Polygon]: {
       chainId: 137,
-      bridge: "",
+      bridge: "0x3C649eed903d9770A5abDBA49C754AdfD1ed4172",
       rpcUrl: "",
-      tokens: [],
+      tokens: [
+        {
+          address: "0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174",
+          symbol: "USDC",
+          decimals: 6,
+          name: "USD Coin",
+        },
+      ],
       depositWallet: "0xa89a90a11e20b61814da283ba906f30742a99492",
       releaseWallet: "0xfdc9Af7852F9b2d234b96B1F53804BC781Ce26b3",
     },
   },
   stellar: {
-   accounts: {
-    usdcDepositAddress: "GAFK7XFZHMLSNV7OJTBO7BAIZA66X6QIBV5RMZZYXK4Q7ZSO52J5C3WQ",
-    usdcDepositTag: "5794940577887230301",
-    usdcReceiverAddress: "",
-    usdcReceiverTag: ""
-  }},
+    accounts: {
+      usdcDepositAddress: "GAFK7XFZHMLSNV7OJTBO7BAIZA66X6QIBV5RMZZYXK4Q7ZSO52J5C3WQ",
+      usdcDepositTag: "5794940577887230301",
+      usdcReceiverAddress: "",
+      usdcReceiverTag: ""
+    }
+  },
   hedera: {
-   accounts: {
-    usdcDepositAddress: "0.0.439415",
-    usdcDepositTag: "6461445716",
-    usdcReceiverAddress: "",
-    usdcReceiverTag: ""
-  }},
+    accounts: {
+      usdcDepositAddress: "0.0.439415",
+      usdcDepositTag: "6461445716",
+      usdcReceiverAddress: "",
+      usdcReceiverTag: ""
+    }
+  },
   tron: {
-   accounts: {
-    usdcDeposit: "TAG83nhpF82P3r9XhFTwNamgv1BsjTcz6v",
-    usdcReceiver: "",
-  }},
+    accounts: {
+      usdcDeposit: "TAG83nhpF82P3r9XhFTwNamgv1BsjTcz6v",
+      usdcReceiver: "",
+    }
+  },
   flow: {
-   accounts: {
-    usdcDeposit: "0x1fafdb9e814dfe06",
-    usdcReceiver: "",
-  }}
+    accounts: {
+      usdcDeposit: "0x1fafdb9e814dfe06",
+      usdcReceiver: "",
+    }
+  }
 };
