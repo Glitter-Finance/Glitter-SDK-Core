@@ -2,13 +2,13 @@ import {  ConfirmedSignaturesForAddress2Options, Connection, Keypair, PublicKey,
 import { SolanaAccount, SolanaAccounts } from './accounts';
 import { SolanaAssets } from './assets';
 import { SolanaBridgeTxnsV1 } from './txns/bridge';
-import { SolanaConfig, SolanaProgramId } from './config';
+import { PollerOptions, SolanaConfig, SolanaProgramId } from './config';
 import { SolanaTxns } from './txns/txns';
 import * as util from 'util';
 import { BridgeToken, BridgeTokens, LogProgress, Precise, Routing, RoutingDefault, Sleep, ValueUnits } from '../../common';
 import { COMMITMENT, DepositNote } from './utils';
 import { SolanaPoller } from './poller';
-import { PartialBridgeTxn } from '../../common/transactions/transactions';
+import { BridgeType, PartialBridgeTxn } from '../../common/transactions/transactions';
 import { ethers } from 'ethers';
 import base58 from 'bs58';
 
@@ -999,11 +999,14 @@ public async bridge(account: SolanaAccount,
         * @param [endAt] 
         * @returns List of usdcdeposit transactions 
         */
-        public async getUsdcReleasePartialTransactions(take:number, beginAt?:string,endAt?:string):Promise<PartialBridgeTxn[]|undefined>{
+        public async startPoller(bridgeType: BridgeType,delay:number,options?:PollerOptions,usdcBridgeTransactions?:'deposit' |'release'):Promise<PartialBridgeTxn[]|undefined>{
         return new Promise(async(resolve, reject) =>{
         try{
 
-            const list = this._poller?.ListUSDCReleaseTransactionHandler(take,beginAt,endAt); 
+            if(!this._poller) throw new Error("poller not set");
+            this._poller?.start(bridgeType,delay,options,usdcBridgeTransactions); 
+
+            const list = this._poller.poll()
             if(!list){
                 throw new Error("unable to list USDC Release PartialBridgeTxn")
             }
@@ -1013,6 +1016,27 @@ public async bridge(account: SolanaAccount,
         }
         })  
         }
+
+        public async getPartialTransactions(take:number, beginAt?:string,endAt?:string):Promise<PartialBridgeTxn[]|undefined>{
+            return new Promise(async(resolve, reject) =>{
+            try{
+    
+                const list = this._poller?.ListUSDCReleaseTransactionHandler(take,beginAt,endAt); 
+                if(!list){
+                    throw new Error("unable to list USDC Release PartialBridgeTxn")
+                }
+                resolve(list)    
+            }catch(err){
+                reject(err)
+            }
+            })  
+            }
+    
+    
+    
+            
+
+
 
         //Helper Functions
     async getTestAirDrop(signer: SolanaAccount): Promise<boolean> {

@@ -1,0 +1,2466 @@
+XALGODEPOSITTXNID 2k8NXp1Ko4Cws6YvWH14vyKktCaNwE3Bu4JXYZggvhAqcfyAwwj78YqEoaU1BaehGwhFs8DUav8xAnYbdWWzTLUw
+PARTIALLLL 2k8NXp1Ko4Cws6YvWH14vyKktCaNwE3Bu4JXYZggvhAqcfyAwwj78YqEoaU1BaehGwhFs8DUav8xAnYbdWWzTLUw
+IS IR false
+XALGODEPOSITTXNID 2FsomY4Lu5TN6c4jh2heu1eVACDfScsvqoVzm3J7zbP7HA31sKRzwmYwamo1nC5oSdtysBVfTHPwdgR917HDdwVs
+PARTIALLLL 2FsomY4Lu5TN6c4jh2heu1eVACDfScsvqoVzm3J7zbP7HA31sKRzwmYwamo1nC5oSdtysBVfTHPwdgR917HDdwVs
+IS IR false
+XALGODEPOSITTXNID jkijF8kiyCwJke2gyk76odiM3bNNNXjLLZh6KCoL2Y5PaFQwZU2ajUW8UJeem1kZNbzh5W799rvLnm2ph6VgJYg
+PARTIALLLL jkijF8kiyCwJke2gyk76odiM3bNNNXjLLZh6KCoL2Y5PaFQwZU2ajUW8UJeem1kZNbzh5W799rvLnm2ph6VgJYg
+IS IR false
+XALGODEPOSITTXNID rY9Lpj9WwxwHJCGUXTneiytHAniZzkZwcMPPxuC47Eh79Y2fKimALrY7BzYRnA9kozWSGRnmv1xY5CuF1qgYpcx
+PARTIALLLL rY9Lpj9WwxwHJCGUXTneiytHAniZzkZwcMPPxuC47Eh79Y2fKimALrY7BzYRnA9kozWSGRnmv1xY5CuF1qgYpcx
+IS IR false
+XALGODEPOSITTXNID 2vmGhaDyohAbyRLZX8rSZ5YqJ1RVzMkzg4irMfXZLXKi6vnGPR1GPVXuQrPjqgCi8RMju7GGvvZYpLsLvSXPujAL
+PARTIALLLL 2vmGhaDyohAbyRLZX8rSZ5YqJ1RVzMkzg4irMfXZLXKi6vnGPR1GPVXuQrPjqgCi8RMju7GGvvZYpLsLvSXPujAL
+IS IR false
+XALGODEPOSITTXNID 5toCPYjZyPf3TTgJSaFFVWqQRH23XhxDCdBgJCjukt4c9LdWbqRMaXTxmhEckRPp2r31QFNZBDfWwDwENBDowJu6
+PARTIALLLL 5toCPYjZyPf3TTgJSaFFVWqQRH23XhxDCdBgJCjukt4c9LdWbqRMaXTxmhEckRPp2r31QFNZBDfWwDwENBDowJu6
+IS IR false
+XALGODEPOSITTXNID 5YimAsNydCAgEDpmkTJi2Y9ZiXEj1UPMnBxrDvGP8FTWuWWx8ZHektQhxZdYZPBDcShW5nDnS39qcrLsNKcbMLw8
+PARTIALLLL 5YimAsNydCAgEDpmkTJi2Y9ZiXEj1UPMnBxrDvGP8FTWuWWx8ZHektQhxZdYZPBDcShW5nDnS39qcrLsNKcbMLw8
+IS IR false
+XALGODEPOSITTXNID 5cfAJ2vAxcyoDzzwjfYcjvxw6yHpdQzj6SmvcWFqBKnNRrNJawc7rttA4RaQ7W6SodrSfZeNhkxMevqhnUjgLUiJ
+PARTIALLLL 5cfAJ2vAxcyoDzzwjfYcjvxw6yHpdQzj6SmvcWFqBKnNRrNJawc7rttA4RaQ7W6SodrSfZeNhkxMevqhnUjgLUiJ
+IS IR false
+XALGODEPOSITTXNID 3nujnCD59rrztxjKr75Tu87vTVvk5oLMi3jnZsLRjtQiU1vm8fRhqYNBoGgtkeetzujFbCjVRsRecGpbrdo9PLEw
+PARTIALLLL 3nujnCD59rrztxjKr75Tu87vTVvk5oLMi3jnZsLRjtQiU1vm8fRhqYNBoGgtkeetzujFbCjVRsRecGpbrdo9PLEw
+IS IR false
+XALGODEPOSITTXNID 5QSUFVtdQC7bXaCgneH7JoMpyz6p9YAPy3JeM5JXxZ3s4EXy4D4jVNRs9db9nZD1zAo5CaaizQK9N3NU1SxREiAF
+PARTIALLLL 5QSUFVtdQC7bXaCgneH7JoMpyz6p9YAPy3JeM5JXxZ3s4EXy4D4jVNRs9db9nZD1zAo5CaaizQK9N3NU1SxREiAF
+IS IR false
+XALGODEPOSITTXNID 4proc4gcBnqJ2N4ZAx9eVCbMvMMujKjYy6Lcdbf6DYCJ2aB9EGs91J9kwyDRHBYVuoErFYH8YNZHHQLDG94t1Xhp
+PARTIALLLL 4proc4gcBnqJ2N4ZAx9eVCbMvMMujKjYy6Lcdbf6DYCJ2aB9EGs91J9kwyDRHBYVuoErFYH8YNZHHQLDG94t1Xhp
+IS IR false
+XALGODEPOSITTXNID 45TTqQ5dKtq5fCTLRDscc7RBcwVod5zc2aBgTZsEZeDMwvsr1cujaM5557JVKRdoG818CjibjYVaQktJ7UpsBiZz
+PARTIALLLL 45TTqQ5dKtq5fCTLRDscc7RBcwVod5zc2aBgTZsEZeDMwvsr1cujaM5557JVKRdoG818CjibjYVaQktJ7UpsBiZz
+IS IR false
+XALGODEPOSITTXNID 2PWysTfQwMFgmq45PRfWcr3f7TvW3AKy6zas9RZpHiS5CBPPXXt9tZ9eDwM4UJffkeMUwe77FxKGJeBhukxRdFfs
+PARTIALLLL 2PWysTfQwMFgmq45PRfWcr3f7TvW3AKy6zas9RZpHiS5CBPPXXt9tZ9eDwM4UJffkeMUwe77FxKGJeBhukxRdFfs
+IS IR false
+XALGODEPOSITTXNID 58vKbWXAMbNo9n1WiSBKYSPHWQ5nUgcrTMMjssvW5Zt5BWooGEQP1qAqFEzUjhQhFprSvN8yyQ7QyLS6bkSvFHkn
+PARTIALLLL 58vKbWXAMbNo9n1WiSBKYSPHWQ5nUgcrTMMjssvW5Zt5BWooGEQP1qAqFEzUjhQhFprSvN8yyQ7QyLS6bkSvFHkn
+IS IR false
+XALGODEPOSITTXNID kuYZEb3aryXstv4TMotFRDMtrpn15VEW3xB95jg2iFwZbfWswN6Rou5w4ouwnemMW9tpvM6ZcpTYpEPPZX5WgEE
+PARTIALLLL kuYZEb3aryXstv4TMotFRDMtrpn15VEW3xB95jg2iFwZbfWswN6Rou5w4ouwnemMW9tpvM6ZcpTYpEPPZX5WgEE
+IS IR false
+XALGODEPOSITTXNID 5qFbJhfzGjAaWtZgyhoSn6qXiJ4mdp1wPPtB6yesNczudtBtQdtuerCvEqwpg7BzsYuHWJJ1uG9TPHmNK7HwXkGA
+PARTIALLLL 5qFbJhfzGjAaWtZgyhoSn6qXiJ4mdp1wPPtB6yesNczudtBtQdtuerCvEqwpg7BzsYuHWJJ1uG9TPHmNK7HwXkGA
+IS IR false
+XALGODEPOSITTXNID c5SDyBcytwrhHBSCYDrnQJTRgeKVjA43sWcgRW7CtS4Q8VZonAZwzqBv88QtFp5MNzRXKfMQxCRuNYpsVKmwj42
+PARTIALLLL c5SDyBcytwrhHBSCYDrnQJTRgeKVjA43sWcgRW7CtS4Q8VZonAZwzqBv88QtFp5MNzRXKfMQxCRuNYpsVKmwj42
+IS IR false
+XALGODEPOSITTXNID 3HD1HTX9p19qGskgmTKRayFiN1TpDMbpT65zRQsTL9Hf1jDuA5LAetDqpPCSE4WLnuqqRkpm148qG5MzQ1iDDXzc
+PARTIALLLL 3HD1HTX9p19qGskgmTKRayFiN1TpDMbpT65zRQsTL9Hf1jDuA5LAetDqpPCSE4WLnuqqRkpm148qG5MzQ1iDDXzc
+IS IR false
+XALGODEPOSITTXNID 4Xui2fS9cE2Q9ymw93YgAyGQRPnY21synmKQEtzWcLeNRwHgKpdG9eu63emZKKTHM2BnVAh22DVEKs2BTXTBvnmP
+PARTIALLLL 4Xui2fS9cE2Q9ymw93YgAyGQRPnY21synmKQEtzWcLeNRwHgKpdG9eu63emZKKTHM2BnVAh22DVEKs2BTXTBvnmP
+IS IR false
+{
+  txnID: '3KcwfbkhBhVfotVX6dGGpBwj2yAeoRGxS3zPzQ4eLrip498BM2YeMn3GkC2QraUH1h4m7d1RAu5zMKsDBJDRgvvx',
+  txnIDHashed: '0xede8832cc5143b0c8d3a5fe8d67184ddd0967d190ac081a3b8e43281ced97a9f',
+  bridgeType: 'Token',
+  txnType: 'Deposit',
+  network: 'solana',
+  chainStatus: 'Completed',
+  txnTimestamp: 2023-01-27T09:38:38.000Z,
+  block: 174636515,
+  tokenSymbol: 'sol',
+  address: 'DQLaCCQ2SmFxFiiBExsWLJTBmq1qTVq5GWtnYE5oGU9C',
+  units: '1000000000',
+  amount: 1,
+  routing: {
+    from: {
+      network: 'solana',
+      address: 'DQLaCCQ2SmFxFiiBExsWLJTBmq1qTVq5GWtnYE5oGU9C',
+      token: 'sol',
+      txn_signature: '3KcwfbkhBhVfotVX6dGGpBwj2yAeoRGxS3zPzQ4eLrip498BM2YeMn3GkC2QraUH1h4m7d1RAu5zMKsDBJDRgvvx'
+    },
+    to: {
+      network: 'algorand',
+      address: '7LXIEKO3KLYNKT4TV7IE5CMGNM4UX6MQBKI7UA2KGVDC6MW4OMAJ55BUA4',
+      token: 'xsol',
+      txn_signature: ''
+    },
+    units: '1000000000',
+    amount: 1
+  }
+}
+{
+  txnID: '4TvmZPeMPYDfkFy4wcgdyyunDFRCPrf3VWarjB2W5b9LXbc1BL7xtrq1E1Ysig2ocXCgXWCyHvbQ2uB1XLZbdH6Y',
+  txnIDHashed: '0xeb1911139fc1902ff81b111d3b211da208beb6d4c17557bdd3eb430edf2687ba',
+  bridgeType: 'Token',
+  txnType: 'Finalize',
+  network: 'solana',
+  chainStatus: 'Completed',
+  txnTimestamp: 2023-01-27T09:39:15.000Z,
+  block: 174636587,
+  tokenSymbol: 'sol',
+  address: '7xCU4nvqu3Nz3BBQckKzibp3kBav4xbkuqQ3WM9CBHdJ',
+  units: '1000000000000000000',
+  amount: 1000000000
+}
+{
+  txnID: '5c7L2dsnpzJFHqXgxx9EcSqokpZ7cgTekMahNJiHyZofRjibwYuf7WJuf8pipL6igriH8hVjy7AcjcXHhaVEh9Tz',
+  txnIDHashed: '0xdf60031775907a421aa3886eaf1d498b7f493b112fed0a5503a264f68d419420',
+  bridgeType: 'Token',
+  txnType: 'Release',
+  network: 'solana',
+  chainStatus: 'Completed',
+  txnTimestamp: 2023-01-27T09:40:15.000Z,
+  block: 174636708,
+  tokenSymbol: 'sol',
+  address: 'DQLaCCQ2SmFxFiiBExsWLJTBmq1qTVq5GWtnYE5oGU9C',
+  units: '1000000000',
+  amount: 1,
+  routing: {
+    from: {
+      network: 'algorand',
+      address: 'J5HUGTZWIJKFGV2WGVCE4U2ZIE3E2UBUKZIEMUSOI42UEURVJNIRSTHRBY',
+      token: 'xsol',
+      txn_signature: '��)�R��O���N��k9K��\n��\x03J5F/2�s\x00XSLVH2DS4XFZ2TFSP4RW'
+    },
+    to: {
+      network: 'solana',
+      address: 'DQLaCCQ2SmFxFiiBExsWLJTBmq1qTVq5GWtnYE5oGU9C',
+      token: 'sol',
+      txn_signature: '5c7L2dsnpzJFHqXgxx9EcSqokpZ7cgTekMahNJiHyZofRjibwYuf7WJuf8pipL6igriH8hVjy7AcjcXHhaVEh9Tz'
+    },
+    units: '1000000000',
+    amount: 1
+  }
+}
+{
+  txnID: '2k8NXp1Ko4Cws6YvWH14vyKktCaNwE3Bu4JXYZggvhAqcfyAwwj78YqEoaU1BaehGwhFs8DUav8xAnYbdWWzTLUw',
+  txnIDHashed: '0x82c8ecf87b9a7eaba74b77c06e284691cdba2d22ba1d970ba05511fe20c094c1',
+  bridgeType: 'Token',
+  txnType: 'Deposit',
+  network: 'solana',
+  chainStatus: 'Completed',
+  txnTimestamp: 2023-01-27T11:12:11.000Z,
+  block: 174647793,
+  tokenSymbol: 'xalgo',
+  address: 'Hv5R9DfmGQLf2HqSivitrU3pzPXmzywPNwrjLJhBsJEM',
+  units: '389690000',
+  amount: 389.69,
+  routing: {
+    from: {
+      network: 'solana',
+      address: 'Hv5R9DfmGQLf2HqSivitrU3pzPXmzywPNwrjLJhBsJEM',
+      token: 'algo',
+      txn_signature: '2k8NXp1Ko4Cws6YvWH14vyKktCaNwE3Bu4JXYZggvhAqcfyAwwj78YqEoaU1BaehGwhFs8DUav8xAnYbdWWzTLUw'
+    },
+    to: {
+      network: 'algorand',
+      address: '75Y65XHI2PF2AXGI6EZWWWIT46OVF7FDWISI7E3EGVSUKUPMYEGQ6AQIRE',
+      token: 'xalgo',
+      txn_signature: ''
+    },
+    units: '389690000',
+    amount: 389.69
+  }
+}
+{
+  txnID: 'DmTktw3KUxhc9H4pyuv7ynmsyn9s5TgoAoJdkaQHJLnEyYF7Fjj77DFpHx6w1jgCZayhkCMHmANhTf6enH9DwZM',
+  txnIDHashed: '0x76d419529c73c72bdba3696a40ae15c8a0e66ebed790712257dc917e3109d1eb',
+  bridgeType: 'Token',
+  txnType: 'Finalize',
+  network: 'solana',
+  chainStatus: 'Completed',
+  txnTimestamp: 2023-01-27T11:12:43.000Z,
+  block: 174647851,
+  tokenSymbol: 'xalgo',
+  address: 'EQJgtwM3C89ZoESMW3znTSYiB346VWW25vVD9XrSW8nw',
+  units: '143',
+  amount: 1.43e-7
+}
+{
+  txnID: '2FsomY4Lu5TN6c4jh2heu1eVACDfScsvqoVzm3J7zbP7HA31sKRzwmYwamo1nC5oSdtysBVfTHPwdgR917HDdwVs',
+  txnIDHashed: '0x488bb489591f81c16bab4314937d47e6e4db1e312c3877f52b08413be15cbe73',
+  bridgeType: 'Token',
+  txnType: 'Deposit',
+  network: 'solana',
+  chainStatus: 'Completed',
+  txnTimestamp: 2023-01-27T14:44:29.000Z,
+  block: 174673160,
+  tokenSymbol: 'xalgo',
+  address: 'Hv5R9DfmGQLf2HqSivitrU3pzPXmzywPNwrjLJhBsJEM',
+  units: '386860000',
+  amount: 386.86,
+  routing: {
+    from: {
+      network: 'solana',
+      address: 'Hv5R9DfmGQLf2HqSivitrU3pzPXmzywPNwrjLJhBsJEM',
+      token: 'algo',
+      txn_signature: '2FsomY4Lu5TN6c4jh2heu1eVACDfScsvqoVzm3J7zbP7HA31sKRzwmYwamo1nC5oSdtysBVfTHPwdgR917HDdwVs'
+    },
+    to: {
+      network: 'algorand',
+      address: '75Y65XHI2PF2AXGI6EZWWWIT46OVF7FDWISI7E3EGVSUKUPMYEGQ6AQIRE',
+      token: 'xalgo',
+      txn_signature: ''
+    },
+    units: '386860000',
+    amount: 386.86
+  }
+}
+{
+  txnID: '2V2xSNtetmRLsYYPzPp6tVYrcgWbSafSaq9BXRmSL8PMmmB4vyFk1T7H81XuHkW3BhpSWBaePw5arXfQzNLb15fV',
+  txnIDHashed: '0x73b9cfc1734f8e72a1df49043c2647bbbd57700e75cae4ffbd34f394e4c5bf4a',
+  bridgeType: 'Token',
+  txnType: 'Finalize',
+  network: 'solana',
+  chainStatus: 'Completed',
+  txnTimestamp: 2023-01-27T14:45:01.000Z,
+  block: 174673220,
+  tokenSymbol: 'xalgo',
+  address: 'EQJgtwM3C89ZoESMW3znTSYiB346VWW25vVD9XrSW8nw',
+  units: '143',
+  amount: 1.43e-7
+}
+{
+  txnID: '5nrA4oynkMU3z9PxAmET59FUKASG5xjCaSxX6c4ngSnWicHUGp2jSsCwxCmfz3D1gDjPpY9aSRYCfPA1Sp3HNiLq',
+  txnIDHashed: '0x5e911c93899cb2129ba04c36eeb39d1ea390af95b6cbaf71f24f63fdaa04bffc',
+  bridgeType: 'Token',
+  txnType: 'Deposit',
+  network: 'solana',
+  chainStatus: 'Completed',
+  txnTimestamp: 2023-01-28T01:39:01.000Z,
+  block: 174750796,
+  tokenSymbol: 'sol',
+  address: 'DFDBi9Xb5LxVpX7szZqTq4e4mH2KKKbnKhvsBDjYoFt6',
+  units: '1000000000',
+  amount: 1,
+  routing: {
+    from: {
+      network: 'solana',
+      address: 'DFDBi9Xb5LxVpX7szZqTq4e4mH2KKKbnKhvsBDjYoFt6',
+      token: 'sol',
+      txn_signature: '5nrA4oynkMU3z9PxAmET59FUKASG5xjCaSxX6c4ngSnWicHUGp2jSsCwxCmfz3D1gDjPpY9aSRYCfPA1Sp3HNiLq'
+    },
+    to: {
+      network: 'algorand',
+      address: 'RBW4U25T6ZYPJVZ2MGKQJBUJNPGG3SJHGMRR4OGOHN4B5XKVRMOA73WVPI',
+      token: 'xsol',
+      txn_signature: ''
+    },
+    units: '1000000000',
+    amount: 1
+  }
+}
+{
+  txnID: '4fng6G9Q3PFjcnGaJNeVFqr1xYgykxujxyKWUtiPNn91Q8mdEuDChKya8Sxk5XU4PJUjBksxsPz3bM9PHJuFYsRJ',
+  txnIDHashed: '0x98c39509df5e65fd0e64220517dd7c77ff7ea672f17f7ac3eb3c09dc0d23bf5d',
+  bridgeType: 'Token',
+  txnType: 'Finalize',
+  network: 'solana',
+  chainStatus: 'Completed',
+  txnTimestamp: 2023-01-28T01:39:35.000Z,
+  block: 174750865,
+  tokenSymbol: 'sol',
+  address: '7xCU4nvqu3Nz3BBQckKzibp3kBav4xbkuqQ3WM9CBHdJ',
+  units: '1000000000000000000',
+  amount: 1000000000
+}
+{
+  txnID: 'jkijF8kiyCwJke2gyk76odiM3bNNNXjLLZh6KCoL2Y5PaFQwZU2ajUW8UJeem1kZNbzh5W799rvLnm2ph6VgJYg',
+  txnIDHashed: '0xa0855a772cb13fcc434054e7bdd3bc623264e039530f22ad2513a67dbc8cb43e',
+  bridgeType: 'Token',
+  txnType: 'Deposit',
+  network: 'solana',
+  chainStatus: 'Completed',
+  txnTimestamp: 2023-01-28T12:06:13.000Z,
+  block: 174825620,
+  tokenSymbol: 'xalgo',
+  address: 'ti3mSbu5n2WVWs2vmgQke96e2qZbUC9a4rt55uC7sVp',
+  units: '5000000',
+  amount: 5,
+  routing: {
+    from: {
+      network: 'solana',
+      address: 'ti3mSbu5n2WVWs2vmgQke96e2qZbUC9a4rt55uC7sVp',
+      token: 'algo',
+      txn_signature: 'jkijF8kiyCwJke2gyk76odiM3bNNNXjLLZh6KCoL2Y5PaFQwZU2ajUW8UJeem1kZNbzh5W799rvLnm2ph6VgJYg'
+    },
+    to: {
+      network: 'algorand',
+      address: 'QX4AKD3FB4IFENJAS3M3DWJ7SHYM3BMHNB44G2XSUEA6TRWFLJRXDUJQCY',
+      token: 'xalgo',
+      txn_signature: ''
+    },
+    units: '5000000',
+    amount: 5
+  }
+}
+{
+  txnID: '5qAeT41BFZSCz7Lv3dTa1vwNHeyptjdknv8wTYa3rPL41Kth7NqjTyqLGXutpAuQ3SvXwyaeDYnVsoqjmRTNHACw',
+  txnIDHashed: '0x12f66708359f765d18f919dbf685363f5376963733a8abdc4bb77651795e0c45',
+  bridgeType: 'Token',
+  txnType: 'Finalize',
+  network: 'solana',
+  chainStatus: 'Completed',
+  txnTimestamp: 2023-01-28T12:06:43.000Z,
+  block: 174825680,
+  tokenSymbol: 'xalgo',
+  address: 'EQJgtwM3C89ZoESMW3znTSYiB346VWW25vVD9XrSW8nw',
+  units: '143',
+  amount: 1.43e-7
+}
+{
+  txnID: 'mANiXiZ1pp59aLUWfxp3cRru2Kn2ZfhY47E8aersm6NpLXezBYoooFcHDPUhZrJZtQR48zaEHF2JG4aVuW5q8rS',
+  txnIDHashed: '0x32827357cce1dfbfd5d6e8584e58ea41af5415883ba4af1f9f3148a656967107',
+  bridgeType: 'Token',
+  txnType: 'Release',
+  network: 'solana',
+  chainStatus: 'Completed',
+  txnTimestamp: 2023-01-28T12:07:32.000Z,
+  block: 174825778,
+  tokenSymbol: 'sol',
+  address: 'ti3mSbu5n2WVWs2vmgQke96e2qZbUC9a4rt55uC7sVp',
+  units: '400000000',
+  amount: 0.4,
+  routing: {
+    from: {
+      network: 'algorand',
+      address: 'JMZEQU2LLBLFENKBKVFVOUZXJBLDIWBXGM2USVKVK5BE2USKKZITSBTZXY',
+      token: 'xsol',
+      txn_signature: '��\x05\x0Fe\x0F\x10R5 �ٱ�?��ͅ�hy�j�\x01���ZcTMLEG3MPHHCPJMZLHK4E'
+    },
+    to: {
+      network: 'solana',
+      address: 'ti3mSbu5n2WVWs2vmgQke96e2qZbUC9a4rt55uC7sVp',
+      token: 'sol',
+      txn_signature: 'mANiXiZ1pp59aLUWfxp3cRru2Kn2ZfhY47E8aersm6NpLXezBYoooFcHDPUhZrJZtQR48zaEHF2JG4aVuW5q8rS'
+    },
+    units: '400000000',
+    amount: 0.4
+  }
+}
+{
+  txnID: '3EeztW3YLrd1yzKpRBb9feNEaDPf8fEQzocdbtaxcfJ72WpaPchj34EActtqGHEkTC5Jhpv2uGMyjWQ38ZzfXuRR',
+  txnIDHashed: '0x8240946993107be583e5bdb1e32aa69ab83b61b6e86a6256cbeb13c925bdf48c',
+  bridgeType: 'Token',
+  txnType: 'Release',
+  network: 'solana',
+  chainStatus: 'Completed',
+  txnTimestamp: 2023-01-29T16:40:08.000Z,
+  block: 175028483,
+  tokenSymbol: 'xalgo',
+  address: 'DQLaCCQ2SmFxFiiBExsWLJTBmq1qTVq5GWtnYE5oGU9C',
+  units: '31000000',
+  amount: 31,
+  routing: {
+    from: {
+      network: 'algorand',
+      address: 'I43FAWSXKEZEQQ2UIRKUYUCYGJJUGSCPJVKU6UKPJQZDKR2WKRAXYUHYY4',
+      token: 'algo',
+      txn_signature: '��)�R��O���N��k9K��\n��\x03J5F/2�s\x00GEMNJVANKIGAP4OFOYYB'
+    },
+    to: {
+      network: 'solana',
+      address: 'DQLaCCQ2SmFxFiiBExsWLJTBmq1qTVq5GWtnYE5oGU9C',
+      token: 'xalgo',
+      txn_signature: '3EeztW3YLrd1yzKpRBb9feNEaDPf8fEQzocdbtaxcfJ72WpaPchj34EActtqGHEkTC5Jhpv2uGMyjWQ38ZzfXuRR'
+    },
+    units: '31000000',
+    amount: 31
+  }
+}
+{
+  txnID: 'rY9Lpj9WwxwHJCGUXTneiytHAniZzkZwcMPPxuC47Eh79Y2fKimALrY7BzYRnA9kozWSGRnmv1xY5CuF1qgYpcx',
+  txnIDHashed: '0xe08af9213222ece13adb7a4e0e1925212d97dabadd84b63e3040c8431344aebd',
+  bridgeType: 'Token',
+  txnType: 'Deposit',
+  network: 'solana',
+  chainStatus: 'Completed',
+  txnTimestamp: 2023-01-29T16:43:41.000Z,
+  block: 175028916,
+  tokenSymbol: 'xalgo',
+  address: 'DQLaCCQ2SmFxFiiBExsWLJTBmq1qTVq5GWtnYE5oGU9C',
+  units: '30000000',
+  amount: 30,
+  routing: {
+    from: {
+      network: 'solana',
+      address: 'DQLaCCQ2SmFxFiiBExsWLJTBmq1qTVq5GWtnYE5oGU9C',
+      token: 'algo',
+      txn_signature: 'rY9Lpj9WwxwHJCGUXTneiytHAniZzkZwcMPPxuC47Eh79Y2fKimALrY7BzYRnA9kozWSGRnmv1xY5CuF1qgYpcx'
+    },
+    to: {
+      network: 'algorand',
+      address: '7LXIEKO3KLYNKT4TV7IE5CMGNM4UX6MQBKI7UA2KGVDC6MW4OMAJ55BUA4',
+      token: 'xalgo',
+      txn_signature: ''
+    },
+    units: '30000000',
+    amount: 30
+  }
+}
+{
+  txnID: '2N4AXcmN2nsuD5zm9KXcj3dsW6dDzyQrxCWTLLSs94F1ML53n8kzo4aMdZZfZxboVBmxpcSzFVeEyFvVbYPFsicf',
+  txnIDHashed: '0x5e5002c6e50719c1bfb9c1bce8953fe2b7bb6a37836209bfe5fd71bd637b6352',
+  bridgeType: 'Token',
+  txnType: 'Finalize',
+  network: 'solana',
+  chainStatus: 'Completed',
+  txnTimestamp: 2023-01-29T16:44:15.000Z,
+  block: 175028984,
+  tokenSymbol: 'xalgo',
+  address: 'EQJgtwM3C89ZoESMW3znTSYiB346VWW25vVD9XrSW8nw',
+  units: '143',
+  amount: 1.43e-7
+}
+{
+  txnID: '3xrEfxC2yrEHTzmcyVQZoQ1b9o4L4pN2MjBprntoJgNhUsRYRTjn9cz9tcqqt7Wt1DZ5QtsDsc7RPyAWytWhUo9p',
+  txnIDHashed: '0x7b6be792f860079a49b1f999d352a64cb9cb30ddd8f807f7c54757ab5b131ed9',
+  bridgeType: 'Token',
+  txnType: 'Deposit',
+  network: 'solana',
+  chainStatus: 'Completed',
+  txnTimestamp: 2023-01-29T16:46:09.000Z,
+  block: 175029217,
+  tokenSymbol: 'sol',
+  address: 'DQLaCCQ2SmFxFiiBExsWLJTBmq1qTVq5GWtnYE5oGU9C',
+  units: '1000000000',
+  amount: 1,
+  routing: {
+    from: {
+      network: 'solana',
+      address: 'DQLaCCQ2SmFxFiiBExsWLJTBmq1qTVq5GWtnYE5oGU9C',
+      token: 'sol',
+      txn_signature: '3xrEfxC2yrEHTzmcyVQZoQ1b9o4L4pN2MjBprntoJgNhUsRYRTjn9cz9tcqqt7Wt1DZ5QtsDsc7RPyAWytWhUo9p'
+    },
+    to: {
+      network: 'algorand',
+      address: '7LXIEKO3KLYNKT4TV7IE5CMGNM4UX6MQBKI7UA2KGVDC6MW4OMAJ55BUA4',
+      token: 'xsol',
+      txn_signature: ''
+    },
+    units: '1000000000',
+    amount: 1
+  }
+}
+{
+  txnID: '5aHugaA3NzPSox7UtcvkKZrXcpozeZD1dRn5q7kgLa4khMV5uT4sEEA9hL5PCzaSm5mav1Z2uQ5rd56LSs1Rz2a8',
+  txnIDHashed: '0x7978677ee614a77c3bdfffb212968a3f36dc17973fc389225bdba401ba078f66',
+  bridgeType: 'Token',
+  txnType: 'Finalize',
+  network: 'solana',
+  chainStatus: 'Completed',
+  txnTimestamp: 2023-01-29T16:46:46.000Z,
+  block: 175029288,
+  tokenSymbol: 'sol',
+  address: '7xCU4nvqu3Nz3BBQckKzibp3kBav4xbkuqQ3WM9CBHdJ',
+  units: '1000000000000000000',
+  amount: 1000000000
+}
+{
+  txnID: '28tNY1MXoSZF1akf6c99rtJmbZe1X7pK9fddZqCseaiVLFQrR5BLqrmeAh93dmBnzt2EhyuJsVW2eDg8aWQ7tbWo',
+  txnIDHashed: '0x6bfb4e232242f6071df8941e9e4c1bd5f33a178a17e7e20c3d344993f80316ba',
+  bridgeType: 'Token',
+  txnType: 'Release',
+  network: 'solana',
+  chainStatus: 'Completed',
+  txnTimestamp: 2023-01-29T16:54:44.000Z,
+  block: 175030226,
+  tokenSymbol: 'sol',
+  address: 'DQLaCCQ2SmFxFiiBExsWLJTBmq1qTVq5GWtnYE5oGU9C',
+  units: '1000000000',
+  amount: 1,
+  routing: {
+    from: {
+      network: 'algorand',
+      address: 'GY3FIV2EKNIE4TZWJYZEEWKWIJJEMSSBJFKTMU2CGJNEIWSZIJASPEIROA',
+      token: 'xsol',
+      txn_signature: '��)�R��O���N��k9K��\n��\x03J5F/2�s\x004S7AYPOWPDVA6GVZBUKV'
+    },
+    to: {
+      network: 'solana',
+      address: 'DQLaCCQ2SmFxFiiBExsWLJTBmq1qTVq5GWtnYE5oGU9C',
+      token: 'sol',
+      txn_signature: '28tNY1MXoSZF1akf6c99rtJmbZe1X7pK9fddZqCseaiVLFQrR5BLqrmeAh93dmBnzt2EhyuJsVW2eDg8aWQ7tbWo'
+    },
+    units: '1000000000',
+    amount: 1
+  }
+}
+{
+  txnID: 'ZqJyQhy4sSTF3Xq2GdKWVFr8bcPPKv2m63qbyvMJjmscMwGG4ivJ8Rq6zwgGb1bV5VNRGKB9mc1qNV2u7VtWr2x',
+  txnIDHashed: '0xbadd92ea7c6dccaa31323f91f9b194a9ffe1324cf01cf0a16d2f5684635bcbf5',
+  bridgeType: 'Token',
+  txnType: 'Release',
+  network: 'solana',
+  chainStatus: 'Completed',
+  txnTimestamp: 2023-01-29T19:23:01.000Z,
+  block: 175047489,
+  tokenSymbol: 'sol',
+  address: '7eosNpPFETvtJLRAPVXf2F9MyBQxQ8bbH46GZvsmShJA',
+  units: '11964600000',
+  amount: 11.9646,
+  routing: {
+    from: {
+      network: 'algorand',
+      address: 'KI2FMQKSIRDUEUCKGJMUMSCTK5HTMVCBKRDTONBSINFFSRCDGRA7LXDYUA',
+      token: 'xsol',
+      txn_signature: '��F�M׭Z��\x10�\x0Bj�*�\x7F46����M� M$�\x167POUE6QIGIHMIRJZVB3L'
+    },
+    to: {
+      network: 'solana',
+      address: '7eosNpPFETvtJLRAPVXf2F9MyBQxQ8bbH46GZvsmShJA',
+      token: 'sol',
+      txn_signature: 'ZqJyQhy4sSTF3Xq2GdKWVFr8bcPPKv2m63qbyvMJjmscMwGG4ivJ8Rq6zwgGb1bV5VNRGKB9mc1qNV2u7VtWr2x'
+    },
+    units: '11964600000',
+    amount: 11.9646
+  }
+}
+{
+  txnID: '2bc2y5K9N7SzUYCktnkFt6kdAyMGQ7Nyon3ZtCdUR2hzzZJnvdCg2HgHmxEmFYdT7cwjFqnp42sjdG9LDMBmRX1B',
+  txnIDHashed: '0x2bab3cd0eb3603e8eaf9e0f9584a017c195e87832453e1bcc3a988c5b359c359',
+  bridgeType: 'Token',
+  txnType: 'Release',
+  network: 'solana',
+  chainStatus: 'Completed',
+  txnTimestamp: 2023-01-30T10:05:48.000Z,
+  block: 175150375,
+  tokenSymbol: 'xalgo',
+  address: 'ti3mSbu5n2WVWs2vmgQke96e2qZbUC9a4rt55uC7sVp',
+  units: '5000000',
+  amount: 5,
+  routing: {
+    from: {
+      network: 'algorand',
+      address: 'G42VAWCJIZJFIRRWGRHEYUZSIFHVKT2MIUZE2NSRKBHVQURSJJI7R32XXU',
+      token: 'algo',
+      txn_signature: '��\x05\x0Fe\x0F\x10R5 �ٱ�?��ͅ�hy�j�\x01���Zc6S5ZBIZCWJDDDNHFE2DJ'
+    },
+    to: {
+      network: 'solana',
+      address: 'ti3mSbu5n2WVWs2vmgQke96e2qZbUC9a4rt55uC7sVp',
+      token: 'xalgo',
+      txn_signature: '2bc2y5K9N7SzUYCktnkFt6kdAyMGQ7Nyon3ZtCdUR2hzzZJnvdCg2HgHmxEmFYdT7cwjFqnp42sjdG9LDMBmRX1B'
+    },
+    units: '5000000',
+    amount: 5
+  }
+}
+{
+  txnID: '2JFnQA4LB4zg3NqiCJonNJYPtKo8RZpFP8z122JVhYqZaC2EeWDSZB5qJagodePp5ieoASZhW354rJTmZoDaqU3s',
+  txnIDHashed: '0xe73ad8a861402bc942ad3242f5c62c1c78e8ef8a9985d981736b054286df7de9',
+  bridgeType: 'Token',
+  txnType: 'Deposit',
+  network: 'solana',
+  chainStatus: 'Completed',
+  txnTimestamp: 2023-01-30T10:06:26.000Z,
+  block: 175150445,
+  tokenSymbol: 'sol',
+  address: 'ti3mSbu5n2WVWs2vmgQke96e2qZbUC9a4rt55uC7sVp',
+  units: '400000000',
+  amount: 0.4,
+  routing: {
+    from: {
+      network: 'solana',
+      address: 'ti3mSbu5n2WVWs2vmgQke96e2qZbUC9a4rt55uC7sVp',
+      token: 'sol',
+      txn_signature: '2JFnQA4LB4zg3NqiCJonNJYPtKo8RZpFP8z122JVhYqZaC2EeWDSZB5qJagodePp5ieoASZhW354rJTmZoDaqU3s'
+    },
+    to: {
+      network: 'algorand',
+      address: 'QX4AKD3FB4IFENJAS3M3DWJ7SHYM3BMHNB44G2XSUEA6TRWFLJRXDUJQCY',
+      token: 'xsol',
+      txn_signature: ''
+    },
+    units: '400000000',
+    amount: 0.4
+  }
+}
+{
+  txnID: '3zx3wSSNxg5tqTUV79tYFSVFkmK15CoowMsfPUbJwhD9VGvcTpM7PJrsWQzWR3kBFwjUz4QViy1TbDnKLaXaiuWt',
+  txnIDHashed: '0xb6a621729b2f5595240af75553afd62fae73c24ba3e2ab579c8e1ea8a97000f0',
+  bridgeType: 'Token',
+  txnType: 'Finalize',
+  network: 'solana',
+  chainStatus: 'Completed',
+  txnTimestamp: 2023-01-30T10:06:56.000Z,
+  block: 175150506,
+  tokenSymbol: 'sol',
+  address: '7xCU4nvqu3Nz3BBQckKzibp3kBav4xbkuqQ3WM9CBHdJ',
+  units: '400000000000000000',
+  amount: 400000000
+}
+{
+  txnID: '13hQXL4zHbFmALay5YoA3c75gjQm9cE6pWvxRPepfTdoDhvRkQF21fN1L5mTf28w2rNLTLSyMjvhRjegoLVaopX',
+  txnIDHashed: '0x47d0aafae549e57d1d81926d0fe4709e12f39bb4cba76376c85af4d92c5d89d7',
+  bridgeType: 'Token',
+  txnType: 'Release',
+  network: 'solana',
+  chainStatus: 'Completed',
+  txnTimestamp: 2023-01-30T11:59:19.000Z,
+  block: 175163480,
+  tokenSymbol: 'xalgo',
+  address: 'DQLaCCQ2SmFxFiiBExsWLJTBmq1qTVq5GWtnYE5oGU9C',
+  units: '100500000',
+  amount: 100.5,
+  routing: {
+    from: {
+      network: 'algorand',
+      address: 'KNNDIURUJNGFSQK2JZMDEWCQIVATKNCVKNHFEQRSIJGVKTCPJFIWZBDX7M',
+      token: 'algo',
+      txn_signature: '��)�R��O���N��k9K��\n��\x03J5F/2�s\x00WWTD4ZFHLM2R4NAB3T4R'
+    },
+    to: {
+      network: 'solana',
+      address: 'DQLaCCQ2SmFxFiiBExsWLJTBmq1qTVq5GWtnYE5oGU9C',
+      token: 'xalgo',
+      txn_signature: '13hQXL4zHbFmALay5YoA3c75gjQm9cE6pWvxRPepfTdoDhvRkQF21fN1L5mTf28w2rNLTLSyMjvhRjegoLVaopX'
+    },
+    units: '100500000',
+    amount: 100.5
+  }
+}
+{
+  txnID: '2vmGhaDyohAbyRLZX8rSZ5YqJ1RVzMkzg4irMfXZLXKi6vnGPR1GPVXuQrPjqgCi8RMju7GGvvZYpLsLvSXPujAL',
+  txnIDHashed: '0x53553af4f764a73f834b42f023a7bc0145ac88728a08ef46385ee5a8ccad7919',
+  bridgeType: 'Token',
+  txnType: 'Deposit',
+  network: 'solana',
+  chainStatus: 'Completed',
+  txnTimestamp: 2023-01-30T12:00:02.000Z,
+  block: 175163564,
+  tokenSymbol: 'xalgo',
+  address: 'DQLaCCQ2SmFxFiiBExsWLJTBmq1qTVq5GWtnYE5oGU9C',
+  units: '100000000',
+  amount: 100,
+  routing: {
+    from: {
+      network: 'solana',
+      address: 'DQLaCCQ2SmFxFiiBExsWLJTBmq1qTVq5GWtnYE5oGU9C',
+      token: 'algo',
+      txn_signature: '2vmGhaDyohAbyRLZX8rSZ5YqJ1RVzMkzg4irMfXZLXKi6vnGPR1GPVXuQrPjqgCi8RMju7GGvvZYpLsLvSXPujAL'
+    },
+    to: {
+      network: 'algorand',
+      address: '7LXIEKO3KLYNKT4TV7IE5CMGNM4UX6MQBKI7UA2KGVDC6MW4OMAJ55BUA4',
+      token: 'xalgo',
+      txn_signature: ''
+    },
+    units: '100000000',
+    amount: 100
+  }
+}
+{
+  txnID: '4ZkM6zFoJpq3yhHrEF9zNRGPyhVZt6AQ9UbvmHaqbB9kizvdXHytCgipWeQv6tBwVKvhAcHfGue5XyHfMELYqDk6',
+  txnIDHashed: '0x91450129f747cb69f9f2ef3a3b3ab01ac6a87baddd73a080eada693eb19ba346',
+  bridgeType: 'Token',
+  txnType: 'Finalize',
+  network: 'solana',
+  chainStatus: 'Completed',
+  txnTimestamp: 2023-01-30T12:00:38.000Z,
+  block: 175163636,
+  tokenSymbol: 'xalgo',
+  address: 'EQJgtwM3C89ZoESMW3znTSYiB346VWW25vVD9XrSW8nw',
+  units: '143',
+  amount: 1.43e-7
+}
+{
+  txnID: '43KsfWdtVow3G1PFKZbhGV68wjhfgQg9coffsvsezmZkNAK2Ajt5nM1LB1vrvZ7aot8MnDXGgLLizTzwCpe7FXg4',
+  txnIDHashed: '0xf652d593717f5b0bfc384c1cfc7972c0b99633ce2e1b9d55b5fe8dbb838e651e',
+  bridgeType: 'Token',
+  txnType: 'Deposit',
+  network: 'solana',
+  chainStatus: 'Completed',
+  txnTimestamp: 2023-01-30T12:06:25.000Z,
+  block: 175164308,
+  tokenSymbol: 'sol',
+  address: 'DQLaCCQ2SmFxFiiBExsWLJTBmq1qTVq5GWtnYE5oGU9C',
+  units: '1010000000',
+  amount: 1.01,
+  routing: {
+    from: {
+      network: 'solana',
+      address: 'DQLaCCQ2SmFxFiiBExsWLJTBmq1qTVq5GWtnYE5oGU9C',
+      token: 'sol',
+      txn_signature: '43KsfWdtVow3G1PFKZbhGV68wjhfgQg9coffsvsezmZkNAK2Ajt5nM1LB1vrvZ7aot8MnDXGgLLizTzwCpe7FXg4'
+    },
+    to: {
+      network: 'algorand',
+      address: '7LXIEKO3KLYNKT4TV7IE5CMGNM4UX6MQBKI7UA2KGVDC6MW4OMAJ55BUA4',
+      token: 'xsol',
+      txn_signature: ''
+    },
+    units: '1010000000',
+    amount: 1.01
+  }
+}
+{
+  txnID: 'nZktRo177SjPd7cRzDhWg3uXfdEWgiwgdnjWhEXLHrzMghKJyQbpPBnntZBYKLaLtHbgCbnabzuFkjnEzBwFWFt',
+  txnIDHashed: '0x9837a1e3465d9ca0def7c9845d22e37a4e30d401493f9c4f6f6587b270def873',
+  bridgeType: 'Token',
+  txnType: 'Finalize',
+  network: 'solana',
+  chainStatus: 'Completed',
+  txnTimestamp: 2023-01-30T12:07:04.000Z,
+  block: 175164388,
+  tokenSymbol: 'sol',
+  address: '7xCU4nvqu3Nz3BBQckKzibp3kBav4xbkuqQ3WM9CBHdJ',
+  units: '1010000000000000000',
+  amount: 1010000000
+}
+{
+  txnID: '4LN8SqCoF4QJoFtbGdSktoDLT2d9pvZoUTFZAmtRLuFr9fuFCehMM9xbKVs4HY5JSiM1yj34T4jiCarurkn3yeex',
+  txnIDHashed: '0xf34bba70861bb42c63897dcb6ec029ec5ff0cf1757e709093c4fc455b4536230',
+  bridgeType: 'Token',
+  txnType: 'Release',
+  network: 'solana',
+  chainStatus: 'Completed',
+  txnTimestamp: 2023-01-30T12:20:11.000Z,
+  block: 175165872,
+  tokenSymbol: 'sol',
+  address: 'DQLaCCQ2SmFxFiiBExsWLJTBmq1qTVq5GWtnYE5oGU9C',
+  units: '1000000000',
+  amount: 1,
+  routing: {
+    from: {
+      network: 'algorand',
+      address: 'KYZFMWC2IFLFKU2LIRMFOUCYLE3USNKOK4ZFSUKNKZKFOQ2WLFIRNQ3WIM',
+      token: 'xsol',
+      txn_signature: '��)�R��O���N��k9K��\n��\x03J5F/2�s\x00NPEZTCF35EEAJLKHFFH2'
+    },
+    to: {
+      network: 'solana',
+      address: 'DQLaCCQ2SmFxFiiBExsWLJTBmq1qTVq5GWtnYE5oGU9C',
+      token: 'sol',
+      txn_signature: '4LN8SqCoF4QJoFtbGdSktoDLT2d9pvZoUTFZAmtRLuFr9fuFCehMM9xbKVs4HY5JSiM1yj34T4jiCarurkn3yeex'
+    },
+    units: '1000000000',
+    amount: 1
+  }
+}
+{
+  txnID: '5qSafXCABieat22mJ4fBxC9dyeP9HQAVJPK4UrtwbJ3vWffVibuMFfWj3BAdC2yK18RjNHbey5ii7WMMNPr2vnbC',
+  txnIDHashed: '0x203e56c2d2613d47ade916e2a9d254af2b9a087cd07d82b58edc33037177874b',
+  bridgeType: 'Token',
+  txnType: 'Release',
+  network: 'solana',
+  chainStatus: 'Completed',
+  txnTimestamp: 2023-01-30T14:05:48.000Z,
+  block: 175177589,
+  tokenSymbol: 'sol',
+  address: 'ti3mSbu5n2WVWs2vmgQke96e2qZbUC9a4rt55uC7sVp',
+  units: '500000000',
+  amount: 0.5,
+  routing: {
+    from: {
+      network: 'algorand',
+      address: 'G5AUSWSYLJKDONCKIFKUYRCUI4ZESV22GUZFINCIJBBFGR2ZJJATOXQ7BQ',
+      token: 'xsol',
+      txn_signature: '��\x05\x0Fe\x0F\x10R5 �ٱ�?��ͅ�hy�j�\x01���Zc344KJZ6C34DBLJXYP7JF'
+    },
+    to: {
+      network: 'solana',
+      address: 'ti3mSbu5n2WVWs2vmgQke96e2qZbUC9a4rt55uC7sVp',
+      token: 'sol',
+      txn_signature: '5qSafXCABieat22mJ4fBxC9dyeP9HQAVJPK4UrtwbJ3vWffVibuMFfWj3BAdC2yK18RjNHbey5ii7WMMNPr2vnbC'
+    },
+    units: '500000000',
+    amount: 0.5
+  }
+}
+{
+  txnID: '5toCPYjZyPf3TTgJSaFFVWqQRH23XhxDCdBgJCjukt4c9LdWbqRMaXTxmhEckRPp2r31QFNZBDfWwDwENBDowJu6',
+  txnIDHashed: '0x6f39ae137c7462d9bd9e4fad79c761be71f53f538d47d3ce62593849bb1677ff',
+  bridgeType: 'Token',
+  txnType: 'Deposit',
+  network: 'solana',
+  chainStatus: 'Completed',
+  txnTimestamp: 2023-01-30T14:06:19.000Z,
+  block: 175177644,
+  tokenSymbol: 'xalgo',
+  address: 'ti3mSbu5n2WVWs2vmgQke96e2qZbUC9a4rt55uC7sVp',
+  units: '5000000',
+  amount: 5,
+  routing: {
+    from: {
+      network: 'solana',
+      address: 'ti3mSbu5n2WVWs2vmgQke96e2qZbUC9a4rt55uC7sVp',
+      token: 'algo',
+      txn_signature: '5toCPYjZyPf3TTgJSaFFVWqQRH23XhxDCdBgJCjukt4c9LdWbqRMaXTxmhEckRPp2r31QFNZBDfWwDwENBDowJu6'
+    },
+    to: {
+      network: 'algorand',
+      address: 'QX4AKD3FB4IFENJAS3M3DWJ7SHYM3BMHNB44G2XSUEA6TRWFLJRXDUJQCY',
+      token: 'xalgo',
+      txn_signature: ''
+    },
+    units: '5000000',
+    amount: 5
+  }
+}
+{
+  txnID: 'QoffNhyQ5oLzaZdaqi3sRF5mhsxPqBsH79Jzbajshm9gwRJ1M4bZjpDBDZAqYS3dEnRADEVtUhDekZZXxt4d1aV',
+  txnIDHashed: '0x6fcc6e15da059a79909b246a2a311ab687029c3cc70c1876274ab4959c827c63',
+  bridgeType: 'Token',
+  txnType: 'Finalize',
+  network: 'solana',
+  chainStatus: 'Completed',
+  txnTimestamp: 2023-01-30T14:07:00.000Z,
+  block: 175177717,
+  tokenSymbol: 'xalgo',
+  address: 'EQJgtwM3C89ZoESMW3znTSYiB346VWW25vVD9XrSW8nw',
+  units: '143',
+  amount: 1.43e-7
+}
+{
+  txnID: '4QgCGSePVAxwo36rP5YMeJ22SfJfBYxEQk8JfqM5svVW16VuazBYSV7W8FPzQ7nmvTAMVL3EbH9B67GFKreqqLoF',
+  txnIDHashed: '0x69bdaf8b8ff934c48ef3e1ad64276ff12940fb867f6b49e27a28494990f287a8',
+  bridgeType: 'Token',
+  txnType: 'Release',
+  network: 'solana',
+  chainStatus: 'Completed',
+  txnTimestamp: 2023-01-31T07:32:59.000Z,
+  block: 175292972,
+  tokenSymbol: 'xalgo',
+  address: 'DQLaCCQ2SmFxFiiBExsWLJTBmq1qTVq5GWtnYE5oGU9C',
+  units: '27000000',
+  amount: 27,
+  routing: {
+    from: {
+      network: 'algorand',
+      address: 'LJCFISRUGVNEKUCMJNKUMVJVKFDUMV2PGMZTIWCBJZHTGMSGIFIYGECEGE',
+      token: 'algo',
+      txn_signature: '��)�R��O���N��k9K��\n��\x03J5F/2�s\x00CFMMBJVI3S55JYHZRBK4'
+    },
+    to: {
+      network: 'solana',
+      address: 'DQLaCCQ2SmFxFiiBExsWLJTBmq1qTVq5GWtnYE5oGU9C',
+      token: 'xalgo',
+      txn_signature: '4QgCGSePVAxwo36rP5YMeJ22SfJfBYxEQk8JfqM5svVW16VuazBYSV7W8FPzQ7nmvTAMVL3EbH9B67GFKreqqLoF'
+    },
+    units: '27000000',
+    amount: 27
+  }
+}
+{
+  txnID: '5YimAsNydCAgEDpmkTJi2Y9ZiXEj1UPMnBxrDvGP8FTWuWWx8ZHektQhxZdYZPBDcShW5nDnS39qcrLsNKcbMLw8',
+  txnIDHashed: '0x2c750c7a77c6f94cb0f78918c8ee5078df0232ea3d7ba8ed2e5fe72bd7c718a8',
+  bridgeType: 'Token',
+  txnType: 'Deposit',
+  network: 'solana',
+  chainStatus: 'Completed',
+  txnTimestamp: 2023-01-31T07:33:37.000Z,
+  block: 175293032,
+  tokenSymbol: 'xalgo',
+  address: 'DQLaCCQ2SmFxFiiBExsWLJTBmq1qTVq5GWtnYE5oGU9C',
+  units: '25000000',
+  amount: 25,
+  routing: {
+    from: {
+      network: 'solana',
+      address: 'DQLaCCQ2SmFxFiiBExsWLJTBmq1qTVq5GWtnYE5oGU9C',
+      token: 'algo',
+      txn_signature: '5YimAsNydCAgEDpmkTJi2Y9ZiXEj1UPMnBxrDvGP8FTWuWWx8ZHektQhxZdYZPBDcShW5nDnS39qcrLsNKcbMLw8'
+    },
+    to: {
+      network: 'algorand',
+      address: '7LXIEKO3KLYNKT4TV7IE5CMGNM4UX6MQBKI7UA2KGVDC6MW4OMAJ55BUA4',
+      token: 'xalgo',
+      txn_signature: ''
+    },
+    units: '25000000',
+    amount: 25
+  }
+}
+{
+  txnID: '44e6kod2oVPrtQ5EBgTFCL9vx252fjQRkfmUHvjp7tL5zWvJ6eUx9MzRbYYw3y2vFcFEGmCy9AsN3Y8mhum9ra8k',
+  txnIDHashed: '0x4c263ab466f12163481ddf69129e99b5269467af0c5db7e2c8ec0270ede05e7a',
+  bridgeType: 'Token',
+  txnType: 'Finalize',
+  network: 'solana',
+  chainStatus: 'Completed',
+  txnTimestamp: 2023-01-31T07:34:15.000Z,
+  block: 175293107,
+  tokenSymbol: 'xalgo',
+  address: 'EQJgtwM3C89ZoESMW3znTSYiB346VWW25vVD9XrSW8nw',
+  units: '143',
+  amount: 1.43e-7
+}
+{
+  txnID: '37JLBsqnX5rfdMMDxwMeMkCD41BGskstYiKD6uLQyuMjFqjbA5hGV7Yzw4XuCuiRSCzryaCpUovRNFk6hV2sAn3N',
+  txnIDHashed: '0x9273335920fd7f264e68292087574e65587b31c8365bb42aabdb3f9151feb76d',
+  bridgeType: 'Token',
+  txnType: 'Deposit',
+  network: 'solana',
+  chainStatus: 'Completed',
+  txnTimestamp: 2023-01-31T07:35:20.000Z,
+  block: 175293221,
+  tokenSymbol: 'sol',
+  address: 'DQLaCCQ2SmFxFiiBExsWLJTBmq1qTVq5GWtnYE5oGU9C',
+  units: '1100000000',
+  amount: 1.1,
+  routing: {
+    from: {
+      network: 'solana',
+      address: 'DQLaCCQ2SmFxFiiBExsWLJTBmq1qTVq5GWtnYE5oGU9C',
+      token: 'sol',
+      txn_signature: '37JLBsqnX5rfdMMDxwMeMkCD41BGskstYiKD6uLQyuMjFqjbA5hGV7Yzw4XuCuiRSCzryaCpUovRNFk6hV2sAn3N'
+    },
+    to: {
+      network: 'algorand',
+      address: '7LXIEKO3KLYNKT4TV7IE5CMGNM4UX6MQBKI7UA2KGVDC6MW4OMAJ55BUA4',
+      token: 'xsol',
+      txn_signature: ''
+    },
+    units: '1100000000',
+    amount: 1.1
+  }
+}
+{
+  txnID: 'uzUuF8f9byhnzn1ifq5exbEH14x2UseVPUDoArvG6ihse5U4GTm952hHqjSQG6HHZp3aCJoHAhvF6gVf8TJFNJ2',
+  txnIDHashed: '0xa5ede81f4fee10ff43f6b38495341f91c361c0d4d274dd142d253cf896216e98',
+  bridgeType: 'Token',
+  txnType: 'Finalize',
+  network: 'solana',
+  chainStatus: 'Completed',
+  txnTimestamp: 2023-01-31T07:35:54.000Z,
+  block: 175293286,
+  tokenSymbol: 'sol',
+  address: '7xCU4nvqu3Nz3BBQckKzibp3kBav4xbkuqQ3WM9CBHdJ',
+  units: '1100000000000000000',
+  amount: 1100000000
+}
+{
+  txnID: '55iyFd8EGJAL6cBif2KTpHy3MESeaZtRwqrREFDGZtJPcBoPfXHkKc4og9KghgdgkATEXgBcxEpsWp3i1rdbuVhD',
+  txnIDHashed: '0xc3355aa01374050ea5d3ea1182dfc7c64adc3a07d5939150966a0f91d0ef78c5',
+  bridgeType: 'Token',
+  txnType: 'Release',
+  network: 'solana',
+  chainStatus: 'Completed',
+  txnTimestamp: 2023-01-31T08:04:30.000Z,
+  block: 175296458,
+  tokenSymbol: 'sol',
+  address: 'DQLaCCQ2SmFxFiiBExsWLJTBmq1qTVq5GWtnYE5oGU9C',
+  units: '1100000000',
+  amount: 1.1,
+  routing: {
+    from: {
+      network: 'algorand',
+      address: 'JBCU2WSWKRFTMTS2KVNEEN2XIZATINKBKFKVKUSRKBCESUJSJJAVE6KHYY',
+      token: 'xsol',
+      txn_signature: '��)�R��O���N��k9K��\n��\x03J5F/2�s\x006COLL4ZP4UDATQDOW3JD'
+    },
+    to: {
+      network: 'solana',
+      address: 'DQLaCCQ2SmFxFiiBExsWLJTBmq1qTVq5GWtnYE5oGU9C',
+      token: 'sol',
+      txn_signature: '55iyFd8EGJAL6cBif2KTpHy3MESeaZtRwqrREFDGZtJPcBoPfXHkKc4og9KghgdgkATEXgBcxEpsWp3i1rdbuVhD'
+    },
+    units: '1100000000',
+    amount: 1.1
+  }
+}
+{
+  txnID: 'N3fnk5y27s2FaXAjHm3GVhCiQ75WhwdLmiCCbHGJpvbJnMBzorpbzEg2qBm4UUNYyuMrbRaw3gPwoFyBGLmrqUU',
+  txnIDHashed: '0x911f0aafa5b02700c5bd3ffa822ece75ea290295e08a013bc71469e6957d1118',
+  bridgeType: 'Token',
+  txnType: 'Release',
+  network: 'solana',
+  chainStatus: 'Completed',
+  txnTimestamp: 2023-01-31T09:26:11.000Z,
+  block: 175305307,
+  tokenSymbol: 'xalgo',
+  address: 'ti3mSbu5n2WVWs2vmgQke96e2qZbUC9a4rt55uC7sVp',
+  units: '5000000',
+  amount: 5,
+  routing: {
+    from: {
+      network: 'algorand',
+      address: 'JNEEUTSSKZGEKM2IKBJE2NKPLFCUYV2IKFKDIQ2IJQZEGSSTKVI7TUWZVA',
+      token: 'algo',
+      txn_signature: '��\x05\x0Fe\x0F\x10R5 �ٱ�?��ͅ�hy�j�\x01���ZcBHIR7HIGV6TNQAXUB3O6'
+    },
+    to: {
+      network: 'solana',
+      address: 'ti3mSbu5n2WVWs2vmgQke96e2qZbUC9a4rt55uC7sVp',
+      token: 'xalgo',
+      txn_signature: 'N3fnk5y27s2FaXAjHm3GVhCiQ75WhwdLmiCCbHGJpvbJnMBzorpbzEg2qBm4UUNYyuMrbRaw3gPwoFyBGLmrqUU'
+    },
+    units: '5000000',
+    amount: 5
+  }
+}
+{
+  txnID: 'z7Zu8f86CQWzFoMh6uBG3H5DCKjkMN7FmX2qsyXamgYbg2zHb3UkM8kCstHF1f3yqmQiuC7QqwHJMp5oQmAWqbx',
+  txnIDHashed: '0x3030edc5f37bd1a62b47b53b2008410897e0b3579af8f373bd98b0389feb52fc',
+  bridgeType: 'Token',
+  txnType: 'Deposit',
+  network: 'solana',
+  chainStatus: 'Completed',
+  txnTimestamp: 2023-01-31T09:28:19.000Z,
+  block: 175305540,
+  tokenSymbol: 'sol',
+  address: 'ti3mSbu5n2WVWs2vmgQke96e2qZbUC9a4rt55uC7sVp',
+  units: '1000000000',
+  amount: 1,
+  routing: {
+    from: {
+      network: 'solana',
+      address: 'ti3mSbu5n2WVWs2vmgQke96e2qZbUC9a4rt55uC7sVp',
+      token: 'sol',
+      txn_signature: 'z7Zu8f86CQWzFoMh6uBG3H5DCKjkMN7FmX2qsyXamgYbg2zHb3UkM8kCstHF1f3yqmQiuC7QqwHJMp5oQmAWqbx'
+    },
+    to: {
+      network: 'algorand',
+      address: 'QX4AKD3FB4IFENJAS3M3DWJ7SHYM3BMHNB44G2XSUEA6TRWFLJRXDUJQCY',
+      token: 'xsol',
+      txn_signature: ''
+    },
+    units: '1000000000',
+    amount: 1
+  }
+}
+{
+  txnID: '3G3SgBywnKYjKuELevFkPYnYr6KrckGC8indDkX9kiaFFjGTRyTrTJqtLHUTeFWYF6uppxrwkbpX9FhgF1MTmYtU',
+  txnIDHashed: '0xd804da1014d3a210ce4115644ebb2d8fe7378672a39fa4ee542458587d35842c',
+  bridgeType: 'Token',
+  txnType: 'Finalize',
+  network: 'solana',
+  chainStatus: 'Completed',
+  txnTimestamp: 2023-01-31T09:28:55.000Z,
+  block: 175305600,
+  tokenSymbol: 'sol',
+  address: '7xCU4nvqu3Nz3BBQckKzibp3kBav4xbkuqQ3WM9CBHdJ',
+  units: '1000000000000000000',
+  amount: 1000000000
+}
+{
+  txnID: '5cfAJ2vAxcyoDzzwjfYcjvxw6yHpdQzj6SmvcWFqBKnNRrNJawc7rttA4RaQ7W6SodrSfZeNhkxMevqhnUjgLUiJ',
+  txnIDHashed: '0x3413c23634ae30f8a099d36bc4c9d5864a30049a500f712689faa4aebfe8d03e',
+  bridgeType: 'Token',
+  txnType: 'Deposit',
+  network: 'solana',
+  chainStatus: 'Completed',
+  txnTimestamp: 2023-02-01T08:01:20.000Z,
+  block: 175454608,
+  tokenSymbol: 'xalgo',
+  address: 'ti3mSbu5n2WVWs2vmgQke96e2qZbUC9a4rt55uC7sVp',
+  units: '5000000',
+  amount: 5,
+  routing: {
+    from: {
+      network: 'solana',
+      address: 'ti3mSbu5n2WVWs2vmgQke96e2qZbUC9a4rt55uC7sVp',
+      token: 'algo',
+      txn_signature: '5cfAJ2vAxcyoDzzwjfYcjvxw6yHpdQzj6SmvcWFqBKnNRrNJawc7rttA4RaQ7W6SodrSfZeNhkxMevqhnUjgLUiJ'
+    },
+    to: {
+      network: 'algorand',
+      address: 'QX4AKD3FB4IFENJAS3M3DWJ7SHYM3BMHNB44G2XSUEA6TRWFLJRXDUJQCY',
+      token: 'xalgo',
+      txn_signature: ''
+    },
+    units: '5000000',
+    amount: 5
+  }
+}
+{
+  txnID: '2Z4eqUiKFdJCEaBFq2iSFXJzL8FNpoadK2QcUe71yvyDuY7GaASChikj1PxYAkHx8jmW1NKbGjZ9R8fPfD8cTsBc',
+  txnIDHashed: '0x49bf72ffa23e228ee3742bcb5b8564432a68a0133b88a3abc5e0fb47001440f3',
+  bridgeType: 'Token',
+  txnType: 'Finalize',
+  network: 'solana',
+  chainStatus: 'Completed',
+  txnTimestamp: 2023-02-01T08:01:55.000Z,
+  block: 175454684,
+  tokenSymbol: 'xalgo',
+  address: 'EQJgtwM3C89ZoESMW3znTSYiB346VWW25vVD9XrSW8nw',
+  units: '143',
+  amount: 1.43e-7
+}
+{
+  txnID: '4giXjKLZxEfhjz2JCP6NYeWzGvzGh9oUwWZp8zQvA3cqMJsEDRo3t46Yarngt7AD6ST4Cf96jVL8SCMd2MttN1vu',
+  txnIDHashed: '0x1bd9b8399174c048558619a8ff5f2775a0514e3857679a213151846ccb43de88',
+  bridgeType: 'Token',
+  txnType: 'Release',
+  network: 'solana',
+  chainStatus: 'Completed',
+  txnTimestamp: 2023-02-01T08:51:59.000Z,
+  block: 175460707,
+  tokenSymbol: 'sol',
+  address: 'ti3mSbu5n2WVWs2vmgQke96e2qZbUC9a4rt55uC7sVp',
+  units: '1000000000',
+  amount: 1,
+  routing: {
+    from: {
+      network: 'algorand',
+      address: 'LBFDEVS2LBEFQUBUKBDDENCFJRCTGVKVI5KEGWKLLFMEINRTLFISMKF7WA',
+      token: 'xsol',
+      txn_signature: '��\x05\x0Fe\x0F\x10R5 �ٱ�?��ͅ�hy�j�\x01���Zc3QKR4RCXPLTM27GBSH6P'
+    },
+    to: {
+      network: 'solana',
+      address: 'ti3mSbu5n2WVWs2vmgQke96e2qZbUC9a4rt55uC7sVp',
+      token: 'sol',
+      txn_signature: '4giXjKLZxEfhjz2JCP6NYeWzGvzGh9oUwWZp8zQvA3cqMJsEDRo3t46Yarngt7AD6ST4Cf96jVL8SCMd2MttN1vu'
+    },
+    units: '1000000000',
+    amount: 1
+  }
+}
+{
+  txnID: '2ikaGKBJdXZ3ipbV1f1ia42Fxxu1J9x7PbA3maqpKphdLqDVZ39M1TsEmLqkeK7mA3T3Ws9Rp9woFFNcd9TG15Kx',
+  txnIDHashed: '0x29db0c8a5a4c00ca9a3084999a6e4d1d8d64f9a453e4da4f86624fda1e7f43d2',
+  bridgeType: 'Token',
+  txnType: 'Release',
+  network: 'solana',
+  chainStatus: 'Completed',
+  txnTimestamp: 2023-02-01T14:15:19.000Z,
+  block: 175498830,
+  tokenSymbol: 'xalgo',
+  address: 'DQLaCCQ2SmFxFiiBExsWLJTBmq1qTVq5GWtnYE5oGU9C',
+  units: '21000000',
+  amount: 21,
+  routing: {
+    from: {
+      network: 'algorand',
+      address: 'I5EUUQZVKVCEITCSJJMFCWRWJBITITCCKZEEEVKBJVAUONSNI5I27B4ZLI',
+      token: 'algo',
+      txn_signature: '��)�R��O���N��k9K��\n��\x03J5F/2�s\x00OCAHITEGLN2DWPD2I24Q'
+    },
+    to: {
+      network: 'solana',
+      address: 'DQLaCCQ2SmFxFiiBExsWLJTBmq1qTVq5GWtnYE5oGU9C',
+      token: 'xalgo',
+      txn_signature: '2ikaGKBJdXZ3ipbV1f1ia42Fxxu1J9x7PbA3maqpKphdLqDVZ39M1TsEmLqkeK7mA3T3Ws9Rp9woFFNcd9TG15Kx'
+    },
+    units: '21000000',
+    amount: 21
+  }
+}
+{
+  txnID: '3nujnCD59rrztxjKr75Tu87vTVvk5oLMi3jnZsLRjtQiU1vm8fRhqYNBoGgtkeetzujFbCjVRsRecGpbrdo9PLEw',
+  txnIDHashed: '0x812bbe21b3e8d033ef799ca771d99e02fc6e7e4db4abb6437c3323ed507b9f39',
+  bridgeType: 'Token',
+  txnType: 'Deposit',
+  network: 'solana',
+  chainStatus: 'Completed',
+  txnTimestamp: 2023-02-01T14:23:58.000Z,
+  block: 175499858,
+  tokenSymbol: 'xalgo',
+  address: 'DQLaCCQ2SmFxFiiBExsWLJTBmq1qTVq5GWtnYE5oGU9C',
+  units: '23000000',
+  amount: 23,
+  routing: {
+    from: {
+      network: 'solana',
+      address: 'DQLaCCQ2SmFxFiiBExsWLJTBmq1qTVq5GWtnYE5oGU9C',
+      token: 'algo',
+      txn_signature: '3nujnCD59rrztxjKr75Tu87vTVvk5oLMi3jnZsLRjtQiU1vm8fRhqYNBoGgtkeetzujFbCjVRsRecGpbrdo9PLEw'
+    },
+    to: {
+      network: 'algorand',
+      address: '7LXIEKO3KLYNKT4TV7IE5CMGNM4UX6MQBKI7UA2KGVDC6MW4OMAJ55BUA4',
+      token: 'xalgo',
+      txn_signature: ''
+    },
+    units: '23000000',
+    amount: 23
+  }
+}
+{
+  txnID: '3CdbxcqDpTBqFXKrBhx7rpTDPGV2iCVb2gvLZx61ZLRBqUxDkWrPVrEVfzctB7NVT1eAB5u4rRDtBqtmQfE5h1LQ',
+  txnIDHashed: '0x7ea83ebd87085013fa6298a7a16e999e1e1f15258b2cf02c68d4160f3df08a0d',
+  bridgeType: 'Token',
+  txnType: 'Finalize',
+  network: 'solana',
+  chainStatus: 'Completed',
+  txnTimestamp: 2023-02-01T14:24:38.000Z,
+  block: 175499936,
+  tokenSymbol: 'xalgo',
+  address: 'EQJgtwM3C89ZoESMW3znTSYiB346VWW25vVD9XrSW8nw',
+  units: '143',
+  amount: 1.43e-7
+}
+{
+  txnID: '4xQaHHJAWdA7wP8d13r2oobeSR1QFKCs6J2brddJRkT1KH2arMXgjHcnFNrzKHb8jKxtHqbQd3hbijkm76ypYRWN',
+  txnIDHashed: '0x171ca19433f201c79488ae389b26bc196f9552262b2325daa76d89a0d1f5a10d',
+  bridgeType: 'Token',
+  txnType: 'Deposit',
+  network: 'solana',
+  chainStatus: 'Completed',
+  txnTimestamp: 2023-02-01T14:53:11.000Z,
+  block: 175503280,
+  tokenSymbol: 'sol',
+  address: 'DQLaCCQ2SmFxFiiBExsWLJTBmq1qTVq5GWtnYE5oGU9C',
+  units: '1000000000',
+  amount: 1,
+  routing: {
+    from: {
+      network: 'solana',
+      address: 'DQLaCCQ2SmFxFiiBExsWLJTBmq1qTVq5GWtnYE5oGU9C',
+      token: 'sol',
+      txn_signature: '4xQaHHJAWdA7wP8d13r2oobeSR1QFKCs6J2brddJRkT1KH2arMXgjHcnFNrzKHb8jKxtHqbQd3hbijkm76ypYRWN'
+    },
+    to: {
+      network: 'algorand',
+      address: '7LXIEKO3KLYNKT4TV7IE5CMGNM4UX6MQBKI7UA2KGVDC6MW4OMAJ55BUA4',
+      token: 'xsol',
+      txn_signature: ''
+    },
+    units: '1000000000',
+    amount: 1
+  }
+}
+{
+  txnID: '4uYjAFyPoberxHaP1hytC6pWbwo8Tf5qpJ47FiPaMc1fjjS8NJTk3XW78BMi6eyvLR2X1tsVQonKvbwn3RiLvsNm',
+  txnIDHashed: '0xc6712079bd72b6cf708ad84f5395fc1b9b8ca2eeb8b4e9baa492c8d3f31e78fc',
+  bridgeType: 'Token',
+  txnType: 'Finalize',
+  network: 'solana',
+  chainStatus: 'Completed',
+  txnTimestamp: 2023-02-01T14:53:42.000Z,
+  block: 175503345,
+  tokenSymbol: 'sol',
+  address: '7xCU4nvqu3Nz3BBQckKzibp3kBav4xbkuqQ3WM9CBHdJ',
+  units: '1000000000000000000',
+  amount: 1000000000
+}
+{
+  txnID: '4Avy3vomSiM7Wtjwo2PYn5oVDgJsDkRQ5A26KHDiJeFnbCs9zsW47cxfAZm5LjvaFH1vX1KyScvcyRYJz776ybwt',
+  txnIDHashed: '0xe7d42c7720f6b394573a3b9326753b331d29a8f98dc8ce505c74b4f8ed33a725',
+  bridgeType: 'Token',
+  txnType: 'Release',
+  network: 'solana',
+  chainStatus: 'Completed',
+  txnTimestamp: 2023-02-01T14:55:01.000Z,
+  block: 175503497,
+  tokenSymbol: 'sol',
+  address: 'DQLaCCQ2SmFxFiiBExsWLJTBmq1qTVq5GWtnYE5oGU9C',
+  units: '1100000000',
+  amount: 1.1,
+  routing: {
+    from: {
+      network: 'algorand',
+      address: 'GVKVINKWKZIEYRS2KFIU4VKSKJMUMSKIJZFVUT2HINEFSNCPGRAVLSK3ZQ',
+      token: 'xsol',
+      txn_signature: '��)�R��O���N��k9K��\n��\x03J5F/2�s\x00ODAUWMOLN5K33FAV7YVX'
+    },
+    to: {
+      network: 'solana',
+      address: 'DQLaCCQ2SmFxFiiBExsWLJTBmq1qTVq5GWtnYE5oGU9C',
+      token: 'sol',
+      txn_signature: '4Avy3vomSiM7Wtjwo2PYn5oVDgJsDkRQ5A26KHDiJeFnbCs9zsW47cxfAZm5LjvaFH1vX1KyScvcyRYJz776ybwt'
+    },
+    units: '1100000000',
+    amount: 1.1
+  }
+}
+{
+  txnID: '5QSUFVtdQC7bXaCgneH7JoMpyz6p9YAPy3JeM5JXxZ3s4EXy4D4jVNRs9db9nZD1zAo5CaaizQK9N3NU1SxREiAF',
+  txnIDHashed: '0x8de8daeeee8ef01f6332441cca1213c7ee5abc3f4a914a01c6e790c0939bf56d',
+  bridgeType: 'Token',
+  txnType: 'Deposit',
+  network: 'solana',
+  chainStatus: 'Completed',
+  txnTimestamp: 2023-02-02T01:18:46.000Z,
+  block: 175575925,
+  tokenSymbol: 'xalgo',
+  address: 'HjqgCuGvrBUmBU9BWR1kCo5paHDy8HpdbrKxbD5Nbk3T',
+  units: '187946200',
+  amount: 187.9462,
+  routing: {
+    from: {
+      network: 'solana',
+      address: 'HjqgCuGvrBUmBU9BWR1kCo5paHDy8HpdbrKxbD5Nbk3T',
+      token: 'algo',
+      txn_signature: '5QSUFVtdQC7bXaCgneH7JoMpyz6p9YAPy3JeM5JXxZ3s4EXy4D4jVNRs9db9nZD1zAo5CaaizQK9N3NU1SxREiAF'
+    },
+    to: {
+      network: 'algorand',
+      address: 'AWPEFMKGD4BHOA7VHBUTQUYZCIZVSNONACXHT6XQBTNF6A2LSGVED4Y2YA',
+      token: 'xalgo',
+      txn_signature: ''
+    },
+    units: '187946200',
+    amount: 187.9462
+  }
+}
+{
+  txnID: '51jRDfP9iNNXUVD5zZzqYtyv6Msron7UMn2aSaYD8MHzbJgk2bS7srFdsGqChoTDUgtawLKDNPoK53vXe3yH162V',
+  txnIDHashed: '0xdab4015133d59dd6728384656b4be5974d3c1f6ca340e0a87cb2387a75c442ca',
+  bridgeType: 'Token',
+  txnType: 'Finalize',
+  network: 'solana',
+  chainStatus: 'Completed',
+  txnTimestamp: 2023-02-02T01:19:22.000Z,
+  block: 175575992,
+  tokenSymbol: 'xalgo',
+  address: 'EQJgtwM3C89ZoESMW3znTSYiB346VWW25vVD9XrSW8nw',
+  units: '143',
+  amount: 1.43e-7
+}
+{
+  txnID: '4proc4gcBnqJ2N4ZAx9eVCbMvMMujKjYy6Lcdbf6DYCJ2aB9EGs91J9kwyDRHBYVuoErFYH8YNZHHQLDG94t1Xhp',
+  txnIDHashed: '0xd9a228e79fa351f7618fc3c78e241413b24b1a40a30541c6a2e881a929f5d5fa',
+  bridgeType: 'Token',
+  txnType: 'Deposit',
+  network: 'solana',
+  chainStatus: 'Completed',
+  txnTimestamp: 2023-02-02T01:26:45.000Z,
+  block: 175576856,
+  tokenSymbol: 'xalgo',
+  address: 'HjqgCuGvrBUmBU9BWR1kCo5paHDy8HpdbrKxbD5Nbk3T',
+  units: '801530500',
+  amount: 801.5305,
+  routing: {
+    from: {
+      network: 'solana',
+      address: 'HjqgCuGvrBUmBU9BWR1kCo5paHDy8HpdbrKxbD5Nbk3T',
+      token: 'algo',
+      txn_signature: '4proc4gcBnqJ2N4ZAx9eVCbMvMMujKjYy6Lcdbf6DYCJ2aB9EGs91J9kwyDRHBYVuoErFYH8YNZHHQLDG94t1Xhp'
+    },
+    to: {
+      network: 'algorand',
+      address: 'AWPEFMKGD4BHOA7VHBUTQUYZCIZVSNONACXHT6XQBTNF6A2LSGVED4Y2YA',
+      token: 'xalgo',
+      txn_signature: ''
+    },
+    units: '801530500',
+    amount: 801.5305
+  }
+}
+{
+  txnID: '4gPPY32fHgmWnXTYF2P2D8M66MjgXdVn58pXRrsjZEBRdRMZ5i16k1Rgx5YmiqvpteJbmf9BPGqGqNonjZ5zpiq3',
+  txnIDHashed: '0x50773ad515541fd01a31eb6a4970e1b3a30407ec0ac33e7e78f4e9babc551107',
+  bridgeType: 'Token',
+  txnType: 'Finalize',
+  network: 'solana',
+  chainStatus: 'Completed',
+  txnTimestamp: 2023-02-02T01:27:31.000Z,
+  block: 175576940,
+  tokenSymbol: 'xalgo',
+  address: 'EQJgtwM3C89ZoESMW3znTSYiB346VWW25vVD9XrSW8nw',
+  units: '143',
+  amount: 1.43e-7
+}
+{
+  txnID: '45TTqQ5dKtq5fCTLRDscc7RBcwVod5zc2aBgTZsEZeDMwvsr1cujaM5557JVKRdoG818CjibjYVaQktJ7UpsBiZz',
+  txnIDHashed: '0x065283953bab511d4b740499d953945f42df8282a30d6b9735dd3d8916f3c1a0',
+  bridgeType: 'Token',
+  txnType: 'Deposit',
+  network: 'solana',
+  chainStatus: 'Completed',
+  txnTimestamp: 2023-02-02T03:34:30.000Z,
+  block: 175591581,
+  tokenSymbol: 'xalgo',
+  address: 'BhJh1Ekq9qPCiJvS2cXNx2frpdtndndjweC3waNjBfu1',
+  units: '9512700',
+  amount: 9.5127,
+  routing: {
+    from: {
+      network: 'solana',
+      address: 'BhJh1Ekq9qPCiJvS2cXNx2frpdtndndjweC3waNjBfu1',
+      token: 'algo',
+      txn_signature: '45TTqQ5dKtq5fCTLRDscc7RBcwVod5zc2aBgTZsEZeDMwvsr1cujaM5557JVKRdoG818CjibjYVaQktJ7UpsBiZz'
+    },
+    to: {
+      network: 'algorand',
+      address: '6GTGDYABFFLGNOPNL3SFGGSYKB5P4BOZ4GADPIKFTI2324X2YLWM5JO7KA',
+      token: 'xalgo',
+      txn_signature: ''
+    },
+    units: '9512700',
+    amount: 9.5127
+  }
+}
+{
+  txnID: '3xCGpR2wberHqNESx9V63Wf2TDiRQkJJJoYJ5QdzGZfh6ohNtdnrSgpoYDytMzo7HAyohSnmWhWLRahjD4dSa4Gx',
+  txnIDHashed: '0x3fcd0d3b33b338f0c0351b21206c8968b3f9441673b142feba61af09d0459bfc',
+  bridgeType: 'Token',
+  txnType: 'Finalize',
+  network: 'solana',
+  chainStatus: 'Completed',
+  txnTimestamp: 2023-02-02T03:35:07.000Z,
+  block: 175591644,
+  tokenSymbol: 'xalgo',
+  address: 'EQJgtwM3C89ZoESMW3znTSYiB346VWW25vVD9XrSW8nw',
+  units: '143',
+  amount: 1.43e-7
+}
+{
+  txnID: '2qpDYDeEDRwqeFy58GQireZeKfe6wdoTwZA4pWLE6NVG96TDVGWzLKB4DcGiJDaJ38Frfkb3FuDoXraAGqXMy7JT',
+  txnIDHashed: '0x431db27e38c70b03971da45d96e9fb4c00d95d00789a3e44e37fbef3dc0fed46',
+  bridgeType: 'Token',
+  txnType: 'Release',
+  network: 'solana',
+  chainStatus: 'Completed',
+  txnTimestamp: 2023-02-02T13:10:49.000Z,
+  block: 175658528,
+  tokenSymbol: 'xalgo',
+  address: 'ti3mSbu5n2WVWs2vmgQke96e2qZbUC9a4rt55uC7sVp',
+  units: '5000000',
+  amount: 5,
+  routing: {
+    from: {
+      network: 'algorand',
+      address: 'KRDUCSC2KVKFKRBSKFFVSWJVLIZU2VC2KRJUYS2BJFLE2T2KINIQX4ZRB4',
+      token: 'algo',
+      txn_signature: '��\x05\x0Fe\x0F\x10R5 �ٱ�?��ͅ�hy�j�\x01���ZcHKAJ52PZR6GFSLEDTTPL'
+    },
+    to: {
+      network: 'solana',
+      address: 'ti3mSbu5n2WVWs2vmgQke96e2qZbUC9a4rt55uC7sVp',
+      token: 'xalgo',
+      txn_signature: '2qpDYDeEDRwqeFy58GQireZeKfe6wdoTwZA4pWLE6NVG96TDVGWzLKB4DcGiJDaJ38Frfkb3FuDoXraAGqXMy7JT'
+    },
+    units: '5000000',
+    amount: 5
+  }
+}
+{
+  txnID: 'dTP34onuu5EWfeghGZKpG8CxrdYJSnkWUWcSm2pJhm7uRww74UdoZV4Gs5hRWypwXfZTzeohDwEf5ftQsRn78rk',
+  txnIDHashed: '0xd750b43e0501cd462b3184e2ee49555254efbcda26350332d2c48b846a5758c5',
+  bridgeType: 'Token',
+  txnType: 'Deposit',
+  network: 'solana',
+  chainStatus: 'Completed',
+  txnTimestamp: 2023-02-02T13:11:25.000Z,
+  block: 175658602,
+  tokenSymbol: 'sol',
+  address: 'ti3mSbu5n2WVWs2vmgQke96e2qZbUC9a4rt55uC7sVp',
+  units: '1000000000',
+  amount: 1,
+  routing: {
+    from: {
+      network: 'solana',
+      address: 'ti3mSbu5n2WVWs2vmgQke96e2qZbUC9a4rt55uC7sVp',
+      token: 'sol',
+      txn_signature: 'dTP34onuu5EWfeghGZKpG8CxrdYJSnkWUWcSm2pJhm7uRww74UdoZV4Gs5hRWypwXfZTzeohDwEf5ftQsRn78rk'
+    },
+    to: {
+      network: 'algorand',
+      address: 'QX4AKD3FB4IFENJAS3M3DWJ7SHYM3BMHNB44G2XSUEA6TRWFLJRXDUJQCY',
+      token: 'xsol',
+      txn_signature: ''
+    },
+    units: '1000000000',
+    amount: 1
+  }
+}
+{
+  txnID: '5htX1nxGUQFUyKJLovcWLf6UmcYLTAv7VgRVMMm8k2jAEeGmrgLH2RDdA6XTLJXzwp4iQJYEPj1uKkkxQWZHYiCs',
+  txnIDHashed: '0x3a3abc5aff3cd7f6da90f9579b42cd0752b1f2194bd071958c3a93e2389c22ff',
+  bridgeType: 'Token',
+  txnType: 'Finalize',
+  network: 'solana',
+  chainStatus: 'Completed',
+  txnTimestamp: 2023-02-02T13:12:04.000Z,
+  block: 175658680,
+  tokenSymbol: 'sol',
+  address: '7xCU4nvqu3Nz3BBQckKzibp3kBav4xbkuqQ3WM9CBHdJ',
+  units: '1000000000000000000',
+  amount: 1000000000
+}
+{
+  txnID: '4ELDNXcvX8owHdJFrcNHu2yU6SdrGZfEP22jVdgqAj7TDcpKaXgxhCQvEtHo2E7EVX32rT5KStufa1zw2c5UCtjq',
+  txnIDHashed: '0xc3dbf933766eee957a8cace3b2159b4a400fbd67d0ede51ff10c7ec877afc4da',
+  bridgeType: 'Token',
+  txnType: 'Release',
+  network: 'solana',
+  chainStatus: 'Completed',
+  txnTimestamp: 2023-02-02T14:13:19.000Z,
+  block: 175665744,
+  tokenSymbol: 'xalgo',
+  address: 'DQLaCCQ2SmFxFiiBExsWLJTBmq1qTVq5GWtnYE5oGU9C',
+  units: '27000000',
+  amount: 27,
+  routing: {
+    from: {
+      network: 'algorand',
+      address: 'JFBUMQKIJBLEUSKJINAU4VKPLFJE6NSYIEZTGQ2DIVFFIRZXKRA64F6R74',
+      token: 'algo',
+      txn_signature: '��)�R��O���N��k9K��\n��\x03J5F/2�s\x00X5BWFSJYNZ7V7SEOL4VD'
+    },
+    to: {
+      network: 'solana',
+      address: 'DQLaCCQ2SmFxFiiBExsWLJTBmq1qTVq5GWtnYE5oGU9C',
+      token: 'xalgo',
+      txn_signature: '4ELDNXcvX8owHdJFrcNHu2yU6SdrGZfEP22jVdgqAj7TDcpKaXgxhCQvEtHo2E7EVX32rT5KStufa1zw2c5UCtjq'
+    },
+    units: '27000000',
+    amount: 27
+  }
+}
+{
+  txnID: '2PWysTfQwMFgmq45PRfWcr3f7TvW3AKy6zas9RZpHiS5CBPPXXt9tZ9eDwM4UJffkeMUwe77FxKGJeBhukxRdFfs',
+  txnIDHashed: '0xcee25ee4798c56ccdaa323a1b45f06e3cf20bfb67b0674f73519526a2c953fc1',
+  bridgeType: 'Token',
+  txnType: 'Deposit',
+  network: 'solana',
+  chainStatus: 'Completed',
+  txnTimestamp: 2023-02-02T14:23:34.000Z,
+  block: 175666955,
+  tokenSymbol: 'xalgo',
+  address: 'DQLaCCQ2SmFxFiiBExsWLJTBmq1qTVq5GWtnYE5oGU9C',
+  units: '23000000',
+  amount: 23,
+  routing: {
+    from: {
+      network: 'solana',
+      address: 'DQLaCCQ2SmFxFiiBExsWLJTBmq1qTVq5GWtnYE5oGU9C',
+      token: 'algo',
+      txn_signature: '2PWysTfQwMFgmq45PRfWcr3f7TvW3AKy6zas9RZpHiS5CBPPXXt9tZ9eDwM4UJffkeMUwe77FxKGJeBhukxRdFfs'
+    },
+    to: {
+      network: 'algorand',
+      address: '7LXIEKO3KLYNKT4TV7IE5CMGNM4UX6MQBKI7UA2KGVDC6MW4OMAJ55BUA4',
+      token: 'xalgo',
+      txn_signature: ''
+    },
+    units: '23000000',
+    amount: 23
+  }
+}
+{
+  txnID: 'hZHEjJdc8ch17RUiT1Phvicm2MvvUSqKnFMHA6MBUJm2MfVV92BCuCRxnK4qCAHkPqWeBSzik6KCVUSGjtxLeRZ',
+  txnIDHashed: '0x0e51526a725be4e8f00aabf051863b4d67d297aeacb2ff2ae58142a9872d5b49',
+  bridgeType: 'Token',
+  txnType: 'Finalize',
+  network: 'solana',
+  chainStatus: 'Completed',
+  txnTimestamp: 2023-02-02T14:24:33.000Z,
+  block: 175667082,
+  tokenSymbol: 'xalgo',
+  address: 'EQJgtwM3C89ZoESMW3znTSYiB346VWW25vVD9XrSW8nw',
+  units: '143',
+  amount: 1.43e-7
+}
+{
+  txnID: '4bPUnqm4VJTamRkFrq5QkV9XtBVEj6tZsNJ3mJum4kN2VV93wwvQX3LmW9HaRmpTzXzLopCoEoVQBa9A6sQJj1zQ',
+  txnIDHashed: '0xb3113e24a017c4686141a9800475b101ddbd048ad4d93140ede2a460af2e7c53',
+  bridgeType: 'Token',
+  txnType: 'Deposit',
+  network: 'solana',
+  chainStatus: 'Completed',
+  txnTimestamp: 2023-02-02T14:29:39.000Z,
+  block: 175667654,
+  tokenSymbol: 'sol',
+  address: 'DQLaCCQ2SmFxFiiBExsWLJTBmq1qTVq5GWtnYE5oGU9C',
+  units: '1100000000',
+  amount: 1.1,
+  routing: {
+    from: {
+      network: 'solana',
+      address: 'DQLaCCQ2SmFxFiiBExsWLJTBmq1qTVq5GWtnYE5oGU9C',
+      token: 'sol',
+      txn_signature: '4bPUnqm4VJTamRkFrq5QkV9XtBVEj6tZsNJ3mJum4kN2VV93wwvQX3LmW9HaRmpTzXzLopCoEoVQBa9A6sQJj1zQ'
+    },
+    to: {
+      network: 'algorand',
+      address: '7LXIEKO3KLYNKT4TV7IE5CMGNM4UX6MQBKI7UA2KGVDC6MW4OMAJ55BUA4',
+      token: 'xsol',
+      txn_signature: ''
+    },
+    units: '1100000000',
+    amount: 1.1
+  }
+}
+{
+  txnID: '28kPuLcpbZh3iEqoCXX7Uus2vEQzPVaygbGRmXNXBykuDvKM77pXpckf6nVr8fjrmZcdghoxxvxgfYomciRyDMmc',
+  txnIDHashed: '0x22c071c1488924d7f619774383ba1d779bc80451360bf0784b6ee52a20e50fc5',
+  bridgeType: 'Token',
+  txnType: 'Finalize',
+  network: 'solana',
+  chainStatus: 'Completed',
+  txnTimestamp: 2023-02-02T14:36:11.000Z,
+  block: 175668404,
+  tokenSymbol: 'sol',
+  address: '7xCU4nvqu3Nz3BBQckKzibp3kBav4xbkuqQ3WM9CBHdJ',
+  units: '1100000000000000000',
+  amount: 1100000000
+}
+{
+  txnID: 'd2SsrJ7HGUmJax12DifXiPnMEE5qYk9tPz5YU12kZvCn1UXJt45zAuEGEsLA6K8aw5meKo9Hrxu1nSQUx4Layat',
+  txnIDHashed: '0x2b0ae7a2ef8d87801930fdbbf8fed2ee55673ec75d0d7719e566ac7c36a88d54',
+  bridgeType: 'Token',
+  txnType: 'Release',
+  network: 'solana',
+  chainStatus: 'Completed',
+  txnTimestamp: 2023-02-02T15:01:51.000Z,
+  block: 175671328,
+  tokenSymbol: 'sol',
+  address: 'DQLaCCQ2SmFxFiiBExsWLJTBmq1qTVq5GWtnYE5oGU9C',
+  units: '1130000000',
+  amount: 1.13,
+  routing: {
+    from: {
+      network: 'algorand',
+      address: 'INFU2RSKJ42E4SZVJFEFOTJVGNEFOTSIIVEUST2OK5LTGTBSKFI3BNVTAY',
+      token: 'xsol',
+      txn_signature: '��)�R��O���N��k9K��\n��\x03J5F/2�s\x003ORVHMKX5GIR6RKO6PCV'
+    },
+    to: {
+      network: 'solana',
+      address: 'DQLaCCQ2SmFxFiiBExsWLJTBmq1qTVq5GWtnYE5oGU9C',
+      token: 'sol',
+      txn_signature: 'd2SsrJ7HGUmJax12DifXiPnMEE5qYk9tPz5YU12kZvCn1UXJt45zAuEGEsLA6K8aw5meKo9Hrxu1nSQUx4Layat'
+    },
+    units: '1130000000',
+    amount: 1.13
+  }
+}
+{
+  txnID: '4mnfX8bTrLt78mKaCEDKESEeyXq5pUvXjGbDWgiw4AuHr6fzwPU8oGd8db7kZ4pmTjkSUqcXMx6xjJEjtzVrWKja',
+  txnIDHashed: '0x68c540aa9e12412679bb6e82d8e84946f526c2a0af1f0cac6047b5d57993cf6f',
+  bridgeType: 'Token',
+  txnType: 'Deposit',
+  network: 'solana',
+  chainStatus: 'Completed',
+  txnTimestamp: 2023-02-02T18:03:05.000Z,
+  block: 175691964,
+  tokenSymbol: 'sol',
+  address: 'DhiTSNRxGuUihznCTiX1qsy3x5mRuEGq5xuo2WnusG6z',
+  units: '50000000',
+  amount: 0.05,
+  routing: {
+    from: {
+      network: 'solana',
+      address: 'DhiTSNRxGuUihznCTiX1qsy3x5mRuEGq5xuo2WnusG6z',
+      token: 'sol',
+      txn_signature: '4mnfX8bTrLt78mKaCEDKESEeyXq5pUvXjGbDWgiw4AuHr6fzwPU8oGd8db7kZ4pmTjkSUqcXMx6xjJEjtzVrWKja'
+    },
+    to: {
+      network: 'algorand',
+      address: 'HNBEJVVCP4KLWHC2BBVPOPCWJZCWE6MQTENTFMSQW3Y6ZU57QU5BZPVZ3U',
+      token: 'xsol',
+      txn_signature: ''
+    },
+    units: '50000000',
+    amount: 0.05
+  }
+}
+{
+  txnID: '4ck7sgbYRFgRSxWoFKjz8HEwC7e8L2TvZbWpnqvt5VByqNBPLYNSEe67pkDVuycv3RzZabYgFkMzEUPWSdCCsUFo',
+  txnIDHashed: '0xcce45e49c6331d21d89bc0e0c6e222211df795f53e22b7c56a4a3daf4d1792a1',
+  bridgeType: 'Token',
+  txnType: 'Finalize',
+  network: 'solana',
+  chainStatus: 'Completed',
+  txnTimestamp: 2023-02-02T18:09:40.000Z,
+  block: 175692688,
+  tokenSymbol: 'sol',
+  address: '7xCU4nvqu3Nz3BBQckKzibp3kBav4xbkuqQ3WM9CBHdJ',
+  units: '50000000000000000',
+  amount: 50000000
+}
+{
+  txnID: '58vKbWXAMbNo9n1WiSBKYSPHWQ5nUgcrTMMjssvW5Zt5BWooGEQP1qAqFEzUjhQhFprSvN8yyQ7QyLS6bkSvFHkn',
+  txnIDHashed: '0x69d4096dcd72eb192b7d297b1d4d241d13ca7b8d500fc70ae8ad82f41d1030b3',
+  bridgeType: 'Token',
+  txnType: 'Deposit',
+  network: 'solana',
+  chainStatus: 'Completed',
+  txnTimestamp: 2023-02-02T21:15:09.000Z,
+  block: 175713524,
+  tokenSymbol: 'xalgo',
+  address: 'ENxNWS1Pwcxty5ET5wUCNGXVbD7CAgLUDgiVk5uNbZ19',
+  units: '47119000',
+  amount: 47.119,
+  routing: {
+    from: {
+      network: 'solana',
+      address: 'ENxNWS1Pwcxty5ET5wUCNGXVbD7CAgLUDgiVk5uNbZ19',
+      token: 'algo',
+      txn_signature: '58vKbWXAMbNo9n1WiSBKYSPHWQ5nUgcrTMMjssvW5Zt5BWooGEQP1qAqFEzUjhQhFprSvN8yyQ7QyLS6bkSvFHkn'
+    },
+    to: {
+      network: 'algorand',
+      address: 'OQ5NZXV46IUN4CRKN6UMXYMD7O5D3UIVI72JLKTPRUJPA2N5EKWRVGXE6Y',
+      token: 'xalgo',
+      txn_signature: ''
+    },
+    units: '47119000',
+    amount: 47.119
+  }
+}
+{
+  txnID: '56N6FrwEWxid2Ddkz63w4Eyismxn2y4KSTiPvs1RAAfrHeRXLAuDyBQgsHSVjqKSpU9JW7f1VkwnW3pnxvfJoXAD',
+  txnIDHashed: '0xcbf083c60b5ddf600848b3f9ba8faf3aa7c6b0858f3386684e1cff5d50e4f866',
+  bridgeType: 'Token',
+  txnType: 'Finalize',
+  network: 'solana',
+  chainStatus: 'Completed',
+  txnTimestamp: 2023-02-02T21:21:16.000Z,
+  block: 175714212,
+  tokenSymbol: 'xalgo',
+  address: 'EQJgtwM3C89ZoESMW3znTSYiB346VWW25vVD9XrSW8nw',
+  units: '143',
+  amount: 1.43e-7
+}
+{
+  txnID: 'kuYZEb3aryXstv4TMotFRDMtrpn15VEW3xB95jg2iFwZbfWswN6Rou5w4ouwnemMW9tpvM6ZcpTYpEPPZX5WgEE',
+  txnIDHashed: '0x70c725075f8a824ca887e884c28d1e127ec2fa257445bf934f09ccd046eb719e',
+  bridgeType: 'Token',
+  txnType: 'Deposit',
+  network: 'solana',
+  chainStatus: 'Completed',
+  txnTimestamp: 2023-02-02T22:34:12.000Z,
+  block: 175722609,
+  tokenSymbol: 'xalgo',
+  address: 'ATiszEf9GpZGoRa1jwJvRJYmoyguzf5otQHG2beBBPAz',
+  units: '5000000',
+  amount: 5,
+  routing: {
+    from: {
+      network: 'solana',
+      address: 'ATiszEf9GpZGoRa1jwJvRJYmoyguzf5otQHG2beBBPAz',
+      token: 'algo',
+      txn_signature: 'kuYZEb3aryXstv4TMotFRDMtrpn15VEW3xB95jg2iFwZbfWswN6Rou5w4ouwnemMW9tpvM6ZcpTYpEPPZX5WgEE'
+    },
+    to: {
+      network: 'algorand',
+      address: 'O5I74BBDBIVDUOSJHWLLABOOWBGBSSTMIV3CLUIJQE3KZOWMLPUNDVWWU4',
+      token: 'xalgo',
+      txn_signature: ''
+    },
+    units: '5000000',
+    amount: 5
+  }
+}
+{
+  txnID: '5z3nHL8RcmPtDHVohQ7yWrH5zDZYYKCwGk56rzbdrrLG29KYbSEbvVYH6txEKMt4p6bTXBvco9TEbh7C6kody9br',
+  txnIDHashed: '0x56ca15f3f86e9714aaae7311558b52cae7491dacf77e0c58e483ccf942bae1e6',
+  bridgeType: 'Token',
+  txnType: 'Finalize',
+  network: 'solana',
+  chainStatus: 'Completed',
+  txnTimestamp: 2023-02-02T22:35:16.000Z,
+  block: 175722724,
+  tokenSymbol: 'xalgo',
+  address: 'EQJgtwM3C89ZoESMW3znTSYiB346VWW25vVD9XrSW8nw',
+  units: '143',
+  amount: 1.43e-7
+}
+{
+  txnID: '3iw7SigLRr3MPied9h6YwQiMadNFCMVFmCHxFJ5FCuaEhQxxiU61As5MpTe8w3xjivgg2qKqwK3GEKhJn55n5CPA',
+  txnIDHashed: '0x309239bdc112b2977ec5644488cdf2a01e664e42af4b8fc42b20fefe3f0d502a',
+  bridgeType: 'Token',
+  txnType: 'Deposit',
+  network: 'solana',
+  chainStatus: 'Completed',
+  txnTimestamp: 2023-02-02T22:36:20.000Z,
+  block: 175722844,
+  tokenSymbol: 'sol',
+  address: 'ATiszEf9GpZGoRa1jwJvRJYmoyguzf5otQHG2beBBPAz',
+  units: '1000000000',
+  amount: 1,
+  routing: {
+    from: {
+      network: 'solana',
+      address: 'ATiszEf9GpZGoRa1jwJvRJYmoyguzf5otQHG2beBBPAz',
+      token: 'sol',
+      txn_signature: '3iw7SigLRr3MPied9h6YwQiMadNFCMVFmCHxFJ5FCuaEhQxxiU61As5MpTe8w3xjivgg2qKqwK3GEKhJn55n5CPA'
+    },
+    to: {
+      network: 'algorand',
+      address: 'O5I74BBDBIVDUOSJHWLLABOOWBGBSSTMIV3CLUIJQE3KZOWMLPUNDVWWU4',
+      token: 'xsol',
+      txn_signature: ''
+    },
+    units: '1000000000',
+    amount: 1
+  }
+}
+{
+  txnID: '3j5oM7kqWdGddfgsXz31FRxRZQaG8LJEruR2LjNom48JivYtbwAqvotedrSZTVRimBREN1HRDj6vATZDdb2oUAGg',
+  txnIDHashed: '0x2ff2e9b8718c4f1bba963c6ce158753a123d5301712f7c1ab0756300ab36b182',
+  bridgeType: 'Token',
+  txnType: 'Finalize',
+  network: 'solana',
+  chainStatus: 'Completed',
+  txnTimestamp: 2023-02-02T22:36:58.000Z,
+  block: 175722924,
+  tokenSymbol: 'sol',
+  address: '7xCU4nvqu3Nz3BBQckKzibp3kBav4xbkuqQ3WM9CBHdJ',
+  units: '1000000000000000000',
+  amount: 1000000000
+}
+{
+  txnID: '3JLrsyDEqqnowsLxvbYLanYXsBdnHETnat5YDyvPvCvYgsDhz6ZVpgbi5jtZK4Afi4SVmS8qukSx6u3tXZznSo1v',
+  txnIDHashed: '0x923544190386c54bdb5de7c50ed341e98901a3f4250a412c2e165fd2ee8141a1',
+  bridgeType: 'Token',
+  txnType: 'Release',
+  network: 'solana',
+  chainStatus: 'Completed',
+  txnTimestamp: 2023-02-02T22:47:55.000Z,
+  block: 175724165,
+  tokenSymbol: 'xalgo',
+  address: 'ATiszEf9GpZGoRa1jwJvRJYmoyguzf5otQHG2beBBPAz',
+  units: '5000000',
+  amount: 5,
+  routing: {
+    from: {
+      network: 'algorand',
+      address: 'IFGVGQZTGY3TMQSOJFLVMVSFJBMVUWJVG5LFGUKIINITKNKUGJIUADQ2Y4',
+      token: 'algo',
+      txn_signature: 'wQ�\x04#\n*::I=��\x05ΰL\x19JlEv%�\t�6���[�7IN3QATRV46L3FAJH25S'
+    },
+    to: {
+      network: 'solana',
+      address: 'ATiszEf9GpZGoRa1jwJvRJYmoyguzf5otQHG2beBBPAz',
+      token: 'xalgo',
+      txn_signature: '3JLrsyDEqqnowsLxvbYLanYXsBdnHETnat5YDyvPvCvYgsDhz6ZVpgbi5jtZK4Afi4SVmS8qukSx6u3tXZznSo1v'
+    },
+    units: '5000000',
+    amount: 5
+  }
+}
+{
+  txnID: '299MVrKthAGBQsegbcvfwvonoM68uEiDiLGTbx5aFwtSvQ1pU9GVW6js4E1JUgyXFyVENjc55P17fsehfPMSdD1b',
+  txnIDHashed: '0x26753c6fa48cb474771d4e8b6c704e42e0f91b40adfaf1d5788f3a7add7e634e',
+  bridgeType: 'Token',
+  txnType: 'Release',
+  network: 'solana',
+  chainStatus: 'Completed',
+  txnTimestamp: 2023-02-02T22:47:59.000Z,
+  block: 175724174,
+  tokenSymbol: 'sol',
+  address: 'ti3mSbu5n2WVWs2vmgQke96e2qZbUC9a4rt55uC7sVp',
+  units: '1000000000',
+  amount: 1,
+  routing: {
+    from: {
+      network: 'algorand',
+      address: 'LBIFGQKWGRGFKWJUGI3VGVKDGJBDIQKYJZLVSTJVGZIFGVCWK5A5GWT4VU',
+      token: 'xsol',
+      txn_signature: '��\x05\x0Fe\x0F\x10R5 �ٱ�?��ͅ�hy�j�\x01���Zc5Z3KF75FTIOVAQXMPOYI'
+    },
+    to: {
+      network: 'solana',
+      address: 'ti3mSbu5n2WVWs2vmgQke96e2qZbUC9a4rt55uC7sVp',
+      token: 'sol',
+      txn_signature: '299MVrKthAGBQsegbcvfwvonoM68uEiDiLGTbx5aFwtSvQ1pU9GVW6js4E1JUgyXFyVENjc55P17fsehfPMSdD1b'
+    },
+    units: '1000000000',
+    amount: 1
+  }
+}
+{
+  txnID: '5PanBotxys8LLsfTfA5T4wcQfQcVP33yxncukxKwRoFVTWDATqsEEECJhrFBmW2ZmHzfmbvyCQa9BCfRzc47LbyH',
+  txnIDHashed: '0x1539fd7eeb4f06e6a184c8d3264902975f3b28fcffec95b009c9065675e99b56',
+  bridgeType: 'Token',
+  txnType: 'Deposit',
+  network: 'solana',
+  chainStatus: 'Completed',
+  txnTimestamp: 2023-02-03T01:35:51.000Z,
+  block: 175743480,
+  tokenSymbol: 'sol',
+  address: 'DhiTSNRxGuUihznCTiX1qsy3x5mRuEGq5xuo2WnusG6z',
+  units: '50000000',
+  amount: 0.05,
+  routing: {
+    from: {
+      network: 'solana',
+      address: 'DhiTSNRxGuUihznCTiX1qsy3x5mRuEGq5xuo2WnusG6z',
+      token: 'sol',
+      txn_signature: '5PanBotxys8LLsfTfA5T4wcQfQcVP33yxncukxKwRoFVTWDATqsEEECJhrFBmW2ZmHzfmbvyCQa9BCfRzc47LbyH'
+    },
+    to: {
+      network: 'algorand',
+      address: 'HNBEJVVCP4KLWHC2BBVPOPCWJZCWE6MQTENTFMSQW3Y6ZU57QU5BZPVZ3U',
+      token: 'xsol',
+      txn_signature: ''
+    },
+    units: '50000000',
+    amount: 0.05
+  }
+}
+{
+  txnID: '3tEHSyfvvQgFTk7LfVT8aLgQPvSMojTCsnCNSodkb9k1gm28FtFniaZCAG3ZMExqYon39zwGadvui6NakKASrWhE',
+  txnIDHashed: '0xbb11ec00db8c6851a74aa55415a70a90215609287c9fb003936ee1a4f07d4349',
+  bridgeType: 'Token',
+  txnType: 'Finalize',
+  network: 'solana',
+  chainStatus: 'Completed',
+  txnTimestamp: 2023-02-03T01:36:32.000Z,
+  block: 175743562,
+  tokenSymbol: 'sol',
+  address: '7xCU4nvqu3Nz3BBQckKzibp3kBav4xbkuqQ3WM9CBHdJ',
+  units: '50000000000000000',
+  amount: 50000000
+}
+{
+  txnID: '5s9Kt3M7Za5HMi14eUVfYm2hgtvZeBdA1AgRUGKCTQJk1AuQgh8mCfensxVDzUWzSUJzuesv1wDo4VnnmgLfuuRg',
+  txnIDHashed: '0xff913f0cff2860de62f099b259c63fdc8817c5d2821fabe1cf74feeb7ca7cf7f',
+  bridgeType: 'Token',
+  txnType: 'Release',
+  network: 'solana',
+  chainStatus: 'Completed',
+  txnTimestamp: 2023-02-03T01:36:50.000Z,
+  block: 175743592,
+  tokenSymbol: 'xalgo',
+  address: 'DhiTSNRxGuUihznCTiX1qsy3x5mRuEGq5xuo2WnusG6z',
+  units: '5500000',
+  amount: 5.5,
+  routing: {
+    from: {
+      network: 'algorand',
+      address: 'LJMDETKDGNGEKQSPKNDEUR2OIFDEYVSGJ5DEOQKKKNGTIMSZJFAX6RWBEU',
+      token: 'algo',
+      txn_signature: ';BD֢\x7F\x14�\x1CZ\bj�<VNEby��\x1B2�P���ӿ�:TS76HMUFFCTKVJFRUANX'
+    },
+    to: {
+      network: 'solana',
+      address: 'DhiTSNRxGuUihznCTiX1qsy3x5mRuEGq5xuo2WnusG6z',
+      token: 'xalgo',
+      txn_signature: '5s9Kt3M7Za5HMi14eUVfYm2hgtvZeBdA1AgRUGKCTQJk1AuQgh8mCfensxVDzUWzSUJzuesv1wDo4VnnmgLfuuRg'
+    },
+    units: '5500000',
+    amount: 5.5
+  }
+}
+{
+  txnID: '3FYjdQpuAUaBmmDg55XFtUA4SWTywnaDAHfDr8U1hF5XhQZ39T1JovCCZXfRUR7dSYdoouEMMR8vG1C95exZ4MAH',
+  txnIDHashed: '0xfffb0386af8c626d1898883488aef2c7cbbc5cfcce8a39849639ea98687c5468',
+  bridgeType: 'Token',
+  txnType: 'Release',
+  network: 'solana',
+  chainStatus: 'Completed',
+  txnTimestamp: 2023-02-03T04:25:50.000Z,
+  block: 175762966,
+  tokenSymbol: 'sol',
+  address: 'ATiszEf9GpZGoRa1jwJvRJYmoyguzf5otQHG2beBBPAz',
+  units: '1000000000',
+  amount: 1,
+  routing: {
+    from: {
+      network: 'algorand',
+      address: 'JBGFGMRWJ5AUKMSQJZLDONKTKJEFATKVJNLE4RKQKUZEWTJUJJITA5YW3Y',
+      token: 'xsol',
+      txn_signature: 'wQ�\x04#\n*::I=��\x05ΰL\x19JlEv%�\t�6���[�H4FE5DXSBPYMHJQWEIYA'
+    },
+    to: {
+      network: 'solana',
+      address: 'ATiszEf9GpZGoRa1jwJvRJYmoyguzf5otQHG2beBBPAz',
+      token: 'sol',
+      txn_signature: '3FYjdQpuAUaBmmDg55XFtUA4SWTywnaDAHfDr8U1hF5XhQZ39T1JovCCZXfRUR7dSYdoouEMMR8vG1C95exZ4MAH'
+    },
+    units: '1000000000',
+    amount: 1
+  }
+}
+{
+  txnID: '5LeqKeunZ1GPg9C7awcv5Ai7dz9pnFwvJVQh8tFRfBDJQ9RSnVj2TjBudmdq6jrJnfH5XsCxk1XPmxwbg96eoc9j',
+  txnIDHashed: '0x16f9f1c8a463166b47aa7154ecc490400609823199667c0eb6c37f6a47633885',
+  bridgeType: 'Token',
+  txnType: 'Release',
+  network: 'solana',
+  chainStatus: 'Completed',
+  txnTimestamp: 2023-02-03T04:28:16.000Z,
+  block: 175763233,
+  tokenSymbol: 'xalgo',
+  address: 'ATiszEf9GpZGoRa1jwJvRJYmoyguzf5otQHG2beBBPAz',
+  units: '5000000',
+  amount: 5,
+  routing: {
+    from: {
+      network: 'algorand',
+      address: 'KM3FCUSHIJLUYWCWGIZUWNSUIZIDOUCIJJIEOSRUKFIDMUC2KFAYOHFN2Y',
+      token: 'algo',
+      txn_signature: 'wQ�\x04#\n*::I=��\x05ΰL\x19JlEv%�\t�6���[�NXJY4STXWOX5X22ZBMEH'
+    },
+    to: {
+      network: 'solana',
+      address: 'ATiszEf9GpZGoRa1jwJvRJYmoyguzf5otQHG2beBBPAz',
+      token: 'xalgo',
+      txn_signature: '5LeqKeunZ1GPg9C7awcv5Ai7dz9pnFwvJVQh8tFRfBDJQ9RSnVj2TjBudmdq6jrJnfH5XsCxk1XPmxwbg96eoc9j'
+    },
+    units: '5000000',
+    amount: 5
+  }
+}
+{
+  txnID: '5qFbJhfzGjAaWtZgyhoSn6qXiJ4mdp1wPPtB6yesNczudtBtQdtuerCvEqwpg7BzsYuHWJJ1uG9TPHmNK7HwXkGA',
+  txnIDHashed: '0xd470d02d24d094f68797a64c36ec2cc7f75ced53cf2071f666ffd228bbf19d0e',
+  bridgeType: 'Token',
+  txnType: 'Deposit',
+  network: 'solana',
+  chainStatus: 'Completed',
+  txnTimestamp: 2023-02-03T09:54:08.000Z,
+  block: 175801727,
+  tokenSymbol: 'xalgo',
+  address: 'ti3mSbu5n2WVWs2vmgQke96e2qZbUC9a4rt55uC7sVp',
+  units: '5000000',
+  amount: 5,
+  routing: {
+    from: {
+      network: 'solana',
+      address: 'ti3mSbu5n2WVWs2vmgQke96e2qZbUC9a4rt55uC7sVp',
+      token: 'algo',
+      txn_signature: '5qFbJhfzGjAaWtZgyhoSn6qXiJ4mdp1wPPtB6yesNczudtBtQdtuerCvEqwpg7BzsYuHWJJ1uG9TPHmNK7HwXkGA'
+    },
+    to: {
+      network: 'algorand',
+      address: 'QX4AKD3FB4IFENJAS3M3DWJ7SHYM3BMHNB44G2XSUEA6TRWFLJRXDUJQCY',
+      token: 'xalgo',
+      txn_signature: ''
+    },
+    units: '5000000',
+    amount: 5
+  }
+}
+{
+  txnID: '43DiRXCCAVx39qGuCgVXoyd6yxudPGv7FMxFZfwChDnxp6Edbc5Pw3kZyHNTFNFzVcnkH9gCTAmVkCA6eKRhVvpK',
+  txnIDHashed: '0x4e83a71e9061b35e5c9f9eb22ee731426f147405f167d50ddd9574cc2500b7fd',
+  bridgeType: 'Token',
+  txnType: 'Finalize',
+  network: 'solana',
+  chainStatus: 'Completed',
+  txnTimestamp: 2023-02-03T09:54:39.000Z,
+  block: 175801788,
+  tokenSymbol: 'xalgo',
+  address: 'EQJgtwM3C89ZoESMW3znTSYiB346VWW25vVD9XrSW8nw',
+  units: '143',
+  amount: 1.43e-7
+}
+{
+  txnID: 'fKS9wG6fX5EjVN41zzUZsJTFMiLKJEXb47qRVbVA3228LPMR5EkMgEaFAaDiUCo9Qf5Lq8wogDvzBSK8opyFK7E',
+  txnIDHashed: '0x013cd7acbb3b74ad11fbe15e2d9136ae5901e4893c0b6717ce5c98451f3fc1b0',
+  bridgeType: 'Token',
+  txnType: 'Deposit',
+  network: 'solana',
+  chainStatus: 'Completed',
+  txnTimestamp: 2023-02-03T09:57:37.000Z,
+  block: 175802145,
+  tokenSymbol: 'sol',
+  address: 'ti3mSbu5n2WVWs2vmgQke96e2qZbUC9a4rt55uC7sVp',
+  units: '1000000000',
+  amount: 1,
+  routing: {
+    from: {
+      network: 'solana',
+      address: 'ti3mSbu5n2WVWs2vmgQke96e2qZbUC9a4rt55uC7sVp',
+      token: 'sol',
+      txn_signature: 'fKS9wG6fX5EjVN41zzUZsJTFMiLKJEXb47qRVbVA3228LPMR5EkMgEaFAaDiUCo9Qf5Lq8wogDvzBSK8opyFK7E'
+    },
+    to: {
+      network: 'algorand',
+      address: 'QX4AKD3FB4IFENJAS3M3DWJ7SHYM3BMHNB44G2XSUEA6TRWFLJRXDUJQCY',
+      token: 'xsol',
+      txn_signature: ''
+    },
+    units: '1000000000',
+    amount: 1
+  }
+}
+{
+  txnID: '5z9b5zMdSgKwuYsV8D9LV9UFhxUD3mDs4efYjTy6vyCHRXn9a3Q2t7Y8MrbpRRcbQNcuL9vQyKizsG7wxyDkMEBX',
+  txnIDHashed: '0xf9ecddbbf8c3e1377344022d843f9567587699a3a85b4d93400c12765a718567',
+  bridgeType: 'Token',
+  txnType: 'Finalize',
+  network: 'solana',
+  chainStatus: 'Completed',
+  txnTimestamp: 2023-02-03T09:58:09.000Z,
+  block: 175802216,
+  tokenSymbol: 'sol',
+  address: '7xCU4nvqu3Nz3BBQckKzibp3kBav4xbkuqQ3WM9CBHdJ',
+  units: '1000000000000000000',
+  amount: 1000000000
+}
+{
+  txnID: '2wyuvXiXd21P3CrbLbgCU9WKZL23u4pUMgvNxsZ4yVLzq9e36pTKpAFEqCcNYHEy652gGthHAk2ApUmsTRj5SWoY',
+  txnIDHashed: '0x4ee34d6d0f3a41e2ee4c45092243c668bd12eaa3bf35ccb5a166b9adbce6c0a4',
+  bridgeType: 'Token',
+  txnType: 'Deposit',
+  network: 'solana',
+  chainStatus: 'Completed',
+  txnTimestamp: 2023-02-03T11:59:15.000Z,
+  block: 175816410,
+  tokenSymbol: 'sol',
+  address: '3A2ZPvcSjfAwnRwkC4Kpx9gZ5yzws3qAoECaASh6A4L9',
+  units: '16000000000',
+  amount: 16,
+  routing: {
+    from: {
+      network: 'solana',
+      address: '3A2ZPvcSjfAwnRwkC4Kpx9gZ5yzws3qAoECaASh6A4L9',
+      token: 'sol',
+      txn_signature: '2wyuvXiXd21P3CrbLbgCU9WKZL23u4pUMgvNxsZ4yVLzq9e36pTKpAFEqCcNYHEy652gGthHAk2ApUmsTRj5SWoY'
+    },
+    to: {
+      network: 'algorand',
+      address: 'D2DITVKIL2ZUAQK264U25ZEGF3RRTUNZ5LG56M6GTQRP3C7CRP5SZIKPJU',
+      token: 'xsol',
+      txn_signature: ''
+    },
+    units: '16000000000',
+    amount: 16
+  }
+}
+{
+  txnID: '3sNPVM6NHX2mFQqPNHxkFoZopDVVBpApXxsH732PBtTWCLqMMiQdgQpjb3JpGZVesvU6Ke8VebuvJ1fUvS8HqjGK',
+  txnIDHashed: '0xdbeff9fce25a5682e45dcf0bdef1741d751e53c75e66679c126b4ad550ae437e',
+  bridgeType: 'Token',
+  txnType: 'Finalize',
+  network: 'solana',
+  chainStatus: 'Completed',
+  txnTimestamp: 2023-02-03T11:59:40.000Z,
+  block: 175816464,
+  tokenSymbol: 'sol',
+  address: '7xCU4nvqu3Nz3BBQckKzibp3kBav4xbkuqQ3WM9CBHdJ',
+  units: '16000000000000000000',
+  amount: 16000000000
+}
+{
+  txnID: '5AqLpxQgvmAbov8UfBwV4uKP9Z3cVGFhxJ5YCjDAW5RzVNMAc18QtERMSR9Xg6y23tMPT81T92kz9kAvUojieso4',
+  txnIDHashed: '0xfa2fd26ab89ba9a8a503eb80c64d3d96123f9cdd349424cdea7a10c8893195dd',
+  bridgeType: 'Token',
+  txnType: 'Release',
+  network: 'solana',
+  chainStatus: 'Completed',
+  txnTimestamp: 2023-02-03T13:19:41.000Z,
+  block: 175825656,
+  tokenSymbol: 'sol',
+  address: 'ti3mSbu5n2WVWs2vmgQke96e2qZbUC9a4rt55uC7sVp',
+  units: '500000000',
+  amount: 0.5,
+  routing: {
+    from: {
+      network: 'algorand',
+      address: 'INFTKTSJIIZECNCNLBCUEUCFJNHFKWCRG4ZDEUCNKJJDIRJWJJAZDNXP6M',
+      token: 'xsol',
+      txn_signature: '��\x05\x0Fe\x0F\x10R5 �ٱ�?��ͅ�hy�j�\x01���ZcZ67D3MNME65AA6SR6SVO'
+    },
+    to: {
+      network: 'solana',
+      address: 'ti3mSbu5n2WVWs2vmgQke96e2qZbUC9a4rt55uC7sVp',
+      token: 'sol',
+      txn_signature: '5AqLpxQgvmAbov8UfBwV4uKP9Z3cVGFhxJ5YCjDAW5RzVNMAc18QtERMSR9Xg6y23tMPT81T92kz9kAvUojieso4'
+    },
+    units: '500000000',
+    amount: 0.5
+  }
+}
+{
+  txnID: '4tt5T5aCgYbqCnaR9KjiEKsnYgzKvB4NURGG29QyS1ASai566RqriHZhzz4fMXw5L64Xb49hHF9hUPcmfSbvueXT',
+  txnIDHashed: '0xf86db363d0d064eefcabf38229e32cb66ae7c5e080ef3b7e5d1b8ae20f659571',
+  bridgeType: 'Token',
+  txnType: 'Deposit',
+  network: 'solana',
+  chainStatus: 'Completed',
+  txnTimestamp: 2023-02-03T17:55:23.000Z,
+  block: 175857672,
+  tokenSymbol: 'sol',
+  address: 'ATiszEf9GpZGoRa1jwJvRJYmoyguzf5otQHG2beBBPAz',
+  units: '81000000000',
+  amount: 81,
+  routing: {
+    from: {
+      network: 'solana',
+      address: 'ATiszEf9GpZGoRa1jwJvRJYmoyguzf5otQHG2beBBPAz',
+      token: 'sol',
+      txn_signature: '4tt5T5aCgYbqCnaR9KjiEKsnYgzKvB4NURGG29QyS1ASai566RqriHZhzz4fMXw5L64Xb49hHF9hUPcmfSbvueXT'
+    },
+    to: {
+      network: 'algorand',
+      address: 'O5I74BBDBIVDUOSJHWLLABOOWBGBSSTMIV3CLUIJQE3KZOWMLPUNDVWWU4',
+      token: 'xsol',
+      txn_signature: ''
+    },
+    units: '81000000000',
+    amount: 81
+  }
+}
+{
+  txnID: '5yHh3xByh1Zs776AZqPuqB4fHwGCFibzQR2CFrVyogLJuceEfJ28iAL3xZ333Aegm9PpsC3Ei5cTMt9vHaDZ4R2x',
+  txnIDHashed: '0xa2569d4326a939679c21d3c4eca327891bbef53a866332a3368531ba51cef62e',
+  bridgeType: 'Token',
+  txnType: 'Finalize',
+  network: 'solana',
+  chainStatus: 'Completed',
+  txnTimestamp: 2023-02-03T17:55:57.000Z,
+  block: 175857729,
+  tokenSymbol: 'sol',
+  address: '7xCU4nvqu3Nz3BBQckKzibp3kBav4xbkuqQ3WM9CBHdJ',
+  units: '81000000000000000000',
+  amount: 81000000000
+}
+{
+  txnID: '3mcs3bwLqdCYhMtm3a6FL62boA7yT3fjiRhiFDyP3D2wQn4N5rDTmdVBHvZJecfG6Mz8JP26QUBpnHYGu7TNwTNR',
+  txnIDHashed: '0x2ef242b69992e421182027ec8f3750de02f78b2b30606215d5693ae3fdd30113',
+  bridgeType: 'Token',
+  txnType: 'Release',
+  network: 'solana',
+  chainStatus: 'Completed',
+  txnTimestamp: 2023-02-04T18:32:23.000Z,
+  block: 176034984,
+  tokenSymbol: 'xalgo',
+  address: 'DQLaCCQ2SmFxFiiBExsWLJTBmq1qTVq5GWtnYE5oGU9C',
+  units: '14000000',
+  amount: 14,
+  routing: {
+    from: {
+      network: 'algorand',
+      address: 'LJCUOUCLKYZFOQJUJBFUYRKUJVJESUKBIFIE4NSWKJBUWWSBJ5I2VP6ZQM',
+      token: 'algo',
+      txn_signature: '��)�R��O���N��k9K��\n��\x03J5F/2�s\x00EWTIAB6PU6S3KAXRHIN6'
+    },
+    to: {
+      network: 'solana',
+      address: 'DQLaCCQ2SmFxFiiBExsWLJTBmq1qTVq5GWtnYE5oGU9C',
+      token: 'xalgo',
+      txn_signature: '3mcs3bwLqdCYhMtm3a6FL62boA7yT3fjiRhiFDyP3D2wQn4N5rDTmdVBHvZJecfG6Mz8JP26QUBpnHYGu7TNwTNR'
+    },
+    units: '14000000',
+    amount: 14
+  }
+}
+{
+  txnID: 'c5SDyBcytwrhHBSCYDrnQJTRgeKVjA43sWcgRW7CtS4Q8VZonAZwzqBv88QtFp5MNzRXKfMQxCRuNYpsVKmwj42',
+  txnIDHashed: '0x47fb57e36ec25e58af14710a4c856c205f0ed43d1fac5f34017e3d60c9aa2e75',
+  bridgeType: 'Token',
+  txnType: 'Deposit',
+  network: 'solana',
+  chainStatus: 'Completed',
+  txnTimestamp: 2023-02-04T18:33:48.000Z,
+  block: 176035147,
+  tokenSymbol: 'xalgo',
+  address: 'DQLaCCQ2SmFxFiiBExsWLJTBmq1qTVq5GWtnYE5oGU9C',
+  units: '12000000',
+  amount: 12,
+  routing: {
+    from: {
+      network: 'solana',
+      address: 'DQLaCCQ2SmFxFiiBExsWLJTBmq1qTVq5GWtnYE5oGU9C',
+      token: 'algo',
+      txn_signature: 'c5SDyBcytwrhHBSCYDrnQJTRgeKVjA43sWcgRW7CtS4Q8VZonAZwzqBv88QtFp5MNzRXKfMQxCRuNYpsVKmwj42'
+    },
+    to: {
+      network: 'algorand',
+      address: '7LXIEKO3KLYNKT4TV7IE5CMGNM4UX6MQBKI7UA2KGVDC6MW4OMAJ55BUA4',
+      token: 'xalgo',
+      txn_signature: ''
+    },
+    units: '12000000',
+    amount: 12
+  }
+}
+{
+  txnID: '4WDg9d1FN4V8zzTTnyemibcxtNZEN8dKsBcFbwtCQ1woVQejjnmVwP9jwqidN8NnCr8RWgxWaYiLcrjbQqPXZTZ3',
+  txnIDHashed: '0x143c01a1350e8956fdb2e030c80cdad556dcdd267cb9f62e7de7244ca76fbe32',
+  bridgeType: 'Token',
+  txnType: 'Finalize',
+  network: 'solana',
+  chainStatus: 'Completed',
+  txnTimestamp: 2023-02-04T18:34:15.000Z,
+  block: 176035200,
+  tokenSymbol: 'xalgo',
+  address: 'EQJgtwM3C89ZoESMW3znTSYiB346VWW25vVD9XrSW8nw',
+  units: '143',
+  amount: 1.43e-7
+}
+{
+  txnID: 'mkRvB3ijaaZ3EN9Sv2KrjrkanS6cMqexbY2ExLx2197bFC3NFkmjXuu3kYyuEwPL58Tyknmp7aFX21Rjp6edwRx',
+  txnIDHashed: '0x6280540e3e56d0a9815b797bbcffc213e69cefeb64a5680568aec279b1788462',
+  bridgeType: 'Token',
+  txnType: 'Deposit',
+  network: 'solana',
+  chainStatus: 'Completed',
+  txnTimestamp: 2023-02-04T18:35:08.000Z,
+  block: 176035305,
+  tokenSymbol: 'sol',
+  address: 'DQLaCCQ2SmFxFiiBExsWLJTBmq1qTVq5GWtnYE5oGU9C',
+  units: '1010000000',
+  amount: 1.01,
+  routing: {
+    from: {
+      network: 'solana',
+      address: 'DQLaCCQ2SmFxFiiBExsWLJTBmq1qTVq5GWtnYE5oGU9C',
+      token: 'sol',
+      txn_signature: 'mkRvB3ijaaZ3EN9Sv2KrjrkanS6cMqexbY2ExLx2197bFC3NFkmjXuu3kYyuEwPL58Tyknmp7aFX21Rjp6edwRx'
+    },
+    to: {
+      network: 'algorand',
+      address: '7LXIEKO3KLYNKT4TV7IE5CMGNM4UX6MQBKI7UA2KGVDC6MW4OMAJ55BUA4',
+      token: 'xsol',
+      txn_signature: ''
+    },
+    units: '1010000000',
+    amount: 1.01
+  }
+}
+{
+  txnID: '3vrctvGMHpzrbKCuSTTE4W9QE7XBTfueshgAv5rWmPWpCdQk2cNZx2oLr1D9FTNinkS5wzoGgTX13nrPrwokBVYL',
+  txnIDHashed: '0x63f1ceb4903361cd4761294a0a9a5b9d7ffdaa9ee1e4b0fbca82b7f5668eac20',
+  bridgeType: 'Token',
+  txnType: 'Finalize',
+  network: 'solana',
+  chainStatus: 'Completed',
+  txnTimestamp: 2023-02-04T18:35:38.000Z,
+  block: 176035372,
+  tokenSymbol: 'sol',
+  address: '7xCU4nvqu3Nz3BBQckKzibp3kBav4xbkuqQ3WM9CBHdJ',
+  units: '1010000000000000000',
+  amount: 1010000000
+}
+{
+  txnID: '5dJLckYbPMQWc2xR4i4Hj4RLJ9hjbTU1xq1S4VBYdnkCvY5qfwxNnoPcKU9y1UUAyEMP4fe9XW19Lqe9ccBhB7tH',
+  txnIDHashed: '0x7381d9eb20cb7e83e6cb24426da4bfc1fb70d76d0a1842966d2895a4bdac0cb6',
+  bridgeType: 'Token',
+  txnType: 'Release',
+  network: 'solana',
+  chainStatus: 'Completed',
+  txnTimestamp: 2023-02-04T18:36:59.000Z,
+  block: 176035527,
+  tokenSymbol: 'sol',
+  address: 'DQLaCCQ2SmFxFiiBExsWLJTBmq1qTVq5GWtnYE5oGU9C',
+  units: '1000000000',
+  amount: 1,
+  routing: {
+    from: {
+      network: 'algorand',
+      address: 'JFGFEM22KVGFSVRWJFLEUVSLGNLFGWSVG5JECSKEG5DTMRSEJRIYSWYOPU',
+      token: 'xsol',
+      txn_signature: '��)�R��O���N��k9K��\n��\x03J5F/2�s\x00PAVNI6MXIZNG2JESUR6S'
+    },
+    to: {
+      network: 'solana',
+      address: 'DQLaCCQ2SmFxFiiBExsWLJTBmq1qTVq5GWtnYE5oGU9C',
+      token: 'sol',
+      txn_signature: '5dJLckYbPMQWc2xR4i4Hj4RLJ9hjbTU1xq1S4VBYdnkCvY5qfwxNnoPcKU9y1UUAyEMP4fe9XW19Lqe9ccBhB7tH'
+    },
+    units: '1000000000',
+    amount: 1
+  }
+}
+{
+  txnID: '3HD1HTX9p19qGskgmTKRayFiN1TpDMbpT65zRQsTL9Hf1jDuA5LAetDqpPCSE4WLnuqqRkpm148qG5MzQ1iDDXzc',
+  txnIDHashed: '0x158563f6c7c45fccc797917c79d76a2864c47fde354de28c0915bf57702cfa9b',
+  bridgeType: 'Token',
+  txnType: 'Deposit',
+  network: 'solana',
+  chainStatus: 'Completed',
+  txnTimestamp: 2023-02-05T06:16:01.000Z,
+  block: 176118651,
+  tokenSymbol: 'xalgo',
+  address: '8fdgWeCSbaBQnPGVRmbksL5ScKNnPXYBvnvD9igHFvcp',
+  units: '381293100',
+  amount: 381.2931,
+  routing: {
+    from: {
+      network: 'solana',
+      address: '8fdgWeCSbaBQnPGVRmbksL5ScKNnPXYBvnvD9igHFvcp',
+      token: 'algo',
+      txn_signature: '3HD1HTX9p19qGskgmTKRayFiN1TpDMbpT65zRQsTL9Hf1jDuA5LAetDqpPCSE4WLnuqqRkpm148qG5MzQ1iDDXzc'
+    },
+    to: {
+      network: 'algorand',
+      address: 'VSGOCSBX2MA7NTQ22MRBZRKVTTCQAHXDCNICUSIX2ZG2KBCZSMCLQCNTOM',
+      token: 'xalgo',
+      txn_signature: ''
+    },
+    units: '381293100',
+    amount: 381.2931
+  }
+}
+{
+  txnID: '5WtVMvD5aGwcgE6MFcFkeiGr7M6vudEfz59hFJSQBcQ22KqmhxHAxUmewafALjWReTMrfPaeikokAizMY5fuRyz',
+  txnIDHashed: '0x9dbe7102ca1b22675d34c006b35044b090c05b8134f307c930d36a6967b97229',
+  bridgeType: 'Token',
+  txnType: 'Finalize',
+  network: 'solana',
+  chainStatus: 'Completed',
+  txnTimestamp: 2023-02-05T06:16:31.000Z,
+  block: 176118713,
+  tokenSymbol: 'xalgo',
+  address: 'EQJgtwM3C89ZoESMW3znTSYiB346VWW25vVD9XrSW8nw',
+  units: '143',
+  amount: 1.43e-7
+}
+{
+  txnID: 'ECrh3gFf3VfLRPZXd7qiZmGJ7WkXbgdDtebvwijHrevAptMbJjtUX2RSNfyPQ1XTTezd1PzGg1kRDg7tLDBujMH',
+  txnIDHashed: '0x4f2345906d35111256c1ef6b7b62aa0f5b88648a71a420d886024d1529345839',
+  bridgeType: 'Token',
+  txnType: 'Deposit',
+  network: 'solana',
+  chainStatus: 'Completed',
+  txnTimestamp: 2023-02-05T12:53:57.000Z,
+  block: 176167680,
+  tokenSymbol: 'sol',
+  address: '8fdgWeCSbaBQnPGVRmbksL5ScKNnPXYBvnvD9igHFvcp',
+  units: '4179999999',
+  amount: 4.179999999,
+  routing: {
+    from: {
+      network: 'solana',
+      address: '8fdgWeCSbaBQnPGVRmbksL5ScKNnPXYBvnvD9igHFvcp',
+      token: 'sol',
+      txn_signature: 'ECrh3gFf3VfLRPZXd7qiZmGJ7WkXbgdDtebvwijHrevAptMbJjtUX2RSNfyPQ1XTTezd1PzGg1kRDg7tLDBujMH'
+    },
+    to: {
+      network: 'algorand',
+      address: 'VSGOCSBX2MA7NTQ22MRBZRKVTTCQAHXDCNICUSIX2ZG2KBCZSMCLQCNTOM',
+      token: 'xsol',
+      txn_signature: ''
+    },
+    units: '4179999999',
+    amount: 4.179999999
+  }
+}
+{
+  txnID: '3KhQHgE4hcHuqMszAspLkHjgQixQeKa8LXt6y3j83hABDkP6WxLtADfCfHSaLXpMmhWH5VLAs4jp8NqjcBG2HmDo',
+  txnIDHashed: '0x8be871f052a5d27ac37af59fd311d8c437d2fd2b56902de81b3127fed4abfc3f',
+  bridgeType: 'Token',
+  txnType: 'Finalize',
+  network: 'solana',
+  chainStatus: 'Completed',
+  txnTimestamp: 2023-02-05T12:54:37.000Z,
+  block: 176167755,
+  tokenSymbol: 'sol',
+  address: '7xCU4nvqu3Nz3BBQckKzibp3kBav4xbkuqQ3WM9CBHdJ',
+  units: '4179999999000000000',
+  amount: 4179999999
+}
+{
+  txnID: '4Xui2fS9cE2Q9ymw93YgAyGQRPnY21synmKQEtzWcLeNRwHgKpdG9eu63emZKKTHM2BnVAh22DVEKs2BTXTBvnmP',
+  txnIDHashed: '0x6bd29333bddf371d047dec6d563e6b374a94d6deba7b8166bb6d18c34e60711f',
+  bridgeType: 'Token',
+  txnType: 'Deposit',
+  network: 'solana',
+  chainStatus: 'Completed',
+  txnTimestamp: 2023-02-06T03:56:56.000Z,
+  block: 176276393,
+  tokenSymbol: 'xalgo',
+  address: '2FJDLXniWpScHJxH3oaLFrGhjXKHie3N66ShmRwiFtqh',
+  units: '42392600',
+  amount: 42.3926,
+  routing: {
+    from: {
+      network: 'solana',
+      address: '2FJDLXniWpScHJxH3oaLFrGhjXKHie3N66ShmRwiFtqh',
+      token: 'algo',
+      txn_signature: '4Xui2fS9cE2Q9ymw93YgAyGQRPnY21synmKQEtzWcLeNRwHgKpdG9eu63emZKKTHM2BnVAh22DVEKs2BTXTBvnmP'
+    },
+    to: {
+      network: 'algorand',
+      address: 'CGXVAK36VUUVOFKRNL7QWDQEFL3ODLMQE5M5JJ52IMRCDZEVUZCXVW5VLI',
+      token: 'xalgo',
+      txn_signature: ''
+    },
+    units: '42392600',
+    amount: 42.3926
+  }
+}
+{
+  txnID: 'SxKZND6PqoJdXFewpyacLGXxAUTdHnCoi5UsY9ASSjMA9qRrq1URoJHMuzNUedaCPEYiJh4WM1J4nbSqSrwRPqM',
+  txnIDHashed: '0x4491834d25488037b6202a2cba6243fee0de54e1afc71c25a7440ab7c259542a',
+  bridgeType: 'Token',
+  txnType: 'Finalize',
+  network: 'solana',
+  chainStatus: 'Completed',
+  txnTimestamp: 2023-02-06T03:57:27.000Z,
+  block: 176276461,
+  tokenSymbol: 'xalgo',
+  address: 'EQJgtwM3C89ZoESMW3znTSYiB346VWW25vVD9XrSW8nw',
+  units: '143',
+  amount: 1.43e-7
+}
+undefined

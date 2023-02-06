@@ -26,37 +26,34 @@ async function SolanaPollerTest() {
         if(!list_partial_txn){
           throw new Error("list_void in undefined")
         }
-        list_partial_txn.forEach((data) =>{
-          console.log(data)
-        })
-     
-
+      //   list_partial_txn.forEach((data) =>{
+      //     console.log(data)
+      //   })
         list_partial_txn.forEach((data) =>{
         console.log(data)
       })
       Sleep(10000)
-      console.log("==========================||========================");
-      console.log("listUsdcPartialDepositTransactions")
-      const list_usdc_deposit = await solana?.getUsdcDepositPartialTransactions(100)
-      if(!list_usdc_deposit) throw new Error("LIST IS UNDEFINED");
-      console.log("list_usdc_deposit_length",list_usdc_deposit.length)
-      console.log("\n")
-      list_usdc_deposit.forEach((data)=>{
-        console.log(data)
-      })
+      // console.log("==========================||========================");
+      // console.log("listUsdcPartialDepositTransactions")
+      // const list_usdc_deposit = await solana?.getUsdcDepositPartialTransactions(100)
+      // if(!list_usdc_deposit) throw new Error("LIST IS UNDEFINED");
+      // console.log("list_usdc_deposit_length",list_usdc_deposit.length)
+      // console.log("\n")
+      // list_usdc_deposit.forEach((data)=>{
+      //   console.log(data)
+      // })
 
-      Sleep(10000)
-
-      console.log("==========================||========================");
-      console.log("listUsdcReleasePartialTransactions")
-      const list_usdc_release = await solana?.getUsdcReleasePartialTransactions(100)
-      if(!list_usdc_release) throw new Error("LIST IS UNDEFINED");
-      console.log("list_usdc_release_length",list_usdc_release.length)
-      console.log("\n")
-      list_usdc_release.forEach((data)=>{
-        console.log(data)
-      })      
-      console.log("finalized");
+      // Sleep(10000)
+      // console.log("==========================||========================");
+      // console.log("listUsdcReleasePartialTransactions")
+      // const list_usdc_release = await solana?.getUsdcReleasePartialTransactions(100)
+      // if(!list_usdc_release) throw new Error("LIST IS UNDEFINED");
+      // console.log("list_usdc_release_length",list_usdc_release.length)
+      // console.log("\n")
+      // list_usdc_release.forEach((data)=>{
+      //   console.log(data)
+      // })      
+      // console.log("finalized");
 }
 
 async function AlgoPollerTest() {

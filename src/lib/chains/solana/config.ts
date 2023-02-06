@@ -24,3 +24,9 @@ export enum SolanaProgramId {
   MemoProgramId = "memoProgram",
   UsdcMint ="UsdcMint"
 }
+
+export type PollerOptions = {
+  limit?:number,
+  startHash?:string,
+  endHash?:string
+}

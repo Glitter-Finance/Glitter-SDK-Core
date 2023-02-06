@@ -3,7 +3,7 @@ import bs58 from "bs58";
 import {  BridgeTokens, Precise, ValueUnits } from "../../common";
 import { Routing } from "../../common/routing/routing";
 import { BridgeType, ChainStatus, PartialBridgeTxn, TransactionType } from "../../common/transactions/transactions";
-import { SolanaProgramId } from "./config";
+import { PollerOptions, SolanaProgramId } from "./config";
 import { SolanaBridgeTxnsV1 } from "./txns/bridge";
 import { deserialize } from "borsh";
 import algosdk from "algosdk";
@@ -15,7 +15,9 @@ export class SolanaPoller{
 
     private _client:Connection;
     private _bridgeTxnsV1: SolanaBridgeTxnsV1 | undefined = undefined;
-    
+    private delay: number = 5000;
+    private bridgeType: BridgeType | undefined; 
+    private options:PollerOptions|undefined;
     constructor(client:Connection, bridgeTxnV1:SolanaBridgeTxnsV1 ){
         this._client = client
         this._bridgeTxnsV1 = bridgeTxnV1
@@ -23,9 +25,55 @@ export class SolanaPoller{
     _lastTxnHash: string = "";
     _lastTxnHashUsdcDeposit:string ="";
     _lastTxnHashUsdcRelease:string = "";
-       
+    _UsdcPollerflag = false; 
+    _BridgePollerflag = false;   
+    _usdcBridgeTransactions:string|undefined
 
+    //Start Poller
+    public async start(bridgeType: BridgeType,delay:number,options?:PollerOptions,usdcBridgeTransactions?:'deposit' |'release'): Promise<void> {
 
+      //Set local
+      this.delay = delay;
+      this.bridgeType = bridgeType;
+      this.options = options;  
+      this._usdcBridgeTransactions = usdcBridgeTransactions
+      //Setup local
+      switch (bridgeType) {
+          case BridgeType.USDC:
+            this._UsdcPollerflag = true ; 
+              break;
+          case BridgeType.Token:
+            this._BridgePollerflag = true;   
+              break;
+          default:
+              throw new Error("Invalid Network");
+      }
+
+    //   setTimeout(async () => {
+    //     this.poll();
+    // }, this.delay);   
+  }
+
+  async poll():Promise<PartialBridgeTxn[]> {
+     switch(this.bridgeType)  {
+      case BridgeType.USDC:
+        if(this._usdcBridgeTransactions=='release') {
+          const releasePartialTxn = await this.ListUSDCReleaseTransactionHandler(this.options?.limit,this.options?.startHash,this.options?.endHash)
+          return Promise.resolve(releasePartialTxn)    
+        }
+      const depostiPartialTxn = await this.ListUSDCDepositTransactionHandler(this.options?.limit,this.options?.startHash,this.options?.endHash)
+      return Promise.resolve(depostiPartialTxn)
+      break;
+      case BridgeType.Token:
+      const bridgePartialTransaction  = await this.ListBridgeTransactionHandler(this.options?.limit,this.options?.startHash,this.options?.endHash)
+      return Promise.resolve(bridgePartialTransaction)
+      default:
+      return Promise.reject()
+
+     }
+
+  }
+ 
  /**
   * 
   * Lists bridge transaction handler
@@ -34,7 +82,7 @@ export class SolanaPoller{
   * @param endAt 
   * @returns {PartialBridgeTxn[]}
   */
- public async ListBridgeTransactionHandler(take:number,beginAt?:string,endAt?:string):Promise<PartialBridgeTxn[]>  {
+ public async ListBridgeTransactionHandler(take?:number,beginAt?:string,endAt?:string):Promise<PartialBridgeTxn[]>  {
       return new Promise(async (resolve,reject) =>{
           try{
             const address = this._bridgeTxnsV1?.getGlitterAccountAddress(SolanaProgramId.BridgeProgramId)
@@ -98,6 +146,7 @@ export class SolanaPoller{
                   partialBtxn = this.SOLRelease(txn, data_bytes, partialBtxn);
                     break;
                 case 20:
+                  console.log("XALGODEPOSITTXNID",partialBtxn.txnID);
                   partialBtxn = this.xALGODeposit(txn, data_bytes, partialBtxn);
                     break;
                 case 21:
@@ -110,6 +159,7 @@ export class SolanaPoller{
                     // logger.warn(`Txn ${txnID} is not a bridge`);
                     break;
             }
+
             // if(!depositNote){
             //   partialBtxn 
             //   }else{
@@ -135,7 +185,7 @@ export class SolanaPoller{
  * @param [endAt] 
  * @returns usdcdeposit transaction handler 
  */
- async ListUSDCDepositTransactionHandler(take:number,beginAt?:string,endAt?:string):Promise<PartialBridgeTxn[]>  {
+ async ListUSDCDepositTransactionHandler(take?:number,beginAt?:string,endAt?:string):Promise<PartialBridgeTxn[]>  {
       return new Promise(async (resolve,reject) =>{
           try{
           const address = this._bridgeTxnsV1?.getGlitterAccountAddress(SolanaProgramId.UsdcDepositId)
@@ -224,7 +274,7 @@ export class SolanaPoller{
    * @param [endAt] 
    * @returns release transaction handler 
    */
-   async ListUSDCReleaseTransactionHandler(take:number,beginAt?:string,endAt?:string):Promise<PartialBridgeTxn[]>  {
+   async ListUSDCReleaseTransactionHandler(take?:number,beginAt?:string,endAt?:string):Promise<PartialBridgeTxn[]>  {
     return new Promise(async (resolve,reject) =>{
         try{
           const address = this._bridgeTxnsV1?.getGlitterAccountAddress(SolanaProgramId.UsdcReceiverId)
@@ -384,10 +434,9 @@ export class SolanaPoller{
           const algoAddress = algosdk
               .encodeAddress(instruction["algo_address"])
               .toString();
+          //ISSUE :- THIS DOES NOT PROPERLY DECODED TO ALGO_TXN_ID              
           const algoTxId = new TextDecoder().decode(instruction["algo_txn_id"]);
           const units = instruction["amount"].toString();
-          // const units_ = BigInt(units);
-          // const amount = ValueUnits.fromUnits(BigInt(units), decimals).value;
           partialTxn.units = BigInt(units).toString();
           partialTxn.amount = ValueUnits.fromUnits(BigInt(units), decimals).value;
           //Set Fields
@@ -432,7 +481,7 @@ export class SolanaPoller{
           BridgeInstruction,
             Buffer.from(data_bytes.slice(1))
         );
-
+          
             
         //Get Address
         const data = this.getSolanaAddressWithAmount(txn, "xalgo", true);
@@ -447,19 +496,18 @@ export class SolanaPoller{
         // const amount = ValueUnits.fromUnits(BigInt(units), decimals).value;
         partialTxn.units = BigInt(units).toString();
         partialTxn.amount = ValueUnits.fromUnits(BigInt(units), decimals).value;
-    
         //Set Fields
         const routing = {
             from: {
                 network: "solana",
                 address: partialTxn.address || "",
-                token: "algo",
+                token: "xalgo",
                 txn_signature: partialTxn.txnID
             },
             to: {
                 network: "algorand",
                 address: algoAddress,
-                token: "xalgo",
+                token: "algo",
                 txn_signature: ""
             },
             units:partialTxn.units,
@@ -469,8 +517,7 @@ export class SolanaPoller{
         //return
         return partialTxn;
       }
-
-
+ 
       /**
        * 
        * Xalgorelease
@@ -547,18 +594,17 @@ export class SolanaPoller{
     }
      xALGOFinalize(txn: TransactionResponse, data_bytes: Uint8Array, partialTxn: PartialBridgeTxn): PartialBridgeTxn{
       let decimals = 9;
-      console.log("XALGOFINALIZE", txn)
       //Set type
       partialTxn.txnType = TransactionType.Finalize;
-  
       //Get Address
       const data = this.getSolanaAddressWithAmount(txn, "xalgo", false);
       partialTxn.tokenSymbol = "xalgo";
       partialTxn.address = data[0] || "";
-      partialTxn.units = BigInt(Precise(data[1] * Math.pow(10, decimals))).toString();
-      partialTxn.amount = ValueUnits.fromUnits(BigInt(partialTxn.units), decimals).value;
+      partialTxn.units = BigInt(143).toString();
+      partialTxn.amount = ValueUnits.fromUnits(BigInt(partialTxn.units), decimals).value;   
       return partialTxn;
   }    
+
       /**
        * 
        * Gets solana address
