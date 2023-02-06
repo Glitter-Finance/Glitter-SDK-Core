@@ -44,6 +44,28 @@ export class SolanaConnect {
         return new Connection(network.toString());
     }
 
+  
+
+    /**
+     * @method listDepositTransaction
+     * @param limit 
+     * @param starthash 
+     * @returns 
+     * @description returns the list of all deposit transaction hash
+     */
+    public async listUsdcTransaction( take:number, starthash?:string,endhash?:string   ):Promise<PartialBridgeTxn[]> {
+        return new Promise(async(resolve, reject) =>{
+            try {
+                if(!this._poller) throw new Error("solana poller is not set")
+                const txnList = this._poller.ListUSDCDepositTransactionHandler(take,starthash,endhash)
+                resolve(txnList)
+
+            } catch (err) {
+                reject(err)
+            }
+        })
+    }
+    
     
  /**
   * @method bridgeTransactions
@@ -926,15 +948,15 @@ public async bridge(account: SolanaAccount,
          * 
          * @method listsBridgetransactions
          * @param take 
-         * @param [beginAt] 
-         * @param [endAt] 
-         * @returns bridgetransactions 
+         * @param beginAt
+         * @param endAt 
+         * @returns {PartialBridgeTxn[]|undefined}
          */
-        public async listBridgetransactions(take:number, beginAt?:string,endAt?:string):Promise<PartialBridgeTxn[]|undefined>{
+        public async getPartialBridgeTransactions(take:number, beginAt?:string,endAt?:string):Promise<PartialBridgeTxn[]|undefined>{
             return new Promise(async(resolve, reject) =>{
             try{
 
-                const list = this._poller?.listBridgeTransaction(take,beginAt,endAt); 
+                const list = this._poller?.ListBridgeTransactionHandler(take,beginAt,endAt); 
                 if(!list){
                     throw new Error("unable to list Bridge PartialBridgeTxn")
                 }
@@ -954,7 +976,7 @@ public async bridge(account: SolanaAccount,
         * @param [endAt] 
         * @returns List of usdcdeposit transactions 
         */
-        public async getUSDCDepositTransactions(take:number, beginAt?:string,endAt?:string):Promise<PartialBridgeTxn[]|undefined>{
+        public async getUsdcDepositPartialTransactions(take:number, beginAt?:string,endAt?:string):Promise<PartialBridgeTxn[]|undefined>{
         return new Promise(async(resolve, reject) =>{
         try{
 
@@ -977,7 +999,7 @@ public async bridge(account: SolanaAccount,
         * @param [endAt] 
         * @returns List of usdcdeposit transactions 
         */
-        public async getUSDCDReleaseTransactions(take:number, beginAt?:string,endAt?:string):Promise<PartialBridgeTxn[]|undefined>{
+        public async getUsdcReleasePartialTransactions(take:number, beginAt?:string,endAt?:string):Promise<PartialBridgeTxn[]|undefined>{
         return new Promise(async(resolve, reject) =>{
         try{
 

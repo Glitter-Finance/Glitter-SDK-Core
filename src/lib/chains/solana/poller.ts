@@ -1,6 +1,6 @@
 import { Connection, PublicKey, TokenBalance, TransactionResponse } from "@solana/web3.js";
 import bs58 from "bs58";
-import {  BridgeTokens, ValueUnits } from "../../common";
+import {  BridgeTokens, Precise, ValueUnits } from "../../common";
 import { Routing } from "../../common/routing/routing";
 import { BridgeType, ChainStatus, PartialBridgeTxn, TransactionType } from "../../common/transactions/transactions";
 import { SolanaProgramId } from "./config";
@@ -24,36 +24,17 @@ export class SolanaPoller{
     _lastTxnHashUsdcDeposit:string ="";
     _lastTxnHashUsdcRelease:string = "";
        
-    /**
-     * @method listDepositTransaction
-     * @param limit 
-     * @param starthash 
-     * @returns 
-     * @description returns the list of all deposit transaction hash
-     */
-    public async listBridgeTransaction( take:number, starthash?:string,endhash?:string   ):Promise<PartialBridgeTxn[]> {
-        return new Promise(async(resolve, reject) =>{
-            try {
-
-                const txnList = this.listBridgeTransactionHandler(take,starthash,endhash)
-                resolve(txnList)
-
-            } catch (err) {
-                reject(err)
-            }
-        })
-    }
 
 
  /**
   * 
   * Lists bridge transaction handler
   * @param take 
-  * @param [beginAt] 
-  * @param [endAt] 
-  * @returns bridge transaction handler 
+  * @param beginAt
+  * @param endAt 
+  * @returns {PartialBridgeTxn[]}
   */
- private async listBridgeTransactionHandler(take:number,beginAt?:string,endAt?:string):Promise<PartialBridgeTxn[]>  {
+ public async ListBridgeTransactionHandler(take:number,beginAt?:string,endAt?:string):Promise<PartialBridgeTxn[]>  {
       return new Promise(async (resolve,reject) =>{
           try{
             const address = this._bridgeTxnsV1?.getGlitterAccountAddress(SolanaProgramId.BridgeProgramId)
@@ -85,36 +66,55 @@ export class SolanaPoller{
               const txn = chunk[i]!;
                 let l = chunk[i]!.transaction.message.instructions.length
               const txnID = RevSignatures[i];
-                let partialBtxn:PartialBridgeTxn ={
-                txnID:txnID,
-                txnType:TransactionType.Unknown,
-              };  
+           
+              //Get Solana Transaction data
+              let partialBtxn: PartialBridgeTxn = {
+                txnID: txnID,
+                txnIDHashed: this.getTxnHashedFromBase58(txnID),
+                bridgeType: BridgeType.Token,
+                txnType: TransactionType.Unknown,
+                network: "solana",
+            }
+            //Check txn status
+            if (txn.meta?.err) {
+              partialBtxn.chainStatus = ChainStatus.Failed;
+              // logger.warn(`Transaction ${txnID} failed`);
+            } else {
+              partialBtxn.chainStatus = ChainStatus.Completed;
+            }
+              //Get timestamp & slot
+              partialBtxn.txnTimestamp = new Date((txn.blockTime || 0) * 1000); //*1000 is to convert to milliseconds
+              partialBtxn.block = txn.slot;
               const txnData = chunk[i]!.transaction.message.instructions[0].data;
               let data_bytes = bs58.decode(txnData);
-              if (Number(data_bytes[0]) === 10) {
-              depositNote = this.solDeposit(txn, data_bytes, txnID);
-              partialBtxn.txnType = TransactionType.Deposit
-            } else if (Number(data_bytes[0]) === 11) {
-                partialBtxn.txnType = TransactionType.Finalize;
-            } else if (Number(data_bytes[0]) === 13) {
-              depositNote = this.SOLRelease(txn, data_bytes, txnID);
-              partialBtxn.txnType = TransactionType.Release
-            } else if (Number(data_bytes[0]) === 20) {
-              depositNote = this.xALGODeposit(txn, data_bytes, txnID);
-              partialBtxn.txnType = TransactionType.Deposit
-            } else if (Number(data_bytes[0]) === 21) {
-                partialBtxn.txnType = TransactionType.Finalize;
-            } else if (Number(data_bytes[0]) === 23) {
-              depositNote = this.xALGORelease(txn, data_bytes, txnID);
-              partialBtxn.txnType = TransactionType.Release
-            } else {
-                console.log(`Transaction ${txnID} is not a bridge transaction`);
+              switch (Number(data_bytes[0])) {
+                case 10:
+                  partialBtxn = this.solDeposit(txn, data_bytes, partialBtxn);
+                    break;
+                case 11:
+                  partialBtxn = this.solFinalize(txn, data_bytes, partialBtxn);
+                    break;
+                case 13:
+                  partialBtxn = this.SOLRelease(txn, data_bytes, partialBtxn);
+                    break;
+                case 20:
+                  partialBtxn = this.xALGODeposit(txn, data_bytes, partialBtxn);
+                    break;
+                case 21:
+                    partialBtxn = this.xALGOFinalize(txn, data_bytes, partialBtxn);
+                    break;
+                case 23:
+                  partialBtxn = this.xALGORelease(txn, data_bytes, partialBtxn);
+                    break;
+                default:
+                    // logger.warn(`Txn ${txnID} is not a bridge`);
+                    break;
             }
-            if(!depositNote){
-              partialBtxn 
-              }else{
-                partialBtxn.routing = depositNote
-              }
+            // if(!depositNote){
+            //   partialBtxn 
+            //   }else{
+            //     partialBtxn.routing = depositNote
+            //   }
               partialbridgeTxnList.push(partialBtxn)
               lastTxnHash = RevSignatures[i]
             }
@@ -135,10 +135,10 @@ export class SolanaPoller{
  * @param [endAt] 
  * @returns usdcdeposit transaction handler 
  */
-public async ListUSDCDepositTransactionHandler(take:number,beginAt?:string,endAt?:string):Promise<PartialBridgeTxn[]>  {
+ async ListUSDCDepositTransactionHandler(take:number,beginAt?:string,endAt?:string):Promise<PartialBridgeTxn[]>  {
       return new Promise(async (resolve,reject) =>{
           try{
-            const address = this._bridgeTxnsV1?.getGlitterAccountAddress(SolanaProgramId.UsdcReceiverId)
+          const address = this._bridgeTxnsV1?.getGlitterAccountAddress(SolanaProgramId.UsdcDepositId)
           if(!address) throw new Error("address not defined")   ;
           if(!this._client) throw new Error("Solana Client Not Defined");
 
@@ -178,31 +178,30 @@ public async ListUSDCDepositTransactionHandler(take:number,beginAt?:string,endAt
                 txnType: TransactionType.Unknown,
                 network: "solana",
             }                  
+               //Check txn status
+               if (txn.meta?.err) {
+                partialTxn.chainStatus = ChainStatus.Failed;
+                console.log(`Transaction ${TxnId} failed`);
+              } else {
+                partialTxn.chainStatus = ChainStatus.Completed;
+             }
+              //Get Timestamp & slot
+              partialTxn.txnTimestamp = new Date((txn.blockTime || 0) * 1000); //*1000 is to convert to milliseconds
+              partialTxn.block = txn.slot;   
+
                 for(let j= 0;j< l;j++){
-                  if (!chunk[i]||chunk[i]==null) break;
-                    
-                      //Check txn status
-                        if (txn.meta?.err) {
-                          partialTxn.chainStatus = ChainStatus.Failed;
-                          console.log(`Transaction ${TxnId} failed`);
-                        } else {
-                          partialTxn.chainStatus = ChainStatus.Completed;
-                       }
-
-                   const data_bytes = (bs58.decode(chunk[i]!.transaction.message.instructions[j].data) || "{}");
-
+                   const data_bytes = (bs58.decode(txn.transaction.message.instructions[j].data) || "{}");
                   try {
                     const object = JSON.parse(Buffer.from(data_bytes).toString('utf8'))
                     if (object.system && object.date) {
                       depositNote = object;
                     }
-
-                 const routing: Routing | null = depositNote ? JSON.parse(depositNote.system) : null;
-                 partialTxn = await this.handleDeposit(txn, routing, partialTxn);
-
                     } catch(err) { }          
                 }
              
+                const routing: Routing | null = depositNote ? JSON.parse(depositNote.system) : null;
+                partialTxn = await this.handleDeposit(txn, routing, partialTxn);
+
                  lastTxnHash = RevSignatures[i]
                  partialbridgeTxnList.push(partialTxn)                
             
@@ -225,7 +224,7 @@ public async ListUSDCDepositTransactionHandler(take:number,beginAt?:string,endAt
    * @param [endAt] 
    * @returns release transaction handler 
    */
-  public async ListUSDCReleaseTransactionHandler(take:number,beginAt?:string,endAt?:string):Promise<PartialBridgeTxn[]>  {
+   async ListUSDCReleaseTransactionHandler(take:number,beginAt?:string,endAt?:string):Promise<PartialBridgeTxn[]>  {
     return new Promise(async (resolve,reject) =>{
         try{
           const address = this._bridgeTxnsV1?.getGlitterAccountAddress(SolanaProgramId.UsdcReceiverId)
@@ -268,31 +267,29 @@ public async ListUSDCDepositTransactionHandler(take:number,beginAt?:string,endAt
                 txnType: TransactionType.Unknown,
                 network: "solana",
             }                  
+               //Check txn status
+               if (txn.meta?.err) {
+                partialTxn.chainStatus = ChainStatus.Failed;
+                console.log(`Transaction ${TxnId} failed`);
+              } else {
+                partialTxn.chainStatus = ChainStatus.Completed;
+             }
+              //Get Timestamp & slot
+              partialTxn.txnTimestamp = new Date((txn.blockTime || 0) * 1000); //*1000 is to convert to milliseconds
+              partialTxn.block = txn.slot;   
+
                 for(let j= 0;j< l;j++){
-                  if (!chunk[i]||chunk[i]==null) break;
-                    
-                      //Check txn status
-                        if (txn.meta?.err) {
-                          partialTxn.chainStatus = ChainStatus.Failed;
-                          console.log(`Transaction ${TxnId} failed`);
-                        } else {
-                          partialTxn.chainStatus = ChainStatus.Completed;
-                       }
-
-                   const data_bytes = (bs58.decode(chunk[i]!.transaction.message.instructions[j].data) || "{}");
-
+                   const data_bytes = (bs58.decode(txn.transaction.message.instructions[j].data) || "{}");
                   try {
                     const object = JSON.parse(Buffer.from(data_bytes).toString('utf8'))
                     if (object.system && object.date) {
                       depositNote = object;
                     }
-
-                 const routing: Routing | null = depositNote ? JSON.parse(depositNote.system) : null;
-                 partialTxn = await this.handleRelease(txn, routing, partialTxn);
-
                     } catch(err) { }          
                 }
              
+                const routing: Routing | null = depositNote ? JSON.parse(depositNote.system) : null;
+                partialTxn = await this.handleRelease(txn, routing, partialTxn);
                  lastTxnHash = RevSignatures[i]
                  partialbridgeTxnList.push(partialTxn)                
             
@@ -313,41 +310,39 @@ public async ListUSDCDepositTransactionHandler(take:number,beginAt?:string,endAt
  * @param txn 
  * @param data_bytes 
  * @param txnID 
- * @returns Sol Deposit Routing 
+ * @returns {PartialBridgeTxn} 
  */
-public solDeposit(txn: TransactionResponse, data_bytes: Uint8Array,txnID:string): Routing {
+ solDeposit(txn: TransactionResponse, data_bytes: Uint8Array,partialTxn: PartialBridgeTxn): PartialBridgeTxn {
 
       let decimals = 9;
       //Set type
-      
-      // partialTxn.tokenSymbol = "sol";
-  
+      partialTxn.txnType = TransactionType.Deposit;
+      partialTxn.tokenSymbol = "sol";
       //Deserialize Instructions
       const instruction = deserialize(
          BridgeInstruction.init_schema,
           BridgeInstruction,
           Buffer.from(data_bytes.slice(1))
       );
-  
       //Get Address
-      const address = this.getSolanaAddress(txn, true, false);
-      // partialTxn.address = address || "";
-  
+      const data = this.getSolanaAddressWithAmount(txn, null, true);
+      partialTxn.address = data[0] || "";
       //Extract Data
       const algoAddress = algosdk
           .encodeAddress(instruction["algo_address"])
           .toString();
       const units = instruction["amount"].toString();
-      const units_ = BigInt(units);
-      const amount = ValueUnits.fromUnits(BigInt(units), decimals).value;
-  
+      // const units_ = BigInt(units);
+      // const amount = ValueUnits.fromUnits(BigInt(units), decimals).value;
+      partialTxn.units = BigInt(units).toString();
+      partialTxn.amount = ValueUnits.fromUnits(BigInt(units), decimals).value;
       //Set Fields
        const routing:Routing = {
           from: {
               network: "solana",
-              address: address || "",
+              address: partialTxn.address || "",
               token: "sol",
-              txn_signature: txnID
+              txn_signature: partialTxn.txnID
           },
           to: {
               network: "algorand",
@@ -355,20 +350,12 @@ public solDeposit(txn: TransactionResponse, data_bytes: Uint8Array,txnID:string)
               token: "xsol",
               txn_signature: ""
           },
-          units: units_.toString(),
-          amount: amount,
+          units: partialTxn.units,
+          amount: partialTxn.amount,
       }
-      const bridgeNodeInstructionData:DepositNote = {
-        system: JSON.stringify({
-          from: routing.from,
-          to: routing.to,
-          amount: routing.amount,
-          units: routing.units?.toString(),
-        }),
-      };  
-
+      partialTxn.routing = routing ;
       //return
-      return routing;
+      return partialTxn;
   }
 
   /**
@@ -379,30 +366,30 @@ public solDeposit(txn: TransactionResponse, data_bytes: Uint8Array,txnID:string)
    * @param txnID 
    * @returns {Routing}
    */
-  public SOLRelease(txn: TransactionResponse, data_bytes: Uint8Array, txnID:string): Routing {
-
+   SOLRelease(txn: TransactionResponse, data_bytes: Uint8Array,partialTxn: PartialBridgeTxn): PartialBridgeTxn {
           let decimals = 9;
-
+          //Set type
+          partialTxn.txnType = TransactionType.Release;
+          partialTxn.tokenSymbol = "sol";
           //Deserialize Instructions
           const instruction = deserialize(
               BridgeInstruction.release_schema,
               BridgeInstruction,
               Buffer.from(data_bytes.slice(1))
           );
-
           //Get Address
-          const address = this.getSolanaAddress(txn, false, false);
-          // partialTxn.address = address || "";
-
+          const data = this.getSolanaAddressWithAmount(txn, null, false);
+          partialTxn.address = data[0] || "";
           //Extract Data
           const algoAddress = algosdk
               .encodeAddress(instruction["algo_address"])
               .toString();
           const algoTxId = new TextDecoder().decode(instruction["algo_txn_id"]);
           const units = instruction["amount"].toString();
-          const units_ = BigInt(units);
-          const amount = ValueUnits.fromUnits(BigInt(units), decimals).value;
-
+          // const units_ = BigInt(units);
+          // const amount = ValueUnits.fromUnits(BigInt(units), decimals).value;
+          partialTxn.units = BigInt(units).toString();
+          partialTxn.amount = ValueUnits.fromUnits(BigInt(units), decimals).value;
           //Set Fields
           const routing = {
               from: {
@@ -413,16 +400,17 @@ public solDeposit(txn: TransactionResponse, data_bytes: Uint8Array,txnID:string)
               },
               to: {
                   network: "solana",
-                  address: address || "",
+                  address:partialTxn.address || "",
                   token: "sol",
-                  txn_signature: txnID
+                  txn_signature:partialTxn.txnID
               },
-              units:units_.toString(),
-              amount:amount,
+              units: partialTxn.units,
+              amount: partialTxn.amount,
           }
 
+          partialTxn.routing = routing ;
           //return
-          return routing;
+          return partialTxn;
       }
 
       /**
@@ -433,9 +421,11 @@ public solDeposit(txn: TransactionResponse, data_bytes: Uint8Array,txnID:string)
        * @param txnID 
        * @returns algodeposit  Routing
        */
-      public xALGODeposit(txn: TransactionResponse, data_bytes: Uint8Array, txnID: string): Routing {
+       xALGODeposit(txn: TransactionResponse, data_bytes: Uint8Array,partialTxn: PartialBridgeTxn): PartialBridgeTxn {
         let decimals = 6;
         //Set type
+        partialTxn.txnType = TransactionType.Deposit;
+        partialTxn.tokenSymbol = "xalgo";        
         //Deserialize Instructions
         const instruction = deserialize(
           BridgeInstruction.init_schema,
@@ -443,25 +433,28 @@ public solDeposit(txn: TransactionResponse, data_bytes: Uint8Array,txnID:string)
             Buffer.from(data_bytes.slice(1))
         );
 
+            
         //Get Address
-        const address = this.getSolanaAddress(txn, true, true);
-        // partialTxn.address = address || "";
+        const data = this.getSolanaAddressWithAmount(txn, "xalgo", true);
+        partialTxn.address = data[0] || "";
 
         //Extract Data
         const algoAddress = algosdk
             .encodeAddress(instruction["algo_address"])
             .toString();
         const units = instruction["amount"].toString();
-        const units_ = BigInt(units);
-        const amount = ValueUnits.fromUnits(BigInt(units), decimals).value;
-
+        // const units_ = BigInt(units);
+        // const amount = ValueUnits.fromUnits(BigInt(units), decimals).value;
+        partialTxn.units = BigInt(units).toString();
+        partialTxn.amount = ValueUnits.fromUnits(BigInt(units), decimals).value;
+    
         //Set Fields
         const routing = {
             from: {
                 network: "solana",
-                address: address || "",
+                address: partialTxn.address || "",
                 token: "algo",
-                txn_signature: txnID
+                txn_signature: partialTxn.txnID
             },
             to: {
                 network: "algorand",
@@ -469,12 +462,12 @@ public solDeposit(txn: TransactionResponse, data_bytes: Uint8Array,txnID:string)
                 token: "xalgo",
                 txn_signature: ""
             },
-            units: units_.toString(),
-            amount: amount,
+            units:partialTxn.units,
+            amount:partialTxn.amount,
         }
-
+        partialTxn.routing = routing ;
         //return
-        return routing;
+        return partialTxn;
       }
 
 
@@ -486,10 +479,12 @@ public solDeposit(txn: TransactionResponse, data_bytes: Uint8Array,txnID:string)
        * @param txnID 
        * @returns algorelease Routing
        */
-      public xALGORelease(txn: TransactionResponse, data_bytes: Uint8Array, txnID: string): Routing {
+       xALGORelease(txn: TransactionResponse, data_bytes: Uint8Array,partialTxn: PartialBridgeTxn): PartialBridgeTxn {
         let decimals = 6;
 
         //Set type
+        partialTxn.txnType = TransactionType.Release;
+        partialTxn.tokenSymbol = "xalgo";
 
       const instruction = deserialize(
         BridgeInstruction.release_schema,
@@ -497,9 +492,10 @@ public solDeposit(txn: TransactionResponse, data_bytes: Uint8Array,txnID:string)
           Buffer.from(data_bytes.slice(1))
       );
 
+
         //Get Address
-        const address = this.getSolanaAddress(txn, false, true);
-        // partialTxn.address = address || "";
+        const data = this.getSolanaAddressWithAmount(txn, "xalgo", false);
+        partialTxn.address = data[0] || "";
 
         //Extract Data
         const algoAddress = algosdk
@@ -507,12 +503,12 @@ public solDeposit(txn: TransactionResponse, data_bytes: Uint8Array,txnID:string)
             .toString();
 
         const algoTxId = new TextDecoder().decode(instruction["algo_txn_id"]);
-
         const units = instruction["amount"].toString();
-
-        const units_ = BigInt(units);
-        const amount = ValueUnits.fromUnits(BigInt(units), decimals).value;
-
+        // const units_ = BigInt(units);
+        // const amount = ValueUnits.fromUnits(BigInt(units), decimals).value;
+        partialTxn.units = BigInt(units).toString();
+        partialTxn.amount = ValueUnits.fromUnits(BigInt(units), decimals).value;
+    
         //Set Fields
         const routing = {
             from: {
@@ -523,19 +519,46 @@ public solDeposit(txn: TransactionResponse, data_bytes: Uint8Array,txnID:string)
             },
             to: {
                 network: "solana",
-                address: address || "",
+                address:  partialTxn.address || "",
                 token: "xalgo",
-                txn_signature: txnID
+                txn_signature: partialTxn.txnID
             },
-            units: units_.toString(),
-            amount: amount,
+            units:partialTxn.units,
+            amount:partialTxn.amount,
         }
-
+        partialTxn.routing = routing ;
         //return
-        return routing;
+        return partialTxn;
       }
 
-
+       solFinalize(txn: TransactionResponse, data_bytes: Uint8Array, partialTxn: PartialBridgeTxn): PartialBridgeTxn{
+        let decimals = 9;
+    
+        //Set type
+        partialTxn.txnType = TransactionType.Finalize;
+    
+        //Get Address
+        const data = this.getSolanaAddressWithAmount(txn, null, false);
+        partialTxn.tokenSymbol = "sol";
+        partialTxn.address = data[0] || "";
+        partialTxn.units = BigInt(Precise(data[1] * Math.pow(10, decimals))).toString();
+        partialTxn.amount = ValueUnits.fromUnits(BigInt(partialTxn.units), decimals).value;
+        return partialTxn;
+    }
+     xALGOFinalize(txn: TransactionResponse, data_bytes: Uint8Array, partialTxn: PartialBridgeTxn): PartialBridgeTxn{
+      let decimals = 9;
+      console.log("XALGOFINALIZE", txn)
+      //Set type
+      partialTxn.txnType = TransactionType.Finalize;
+  
+      //Get Address
+      const data = this.getSolanaAddressWithAmount(txn, "xalgo", false);
+      partialTxn.tokenSymbol = "xalgo";
+      partialTxn.address = data[0] || "";
+      partialTxn.units = BigInt(Precise(data[1] * Math.pow(10, decimals))).toString();
+      partialTxn.amount = ValueUnits.fromUnits(BigInt(partialTxn.units), decimals).value;
+      return partialTxn;
+  }    
       /**
        * 
        * Gets solana address
@@ -598,13 +621,15 @@ public solDeposit(txn: TransactionResponse, data_bytes: Uint8Array,txnID:string)
             const data = this.getSolanaAddressWithAmount(txn, "usdc", false);
             partialTxn.address = data[0] || "";
             let value = data[1] || 0;
+
+            // console.log("preciseVALUE",Precise(value * Math.pow(10, decimals)))
+            let ParsedValue = typeof Precise(value * Math.pow(10, decimals));
             partialTxn.amount = value;
-            partialTxn.units = ValueUnits.fromValue(value, decimals).units;
-        
+            // partialTxn.units = ValueUnits.fromValue(value, decimals).units.toString();
+            partialTxn.units = routing?.units;
             partialTxn.routing = routing;
             return Promise.resolve(partialTxn);
         }
-        
         
         async  handleDeposit(txn: TransactionResponse, routing: Routing | null, partialTxn: PartialBridgeTxn): Promise<PartialBridgeTxn> {
           let decimals = 6;
@@ -625,12 +650,12 @@ public solDeposit(txn: TransactionResponse, data_bytes: Uint8Array,txnID:string)
               }
               let value = -data[1] || 0;
               partialTxn.amount = value;
-              partialTxn.units = ValueUnits.fromValue(value, decimals).units;
+              partialTxn.units = ValueUnits.fromValue(value, decimals).units.toString();
           } else if (data[1] > 0) {
               partialTxn.txnType = TransactionType.Refund; //positive delta is a refund to the user
               let value = data[1] || 0;
               partialTxn.amount = value;
-              partialTxn.units = ValueUnits.fromValue(value, decimals).units;
+              partialTxn.units = ValueUnits.fromValue(value, decimals).units.toString();
           }
       
           partialTxn.routing = routing;
@@ -681,7 +706,7 @@ public solDeposit(txn: TransactionResponse, data_bytes: Uint8Array,txnID:string)
                     //Check mint address
                     let postBalanceObj = txn?.meta?.postTokenBalances?.[i];
                     if (postBalanceObj?.mint.toLocaleLowerCase() !== mintAddress.toLocaleLowerCase()) {
-                        console.log(`Pre ${postBalanceObj?.mint} !== ${mintAddress}`)
+                        // console.log(`Pre ${postBalanceObj?.mint} !== ${mintAddress}`)
                         continue;
                     }
                   
@@ -757,10 +782,6 @@ public solDeposit(txn: TransactionResponse, data_bytes: Uint8Array,txnID:string)
                 return txn?.meta?.preTokenBalances?.[i].uiTokenAmount.uiAmount;
             }
           }
-
-                    
-
-          
 }
 
 /**

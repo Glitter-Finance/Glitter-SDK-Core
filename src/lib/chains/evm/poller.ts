@@ -243,7 +243,7 @@ async parseLogs(
     //Get txn params
     if (type === TransactionType.Deposit && transferEvent) {
       returnTxn.address = transferEvent.from;
-      returnTxn.units = BigInt(depositEvent.amount.toString());
+      returnTxn.units = BigInt(depositEvent.amount.toString()).toString();
       returnTxn.amount = ValueUnits.fromUnits(BigInt(returnTxn.units), decimals).value;
 
       //Get Routing
@@ -269,7 +269,7 @@ async parseLogs(
     } else if (type === TransactionType.Release && transferEvent) {
 
       returnTxn.address = releaseEvent.destinationWallet;
-      returnTxn.units = BigInt(releaseEvent.amount.toString());
+      returnTxn.units = BigInt(releaseEvent.amount.toString()).toString();
       returnTxn.amount = ValueUnits.fromUnits(BigInt(returnTxn.units), decimals).value;
 
       //Get Routing

@@ -8,7 +8,7 @@ import { AlgorandBridgeTxnsV1 } from "./txns/bridge";
 import * as dotenv from 'dotenv'
 import winston from "winston";
 import { ethers } from "ethers";
-import { base64To0xString } from "../../common/utils/utils";
+import { base64To0xString,base64ToBigUIntString } from "../../common/utils/utils";
 
 dotenv.config({ path:'src/.env' });
 const DEFAULT_LIMIT =500;          
@@ -47,7 +47,7 @@ export class AlgorandPoller{
         lastPauseMessageTime:number | null =null;
         lastPollMessageTime = 0;
         lastNoNewTxMessageTime = 0;
-        lastTxnTime = 0;
+        lastTxnTime =0;
         lastPolledTime = 0;
         //Pause
         paused = false;
@@ -112,6 +112,7 @@ export class AlgorandPoller{
             // get the last ended round
             let nextMinRound = minRound==undefined ? this._lastRound:minRound;
             let lastTxnId = "";
+            let NewlastTxnTime = 0;
             let PartialBtxnList:PartialBridgeTxn[] = [];
             const TxnLimit = limit==undefined?DEFAULT_LIMIT:limit
 
@@ -134,22 +135,24 @@ export class AlgorandPoller{
                     for (let i = 0; i < data.transactions.length; i++) {
                         let tx = data.transactions[i];
                         let txRound = tx['confirmed-round'];
+                        const txnId = tx['id'];
                         if (txRound > nextMinRound) nextMinRound = txRound;
                         //Check if this is last transaction, if so, we've caught up
                         if (tx['id'] === lastTxnId) {
                             break;
                         }
-
-                        lastTxnId = tx['id'];
-                        const PartialBtxn = this.getPartialBTxn(tx)
-
+                       const PartialBtxn = this.getPartialBTxn(tx)
                         if(PartialBtxn!=null){
 
                             PartialBtxnList.push(PartialBtxn);
 
                         }
-
+                        
                         this._lastTxnID = lastTxnId;
+                        let transactionTimestamp = tx["round-time"];
+                        // NewlastTxnTime = new Date((transactionTimestamp || 0) * 1000); 
+                        NewlastTxnTime = transactionTimestamp   
+                        
                     }
                 } else {
                     //No transactions in this round
@@ -158,13 +161,14 @@ export class AlgorandPoller{
             }catch(err){
                    
             }
+
+            
                 //Save state
                 // setLastCompletedRound("../SaveStates", nextMinRound);
                 // setLastCompletedTxnID("../SaveStates", lastTxnID);
                 this._lastRound = nextMinRound;
                 this._lastTxnID = lastTxnId;
-                console.log("NEXTMINROUND",this._lastRound)
-                console.log("LASTTXN",this._lastTxnID)
+                this.lastTxnTime = NewlastTxnTime
 
         }while(true)
             //Set last Contract Count
@@ -602,30 +606,29 @@ export class AlgorandPoller{
          * @param txn 
          * @returns partial btxn 
          */
-        public getPartialBTxn(txn:any):PartialBridgeTxn | null{
-            if (!txn["application-transaction"]) return null;
-            if (!txn["application-transaction"]["application-args"]) return null;   
+        public getPartialBTxn(txn:any):PartialBridgeTxn|undefined{
+            if (!txn["application-transaction"]) return undefined;
+            if (!txn["application-transaction"]["application-args"]) return undefined ;   
             //Get local Vars
             let appTxn = txn["application-transaction"];
             let txnArgs = appTxn["application-args"];
-            if (txnArgs.length === 0) return null;
+            if (txnArgs.length === 0) return undefined ;
             
             //Ensure this is a Noop transaction
             let onComplete = appTxn["on-completion"];
-            if (onComplete !== "noop") return null;
+            if (onComplete !== "noop") return undefined;
             //Ensure signature is defined (that transaction is valid)
             if (
                 !txn["signature"] ||
                 (!txn["signature"]["multisig"] && !txn["signature"]["sig"])
-            )
-            return null;
-
+            ){
+            return undefined;
+            }
             let solAddress = this.convertToAscii(txnArgs[0]);
             let algoSender = this.convertToAscii(txnArgs[1]);
             let algoReceiver = appTxn["accounts"][0];
             let solAssetID: string | null = null;
             let algoAssetID: string | null = null;
-
             let xALGOAssetID = "xALGoH1zUfRmpCriy94qbfoMXHtK6NDnMKzT4Xdvgms";
             switch (this.convertToAscii(txnArgs[2])) {
               case xALGOAssetID:
@@ -656,108 +659,159 @@ export class AlgorandPoller{
             let solSig = this.convertToAscii(txnArgs[5]);
             if (!solSig) solSig = "null";
             let routing:Routing|undefined = undefined; 
-            let partialBTxn:PartialBridgeTxn|undefined;
-
-            if(appCall =="xSOL-deposit"){
+            //Get Algorand Transaction data
+            let PartialBtxn: PartialBridgeTxn | undefined = {
+                txnID: txnID,
+                txnIDHashed: this.getTxnHashedFromBase64(txnID),
+                bridgeType: BridgeType.Token,
+                txnType: TransactionType.Unknown,
+                network: "algorand",
+                chainStatus: ChainStatus.Completed
+            }
+            //Timestamp
+            const transactionTimestamp = txn["round-time"];
+            PartialBtxn.txnTimestamp = new Date((transactionTimestamp || 0) * 1000); //*1000 is to convert to milliseconds
+            PartialBtxn.block = txn["confirmed-round"];
+            if(appCall.toLocaleLowerCase() =="xsol-deposit"){
                 let decimals = 9;
                 const units = BigInt(amount)
                 const amount_ = ValueUnits.fromUnits(BigInt(amount), decimals).value;
                 let txnType = TransactionType.Deposit
+                //Set type
+                PartialBtxn.txnType = txnType;
+                PartialBtxn.tokenSymbol = "xsol";
+                PartialBtxn.address = algoSender;
+                PartialBtxn.units = BigInt(base64ToBigUIntString(txnArgs[6])).toString();
+                PartialBtxn.amount = ValueUnits.fromUnits(BigInt(PartialBtxn.units), decimals).value;
+
                 routing ={
                     from:{
-                        address:algoSender,
+                        address:algoSender || "",
                         network:"algorand",
-                        token:algoAssetID,
+                        token:algoAssetID=="xsol"?algoAssetID:"xsol",
                         txn_signature:txnID,
                     },
                     to:{
                         network:"solana",
-                        address:solAddress,
-                        token:solAssetID,
-                        txn_signature:solSig
+                        address:solAddress || "",
+                        token:solAssetID=="sol"?solAddress:"sol",
+                        txn_signature:solSig || ""
                     },
-                    units:units.toString(),
-                    amount:amount_
+                    units: PartialBtxn.units || "",
+                    amount: PartialBtxn.amount
                 } as Routing
+            
+             PartialBtxn.routing = routing;
+             return PartialBtxn;   
 
-                partialBTxn = {
-                    txnID:txnID,
-                    txnType:txnType,
-                    routing:routing
-                }
-             return partialBTxn;   
-
-            }else if(appCall=="algo-release") {
-
+            }else if(appCall.toLocaleLowerCase()=="algo-release") {
                 let decimals =6; 
                 const units = BigInt(amount)
                 const amount_ = ValueUnits.fromUnits(BigInt(amount), decimals).value;
                 let txnType = TransactionType.Release
+                //Set type
+                PartialBtxn.txnType = txnType;
+                PartialBtxn.tokenSymbol = "algo";
+                PartialBtxn.address = txn["application-transaction"].accounts[0];
+                PartialBtxn.units = BigInt(base64ToBigUIntString(txnArgs[6])).toString();
+                PartialBtxn.amount = ValueUnits.fromUnits(BigInt(PartialBtxn.units), decimals).value;
+
                 routing ={
                     from:{
                         address:solAddress,
                         network:"solana",
-                        token:solAssetID,
+                        token:solAssetID=="xalgo"?solAssetID:"xalgo",
                         txn_signature:solSig,
                     },
                     to:{
-                        address:algoReceiver,
+                        address:PartialBtxn.address || algoReceiver,
                         network:"algorand",
-                        token:algoAssetID,
+                        token:algoAssetID=="algo"?algoAssetID:"algo",
                         txn_signature:txnID
                     },
-                    units:units.toString(),
-                    amount:amount_
+                    units:PartialBtxn.units,
+                    amount: PartialBtxn.amount
                 } as Routing
 
-                partialBTxn = {
-                    txnID:txnID,
-                    txnType:txnType,
-                    routing:routing
-                }
-              
-                return partialBTxn;
+                PartialBtxn.routing = routing;
+                return PartialBtxn;
                 
-            }else if(appCall =="xSOL-release"){
+            }else if(appCall.toLocaleLowerCase() =="xsol-release"){
               
                 let decimals =9; 
                 const units = BigInt(amount)
                 const amount_ = ValueUnits.fromUnits(BigInt(units), decimals).value;
                 let txnType = TransactionType.Release
+                //Set type
+                PartialBtxn.txnType = txnType;
+                PartialBtxn.tokenSymbol = "xsol";
+                PartialBtxn.address = txn["application-transaction"].accounts[0];
+                PartialBtxn.units = BigInt(base64ToBigUIntString(txnArgs[6])).toString();
+                PartialBtxn.amount = ValueUnits.fromUnits(BigInt(PartialBtxn.units), decimals).value;
+
                 routing ={
                     from:{
                         address:solAddress,
                         network:"solana",
-                        token:solAssetID,
+                        token:solAssetID=="sol"?solAssetID:"sol",
                         txn_signature:solSig,
                     },
                     to:{
-                        address:algoReceiver,
+                        address:PartialBtxn.address || algoReceiver,
                         network:"algorand",
-                        token:algoAssetID,
+                        token:algoAssetID=="xsol"?algoAssetID:"xsol",
                         txn_signature:txnID
                     },
-                    units:units.toString(),
-                    amount:amount_
+                    units: PartialBtxn.units,
+                    amount:PartialBtxn.amount
                 } as Routing
 
-                partialBTxn = {
-                    txnID:txnID,
-                    txnType:txnType,
-                    routing:routing
-                }
-              
-                return partialBTxn;
+                PartialBtxn.routing = routing;
+                return PartialBtxn;
                 
-            }else if(appCall =="algo-deposit"){
+            }else if(appCall.toLocaleLowerCase() == "xsol-refund"){
+                let decimals = 9;
+
+            //Set type
+            PartialBtxn.txnType = TransactionType.Refund;
+            PartialBtxn.tokenSymbol = "xsol";
+            PartialBtxn.address = txn["application-transaction"].accounts[0];
+            PartialBtxn.units = BigInt(base64ToBigUIntString(txnArgs[6])).toString();
+            PartialBtxn.amount = ValueUnits.fromUnits(BigInt(PartialBtxn.units), decimals).value;
+           routing = {
+                from: {
+                    network: "algorand",
+                    address: PartialBtxn.address|| "",
+                    token: "xsol",
+                    txn_signature: txnID
+                },
+                to: {
+                    network: "algorand",
+                    address: PartialBtxn.address || "",
+                    token: "xsol",
+                    txn_signature: ""
+                },
+                units: PartialBtxn.units,
+                amount: PartialBtxn.amount,
+            }
+            PartialBtxn.routing = routing;
+            return PartialBtxn;
+
+            }else if(appCall.toLocaleLowerCase() =="algo-deposit"){
           
                 let decimals =6; 
                 const units = BigInt(amount)
                 const amount_ = ValueUnits.fromUnits(BigInt(units), decimals).value;
                 let txnType = TransactionType.Deposit
+                //Set type
+                PartialBtxn.txnType =txnType;
+                PartialBtxn.tokenSymbol = "algo";
+                PartialBtxn.address = txn.sender;
+                PartialBtxn.units = BigInt(base64ToBigUIntString(txnArgs[6])).toString();
+                PartialBtxn.amount = ValueUnits.fromUnits(BigInt(PartialBtxn.units), decimals).value;
                 routing ={
                     from:{
-                        address:algoSender,
+                        address:PartialBtxn.address || algoSender,
                         network:"algorand",
                         token:algoAssetID,
                         txn_signature:txnID,
@@ -768,24 +822,27 @@ export class AlgorandPoller{
                         token:solAssetID,
                         txn_signature:solSig
                     },
-                    units:units.toString(),
-                    amount:amount_
+                    units:PartialBtxn.units,
+                    amount:PartialBtxn.amount
                 } as Routing
 
-                partialBTxn = {
-                    txnID:txnID,
-                    txnType:txnType,
-                    routing:routing
-                }
-              
-                return partialBTxn;                
+                PartialBtxn.routing = routing;
+                return PartialBtxn;               
                 
-            }else if(appCall=="algo-refund") {
+            }else if(appCall.toLocaleLowerCase()=="algo-refund") {
 
                 let decimals =6; 
                 const units = BigInt(amount)
                 const amount_ = ValueUnits.fromUnits(BigInt(units), decimals).value;
                 let txnType = TransactionType.Refund
+
+                //Set type
+                PartialBtxn.txnType =txnType;
+                PartialBtxn.tokenSymbol = "algo";
+                PartialBtxn.address = txn["application-transaction"].accounts[0];
+                PartialBtxn.units = BigInt(base64ToBigUIntString(txnArgs[6])).toString();
+                PartialBtxn.amount = ValueUnits.fromUnits(BigInt(PartialBtxn.units), decimals).value;
+
                 routing ={
                     from:{
                         address:algoReceiver,
@@ -799,24 +856,18 @@ export class AlgorandPoller{
                         token:solAssetID,
                         txn_signature:txnID
                     },
-                    units:units.toString(),
-                    amount:amount_
+                    units: PartialBtxn.units,
+                    amount: PartialBtxn.amount
                 } as Routing
 
-                partialBTxn = {
-                    txnID:txnID,
-                    txnType:txnType,
-                    routing:routing
-                }
-              
-                return partialBTxn;  
+                PartialBtxn.routing = routing;
 
+                return PartialBtxn;  
             }
-
-            return null; 
+            return undefined; 
         }
 
-          public convertToAscii(str:string) {
+        public convertToAscii(str:string) {
             let arg = Buffer.from(str, "base64").toString("ascii");
             return arg;
           }
@@ -828,8 +879,6 @@ export class AlgorandPoller{
               return Number(str);
             }
           }
-
-          
 }
 
 export type DepositNote = {
