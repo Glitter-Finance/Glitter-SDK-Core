@@ -30,6 +30,10 @@ private _environment: GlitterEnvironment | undefined;
 
   //Setters
   public setEnvironment(environment: GlitterEnvironment): GlitterBridgeSDK {
+
+    //Set environment
+    this._environment = environment;
+
     switch (environment) {
       case GlitterEnvironment.mainnet:
         this._bridgeConfig = BridgeMainnet;
