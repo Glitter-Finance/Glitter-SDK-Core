@@ -14,10 +14,14 @@ export function Sleep(ms: number) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-export function Precise(value: number, precision: number = 15): number {
-    return Number(parseFloat(value.toString()).toPrecision(precision));
+export function Precise(value: number|string, precision: number = 21): number {
+    if (typeof value === "string") {
+        return Number(parseFloat(value).toPrecision(precision));
+    } else {
+        return Number(parseFloat(value.toString()).toPrecision(precision));
+    }
 }
-export function PreciseDecimals(value: number, decimals: number = 2): number {
+export function PreciseDecimals(value: number|string, decimals: number = 2): number {
     return Number(Precise(value).toFixed(decimals));
 }
 
