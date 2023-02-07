@@ -1,6 +1,7 @@
 import algosdk, { MultisigMetadata, Algodv2 } from "algosdk";
 import * as util from "util";
 import { BridgeToken, ValueUnits } from "../../common";
+import { AlgoError } from "./algoError";
 
 export type AlgorandAccount = {
     addr: string;
@@ -69,11 +70,11 @@ export class AlgorandAccounts {
                 }
 
                 //Fail Safe
-                if (!mnemonic) throw new Error("mnemonic not defined");
+                if (!mnemonic) throw new Error(AlgoError.INVALID_MNEMONIC);
 
                 //Convert seed to Account
                 let local_acccount = algosdk.mnemonicToSecretKey(mnemonic) as AlgorandAccount;
-                if (!local_acccount) throw new Error("mnemonic not valid");
+                if (!local_acccount) throw new Error(AlgoError.INVALID_MNEMONIC);
 
                 //Log
                 console.log(`Added Algorand Wallet:  ${local_acccount.addr}`)
@@ -129,7 +130,7 @@ export class AlgorandAccounts {
                 //Get Account Details
                 if (getAccountDetails) {
                     const accountInfo = await this.getInfo(msig.addr);
-                    if (!accountInfo) throw new Error("Account Info not found");
+                    if (!accountInfo) throw new Error(AlgoError.ACCOUNT_INFO);
                     msig.Details = await this.updateInfo(msig.Details, accountInfo, getAssetDetails);
                 }
 
@@ -159,12 +160,12 @@ export class AlgorandAccounts {
             try {
 
                 //Fail Safe
-                if (!this._client) throw new Error("Algorand Client not defined");
+                if (!this._client) throw new Error(AlgoError.CLIENT_NOT_SET);
 
                 let account: AlgorandAccount | undefined = undefined;
                 if (typeof params == "string") {
                     account = this.get(params);
-                    if (!account) throw new Error("Account not found");
+                    if (!account) throw new Error(AlgoError.INVALID_ACCOUNT);
                 } else {
                     account = params;
                 }
@@ -236,9 +237,9 @@ export class AlgorandAccounts {
         // eslint-disable-next-line no-async-promise-executor
         return new Promise(async (resolve, reject) => {
             try {
-                if (!local_acccount) throw new Error("Cannot update undefined account");
+                if (!local_acccount) throw new Error(AlgoError.INVALID_ACCOUNT);
                 const accountInfo = await this.getInfo(local_acccount);
-                if (!accountInfo) throw new Error("Account Info not found");
+                if (!accountInfo) throw new Error(AlgoError.ACCOUNT_INFO);
                 local_acccount.Details = await this.updateInfo(local_acccount.Details, accountInfo, getAssetDetails);
 
                 //update account list
@@ -324,11 +325,11 @@ export class AlgorandAccounts {
             try {
 
                 //Fail Safe
-                if (!this._client) throw new Error("Algorand Client not defined");
-                if (!address) throw new Error("Address not defined");
+                if (!this._client) throw new Error(AlgoError.CLIENT_NOT_SET);
+                if (!address) throw new Error(AlgoError.INVALID_ACCOUNT);
 
                 const accountInfo = await this._client.accountInformation(address).do();
-                if (!accountInfo) throw new Error("Account Info not found");
+                if (!accountInfo) throw new Error(AlgoError.ACCOUNT_INFO);
 
                 return resolve(ValueUnits.fromUnits(BigInt(accountInfo.amount), this.algo_decimals).value);
                 
@@ -344,12 +345,12 @@ export class AlgorandAccounts {
             try {
 
                 //Fail Safe
-                if (!this._client) throw new Error("Algorand Client not defined");
-                if (!token) throw new Error("Token not defined");
-                if (!address) throw new Error("Address not defined");
+                if (!this._client) throw new Error(AlgoError.CLIENT_NOT_SET);
+                if (!token) throw new Error(AlgoError.INVALID_ASSET);
+                if (!address) throw new Error(AlgoError.INVALID_ASSET);
 
                 const accountInfo = await this._client.accountInformation(address).do();
-                if (!accountInfo) throw new Error("Account Info not found");
+                if (!accountInfo) throw new Error(AlgoError.ACCOUNT_INFO);
 
                 let tokensHeld = 0;
                 for (let i = 0; i < accountInfo.assets.length; i++) {

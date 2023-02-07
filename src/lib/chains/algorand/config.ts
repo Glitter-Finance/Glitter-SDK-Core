@@ -52,3 +52,7 @@ export enum AlgorandProgramAccount {
   UsdcAssetId ="UsdcassetId",
   xALGOAssetID ="xALGOAssetID"
 }
+export type PollerOptions = {
+  limit?:number,
+  minRound?:number,
+}

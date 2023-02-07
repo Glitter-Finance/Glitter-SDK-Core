@@ -11,6 +11,7 @@ import { PartialBridgeTxn, TransactionType } from '../../common/transactions/tra
 import { AlgorandPoller } from './poller';
 import { ethers } from 'ethers';
 import { base64To0xString, base64ToString } from '../../common/utils/utils';
+import { AlgoError } from './algoError';
 
 /**
  * 
@@ -58,7 +59,7 @@ export class AlgorandConnect {
     public checkHealth(): Promise<{}> {
         return new Promise(async (resolve, reject) => {
             try {
-                if (!this._client) throw new Error("Algorand Client not defined");
+                if (!this._client) throw new Error(AlgoError.CLIENT_NOT_SET);
                 let returnValue = await this._client.healthCheck().do();
                 resolve(returnValue);
             } catch (error) {
@@ -69,7 +70,7 @@ export class AlgorandConnect {
     public checkVersion(): Promise<{}> {
         return new Promise(async (resolve, reject) => {
             try {
-                if (!this._client) throw new Error("Algorand Client not defined");
+                if (!this._client) throw new Error(AlgoError.CLIENT_NOT_SET);
                 let returnValue = await this._client.versionsCheck().do();
                 resolve(returnValue);
             } catch (error) {
@@ -79,82 +80,6 @@ export class AlgorandConnect {
     }
 
 
-    /**
-     * 
-     * 
-     * Gets partial bridge transactions
-     * @param minRound
-     * @returns {PartialBridgeTxn[]|undefined} 
-     */
-    public async getPartialBridgeTransactions(minRound?:number):Promise<PartialBridgeTxn[]|undefined>{
-       
-        return new Promise(async(resolve,reject) =>{
-            try{
-                if (!this._poller) throw new Error("POLLER IS NOT INITILALIZED")
-
-                const BridgeTxnlist = await this._poller.ListPartialBridgeTxn(minRound);
-                resolve(BridgeTxnlist)
-
-            }catch(err){
-                reject(err)
-            }
-        })
-        
-    }
-
-    public async getUsdcDepositPartialTransactions(minRound?:number):Promise<PartialBridgeTxn[]>{
-
-        return new Promise(async(resolve,reject) =>{
-            try{
-                if(!this._poller) throw new Error("Poller not set");
-                const list = this._poller.ListusdcDepositTransactionHandler(undefined,minRound,undefined);
-                resolve(list)
-            }catch(err){
-                reject(err)
-            }
-        })
-    }
-    public async getUsdcReleasePartialTransactions(minRound?:number):Promise<PartialBridgeTxn[]>{
-
-        return new Promise(async(resolve,reject) =>{
-            try{
-                if(!this._poller) throw new Error("Poller not set");
-                const list = this._poller.ListusdcReleaseTransactionHandler(undefined,minRound,undefined);
-                resolve(list)
-            }catch(err){
-                reject(err)
-            }
-        })
-    }
-
-
-
-    getPollerLastRound(){
-    
-    if (!this._poller) throw new Error("POLLER IS NOT INITILALIZED")
-    const lastRound = this._poller.getLastMinRound();
-    return lastRound
-    
-    }
-    
-    getPollerLastTxn(){
-    
-    if (!this._poller) throw new Error("POLLER IS NOT INITILALIZED")
-    const lastTxn = this._poller.getLastTxnId();
-    return lastTxn
-    
-   }
-
-   getUsdcDepositPolletLastRound(){
-    if(!this._poller) throw new Error("poller is not initialized")
-    const lastRound = this._poller.getLastMinRoundUsdcDeposit();
-    return lastRound
-   }
-   getUsdcReleasePolletLastRound(){
-    if(!this._poller) throw new Error("poller is not initialized")
-    const lastRound = this._poller.getLastMinRoundUsdcRelease();
-    return lastRound
-   }
 
     /**
      * 
@@ -164,7 +89,7 @@ export class AlgorandConnect {
      * @param toAddress 
      * @param tosymbol 
      * @param amount 
-     * @returns 
+     * @returns {Promise<algosdk.Transaction[]>}
      */
  public async bridgeTransaction(
     fromAddress:string, 
@@ -177,13 +102,13 @@ export class AlgorandConnect {
     return new Promise(async (resolve, reject ) =>{
         try{
 
-            if (!this._client) throw new Error("Algorand Client not defined");
-            if (!this._bridgeTxnsV1) throw new Error("Algorand Bridge Txns not defined");
+            if (!this._client) throw new Error(AlgoError.CLIENT_NOT_SET);
+            if (!this._bridgeTxnsV1) throw new Error(AlgoError.BRIDGE_NOT_SET);
 
             //Get Token
             const asset = BridgeTokens.get("algorand", fromSymbol);
             // ?? asset should be xsol 
-            if (!asset) throw new Error("Asset not found");
+            if (!asset) throw new Error(AlgoError.INVALID_ASSET);
 
             //Get routing
             const routing = RoutingDefault();
@@ -218,26 +143,24 @@ export class AlgorandConnect {
  }   
 
     /**
-     * 
-     * 
-     * Bridges algorand connect
+     * @method bridge
      * @param account 
      * @param fromSymbol 
      * @param toNetwork 
      * @param toAddress 
      * @param tosymbol 
      * @param amount 
-     * @returns true if transactions are signed  
+     * @returns {Promise<boolean>}
      */
     public async bridge(account: AlgorandAccount, fromSymbol: string, toNetwork: string, toAddress: string, tosymbol: string, amount: number): Promise<boolean> {
         return new Promise(async (resolve, reject) => {
             try {
-                if (!this._client) throw new Error("Algorand Client not defined");
-                if (!this._bridgeTxnsV1) throw new Error("Algorand Bridge Txns not defined");
+                if (!this._client) throw new Error(AlgoError.CLIENT_NOT_SET);
+                if (!this._bridgeTxnsV1) throw new Error(AlgoError.BRIDGE_NOT_SET);
 
                 //Get Token
                 const asset = BridgeTokens.get("algorand", fromSymbol);
-                if (!asset) throw new Error("Asset not found");
+                if (!asset) throw new Error(AlgoError.INVALID_ASSET);
 
                 //Get routing
                 const routing = RoutingDefault();
@@ -275,16 +198,16 @@ export class AlgorandConnect {
     /**
      * 
      * 
-     * Funds account
+     * @method fundAccount
      * @param funder 
      * @param account 
      * @param amount 
-     * @returns  
+     * @returns {Promise<boolean>}  
      */
     public async fundAccount(funder: AlgorandAccount, account: AlgorandAccount, amount: number): Promise<boolean> {
         return new Promise(async (resolve, reject) => {
             try {
-                if (!this._client) throw new Error("Algorand Client not defined");
+                if (!this._client) throw new Error(AlgoError.CLIENT_NOT_SET);
 
                 //Get routing
                 const routing = RoutingDefault();
@@ -308,21 +231,21 @@ export class AlgorandConnect {
 
     /**
      * 
-     * Funds account token
+     * @method fundAccountToken
      * @param funder 
      * @param account 
      * @param amount 
      * @param symbol 
-     * @returns 
+     * @returns {Promise<boolean>}
      */
     public async fundAccountToken(funder: AlgorandAccount, account: AlgorandAccount, amount: number, symbol: string): Promise<boolean> {
         return new Promise(async (resolve, reject) => {
             try {
-                if (!this._client) throw new Error("Algorand Client not defined");
+                if (!this._client) throw new Error(AlgoError.CLIENT_NOT_SET);
 
                 //Get Token
                 const asset = BridgeTokens.get("algorand", symbol);
-                if (!asset) throw new Error("Asset not found");
+                if (!asset) throw new Error(AlgoError.INVALID_ASSET);
 
                 //Get routing
                 const routing = RoutingDefault();
@@ -345,11 +268,11 @@ export class AlgorandConnect {
     }
 
     /**
-     * Sends algo
+     * @method sendAlgo
      * @param routing 
      * @param signer 
-     * @param [debug_rootPath] 
-     * @returns  
+     * @param debug_rootPath
+     * @returns {Promise<boolean>}
      */
     async sendAlgo(routing: Routing,
         signer: Account,
@@ -359,8 +282,8 @@ export class AlgorandConnect {
             try {
 
                 //Fail Safe
-                if (!this._transactions) throw new Error("Algorand Transactions not defined");
-                if (!signer) throw new Error("Signer is required");
+                if (!this._transactions) throw new Error(AlgoError.UNDEFINED_TRANSACTION);
+                if (!signer) throw new Error(AlgoError.INVALID_SIGNER);
 
                 //Get Txns
                 const transactions: Transaction[] = [];
@@ -379,12 +302,12 @@ export class AlgorandConnect {
 
     /**
      * 
-     * Sends tokens
+     * @method sendTokens
      * @param routing 
      * @param signer 
      * @param token 
-     * @param [debug_rootPath] 
-     * @returns  
+     * @param debug_rootPath
+     * @returns  {Promise<boolean>}
      */
     async sendTokens(routing: Routing,
         signer: Account,
@@ -395,9 +318,8 @@ export class AlgorandConnect {
             try {
 
                 //Fail Safe
-                if (!this._transactions) throw new Error("Algorand Transactions not defined");
-                if (!signer) throw new Error("Signer is required");
-
+                if (!this._transactions) throw new Error(AlgoError.UNDEFINED_TRANSACTION);
+                if (!signer) throw new Error(AlgoError.INVALID_SIGNER);
 
                 //Get Txn
                 console.log(`Sending ${routing.amount} ${token.symbol} from ${routing.from.address} to ${routing.to.address}`);
@@ -418,13 +340,13 @@ export class AlgorandConnect {
 
     /**
      * 
-     * Mints tokens
+     * @method mintTokens
      * @param signers 
      * @param msigParams 
      * @param routing 
      * @param token 
-     * @param [debug_rootPath] 
-     * @returns  
+     * @param debug_rootPath 
+     * @returns {Promise<boolean>} 
      */
     async mintTokens(signers: Account[],
         msigParams: algosdk.MultisigMetadata,
@@ -436,7 +358,7 @@ export class AlgorandConnect {
             try {
 
                 //Fail Safe
-                if (!this._transactions) throw new Error("Algorand Transactions not defined");
+                if (!this._transactions) throw new Error(AlgoError.UNDEFINED_TRANSACTION);
 
                 //Get Txn
                 console.log(`Minting ${routing.amount} ${token.symbol} to ${routing.to.address}`);
@@ -457,10 +379,10 @@ export class AlgorandConnect {
 
     /**
      * 
-     * Optins token
+     * @method optinToken
      * @param signer 
      * @param symbol 
-     * @returns  
+     * @returns {Promise<boolean>}  
      */
     async optinToken(signer: Account,
         symbol: string): Promise<boolean> {
@@ -470,13 +392,13 @@ export class AlgorandConnect {
 
                 //Get Token
                 const token = BridgeTokens.get("algorand", symbol);
-                if (!token) throw new Error("Token not found");
+                if (!token) throw new Error(AlgoError.INVALID_ASSET);
 
                 //Fail Safe
-                if (!this._transactions) throw new Error("Algorand Transactions not defined");
-                if (!token.address) throw new Error("asset_id is required");
-                if (typeof token.address !== "number") throw new Error("token address is required in number format");
-
+                if (!this._transactions) throw new Error(AlgoError.UNDEFINED_TRANSACTION);
+                if (!token.address) throw new Error(AlgoError.INVALID_ASSET_ID);
+                if (typeof token.address !== "number") throw new Error(AlgoError.INVALID_ASSET_ID_TYPE);
+                      
                 //Get Txn
                 console.log(`Opting in ${signer.addr} to ${token.address}`);
                 const transactions: Transaction[] = [];
@@ -496,19 +418,17 @@ export class AlgorandConnect {
 
     /**
      * 
-     * Optedins account exists
+     * @method OptedinAccountExists
      * @param address 
      * @param asset 
-     * @returns 
+     * @returns {Promise<boolean>}
      */
     async OptedinAccountExists(address:string,asset:string):Promise<boolean> {
         return new Promise(async(resolve,reject) =>{
             try{
-                if(!this._client) throw new Error("algoclient not set");
+                if(!this._client) throw new Error(AlgoError.CLIENT_NOT_SET);
                 
                 const info = await this._client.accountInformation(address).query;
-
-                
 
             }catch(err){
                 reject(err)
@@ -533,12 +453,12 @@ export class AlgorandConnect {
 
                 //Get Token
                 const token = BridgeTokens.get("algorand", symbol);
-                if (!token) throw new Error("Token not found");
+                if (!token) throw new Error(AlgoError.INVALID_ASSET);
 
                 //Fail Safe
-                if (!this._transactions) throw new Error("Algorand Transactions not defined");
-                if (!token.address) throw new Error("asset_id is required");
-                if (typeof token.address !== "number") throw new Error("address is required in number format");
+                if (!this._transactions) throw new Error(AlgoError.UNDEFINED_TRANSACTION);
+                if (!token.address) throw new Error(AlgoError.INVALID_ASSET_ID);
+                if (typeof token.address !== "number") throw new Error(AlgoError.INVALID_ASSET_ID_TYPE);
 
                 //Get Txns                
                 console.log(`Closing out token account for ${signer.addr} to ${receiver}`);
@@ -572,7 +492,7 @@ export class AlgorandConnect {
             try {
 
                 //Fail Safe
-                if (!this._transactions) throw new Error("Algorand Transactions not defined");
+                if (!this._transactions) throw new Error(AlgoError.UNDEFINED_TRANSACTION);
 
                 //Get txns
                 console.log(`Closing out token account for ${signer.addr} to ${receiver}`);
@@ -607,10 +527,10 @@ export class AlgorandConnect {
             try {
 
                 //Fail Safe
-                if (!this._transactions) throw new Error("Algorand Transactions not defined");
-                if (!this._client) throw new Error("Algorand Client not defined");
-                if (!signer) throw new Error("Signer not defined");
-                if (!signer.sk) throw new Error("Signer Secret Key is required");
+                if (!this._transactions) throw new Error(AlgoError.UNDEFINED_TRANSACTION);
+                if (!this._client) throw new Error(AlgoError.CLIENT_NOT_SET);
+                if (!signer) throw new Error(AlgoError.INVALID_SIGNER);
+                if (!signer.sk) throw new Error(AlgoError.MISSING_SECRET_KEY);
 
                 //Check Txns
                 if (groupedTxns.length == 0) throw new Error("No Transactions to sign");
@@ -664,8 +584,8 @@ export class AlgorandConnect {
         // eslint-disable-next-line no-async-promise-executor
             try{
                 //Fail Safe
-                if (!this._transactions) throw new Error("Algorand Transactions not defined");
-                if (!this._client) throw new Error("Algorand Client not defined");
+                if (!this._transactions) throw new Error(AlgoError.UNDEFINED_TRANSACTION);
+                if (!this._client) throw new Error(AlgoError.CLIENT_NOT_SET);
                 if (debug_rootPath) {
                     await this.createDryrun(rawsignedTxns, debug_rootPath);
                 }
@@ -701,13 +621,13 @@ export class AlgorandConnect {
             try {
 
                 //Fail Safe
-                if (!this._client) throw new Error("Algorand Client not defined");
+                if (!this._client) throw new Error(AlgoError.CLIENT_NOT_SET);
 
                 //Check signers
                 if (signers.length == 0) throw new Error("No Signers");
                 signers.forEach((signer) => {
-                    if (!signer) throw new Error("Signer not defined");
-                    if (!signer.sk) throw new Error("Signer Secret Key is required");
+                    if (!signer) throw new Error(AlgoError.INVALID_SIGNER);
+                    if (!signer.sk) throw new Error(AlgoError.MISSING_SECRET_KEY);
                 });
 
                 //Check Txns
@@ -765,7 +685,7 @@ export class AlgorandConnect {
             try {
 
                 //Fail Safe
-                if (!this._client) throw new Error("Algorand Client not defined");
+                if (!this._client) throw new Error(AlgoError.CLIENT_NOT_SET);
 
                 //Make sure root path is defined
                 if (!rootPath) resolve(false);
@@ -804,7 +724,7 @@ export class AlgorandConnect {
     public async getBalance(address: string): Promise<number> {
         return new Promise(async (resolve, reject) => {
             try {
-                if (!this._accounts) throw new Error("Algorand Accounts not defined");
+                if (!this._accounts) throw new Error(AlgoError.UNDEFINED_ACCOUNTS);
                 const balance = await this._accounts.getBalance(address);
 
                 resolve(balance);
@@ -852,7 +772,7 @@ export class AlgorandConnect {
 
                     //Check timeout
                     if (Date.now() - start > timeoutSeconds * 1000) {
-                        reject(new Error("Timeout waiting for balance"));
+                        reject(new Error(AlgoError.TIMEOUT));
                     }
 
                     //Wait and Check balance
@@ -902,7 +822,7 @@ export class AlgorandConnect {
 
                     //Check timeout
                     if (Date.now() - start > timeoutSeconds * 1000) {
-                        reject(new Error("Timeout waiting for balance"));
+                        reject(new Error(AlgoError.TIMEOUT));
                     }
 
                     //Wait and Check balance
@@ -952,7 +872,7 @@ export class AlgorandConnect {
 
                     //Check timeout
                     if (Date.now() - start > timeoutSeconds * 1000) {
-                        reject(new Error("Timeout waiting for balance"));
+                        reject(new Error(AlgoError.TIMEOUT));
                     }
 
                     //Wait and Check balance
@@ -983,13 +903,13 @@ export class AlgorandConnect {
     public async getTokenBalance(address: string, symbol: string): Promise<number> {
         return new Promise(async (resolve, reject) => {
             try {
-                if (!this._accounts) throw new Error("Algorand Accounts not defined");
+                if (!this._accounts) throw new Error(AlgoError.UNDEFINED_ACCOUNTS);
 
                 //Get Token
                 const token = BridgeTokens.get("algorand", symbol);
-                if (!token) throw new Error("Token not found");
-                if (!token.address) throw new Error("mint address is required");
-                if (typeof token.address !== "number") throw new Error("token address is required in number format");
+                if (!token) throw new Error(AlgoError.INVALID_ASSET);
+                if (!token.address) throw new Error(AlgoError.INVALID_ASSET_ID);
+                if (typeof token.address !== "number") throw new Error(AlgoError.INVALID_ASSET_ID_TYPE);
 
                 //Get Token Balance
                 const balance = await this._accounts.getTokensHeld(address, token);
@@ -1161,12 +1081,96 @@ export class AlgorandConnect {
         });
     }
 
+
+    /**
+     * @method getPartialBridgeTransactions
+     * @param minRound
+     * @returns {PartialBridgeTxn[]|undefined} 
+     */
+    public async getPartialBridgeTransactions(minRound?:number):Promise<PartialBridgeTxn[]|undefined>{
+       
+        return new Promise(async(resolve,reject) =>{
+            try{
+                if (!this._poller) throw new Error(AlgoError.POLLER_NOT_SET);
+
+                const BridgeTxnlist = await this._poller.ListBridgeTransactionHandler(minRound);
+                resolve(BridgeTxnlist)
+
+            }catch(err){
+                reject(err)
+            }
+        })
+        
+    }
+
+    /**
+     * @method getUsdcDepositPartialTransactions
+     * @param minRound
+     * @returns {PartialBridgeTxn[]|undefined} 
+     */
+    public async getUsdcDepositPartialTransactions(minRound?:number):Promise<PartialBridgeTxn[]>{
+
+        return new Promise(async(resolve,reject) =>{
+            try{
+                if(!this._poller) throw new Error(AlgoError.POLLER_NOT_SET);
+                const list = this._poller.ListUSDCDepositTransactionHandler(minRound,undefined,undefined);
+                resolve(list)
+            }catch(err){
+                reject(err)
+            }
+        })
+    }
+
+    /**
+     * @method getUsdcReleasePartialTransactions
+     * @param minRound
+     * @returns {PartialBridgeTxn[]|undefined} 
+     */
+    public async getUsdcReleasePartialTransactions(minRound?:number):Promise<PartialBridgeTxn[]>{
+        return new Promise(async(resolve,reject) =>{
+            try{
+                if(!this._poller) throw new Error(AlgoError.POLLER_NOT_SET);
+                const list = this._poller.ListUSDCReleaseTransactionHandler(minRound,undefined,undefined);
+                resolve(list)
+            }catch(err){
+                reject(err)
+            }
+        })
+    }
+
+    getPollerLastRound(){
+    
+    if (!this._poller) throw new Error(AlgoError.POLLER_NOT_SET)
+    const lastRound = this._poller.getLastMinRound();
+    return lastRound
+    
+    }
+    
+    getPollerLastTxn(){
+    
+    if (!this._poller) throw new Error(AlgoError.POLLER_NOT_SET)
+    const lastTxn = this._poller.getLastTxnId();
+    return lastTxn
+    
+   }
+
+   getUsdcDepositPolletLastRound(){
+    if(!this._poller) throw new Error(AlgoError.POLLER_NOT_SET)
+    const lastRound = this._poller.getLastMinRoundUsdcDeposit();
+    return lastRound
+   }
+   getUsdcReleasePolletLastRound(){
+    if(!this._poller) throw new Error(AlgoError.POLLER_NOT_SET)
+    const lastRound = this._poller.getLastMinRoundUsdcRelease();
+    return lastRound
+   }
+
     /**
      * 
      * 
-     * Gets algorand bridge address
+     * @method getAlgorandBridgeAddress
      * @param id 
-     * @returns algorand bridge address 
+     * @returns {string |number|undefined}
      */
     public getAlgorandBridgeAddress(id:AlgorandProgramAccount):string |number|undefined{
         

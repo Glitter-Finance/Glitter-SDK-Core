@@ -6,11 +6,13 @@ import { PollerOptions, SolanaConfig, SolanaProgramId } from './config';
 import { SolanaTxns } from './txns/txns';
 import * as util from 'util';
 import { BridgeToken, BridgeTokens, LogProgress, Precise, Routing, RoutingDefault, Sleep, ValueUnits } from '../../common';
-import { COMMITMENT, DepositNote } from './utils';
+import { COMMITMENT } from './utils';
+import { DepositNote } from '../../common/routing/routing';
 import { SolanaPoller } from './poller';
 import { BridgeType, PartialBridgeTxn } from '../../common/transactions/transactions';
 import { ethers } from 'ethers';
 import base58 from 'bs58';
+import { SolanaError } from './solanaError';
 
 export enum SolanaPublicNetworks  {
     mainnet_beta = "https://api.mainnet-beta.solana.com",
@@ -44,29 +46,7 @@ export class SolanaConnect {
         return new Connection(network.toString());
     }
 
-  
 
-    /**
-     * @method listDepositTransaction
-     * @param limit 
-     * @param starthash 
-     * @returns 
-     * @description returns the list of all deposit transaction hash
-     */
-    public async listUsdcTransaction( take:number, starthash?:string,endhash?:string   ):Promise<PartialBridgeTxn[]> {
-        return new Promise(async(resolve, reject) =>{
-            try {
-                if(!this._poller) throw new Error("solana poller is not set")
-                const txnList = this._poller.ListUSDCDepositTransactionHandler(take,starthash,endhash)
-                resolve(txnList)
-
-            } catch (err) {
-                reject(err)
-            }
-        })
-    }
-    
-    
  /**
   * @method bridgeTransactions
   * @param fromAddress 
@@ -90,14 +70,14 @@ export class SolanaConnect {
 
         try{
             //Fail Safe
-            if (!this._client) throw new Error('Solana Client not found');
-            if (!this._bridgeTxnsV1) throw new Error('Solana Bridge Transactions not found');
-            if (!this._accounts) throw new Error('Solana Accounts not found');
-            if (!this._assets) throw new Error('Solana Assets not found');
+            if (!this._client) throw new Error(SolanaError.CLIENT_NOT_SET);
+            if (!this._bridgeTxnsV1) throw new Error(SolanaError.BRIDGE_NOT_SET);
+            if (!this._accounts) throw new Error(SolanaError.ACCOUNTS_NOT_SET);
+            if (!this._assets) throw new Error(SolanaError.ASSETS_NOT_SET);
             
              //Get Token
              const token = BridgeTokens.get("solana", fromSymbol);
-             if (!token) throw new Error("Token not found");
+             if (!token) throw new Error(SolanaError.INVALID_ASSET);
 
 
                //Get routing
@@ -122,7 +102,6 @@ export class SolanaConnect {
                }else {
                    txn = await this._bridgeTxnsV1.tokenBridgeTransaction(sourcePubkey, routing, token);
                 }
-
                 resolve(txn);
 
         }catch(err){
@@ -154,14 +133,14 @@ public async bridge(account: SolanaAccount,
             try {
 
                 //Fail Safe
-                if (!this._client) throw new Error('Solana Client not found');
-                if (!this._bridgeTxnsV1) throw new Error('Solana Bridge Transactions not found');
-                if (!this._accounts) throw new Error('Solana Accounts not found');
-                if (!this._assets) throw new Error('Solana Assets not found');
-
-                //Get Token
-                const token = BridgeTokens.get("solana", fromSymbol);
-                if (!token) throw new Error("Token not found");
+            if (!this._client) throw new Error(SolanaError.CLIENT_NOT_SET);
+            if (!this._bridgeTxnsV1) throw new Error(SolanaError.BRIDGE_NOT_SET);
+            if (!this._accounts) throw new Error(SolanaError.ACCOUNTS_NOT_SET);
+            if (!this._assets) throw new Error(SolanaError.ASSETS_NOT_SET);
+            
+             //Get Token
+             const token = BridgeTokens.get("solana", fromSymbol);
+             if (!token) throw new Error(SolanaError.INVALID_ASSET);
 
                 //Get routing
                 const routing = RoutingDefault();
@@ -183,7 +162,7 @@ public async bridge(account: SolanaAccount,
                 }else {
                     txn = await this._bridgeTxnsV1.tokenBridgeTransaction(account.pk, routing, token);
                 }
-                if (!txn) throw new Error("Transaction not found");
+                if (!txn) throw new Error(SolanaError.UNDEFINED_TRANSACTION);
 
                 //Send Transaction
                 const txid = await this._client.sendTransaction(
@@ -218,7 +197,7 @@ public async bridge(account: SolanaAccount,
             try {
 
                 //Fail safe
-                if (!this._client) throw new Error("Solana Client not defined");
+                if (!this._client) throw new Error(SolanaError.CLIENT_NOT_SET);
 
                 //Get routing
                 const routing = RoutingDefault();
@@ -254,11 +233,11 @@ public async bridge(account: SolanaAccount,
             try {
 
                 //Fail safe
-                if (!this._client) throw new Error("Solana Client not defined");
+                if (!this._client) throw new Error(SolanaError.CLIENT_NOT_SET);
 
                 //Get Token
                 const token = BridgeTokens.get("solana", symbol);
-                if (!token) throw new Error("Token not found");
+                if (!token) throw new Error(SolanaError.INVALID_ASSET);
 
                 //Get routing
                 const routing = RoutingDefault();
@@ -290,11 +269,11 @@ public async bridge(account: SolanaAccount,
         return new Promise(async (resolve, reject) => {
             try {
 
-                //Fail safe
-                if (!this._client) throw new Error("Solana Client not defined");
-                if (!this._transactions) throw new Error("Solana Transactions not defined");
-                if (!this._accounts) throw new Error("Solana Accounts not defined");
-
+                   //Fail Safe
+            if (!this._client) throw new Error(SolanaError.CLIENT_NOT_SET);
+            if (!this._transactions) throw new Error(SolanaError.UNDEFINED_TRANSACTION);
+            if (!this._accounts) throw new Error(SolanaError.ACCOUNTS_NOT_SET);
+           
                 //Get balance
                 const balance = await this.getBalance(signer.addr);
 
@@ -310,7 +289,7 @@ public async bridge(account: SolanaAccount,
 
                 //Get sol token
                 const solToken = await this._transactions.SolToken;
-                if (!solToken) throw new Error("Sol Token not found");
+                if (!solToken) throw new Error(SolanaError.SOL_TOKEN_NOT_SET);
 
                 routing.amount = ValueUnits.fromUnits(BigInt(1), solToken.decimals).value;
 
@@ -352,11 +331,11 @@ public async bridge(account: SolanaAccount,
         return new Promise(async (resolve, reject) => {
             try {
 
-                //Fail Safe
-                if (!this._client) throw new Error('Solana Client not found');
-                if (!this._transactions) throw new Error('Solana Transactions not found');
-                if (!this._accounts) throw new Error('Solana Accounts not found');
-
+           //Fail Safe
+            if (!this._client) throw new Error(SolanaError.CLIENT_NOT_SET);
+            if (!this._transactions) throw new Error(SolanaError.UNDEFINED_TRANSACTION);
+            if (!this._accounts) throw new Error(SolanaError.ACCOUNTS_NOT_SET);
+           
                 //Get Transactions
                 console.log(`Sending ${routing.amount} SOL from ${signer.addr} to ${routing.to.address}`);
                 const txn = await this._transactions.sendSolTransaction(routing);
@@ -391,13 +370,15 @@ public async bridge(account: SolanaAccount,
             try {
 
                 //Fail Safe
-                if (!this._transactions) throw new Error("Solana Transactions not defined");
-                if (!account) throw new Error("Sender account is required");
-                if (!token) throw new Error("Token is required");
-                if (!this._assets) throw new Error("Solana Assets not defined");
-                if (!this._accounts) throw new Error("Solana Accounts not defined");
-                if (!this._client) throw new Error("Solana Client not defined");
-
+                if (!this._transactions) throw new Error(SolanaError.UNDEFINED_TRANSACTION);
+                if (!account) throw new Error(SolanaError.INVALID_ACCOUNT);
+                if (!token) throw new Error(SolanaError.INVALID_ASSET);
+                if (!this._assets) throw new Error(SolanaError.UNDEFINED_SOL_ASSETS);
+                
+                if (!this._client) throw new Error(SolanaError.CLIENT_NOT_SET);
+                if (!this._transactions) throw new Error(SolanaError.UNDEFINED_TRANSACTION);
+                if (!this._accounts) throw new Error(SolanaError.ACCOUNTS_NOT_SET);
+                
                 //get token accounts
                 const senderTokenAccount = await this._assets.getTokenAccount(account.pk, token);
                 const receiverTokenAccount = await this._assets.getTokenAccount(new PublicKey(routing.to.address), token);
@@ -445,15 +426,17 @@ public async bridge(account: SolanaAccount,
             try {
 
                 //Fail Safe
-                if (!this._accounts) throw new Error("Solana Accounts not defined");
-                if (!this._transactions) throw new Error("Solana Transactions not defined");
                 if (!this._assets) throw new Error("Solana Assets not defined");
+                if (!this._transactions) throw new Error(SolanaError.UNDEFINED_TRANSACTION);
+                if (!account) throw new Error(SolanaError.INVALID_ACCOUNT);
+                if (!this._client) throw new Error(SolanaError.UNDEFINED_SOL_ASSETS);
+                //Fail Safe
 
                 //Get Token
                 const token = BridgeTokens.get("solana", symbol);
-                if (!token) throw new Error("Token not found");
-                if (!token.address) throw new Error("mint address is required");
-                if (typeof token.address !== "string") throw new Error("token address is required in string format");
+                if (!token) throw new Error(SolanaError.ASSETS_NOT_SET);
+                if (!token.address) throw new Error(SolanaError.INVALID_APP_ID);
+                if (typeof token.address !== "string") throw new Error(SolanaError.INVALID_ASSET_ID_TYPE);
 
                 //Get Txn
                 console.log(`Opting in ${account.addr} to ${token.address}`);
@@ -504,17 +487,17 @@ public async bridge(account: SolanaAccount,
             try {
 
                 //Fail Safe
-                if (!this._transactions) throw new Error("Solana Transactions not defined");
-                if (!this._assets) throw new Error("Solana Assets not defined");
+                if (!this._transactions) throw new Error(SolanaError.UNDEFINED_TRANSACTION);
+                if (!this._assets) throw new Error(SolanaError.UNDEFINED_SOL_ASSETS);
 
                 //Get balance
                 let balance = await this.getTokenBalance(signer.addr, symbol);
 
                 //Get Token
                 const token = BridgeTokens.get("solana", symbol);
-                if (!token) throw new Error("Token not found");
-                if (!token.address) throw new Error("mint address is required");
-                if (typeof token.address !== "string") throw new Error("token address is required in string format");
+                if (!token) throw new Error(SolanaError.INVALID_ASSET);
+                if (!token.address) throw new Error(SolanaError.INVALID_APP_ID);
+                if (typeof token.address !== "string") throw new Error(SolanaError.INVALID_ASSET_ID_TYPE);
 
                 //Check if balance needs to be closed out
                 if (balance > 0) {
@@ -525,7 +508,7 @@ public async bridge(account: SolanaAccount,
                 }
                 //get token account
                 const tokenAccount = await this._assets.getTokenAccount(signer.pk, token);
-                if (!tokenAccount) throw new Error("Token Account not found");
+                if (!tokenAccount) throw new Error(SolanaError.UNDEFINED_TOKEN_ACCOUNT);
 
                 let txn = this._transactions.closeTokenAccountTransaction(signer.pk, tokenAccount.address);
                 resolve(true);
@@ -549,13 +532,13 @@ public async bridge(account: SolanaAccount,
             try {
 
                 //Fail Safe
-                if (!this._assets) throw new Error("Solana Assets not defined");
+                if (!this._assets) throw new Error(SolanaError.UNDEFINED_SOL_ASSETS);
 
                 // //Get Token
                 const token = BridgeTokens.get("solana", symbol);
-                if (!token) throw new Error("Token not found");
-                if (!token.address) throw new Error("mint address is required");
-                if (typeof token.address !== "string") throw new Error("token address is required in string format");
+                if (!token) throw new Error(SolanaError.INVALID_ASSET);
+                if (!token.address) throw new Error(SolanaError.INVALID_APP_ID);
+                if (typeof token.address !== "string") throw new Error(SolanaError.INVALID_ASSET_ID_TYPE);
 
                 //get token account
                 const tokenAccount = await this._assets.getTokenAccount(account.pk, token);
@@ -581,17 +564,18 @@ public async bridge(account: SolanaAccount,
     public async getBalance(address: string): Promise<number> {
         return new Promise(async (resolve, reject) => {
             try {
-                if (!this._client) throw new Error("Solana Client not defined");
-                if (!this._accounts) throw new Error("Solana Accounts not defined");
-                if (!this._transactions) throw new Error("Solana transactions not defined");
-
+     
+                if (!this._client) throw new Error(SolanaError.CLIENT_NOT_SET);
+                if (!this._transactions) throw new Error(SolanaError.UNDEFINED_TRANSACTION);
+                if (!this._accounts) throw new Error(SolanaError.ACCOUNTS_NOT_SET);
+           
                 //get account
                 const account = this._accounts.getAccount(address);
-                if (!account) throw new Error("Account not found");
+                if (!account) throw new Error(SolanaError.INVALID_ACCOUNT);
 
                 //Get sol token
                 const solToken = await this._transactions.SolToken;
-                if (!solToken) throw new Error("Sol Token not found");
+                if (!solToken) throw new Error(SolanaError.SOL_TOKEN_NOT_SET);
 
                 let units = await this._client.getBalance(account.pk);
 
@@ -766,20 +750,21 @@ public async bridge(account: SolanaAccount,
     public async getTokenBalance(address: string, symbol: string): Promise<number> {
         return new Promise(async (resolve, reject) => {
             try {
-                if (!this._client) throw new Error("Solana Client not defined");
-                if (!this._accounts) throw new Error("Solana Accounts not defined");
-                if (!this._transactions) throw new Error("Solana transactions not defined");
+                //Fail Safe
                 if (!this._assets) throw new Error("Solana Assets not defined");
+                if (!this._transactions) throw new Error(SolanaError.UNDEFINED_TRANSACTION);
+                if (!this._accounts) throw new Error(SolanaError.INVALID_ACCOUNT);
+                if (!this._client) throw new Error(SolanaError.UNDEFINED_SOL_ASSETS);
 
                 //Get Token
                 const token = BridgeTokens.get("solana", symbol);
-                if (!token) throw new Error("Token not found");
-                if (!token.address) throw new Error("mint address is required");
-                if (typeof token.address !== "string") throw new Error("token address is required in string format");
+                if (!token) throw new Error(SolanaError.INVALID_ASSET);
+                if (!token.address) throw new Error(SolanaError.INVALID_APP_ID);
+                if (typeof token.address !== "string") throw new Error(SolanaError.INVALID_ASSET_ID_TYPE);
 
                 //get token account
                 const tokenAccount = await this._assets.getTokenAccount(new PublicKey(address), token);
-                if (!tokenAccount) throw new Error("Token Account not found");
+                if (!tokenAccount) throw new Error(SolanaError.UNDEFINED_TOKEN_ACCOUNT);
 
                 //Get balance (Units)
                 let unitsContext = await this._client.getTokenAccountBalance(tokenAccount.address);
@@ -829,7 +814,7 @@ public async bridge(account: SolanaAccount,
 
                     //Check timeout
                     if (Date.now() - start > timeoutSeconds * 1000) {
-                        reject(new Error("Timeout waiting for balance"));
+                        reject(new Error(SolanaError.TIMEOUT));
                     }
 
                     //Wait and Check balance
@@ -877,7 +862,7 @@ public async bridge(account: SolanaAccount,
 
                     //Check timeout
                     if (Date.now() - start > timeoutSeconds * 1000) {
-                        reject(new Error("Timeout waiting for balance"));
+                        reject(new Error(SolanaError.TIMEOUT));
                     }
 
                     //Wait and Check balance
@@ -922,7 +907,7 @@ public async bridge(account: SolanaAccount,
 
                     //Check timeout
                     if (Date.now() - start > timeoutSeconds * 1000) {
-                        reject(new Error("Timeout waiting for balance"));
+                        reject(new Error(SolanaError.TIMEOUT));
                     }
 
                     //Wait and Check balance
@@ -952,9 +937,10 @@ public async bridge(account: SolanaAccount,
         public async getPartialBridgeTransactions(take:number, beginAt?:string,endAt?:string):Promise<PartialBridgeTxn[]|undefined>{
             return new Promise(async(resolve, reject) =>{
             try{
+                if(!this._poller) throw new Error(SolanaError.POLLER_NOT_SET)
                 const list = this._poller?.ListBridgeTransactionHandler(take,beginAt,endAt); 
                 if(!list){
-                    throw new Error("unable to list Bridge PartialBridgeTxn")
+                    throw new Error("LIST IS UNDEFINED")
                 }
                 resolve(list)    
             }catch(err){
@@ -975,10 +961,10 @@ public async bridge(account: SolanaAccount,
         public async getUsdcDepositPartialTransactions(take:number, beginAt?:string,endAt?:string):Promise<PartialBridgeTxn[]|undefined>{
         return new Promise(async(resolve, reject) =>{
         try{
-
+            if(!this._poller) throw new Error(SolanaError.POLLER_NOT_SET)
             const list = this._poller?.ListUSDCDepositTransactionHandler(take,beginAt,endAt); 
             if(!list){
-                throw new Error("unable to list USDC Deposit PartialBridgeTxn")
+                throw new Error("LIST IS UNDEFINED")
             }
             resolve(list)    
         }catch(err){
@@ -999,6 +985,7 @@ public async bridge(account: SolanaAccount,
      public async startPoller(bridgeType: BridgeType,delay:number,options?:PollerOptions,usdcBridgeTransactions?:'deposit' |'release'):Promise<PartialBridgeTxn[]|undefined>{
         return new Promise(async(resolve, reject) =>{
         try{
+
 
             if(!this._poller) throw new Error("poller not set");
             this._poller?.start(bridgeType,delay,options,usdcBridgeTransactions); 
@@ -1025,10 +1012,10 @@ public async bridge(account: SolanaAccount,
         public async getUsdcReleasePartialTransactions(take:number, beginAt?:string,endAt?:string):Promise<PartialBridgeTxn[]|undefined>{
             return new Promise(async(resolve, reject) =>{
             try{
-    
+                if(!this._poller) throw new Error(SolanaError.POLLER_NOT_SET)
                 const list = this._poller?.ListUSDCReleaseTransactionHandler(take,beginAt,endAt); 
                 if(!list){
-                    throw new Error("unable to list USDC Release PartialBridgeTxn")
+                    throw new Error("LIST IS UNDEFINED")
                 }
                 resolve(list)    
             }catch(err){
@@ -1042,7 +1029,7 @@ public async bridge(account: SolanaAccount,
         // eslint-disable-next-line no-async-promise-executor
         return new Promise(async (resolve, reject) => {
             try {
-                if (!this._client) throw new Error('Solana Client not found');
+                if (!this._client) throw new Error(SolanaError.CLIENT_NOT_SET);
                 const result = await this._client.requestAirdrop(signer.pk, 1_000_000_000);
                 resolve(true);
             } catch (error) {
@@ -1057,9 +1044,9 @@ public async bridge(account: SolanaAccount,
         return new Promise(async(resolve, reject) => {
             try{
 
-                if(!txn) throw new Error("transaction is not valid");
-                if(!account) throw new Error(" account is not defined");
-                if(!this._client) throw new Error("solana client not connected")
+                if(!txn) throw new Error(SolanaError.UNDEFINED_TRANSACTION);
+                if(!account) throw new Error(SolanaError.UNDEFINED_ACCOUNTS);
+                if(!this._client) throw new Error(SolanaError.CLIENT_NOT_SET);
                 const wallet = Keypair.fromSecretKey(account.sk); 
 
                 const txn_signature = await sendAndConfirmTransaction(this._client, txn,[wallet]);
@@ -1090,7 +1077,7 @@ public async bridge(account: SolanaAccount,
         return new Promise(async (resolve,reject) => {
             try{
                 if (!txn) throw new Error("Transaction is not Signed");
-                if (!this._client) throw new Error(" solana client not connected");
+                if (!this._client) throw new Error(SolanaError.CLIENT_NOT_SET);
                 const txn_hash = await this._client.sendRawTransaction(txn,{
                     skipPreflight: false,
                     preflightCommitment: COMMITMENT

@@ -15,6 +15,10 @@ export type RoutingPoint = {
     txn_signature?: string;
     txn_signature_hashed?: string;
 }
+export type DepositNote = {
+    system: string, 
+    date: string,
+}
 
 export function RoutingDefault(copyFrom: Routing | undefined = undefined): Routing {
 

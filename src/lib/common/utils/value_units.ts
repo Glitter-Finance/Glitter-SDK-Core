@@ -28,13 +28,6 @@ export class ValueUnits {
     }
   }
 
-  public static getTrimmedNumber(num: number): number {
-    const decimalPlaces = num.toString().split(".")[1];
-    if (decimalPlaces && decimalPlaces.length > 3) {
-        return Number(num.toFixed(3));
-    }
-    return num;
-}
 
 }
 

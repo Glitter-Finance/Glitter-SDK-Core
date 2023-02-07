@@ -1,3 +1,4 @@
+import algosdk from 'algosdk';
 import minimist = require('minimist');
 import * as readline from 'readline'
 
@@ -36,4 +37,15 @@ export const base64To0xString = (encoded: any) => {
 export const base64ToBigUIntString = (encoded: any) => {
     return Buffer.from(encoded, "base64").readBigUInt64BE().toString();
 };
-
+export const  convertToAscii= (str:string) => {
+    let arg = Buffer.from(str, "base64").toString("ascii");
+    return arg;
+}
+ export const convertToNumber = (str:any) =>{
+    if (typeof str !== "number") {
+      str = Buffer.from(str, "base64");
+      return Number(algosdk.decodeUint64(str,"safe"));
+    } else {
+      return Number(str);
+    }
+  }

@@ -3,14 +3,13 @@ import {  Sleep } from "../../common";
 import { Routing, ValueUnits } from "../../common";
 import { BridgeTokens } from "../../common/tokens/tokens";
 import { BridgeType, ChainStatus, PartialBridgeTxn, TransactionType } from "../../common/transactions/transactions";
-import { AlgorandProgramAccount } from "./config";
+import { AlgorandProgramAccount, PollerOptions } from "./config";
 import { AlgorandBridgeTxnsV1 } from "./txns/bridge";
-import * as dotenv from 'dotenv'
-import winston from "winston";
 import { ethers } from "ethers";
-import { base64To0xString,base64ToBigUIntString } from "../../common/utils/utils";
+import { base64To0xString,base64ToBigUIntString, convertToAscii, convertToNumber } from "../../common/utils/utils";
+import { DepositNote } from "../../common/routing/routing";
+import { AlgoError } from "./algoError";
 
-dotenv.config({ path:'src/.env' });
 const DEFAULT_LIMIT =500;          
 
 export class AlgorandPoller{
@@ -18,15 +17,16 @@ export class AlgorandPoller{
     private _clientIndexer: algosdk.Indexer | undefined = undefined;
     private _client: algosdk.Algodv2 | undefined = undefined;
     private _bridgeTxnsV1: AlgorandBridgeTxnsV1 | undefined = undefined;
-    
+    private delay: number = 5000;
+    private bridgeType: BridgeType | undefined; 
+    private options:PollerOptions|undefined;   
     constructor(client:algosdk.Algodv2, clientIndexer:algosdk.Indexer,bridgeTxnV1:AlgorandBridgeTxnsV1){
         this._client = client
         this._clientIndexer = clientIndexer
         this._bridgeTxnsV1 = bridgeTxnV1
     }
     
-        //Logger -> Passed in on start
-        logger = undefined;
+        
         //Interval
         pollerLoop = null;
         //Local Vars
@@ -51,6 +51,9 @@ export class AlgorandPoller{
         lastPolledTime = 0;
         //Pause
         paused = false;
+        _usdcBridgeTransactions:string|undefined     
+        _UsdcPollerflag = false; 
+        _BridgePollerflag = false;   
         public pausePoller() {
             this.paused = true;
         }
@@ -58,18 +61,62 @@ export class AlgorandPoller{
             this.paused = false;
         }
 
+    //Start Poller
+    public async start(bridgeType: BridgeType,delay:number,options?:PollerOptions,usdcBridgeTransactions?:'deposit' |'release'): Promise<void> {
+
+        //Set local
+        this.delay = delay;
+        this.bridgeType = bridgeType;
+        this.options = options;  
+        this._usdcBridgeTransactions = usdcBridgeTransactions
+        //Setup local
+        switch (bridgeType) {
+            case BridgeType.USDC:
+              this._UsdcPollerflag = true ; 
+                break;
+            case BridgeType.Token:
+              this._BridgePollerflag = true;   
+                break;
+            default:
+                throw new Error("Invalid Network");
+        }
+      //   setTimeout(async () => {
+      //     this.poll();
+      // }, this.delay);   
+    }
+
+  async poll():Promise<PartialBridgeTxn[]|undefined> {
+     switch(this.bridgeType)  {
+      case BridgeType.USDC:
+        if(this._usdcBridgeTransactions=='release') {
+          const releasePartialTxn = await this.ListUSDCReleaseTransactionHandler(this.options?.minRound,this.options?.limit)
+          return Promise.resolve(releasePartialTxn)    
+        }
+      const depostiPartialTxn = await this.ListUSDCDepositTransactionHandler(this.options?.minRound,this.options?.limit)
+      return Promise.resolve(depostiPartialTxn)
+      break;
+      case BridgeType.Token:
+      const bridgePartialTransaction  = await this.ListBridgeTransactionHandler(this.options?.minRound,this.options?.limit)
+      return Promise.resolve(bridgePartialTransaction)
+      default:
+      return Promise.reject()
+
+     }
+  }
+
  /**
-  * @methof ListPartialBridgeTxn
+  * @method ListBridgeTransactionHandler
   * @param minRound 
-  * @returns 
+  * @param limit 
+  * @returns {PartialBridgeTxn[]|undefined}
   */        
-    public async ListPartialBridgeTxn(minRound?:number,limit?:number):Promise<PartialBridgeTxn[]|undefined>{
+    public async ListBridgeTransactionHandler(minRound?:number,limit?:number):Promise<PartialBridgeTxn[]|undefined>{
          return new Promise(async (resolve,reject) =>{
             
         try{
 
-            if(!this._client) throw new Error("Algo Client Not Defined");
-            if(!this._clientIndexer)  throw new Error("Indexer Not Set")
+            if(!this._client) throw new Error(AlgoError.CLIENT_NOT_SET);
+            if(!this._clientIndexer)  throw new Error(AlgoError.INDEXER_NOT_SET)
             let nextToken = null;
             //set polling flag
             this._polling = true; 
@@ -78,7 +125,7 @@ export class AlgorandPoller{
             this.lastPolledTime = Date.now();
             let appId = this._bridgeTxnsV1?.getGlitterAccountAddress(AlgorandProgramAccount.appID);
             if(!appId) {
-                throw new Error("APP ID NOT DEFINED")
+                throw new Error(AlgoError.INVALID_APP_ID)
             }
             //Check app 
             let app = await this._client.getApplicationByID(appId as number).do();
@@ -91,9 +138,9 @@ export class AlgorandPoller{
             let solReleaseCounter = globalState.find((x: { key: string; }) => x.key === "eFNPTC1yZWxlYXNlLWNvdW50ZXI=")['value']['uint'];
             let solRefundCounter = globalState.find((x: { key: string; }) => x.key === "eFNPTC1yZWZ1bmQtY291bnRlcg==")['value']['uint'];
             let count = algoDepositCounter + algoReleaseCounter + algoRefundCounter + solDepositCounter + solReleaseCounter + solRefundCounter;
-        //Check if new transactions
-        if (count === this._lastContractCount) {
-            //No new transactions
+              //Check if new transactions
+               if (count === this._lastContractCount) {
+               //No new transactions
 
                 if (Date.now() - this.lastNoNewTxMessageTime >= 5 * 1000) {
                     if (this.lastTxnTime == null) {
@@ -101,7 +148,6 @@ export class AlgorandPoller{
                     } else {
                         console.log("No new transactions.  Last transaction: " + (Date.now() / this.lastTxnTime) + " seconds ago");
                     }
-                    //if (logger !== undefined) console.log("Poller is still running after " + getLastTxnTimeDelta() + " seconds.");
                     this.lastNoNewTxMessageTime = Date.now();
                 }
             
@@ -117,9 +163,7 @@ export class AlgorandPoller{
             const TxnLimit = limit==undefined?DEFAULT_LIMIT:limit
 
             do{
-
                 try{
-
                  Sleep(1000) // 1 sec delay 
                 var data = await this._clientIndexer
                 .searchForTransactions()
@@ -143,16 +187,11 @@ export class AlgorandPoller{
                         }
                        const PartialBtxn = this.getPartialBTxn(tx)
                         if(PartialBtxn!=null){
-
                             PartialBtxnList.push(PartialBtxn);
-
                         }
-                        
                         this._lastTxnID = lastTxnId;
                         let transactionTimestamp = tx["round-time"];
-                        // NewlastTxnTime = new Date((transactionTimestamp || 0) * 1000); 
                         NewlastTxnTime = transactionTimestamp   
-                        
                     }
                 } else {
                     //No transactions in this round
@@ -161,8 +200,6 @@ export class AlgorandPoller{
             }catch(err){
                    
             }
-
-            
                 //Save state
                 // setLastCompletedRound("../SaveStates", nextMinRound);
                 // setLastCompletedTxnID("../SaveStates", lastTxnID);
@@ -179,15 +216,10 @@ export class AlgorandPoller{
     }catch(err){
         reject(err)
     }
-
-
     //Clear Polling Flag 
-
     this._polling = false;
     this._pollerCountflag=2
 })
-  
-
 }
 
 
@@ -196,7 +228,7 @@ export class AlgorandPoller{
        if(this._pollerCountflag=2) {
         res = this._lastRound
        }else {
-        throw new Error("POLLER IS NOT SET")
+        throw new Error(AlgoError.POLLER_NOT_SET)
        }
 
         return res 
@@ -207,7 +239,7 @@ export class AlgorandPoller{
        if(this._pollerCountflag=2) {
         res = this._lastTxnID
        }else{
-        throw new Error("POLLER IS NOT SET")
+        throw new Error(AlgoError.POLLER_NOT_SET)
        }
 
         return res 
@@ -218,7 +250,7 @@ export class AlgorandPoller{
         if(this._pollerCountflag=2) {
          res = this._lastContractCount
         }else{
-         throw new Error("POLLER IS NOT SET")
+         throw new Error(AlgoError.POLLER_NOT_SET)
         }
  
          return res 
@@ -227,21 +259,20 @@ export class AlgorandPoller{
 
      /**
       * 
-      * 
-      * Listusdcs deposit transaction handler
+      * @method ListUSDCDepositTransactionHandler
       * @param address 
       * @param limit 
       * @param asset 
       * @param startHash
       * @returns {PartialBridgeTxn[]}  
       */
-     public async ListusdcDepositTransactionHandler(limit?:number,minRound?:number,startHash?:string):Promise<PartialBridgeTxn[]>  {
+     public async ListUSDCDepositTransactionHandler(minRound?:number,limit?:number,startHash?:string):Promise<PartialBridgeTxn[]>  {
         return new Promise(async (resolve,reject) =>{
             try{
                     const address = this._bridgeTxnsV1?.getGlitterAccountAddress(AlgorandProgramAccount.UsdcDepositAccount) as string;
-                    if(!address) throw new Error("address not defined")   ;
-                    if(!this._client) throw new Error("Algo Client Not Defined");
-                    if(!this._clientIndexer)  throw new Error("Indexer Not Set")
+                    if(!address) throw new Error(AlgoError.INVALID_ACCOUNT) ;
+                    if(!this._client) throw new Error(AlgoError.CLIENT_NOT_SET);
+                    if(!this._clientIndexer)  throw new Error(AlgoError.INDEXER_NOT_SET);
                     this._USDCpolling = true; 
                     this._pollerCountflag=3;
                     let nextMinRound = minRound==undefined ? this._UsdclastRound:minRound;
@@ -258,7 +289,7 @@ export class AlgorandPoller{
                             .minRound(nextMinRound)
                             .address(address)
                             .do();
-                            if(!data) throw new Error("DATA IS udndefined ")
+                            if(!data) throw new Error("DATA IS UNDEFINED ")
                             this.nextToken = data['next-token'];
                             if (data.transactions.length > 0) {
                                 //There are transactions in this round. Add to Transaction Map    
@@ -337,7 +368,7 @@ export class AlgorandPoller{
            if(this._pollerCountflag=3) {
             res = this._UsdclastRound
            }else {
-            throw new Error("POLLER IS NOT SET")
+            throw new Error(AlgoError.POLLER_NOT_SET)
            }
     
             return res 
@@ -348,7 +379,7 @@ export class AlgorandPoller{
            if(this._pollerCountflag=3) {
             res = this._UsdclastTxnID
            }else{
-            throw new Error("POLLER IS NOT SET")
+            throw new Error(AlgoError.POLLER_NOT_SET)
            }
     
             return res 
@@ -363,21 +394,21 @@ export class AlgorandPoller{
     /**
       * 
       * 
-      * Listusdcs Release transaction handler
+      * @method ListUSDCReleaseTransactionHandler
       * @param address 
       * @param limit 
       * @param asset 
       * @param startHash
       * @returns {PartialBridgeTxn[]}
       */
-        public async ListusdcReleaseTransactionHandler(limit?:number,minRound?:number,startHash?:string):Promise<PartialBridgeTxn[]>  {
+        public async ListUSDCReleaseTransactionHandler(minRound?:number,limit?:number,startHash?:string):Promise<PartialBridgeTxn[]>  {
             return new Promise(async (resolve,reject) =>{
                 try{
                     
                     const address = this._bridgeTxnsV1?.getGlitterAccountAddress(AlgorandProgramAccount.UsdcReceiverAccount) as string;
-                    if(!address) throw new Error("address not defined")   ;
-                    if(!this._client) throw new Error("Algo Client Not Defined");
-                    if(!this._clientIndexer)  throw new Error("Indexer Not Set")
+                    if(!address) throw new Error(AlgoError.INVALID_ACCOUNT);
+                    if(!this._client) throw new Error(AlgoError.CLIENT_NOT_SET);
+                    if(!this._clientIndexer)  throw new Error(AlgoError.INDEXER_NOT_SET)
                     this._USDCpolling = true; 
                     this._pollerCountflag=5;
                     let nextMinRound = minRound==undefined ? this._UsdcReleaselastRound:minRound;
@@ -394,7 +425,7 @@ export class AlgorandPoller{
                             .minRound(nextMinRound)
                             .address(address)
                             .do();
-                            if(!data) throw new Error("data IS udndefined ")
+                            if(!data) throw new Error("data IS UNDEFINED ")
                             this.nextToken = data['next-token'];
                             if (data.transactions.length > 0) {
                                 //There are transactions in this round. Add to Transaction Map    
@@ -470,7 +501,7 @@ export class AlgorandPoller{
            if(this._pollerCountflag=3) {
             res = this._UsdcReleaselastRound
            }else {
-            throw new Error("POLLER IS NOT SET")
+            throw new Error(AlgoError.POLLER_NOT_SET)
            }
     
             return res 
@@ -481,7 +512,7 @@ export class AlgorandPoller{
            if(this._pollerCountflag=3) {
             res = this._UsdcReleaselastTxnID
            }else{
-            throw new Error("POLLER IS NOT SET")
+            throw new Error(AlgoError.POLLER_NOT_SET)
            }
     
             return res 
@@ -523,23 +554,17 @@ export class AlgorandPoller{
             partialTxn: PartialBridgeTxn,
            ): Promise<PartialBridgeTxn> {
             let decimals = 6;
-        
-        
             //Set type
             partialTxn.tokenSymbol = "usdc";
-        
             //Get Address
             let units = txn["asset-transfer-transaction"].amount;
             let assetID = txn["asset-transfer-transaction"]["asset-id"];
-        
             //Check if asset is USDC
             if (assetID !== BridgeTokens.get("algorand","usdc")?.address) {
                 return Promise.resolve(partialTxn);
             }
-        
             let sender = txn.sender;
             if (sender == this._bridgeTxnsV1?.getGlitterAccountAddress(AlgorandProgramAccount.UsdcDepositAccount)) {
-               
                 //This is a transfer or refund
                 if (!routing){
                     partialTxn.txnType = TransactionType.Transfer;
@@ -553,10 +578,8 @@ export class AlgorandPoller{
                 partialTxn.address = txn.sender;
                 partialTxn.txnType = TransactionType.Deposit;
             }
-        
             partialTxn.units = units;
             partialTxn.amount = ValueUnits.fromUnits(units, decimals).value;
-        
             partialTxn.routing = routing;
             return Promise.resolve(partialTxn);
         }
@@ -624,13 +647,13 @@ export class AlgorandPoller{
             ){
             return undefined;
             }
-            let solAddress = this.convertToAscii(txnArgs[0]);
-            let algoSender = this.convertToAscii(txnArgs[1]);
+            let solAddress = convertToAscii(txnArgs[0]);
+            let algoSender = convertToAscii(txnArgs[1]);
             let algoReceiver = appTxn["accounts"][0];
             let solAssetID: string | null = null;
             let algoAssetID: string | null = null;
             let xALGOAssetID = "xALGoH1zUfRmpCriy94qbfoMXHtK6NDnMKzT4Xdvgms";
-            switch (this.convertToAscii(txnArgs[2])) {
+            switch (convertToAscii(txnArgs[2])) {
               case xALGOAssetID:
                 solAssetID = "xalgo";
                 break;
@@ -641,7 +664,7 @@ export class AlgorandPoller{
                 solAssetID = null;
                 break;
             }
-            switch (this.convertToAscii(txnArgs[3])) {
+            switch (convertToAscii(txnArgs[3])) {
               case "xSOL":
                 algoAssetID = "xsol";
                 break;
@@ -652,11 +675,11 @@ export class AlgorandPoller{
                 algoAssetID = null;
                 break;
             }
-            let appCall = this.convertToAscii(txnArgs[4]);
-            let amount = this.convertToNumber(txnArgs[6]);
+            let appCall = convertToAscii(txnArgs[4]).toLocaleLowerCase();
+            let amount =  convertToNumber(txnArgs[6]);
             let txnID = txn["id"];
             let txnSignature = txn["signature"]["sig"];
-            let solSig = this.convertToAscii(txnArgs[5]);
+            let solSig = convertToAscii(txnArgs[5]);
             if (!solSig) solSig = "null";
             let routing:Routing|undefined = undefined; 
             //Get Algorand Transaction data
@@ -672,7 +695,7 @@ export class AlgorandPoller{
             const transactionTimestamp = txn["round-time"];
             PartialBtxn.txnTimestamp = new Date((transactionTimestamp || 0) * 1000); //*1000 is to convert to milliseconds
             PartialBtxn.block = txn["confirmed-round"];
-            if(appCall.toLocaleLowerCase() =="xsol-deposit"){
+            if(appCall =="xsol-deposit"){
                 let decimals = 9;
                 const units = BigInt(amount)
                 const amount_ = ValueUnits.fromUnits(BigInt(amount), decimals).value;
@@ -704,7 +727,7 @@ export class AlgorandPoller{
              PartialBtxn.routing = routing;
              return PartialBtxn;   
 
-            }else if(appCall.toLocaleLowerCase()=="algo-release") {
+            }else if(appCall=="algo-release") {
                 let decimals =6; 
                 const units = BigInt(amount)
                 const amount_ = ValueUnits.fromUnits(BigInt(amount), decimals).value;
@@ -736,7 +759,7 @@ export class AlgorandPoller{
                 PartialBtxn.routing = routing;
                 return PartialBtxn;
                 
-            }else if(appCall.toLocaleLowerCase() =="xsol-release"){
+            }else if(appCall =="xsol-release"){
               
                 let decimals =9; 
                 const units = BigInt(amount)
@@ -769,7 +792,7 @@ export class AlgorandPoller{
                 PartialBtxn.routing = routing;
                 return PartialBtxn;
                 
-            }else if(appCall.toLocaleLowerCase() == "xsol-refund"){
+            }else if(appCall == "xsol-refund"){
                 let decimals = 9;
 
             //Set type
@@ -797,7 +820,7 @@ export class AlgorandPoller{
             PartialBtxn.routing = routing;
             return PartialBtxn;
 
-            }else if(appCall.toLocaleLowerCase() =="algo-deposit"){
+            }else if(appCall =="algo-deposit"){
           
                 let decimals =6; 
                 const units = BigInt(amount)
@@ -829,7 +852,7 @@ export class AlgorandPoller{
                 PartialBtxn.routing = routing;
                 return PartialBtxn;               
                 
-            }else if(appCall.toLocaleLowerCase()=="algo-refund") {
+            }else if(appCall=="algo-refund") {
 
                 let decimals =6; 
                 const units = BigInt(amount)
@@ -867,21 +890,5 @@ export class AlgorandPoller{
             return undefined; 
         }
 
-        public convertToAscii(str:string) {
-            let arg = Buffer.from(str, "base64").toString("ascii");
-            return arg;
-          }
-          public convertToNumber(str:any) {
-            if (typeof str !== "number") {
-              str = Buffer.from(str, "base64");
-              return Number(algosdk.decodeUint64(str,"safe"));
-            } else {
-              return Number(str);
-            }
-          }
 }
 
-export type DepositNote = {
-    system: string, // RoutingData json format
-    date: string,
-}

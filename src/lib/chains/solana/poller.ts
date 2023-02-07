@@ -1,13 +1,13 @@
 import { Connection, PublicKey, TokenBalance, TransactionResponse } from "@solana/web3.js";
 import bs58 from "bs58";
-import {  BridgeTokens, Precise, ValueUnits } from "../../common";
+import {  BridgeTokens, Precise, PreciseDecimals, ValueUnits } from "../../common";
 import { Routing } from "../../common/routing/routing";
 import { BridgeType, ChainStatus, PartialBridgeTxn, TransactionType } from "../../common/transactions/transactions";
 import { PollerOptions, SolanaProgramId } from "./config";
 import { SolanaBridgeTxnsV1 } from "./txns/bridge";
 import { deserialize } from "borsh";
 import algosdk from "algosdk";
-import { DepositNote } from "./utils";
+import { DepositNote } from "../../common/routing/routing";
 import { ethers } from "ethers";
 import base58 from "bs58";
 
@@ -534,8 +534,6 @@ export class SolanaPoller{
           Buffer.from(data_bytes.slice(1))
       );
      
-     
-
         //Get Address
         const data = this.getSolanaAddressWithAmount(txn, "xalgo", false);
         partialTxn.address = data[0] || "";
@@ -573,8 +571,15 @@ export class SolanaPoller{
         return partialTxn;
       }
 
-
-       solFinalize(txn: TransactionResponse, data_bytes: Uint8Array, partialTxn: PartialBridgeTxn): PartialBridgeTxn{
+      /**
+       * 
+       * @method solFinalize
+       * @param txn 
+       * @param data_bytes 
+       * @param partialTxn 
+       * @returns {PartialBridgeTxn} 
+       */
+      solFinalize(txn: TransactionResponse, data_bytes: Uint8Array, partialTxn: PartialBridgeTxn): PartialBridgeTxn{
         let decimals = 9;
     
         //Set type
@@ -589,6 +594,15 @@ export class SolanaPoller{
         return partialTxn;
     }
 
+      /**
+       * 
+       * @method xALGOFinalize
+       * @param txn 
+       * @param data_bytes 
+       * @param partialTxn 
+       * @returns {PartialBridgeTxn} 
+       */
+          
      xALGOFinalize(txn: TransactionResponse, data_bytes: Uint8Array, partialTxn: PartialBridgeTxn): PartialBridgeTxn{
       let decimals = 9;
       partialTxn.txnType = TransactionType.Finalize;
@@ -596,21 +610,20 @@ export class SolanaPoller{
       partialTxn.tokenSymbol = "xalgo";
       partialTxn.address = data[0] || "";
       let value = data[1] || 0;
-      const amount = ValueUnits.getTrimmedNumber(value); 
+      const amount =PreciseDecimals(value);        
       const units = ValueUnits.fromValue(amount,decimals).units
       partialTxn.amount = amount;
       partialTxn.units = units.toString();
        return partialTxn;
   }    
 
-
       /**
        * 
-       * Gets solana address
+       * @method getSolanaAddress
        * @param txn 
        * @param isDeposit 
        * @param isToken 
-       * @returns solana address 
+       * @returns {string} 
        */
       public getSolanaAddress(txn: TransactionResponse, isDeposit: boolean, isToken: boolean): string {
 

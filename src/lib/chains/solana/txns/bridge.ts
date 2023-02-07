@@ -20,7 +20,7 @@ import {
     createTransferInstruction,
     getAssociatedTokenAddress,
 } from "@solana/spl-token";
-import { DepositNote } from "../utils";
+import { DepositNote } from "../../../common/routing/routing";
 import { BridgeToken, BridgeTokens, Routing, ValueUnits } from "../../../common";
 import { SolanaAccountsConfig, SolanaProgramId } from "../config";
 
@@ -373,7 +373,7 @@ export class SolanaBridgeTxnsV1 {
 
                 //Get Bridge Program PubKey
                 const bridgeProgram = new PublicKey(this._bridgeProgramAddress!);
-                
+
                 //Get accounts
                 const solanaEscrowAccount = await this.getSolEscrowAccount(account);
 

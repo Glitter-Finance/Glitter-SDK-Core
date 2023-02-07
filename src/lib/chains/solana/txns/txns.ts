@@ -2,6 +2,7 @@ import { Account, Connection, Keypair, PublicKey, Signer, SystemProgram, Transac
 import { ASSOCIATED_TOKEN_PROGRAM_ID, TOKEN_PROGRAM_ID, NATIVE_MINT, createCloseAccountInstruction, getOrCreateAssociatedTokenAccount, createTransferCheckedInstruction } from "@solana/spl-token";
 import * as util from "util";
 import { BridgeToken, BridgeTokens, Routing, ValueUnits } from "../../../common";
+import { SolanaError } from "../solanaError";
 
 export class SolanaTxns {
 
@@ -21,13 +22,13 @@ export class SolanaTxns {
     }
 
     public sendSolTransaction(routing: Routing): Transaction {
-        if (!this._client) throw new Error('Solana Client not found');
-        if (!routing) throw new Error('Routing not found');
-        if (!routing.amount) throw new Error('Amount not found');
+        if (!this._client) throw new Error(SolanaError.CLIENT_NOT_SET);
+        if (!routing) throw new Error(SolanaError.UNDEFINED_ROUTING);
+        if (!routing.amount) throw new Error(' Routing Amount not found');
 
         //Get Sol Token
         const solToken = this.SolToken;
-        if (!solToken) throw new Error('Sol Token not found');
+        if (!solToken) throw new Error(SolanaError.SOL_TOKEN_NOT_SET);
 
         const txn = new Transaction().add(
             SystemProgram.transfer({
@@ -44,12 +45,12 @@ export class SolanaTxns {
         recipientTokenAccount: PublicKey,
         token: BridgeToken): Transaction {
 
-        if (!this._client) throw new Error('Solana Client not found');
-        if (!routing) throw new Error('Routing not found');
-        if (!routing.amount) throw new Error('Amount not found');
+        if (!this._client) throw new Error(SolanaError.CLIENT_NOT_SET);
+        if (!routing) throw new Error(SolanaError.UNDEFINED_ROUTING);
+        if (!routing.amount) throw new Error('Routing Amount not found');
         if (!token) throw new Error('Token not found');
-        if (!token.address) throw new Error('Token address not found');
-        if (typeof token.address !== "string") throw new Error('Token address not found in string format');
+        if (!token.address) throw new Error(SolanaError.INVALID_ASSET_ID);
+        if (typeof token.address !== "string") throw new Error(SolanaError.INVALID_ASSET_ID_TYPE);
 
         const txn = new Transaction().add(
             createTransferCheckedInstruction(
