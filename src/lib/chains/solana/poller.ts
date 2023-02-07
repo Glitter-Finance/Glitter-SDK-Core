@@ -146,7 +146,6 @@ export class SolanaPoller{
                   partialBtxn = this.SOLRelease(txn, data_bytes, partialBtxn);
                     break;
                 case 20:
-                  console.log("XALGODEPOSITTXNID",partialBtxn.txnID);
                   partialBtxn = this.xALGODeposit(txn, data_bytes, partialBtxn);
                     break;
                 case 21:
@@ -382,8 +381,6 @@ export class SolanaPoller{
           .encodeAddress(instruction["algo_address"])
           .toString();
       const units = instruction["amount"].toString();
-      // const units_ = BigInt(units);
-      // const amount = ValueUnits.fromUnits(BigInt(units), decimals).value;
       partialTxn.units = BigInt(units).toString();
       partialTxn.amount = ValueUnits.fromUnits(BigInt(units), decimals).value;
       //Set Fields
@@ -434,8 +431,10 @@ export class SolanaPoller{
           const algoAddress = algosdk
               .encodeAddress(instruction["algo_address"])
               .toString();
-          //ISSUE :- THIS DOES NOT PROPERLY DECODED TO ALGO_TXN_ID              
-          const algoTxId = new TextDecoder().decode(instruction["algo_txn_id"]);
+       
+          let algoTxId = new TextDecoder().decode(
+            new Uint8Array(data_bytes.slice(33, 85))
+        );
           const units = instruction["amount"].toString();
           partialTxn.units = BigInt(units).toString();
           partialTxn.amount = ValueUnits.fromUnits(BigInt(units), decimals).value;
@@ -464,11 +463,11 @@ export class SolanaPoller{
 
       /**
        * 
-       * Xalgodeposit
+       * @method xALGODeposit
        * @param txn 
        * @param data_bytes 
        * @param txnID 
-       * @returns algodeposit  Routing
+       * @returns {PartialBridgeTxn}
        */
        xALGODeposit(txn: TransactionResponse, data_bytes: Uint8Array,partialTxn: PartialBridgeTxn): PartialBridgeTxn {
         let decimals = 6;
@@ -481,8 +480,6 @@ export class SolanaPoller{
           BridgeInstruction,
             Buffer.from(data_bytes.slice(1))
         );
-          
-            
         //Get Address
         const data = this.getSolanaAddressWithAmount(txn, "xalgo", true);
         partialTxn.address = data[0] || "";
@@ -492,8 +489,6 @@ export class SolanaPoller{
             .encodeAddress(instruction["algo_address"])
             .toString();
         const units = instruction["amount"].toString();
-        // const units_ = BigInt(units);
-        // const amount = ValueUnits.fromUnits(BigInt(units), decimals).value;
         partialTxn.units = BigInt(units).toString();
         partialTxn.amount = ValueUnits.fromUnits(BigInt(units), decimals).value;
         //Set Fields
@@ -538,7 +533,8 @@ export class SolanaPoller{
         BridgeInstruction,
           Buffer.from(data_bytes.slice(1))
       );
-
+     
+     
 
         //Get Address
         const data = this.getSolanaAddressWithAmount(txn, "xalgo", false);
@@ -549,13 +545,12 @@ export class SolanaPoller{
             .encodeAddress(instruction["algo_address"])
             .toString();
 
-        const algoTxId = new TextDecoder().decode(instruction["algo_txn_id"]);
+        let algoTxId = new TextDecoder().decode(
+              new Uint8Array(data_bytes.slice(33, 85))
+          );
         const units = instruction["amount"].toString();
-        // const units_ = BigInt(units);
-        // const amount = ValueUnits.fromUnits(BigInt(units), decimals).value;
         partialTxn.units = BigInt(units).toString();
         partialTxn.amount = ValueUnits.fromUnits(BigInt(units), decimals).value;
-    
         //Set Fields
         const routing = {
             from: {
@@ -578,6 +573,7 @@ export class SolanaPoller{
         return partialTxn;
       }
 
+
        solFinalize(txn: TransactionResponse, data_bytes: Uint8Array, partialTxn: PartialBridgeTxn): PartialBridgeTxn{
         let decimals = 9;
     
@@ -592,18 +588,21 @@ export class SolanaPoller{
         partialTxn.amount = ValueUnits.fromUnits(BigInt(partialTxn.units), decimals).value;
         return partialTxn;
     }
+
      xALGOFinalize(txn: TransactionResponse, data_bytes: Uint8Array, partialTxn: PartialBridgeTxn): PartialBridgeTxn{
       let decimals = 9;
-      //Set type
       partialTxn.txnType = TransactionType.Finalize;
-      //Get Address
       const data = this.getSolanaAddressWithAmount(txn, "xalgo", false);
       partialTxn.tokenSymbol = "xalgo";
       partialTxn.address = data[0] || "";
-      partialTxn.units = BigInt(143).toString();
-      partialTxn.amount = ValueUnits.fromUnits(BigInt(partialTxn.units), decimals).value;   
-      return partialTxn;
+      let value = data[1] || 0;
+      const amount = ValueUnits.getTrimmedNumber(value); 
+      const units = ValueUnits.fromValue(amount,decimals).units
+      partialTxn.amount = amount;
+      partialTxn.units = units.toString();
+       return partialTxn;
   }    
+
 
       /**
        * 

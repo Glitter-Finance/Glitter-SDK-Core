@@ -371,11 +371,9 @@ export class SolanaBridgeTxnsV1 {
                 if (!this._bridgeProgramAddress) throw new Error("Bridge Program Address is not set");
                 if (!this._client) throw new Error("Client is not set");
 
-
-
                 //Get Bridge Program PubKey
                 const bridgeProgram = new PublicKey(this._bridgeProgramAddress!);
-
+                
                 //Get accounts
                 const solanaEscrowAccount = await this.getSolEscrowAccount(account);
 

@@ -907,14 +907,11 @@ public async bridge(account: SolanaAccount,
     public async waitForTokenBalanceChange(address: string, symbol: string, startingAmount: number, timeoutSeconds: number = 60): Promise<number> {
         return new Promise(async (resolve, reject) => {
             try {
-
                 //Get start time & balance
                 const start = Date.now();
                 let balance = await this.getTokenBalance(address,symbol);
-
                 //Loop until balance (or timeout) is reached
                 while (true) {
-
                     if (balance != startingAmount) {
                         break;
                     }
@@ -955,7 +952,6 @@ public async bridge(account: SolanaAccount,
         public async getPartialBridgeTransactions(take:number, beginAt?:string,endAt?:string):Promise<PartialBridgeTxn[]|undefined>{
             return new Promise(async(resolve, reject) =>{
             try{
-
                 const list = this._poller?.ListBridgeTransactionHandler(take,beginAt,endAt); 
                 if(!list){
                     throw new Error("unable to list Bridge PartialBridgeTxn")
@@ -972,9 +968,9 @@ public async bridge(account: SolanaAccount,
         *
         * @method getUSDCDepositTransactions
         * @param take 
-        * @param [beginAt] 
-        * @param [endAt] 
-        * @returns List of usdcdeposit transactions 
+        * @param beginAt
+        * @param endAt
+        * @returns {PartialBridgeTxn[]|undefined}
         */
         public async getUsdcDepositPartialTransactions(take:number, beginAt?:string,endAt?:string):Promise<PartialBridgeTxn[]|undefined>{
         return new Promise(async(resolve, reject) =>{
@@ -991,15 +987,16 @@ public async bridge(account: SolanaAccount,
         })  
         }
 
-        /**
-        *
-        * @method getUSDCDReleaseTransactions
-        * @param take 
-        * @param [beginAt] 
-        * @param [endAt] 
-        * @returns List of usdcdeposit transactions 
-        */
-        public async startPoller(bridgeType: BridgeType,delay:number,options?:PollerOptions,usdcBridgeTransactions?:'deposit' |'release'):Promise<PartialBridgeTxn[]|undefined>{
+     /**
+      * 
+      * @method startPoller
+      * @param bridgeType 
+      * @param delay 
+      * @param options 
+      * @param usdcBridgeTransactions
+      * @returns {PartialBridgeTxn[]|undefined} 
+      */
+     public async startPoller(bridgeType: BridgeType,delay:number,options?:PollerOptions,usdcBridgeTransactions?:'deposit' |'release'):Promise<PartialBridgeTxn[]|undefined>{
         return new Promise(async(resolve, reject) =>{
         try{
 
@@ -1017,7 +1014,15 @@ public async bridge(account: SolanaAccount,
         })  
         }
 
-        public async getPartialTransactions(take:number, beginAt?:string,endAt?:string):Promise<PartialBridgeTxn[]|undefined>{
+        /**
+        *
+        * @method getUSDCDReleaseTransactions
+        * @param take 
+        * @param beginAt
+        * @param endAt
+        * @returns {PartialBridgeTxn[]|undefined}
+        */
+        public async getUsdcReleasePartialTransactions(take:number, beginAt?:string,endAt?:string):Promise<PartialBridgeTxn[]|undefined>{
             return new Promise(async(resolve, reject) =>{
             try{
     
@@ -1031,12 +1036,6 @@ public async bridge(account: SolanaAccount,
             }
             })  
             }
-    
-    
-    
-            
-
-
 
         //Helper Functions
     async getTestAirDrop(signer: SolanaAccount): Promise<boolean> {
