@@ -58,18 +58,7 @@ export const BridgeTestnet: GlitterBridgeConfig = {
         name: undefined,
         max_transfer: undefined,
         total_supply: undefined,
-      },
-      {
-        network: "algorand",
-        symbol: "xGLI",
-        address: 607591690,
-        decimals: 6,
-        min_transfer: undefined,
-        fee_divisor: undefined,
-        name: undefined,
-        max_transfer: undefined,
-        total_supply: undefined,
-      },
+      }
     ],
   },
   solana: {
@@ -118,18 +107,7 @@ export const BridgeTestnet: GlitterBridgeConfig = {
         name: undefined,
         max_transfer: undefined,
         total_supply: undefined,
-      },
-      {
-        network: "solana",
-        symbol: "xGLI",
-        address: "FsPncBfeDV3Uv9g6yyx1NnKidvUeCaAiT2NtBAPy17xg",
-        decimals: 6,
-        min_transfer: undefined,
-        fee_divisor: undefined,
-        name: undefined,
-        max_transfer: undefined,
-        total_supply: undefined,
-      },
+      }
     ],
   },
   evm: {
