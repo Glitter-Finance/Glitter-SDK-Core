@@ -7,6 +7,7 @@ export enum TransactionType{
     Refund =  "Refund",
     Transfer = "Transfer",
     Finalize = "Finalize",
+    FeeTransfer = "FeeTransfer",
 }
 export enum ChainStatus{
     Unknown = "Unknown",
