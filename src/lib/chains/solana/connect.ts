@@ -1,4 +1,4 @@
-import {  ConfirmedSignaturesForAddress2Options, Connection, Keypair, PublicKey, sendAndConfirmTransaction, Transaction, TransactionInstruction } from '@solana/web3.js';
+import { ConfirmedSignaturesForAddress2Options, Connection, Keypair, PublicKey, sendAndConfirmTransaction, Transaction, TransactionInstruction } from '@solana/web3.js';
 import { SolanaAccount, SolanaAccounts } from './accounts';
 import { SolanaAssets } from './assets';
 import { SolanaBridgeTxnsV1 } from './txns/bridge';
@@ -11,7 +11,7 @@ import { SolanaPoller } from './poller';
 import { ethers } from 'ethers';
 import base58 from 'bs58';
 
-export enum SolanaPublicNetworks  {
+export enum SolanaPublicNetworks {
     mainnet_beta = "https://api.mainnet-beta.solana.com",
     testnet = "https://api.testnet.solana.com",
     devnet = "https://api.devnet.solana.com"
@@ -24,7 +24,7 @@ export class SolanaConnect {
     private _assets: SolanaAssets | undefined = undefined;
     private _transactions: SolanaTxns | undefined = undefined;
     private _bridgeTxnsV1: SolanaBridgeTxnsV1 | undefined = undefined;
-    private _poller:SolanaPoller | undefined;
+    private _poller: SolanaPoller | undefined;
     private _config: SolanaConfig | undefined = undefined;
     _lastTxnHash: string = "";
 
@@ -35,91 +35,96 @@ export class SolanaConnect {
         this._accounts = new SolanaAccounts(this._client);
         this._assets = new SolanaAssets(this._client);
         this._transactions = new SolanaTxns(this._client);
-        this._bridgeTxnsV1 = new SolanaBridgeTxnsV1(this._client,config.accounts.bridgeProgram, config.accounts );
-        this._poller = new SolanaPoller(this._client,this._bridgeTxnsV1) 
+        this._bridgeTxnsV1 = new SolanaBridgeTxnsV1(this._client, config.accounts.bridgeProgram, config.accounts);
+        this._poller = new SolanaPoller(this._client, this._bridgeTxnsV1)
+
+        //Load tokens
+        config.tokens.forEach(element => {
+            BridgeTokens.add(element);
+        });
     }
-    
+
     public getPublicConnection(network: SolanaPublicNetworks): Connection {
         return new Connection(network.toString());
     }
 
- /**
-  * @method bridgeTransactions
-  * @param fromAddress 
-  * @param fromSymbol 
-  * @param toNetwork 
-  * @param toAddress 
-  * @param tosymbol 
-  * @param amount 
-  * @returns Unsigned bridge transaction
-  * @description performs the bridge operation without signing transaction and return the undigned transaction instead
-  */
+    /**
+     * @method bridgeTransactions
+     * @param fromAddress 
+     * @param fromSymbol 
+     * @param toNetwork 
+     * @param toAddress 
+     * @param tosymbol 
+     * @param amount 
+     * @returns Unsigned bridge transaction
+     * @description performs the bridge operation without signing transaction and return the undigned transaction instead
+     */
     public async bridgeTransactions(
-        fromAddress:string, 
-        fromSymbol:string,
-        toNetwork:string, 
-        toAddress:string, 
-        tosymbol:string,
-        amount:number
-    ):Promise<Transaction | undefined>{
+        fromAddress: string,
+        fromSymbol: string,
+        toNetwork: string,
+        toAddress: string,
+        tosymbol: string,
+        amount: number
+    ): Promise<Transaction | undefined> {
         return new Promise(async (resolve, reject) => {
 
-        try{
-            //Fail Safe
-            if (!this._client) throw new Error('Solana Client not found');
-            if (!this._bridgeTxnsV1) throw new Error('Solana Bridge Transactions not found');
-            if (!this._accounts) throw new Error('Solana Accounts not found');
-            if (!this._assets) throw new Error('Solana Assets not found');
-            
-             //Get Token
-             const token = BridgeTokens.get("solana", fromSymbol);
-             if (!token) throw new Error("Token not found");
+            try {
+                //Fail Safe
+                if (!this._client) throw new Error('Solana Client not found');
+                if (!this._bridgeTxnsV1) throw new Error('Solana Bridge Transactions not found');
+                if (!this._accounts) throw new Error('Solana Accounts not found');
+                if (!this._assets) throw new Error('Solana Assets not found');
+
+                //Get Token
+                const token = BridgeTokens.get("solana", fromSymbol);
+                if (!token) throw new Error("Token not found");
 
 
-               //Get routing
-               const routing = RoutingDefault();
-               routing.from.address = fromAddress;
-               routing.from.token = fromSymbol;
-               routing.from.network = "solana";
+                //Get routing
+                const routing = RoutingDefault();
+                routing.from.address = fromAddress;
+                routing.from.token = fromSymbol;
+                routing.from.network = "solana";
 
-               routing.to.address = toAddress; 
-               routing.to.token = tosymbol;
-               routing.to.network = toNetwork;
-               routing.amount = amount;
-               
-               const sourcePubkey = new PublicKey(fromAddress);
-               let txn: Transaction | undefined = undefined;
-               if (token.symbol.toLowerCase() === "sol"  ) {
-                   txn = await this._bridgeTxnsV1.solBridgeTransaction(sourcePubkey, routing, token);
-               } else if (token.symbol.toLocaleLowerCase() == "usdc" && tosymbol.toLocaleLowerCase() == "usdc"){
+                routing.to.address = toAddress;
+                routing.to.token = tosymbol;
+                routing.to.network = toNetwork;
+                routing.amount = amount;
 
-                txn = await this._bridgeTxnsV1.HandleUsdcSwapUnsigned( routing, token);
+                const sourcePubkey = new PublicKey(fromAddress);
+                let txn: Transaction | undefined = undefined;
+                if (token.symbol.toLowerCase() === "sol") {
+                    txn = await this._bridgeTxnsV1.solBridgeTransaction(sourcePubkey, routing, token);
+                } else if (token.symbol.toLocaleLowerCase() == "usdc" && tosymbol.toLocaleLowerCase() == "usdc") {
 
-               }else {
-                   txn = await this._bridgeTxnsV1.tokenBridgeTransaction(sourcePubkey, routing, token);
+                    txn = await this._bridgeTxnsV1.HandleUsdcSwapUnsigned(routing, token);
+
+                } else {
+                    txn = await this._bridgeTxnsV1.tokenBridgeTransaction(sourcePubkey, routing, token);
                 }
 
                 resolve(txn);
 
-        }catch(err){
-            reject(err)
-        }
+            } catch (err) {
+                reject(err)
+            }
 
-    })
-}
+        })
+    }
 
-/**
- * @method bridge
- * @param account solana account of source 
- * @param fromSymbol token symbol of source 
- * @param toNetwork destination chain
- * @param toAddress address on destination chain
- * @param tosymbol destination token symbol
- * @param amount  amount to be transfered from source 
- * @returns 
- * @description performs the bridging operation between two chains 
- */
-public async bridge(account: SolanaAccount,
+    /**
+     * @method bridge
+     * @param account solana account of source 
+     * @param fromSymbol token symbol of source 
+     * @param toNetwork destination chain
+     * @param toAddress address on destination chain
+     * @param tosymbol destination token symbol
+     * @param amount  amount to be transfered from source 
+     * @returns 
+     * @description performs the bridging operation between two chains 
+     */
+    public async bridge(account: SolanaAccount,
         fromSymbol: string,
         toNetwork: string,
         toAddress: string,
@@ -145,18 +150,18 @@ public async bridge(account: SolanaAccount,
                 routing.from.token = fromSymbol;
                 routing.from.network = "solana";
 
-                routing.to.address = toAddress; 
+                routing.to.address = toAddress;
                 routing.to.token = tosymbol;
                 routing.to.network = toNetwork;
                 routing.amount = amount;
 
                 //get token account
                 let txn: Transaction | undefined = undefined;
-                if (token.symbol.toLowerCase() === "sol"  ) {
+                if (token.symbol.toLowerCase() === "sol") {
                     txn = await this._bridgeTxnsV1.solBridgeTransaction(account.pk, routing, token);
-                } else if(routing.to.token.toLocaleLowerCase() === "usdc" && token.symbol.toLocaleLowerCase() === "usdc") {
-                    txn =  await this._bridgeTxnsV1.HandleUsdcSwap(account, routing);
-                }else {
+                } else if (routing.to.token.toLocaleLowerCase() === "usdc" && token.symbol.toLocaleLowerCase() === "usdc") {
+                    txn = await this._bridgeTxnsV1.HandleUsdcSwap(account, routing);
+                } else {
                     txn = await this._bridgeTxnsV1.tokenBridgeTransaction(account.pk, routing, token);
                 }
                 if (!txn) throw new Error("Transaction not found");
@@ -405,17 +410,17 @@ public async bridge(account: SolanaAccount,
 
 
     }
-    
+
     /**
      * @method optinToken
-	 * @param account 
+     * @param account 
      * @param symbol 
      * @returns 
      * @description creates token account 
      */
     async optinToken
-    (account: SolanaAccount,
-        symbol: string): Promise<boolean> {
+        (account: SolanaAccount,
+            symbol: string): Promise<boolean> {
         // eslint-disable-next-line no-async-promise-executor
         return new Promise(async (resolve, reject) => {
             try {
@@ -511,7 +516,7 @@ public async bridge(account: SolanaAccount,
             }
         });
     }
-    
+
     /**
      * @method optinAccountExists
      * @param account 
@@ -785,7 +790,7 @@ public async bridge(account: SolanaAccount,
 
                 //Get start time & balance
                 const start = Date.now();
-                let balance = await this.getTokenBalance(address,symbol);
+                let balance = await this.getTokenBalance(address, symbol);
 
                 //Loop until balance (or timeout) is reached
                 while (true) {
@@ -838,7 +843,7 @@ public async bridge(account: SolanaAccount,
 
                 //Get start time & balance
                 const start = Date.now();
-                let balance = await this.getTokenBalance(address,symbol);
+                let balance = await this.getTokenBalance(address, symbol);
 
                 //Loop until balance (or timeout) is reached
                 while (true) {
@@ -886,7 +891,7 @@ public async bridge(account: SolanaAccount,
 
                 //Get start time & balance
                 const start = Date.now();
-                let balance = await this.getTokenBalance(address,symbol);
+                let balance = await this.getTokenBalance(address, symbol);
 
                 //Loop until balance (or timeout) is reached
                 while (true) {
@@ -935,26 +940,26 @@ public async bridge(account: SolanaAccount,
     }
 
     // Txn helper 
-    async sendAndConfirmTransaction(txn:Transaction,account:SolanaAccount): Promise<string> {
+    async sendAndConfirmTransaction(txn: Transaction, account: SolanaAccount): Promise<string> {
         // eslint-disable-next-line no-async-promise-executor
-        return new Promise(async(resolve, reject) => {
-            try{
+        return new Promise(async (resolve, reject) => {
+            try {
 
-                if(!txn) throw new Error("transaction is not valid");
-                if(!account) throw new Error(" account is not defined");
-                if(!this._client) throw new Error("solana client not connected")
-                const wallet = Keypair.fromSecretKey(account.sk); 
+                if (!txn) throw new Error("transaction is not valid");
+                if (!account) throw new Error(" account is not defined");
+                if (!this._client) throw new Error("solana client not connected")
+                const wallet = Keypair.fromSecretKey(account.sk);
 
-                const txn_signature = await sendAndConfirmTransaction(this._client, txn,[wallet]);
+                const txn_signature = await sendAndConfirmTransaction(this._client, txn, [wallet]);
 
 
                 resolve(txn_signature)
 
-            }catch(err){
+            } catch (err) {
                 reject(err)
             }
         });
-        
+
     }
     public get client() {
         return this._client;
@@ -968,19 +973,19 @@ public async bridge(account: SolanaAccount,
     public get lastTxnHash() {
         return this._lastTxnHash
     }
-   // wallet- txn helper 
-    public async sendSignedTransaction(txn:number[] | Uint8Array ) :Promise<string> {
-        return new Promise(async (resolve,reject) => {
-            try{
+    // wallet- txn helper 
+    public async sendSignedTransaction(txn: number[] | Uint8Array): Promise<string> {
+        return new Promise(async (resolve, reject) => {
+            try {
                 if (!txn) throw new Error("Transaction is not Signed");
                 if (!this._client) throw new Error(" solana client not connected");
-                const txn_hash = await this._client.sendRawTransaction(txn,{
+                const txn_hash = await this._client.sendRawTransaction(txn, {
                     skipPreflight: false,
                     preflightCommitment: COMMITMENT
-                  });
+                });
 
                 resolve(txn_hash)
-            }catch(err){
+            } catch (err) {
                 reject(err)
             }
         })
@@ -990,26 +995,26 @@ public async bridge(account: SolanaAccount,
     // get Id
     public getTxnHashedFromBase58(txnID: string): string {
         return ethers.utils.keccak256(base58.decode(txnID));
-      }   
-    public getSolanaBridgeAddress(id:SolanaProgramId):string|number|undefined{
+    }
+    public getSolanaBridgeAddress(id: SolanaProgramId): string | number | undefined {
         return this._bridgeTxnsV1?.getGlitterAccountAddress(id);
     }
-    public get tokenBridgePollerAddress():string|number|undefined{
+    public get tokenBridgePollerAddress(): string | number | undefined {
         return this._config?.accounts?.bridgeProgram;
     }
-    public get usdcBridgePollerAddress():string|number|undefined{
+    public get usdcBridgePollerAddress(): string | number | undefined {
         return this._config?.accounts?.usdcDeposit;
     }
-    public get usdcBridgeDepositAddress():string|number|undefined{
+    public get usdcBridgeDepositAddress(): string | number | undefined {
         return this._config?.accounts?.usdcDeposit;
-    }   
-    public get usdcBridgeDepositTokenAddress():string|number|undefined{
+    }
+    public get usdcBridgeDepositTokenAddress(): string | number | undefined {
         return this._config?.accounts?.usdcDepositTokenAccount;
-    }   
-    public get usdcBridgeReceiverAddress():string|number|undefined{
+    }
+    public get usdcBridgeReceiverAddress(): string | number | undefined {
         return this._config?.accounts?.usdcReceiver;
     }
-    public get usdcBridgeReceiverTokenAddress():string|number|undefined{
+    public get usdcBridgeReceiverTokenAddress(): string | number | undefined {
         return this._config?.accounts?.usdcReceiverTokenAccount;
     }
     public getMintAddress(symbol: string): string | undefined {
@@ -1027,8 +1032,8 @@ public async bridge(account: SolanaAccount,
             return undefined;
         }
     }
-    public getToken(token:string):BridgeToken | undefined{
-        return BridgeTokens.get("solana",   token);
-      }
+    public getToken(token: string): BridgeToken | undefined {
+        return BridgeTokens.get("solana", token);
+    }
 
 }

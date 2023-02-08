@@ -48,6 +48,11 @@ export class EvmConnect {
       return _tokens;
     }, {} as Record<string, ERC20>);
 
+  //    //Load tokens
+  //    config.tokens.forEach(element => {
+  //     BridgeTokens.add(element);
+  // });
+
     return {
       rpcProvider,
       bridge,

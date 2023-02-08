@@ -40,6 +40,12 @@ export class AlgorandConnect {
         this._transactions = new AlgorandTxns(this._client, config.accounts);
         this._bridgeTxnsV1 = new AlgorandBridgeTxnsV1(this._client, config.appProgramId, this._transactions, config.accounts);
         this._poller = new AlgorandPoller(this._client, this._clientIndexer, this._bridgeTxnsV1)
+   
+        //Load tokens
+        config.tokens.forEach(element => {
+            BridgeTokens.add(element);
+        });
+
     }
 
     //Getters
