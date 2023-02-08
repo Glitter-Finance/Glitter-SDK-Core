@@ -22,8 +22,6 @@
   "homepage": "https://github.com/Glitter-Finance/glitter-bridge-connections#readme",
   "dependencies": {
     "@circle-fin/circle-sdk": "^1.3.0",
-    "@perawallet/connect": "^1.0.7",
-    "@randlabs/myalgo-connect": "^1.4.2",
     "@solana/spl-token": "^0.3.6",
     "@solana/web3.js": "^1.65.0",
     "algosdk": "^1.24.1",
@@ -45,7 +43,7 @@
     "github": {
       "release": true
     }
-  },
+  },                  
   "devDependencies": {
     "@types/jest": "^29.2.6",
     "@types/minimist": "^1.2.2",
@@ -58,3 +56,4 @@
     "dist/**/*"
   ]
 }
+ 

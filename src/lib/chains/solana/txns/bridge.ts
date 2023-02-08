@@ -585,6 +585,7 @@ export class BridgeSetSchema {
         ],
     ]);
 }
+
 export class BridgeReleaseSchema {
     readonly algo_address: Uint8Array
     readonly algo_txn_id: Uint8Array

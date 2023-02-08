@@ -30,3 +30,8 @@ export type PollerOptions = {
   startHash?:string,
   endHash?:string
 }
+export enum SolanaPublicNetworks  {
+  mainnet_beta = "https://api.mainnet-beta.solana.com",
+  testnet = "https://api.testnet.solana.com",
+  devnet = "https://api.devnet.solana.com"
+}

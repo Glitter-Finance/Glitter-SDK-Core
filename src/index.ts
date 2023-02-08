@@ -56,7 +56,9 @@ import {
   BridgeToken,
   BridgeTokenDefault,
   BridgeTokens,
+  
 } from "./lib/common/tokens/tokens";
+import { BridgeType } from "./lib/common/transactions/transactions";
 import { Logger } from "./lib/common/utils/logger";
 import {
   InputParams,
@@ -70,8 +72,8 @@ import { ValueUnits } from "./lib/common/utils/value_units";
 import { GlitterBridgeSDK } from "./GlitterBridgeSDK";
 import { BridgeNetworks } from "./lib/common/networks/networks";
 import { GlitterEnvironment } from "./lib/configs/config";
-import { AlgorandWallet } from "./lib/chains/algorand/wallet";
-
+import { DepositNote } from "./lib/common/routing/routing";
+import { base64To0xString,base64ToBigUIntString,convertToAscii,convertToNumber } from "./lib/common/utils/utils";
 export {
   GlitterBridgeSDK,
   BridgeNetworks,
@@ -127,5 +129,10 @@ export {
   PreciseDecimals,
   ValueUnits,
   LogProgress,
-  AlgorandWallet,
+  DepositNote,
+  BridgeType,
+  base64To0xString,
+  base64ToBigUIntString,
+  convertToAscii,
+  convertToNumber
 };

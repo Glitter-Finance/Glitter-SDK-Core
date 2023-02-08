@@ -6,7 +6,7 @@ import { BridgeNetworks } from "../src/lib/common/networks/networks";
 run();
 
 async function run() {
-  const result = await SolanaPollerTest();
+  const result = await AlgoPollerTest();
   console.log(result);
 }
 
@@ -29,8 +29,8 @@ async function SolanaPollerTest() {
         list_partial_txn.forEach((data) =>{
           console.log(data)
         })
-
       Sleep(10000)
+      console.log("\n")
       console.log("==========================||========================");
       console.log("listUsdcPartialDepositTransactions")
       const list_usdc_deposit = await solana?.getUsdcDepositPartialTransactions(100)
@@ -41,7 +41,8 @@ async function SolanaPollerTest() {
         console.log(data)
       })
 
-      Sleep(10000)
+      Sleep(30000)
+      console.log("\n")
       console.log("==========================||========================");
       console.log("listUsdcReleasePartialTransactions")
       const list_usdc_release = await solana?.getUsdcReleasePartialTransactions(100)
@@ -77,6 +78,10 @@ async function AlgoPollerTest() {
         list_partial_txn.forEach((data) =>{
           console.log(data)
         })
+      Sleep(30000)
+      console.log("\n")
+      console.log("==========================||========================");
+      console.log("listUsdcPartialDepositTransactions")        
       const lastRound = await algorand?.getPollerLastRound();
       if(!lastRound) throw new Error("last round is undefined");
       console.log("LASTROUNDINTEST",lastRound)  
@@ -88,6 +93,8 @@ async function AlgoPollerTest() {
       list_partial_txn_2.forEach((data) =>{
         console.log(data)
       })
+      Sleep(30000)
+      console.log("\n")
       console.log("==========================||========================");
       console.log("listUsdcPartialDepositTransactions")
       const list_usdc_deposit = await algorand?.getUsdcDepositPartialTransactions()

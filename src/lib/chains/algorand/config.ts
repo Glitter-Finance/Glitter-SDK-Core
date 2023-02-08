@@ -1,5 +1,4 @@
-import { PeraWalletConnect } from "@perawallet/connect";
-import MyAlgoConnect from "@randlabs/myalgo-connect";
+
 import { BridgeToken } from "../../common";
 
 export type AlgorandConfig = {
@@ -13,15 +12,7 @@ export type AlgorandConfig = {
   accounts: AlgorandAccountsConfig;
   tokens: BridgeToken[];
 };
-export type PeraWalletResult = {
-  address: string;
-  wallet: PeraWalletConnect;
-};
 
-export type MyAlgoWalletResult = {
-  address: string;
-  wallet: MyAlgoConnect;
-};
 export type AlgorandAccountsConfig = {
   asaOwner: string;
   algoOwner: string;

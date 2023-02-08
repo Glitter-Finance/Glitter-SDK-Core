@@ -355,7 +355,7 @@ export class SolanaPoller{
 /**
  * 
  * 
- * Sols deposit
+ * @method solDeposit
  * @param txn 
  * @param data_bytes 
  * @param txnID 
@@ -407,7 +407,7 @@ export class SolanaPoller{
 
   /**
    * 
-   * Solreleases 
+   * @method Solreleases 
    * @param txn 
    * @param data_bytes 
    * @param txnID 
@@ -515,11 +515,11 @@ export class SolanaPoller{
  
       /**
        * 
-       * Xalgorelease
+       * @method Xalgorelease
        * @param txn 
        * @param data_bytes 
        * @param txnID 
-       * @returns algorelease Routing
+       * @returns {PartialBridgeTxn}
        */
        xALGORelease(txn: TransactionResponse, data_bytes: Uint8Array,partialTxn: PartialBridgeTxn): PartialBridgeTxn {
         let decimals = 6;
@@ -682,9 +682,11 @@ export class SolanaPoller{
 
             // console.log("preciseVALUE",Precise(value * Math.pow(10, decimals)))
             let ParsedValue = typeof Precise(value * Math.pow(10, decimals));
-            partialTxn.amount = value;
-            // partialTxn.units = ValueUnits.fromValue(value, decimals).units.toString();
-            partialTxn.units = routing?.units;
+            const amount =PreciseDecimals(value);        
+            const units = ValueUnits.fromValue(amount,decimals).units            
+            partialTxn.amount = amount;
+            partialTxn.units = units.toString();
+            // partialTxn.units = routing?.units;
             partialTxn.routing = routing;
             return Promise.resolve(partialTxn);
         }

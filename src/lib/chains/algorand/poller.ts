@@ -498,7 +498,7 @@ export class AlgorandPoller{
 
         getLastMinRoundUsdcRelease(){
             let  res:number|undefined ; 
-           if(this._pollerCountflag=3) {
+           if(this._pollerCountflag=5) {
             res = this._UsdcReleaselastRound
            }else {
             throw new Error(AlgoError.POLLER_NOT_SET)
@@ -509,7 +509,7 @@ export class AlgorandPoller{
     
         getLastTxnIdUsdcRelease(){
             let res:string|undefined ; 
-           if(this._pollerCountflag=3) {
+           if(this._pollerCountflag=5) {
             res = this._UsdcReleaselastTxnID
            }else{
             throw new Error(AlgoError.POLLER_NOT_SET)

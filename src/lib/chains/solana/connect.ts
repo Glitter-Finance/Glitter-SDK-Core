@@ -2,7 +2,7 @@ import {  ConfirmedSignaturesForAddress2Options, Connection, Keypair, PublicKey,
 import { SolanaAccount, SolanaAccounts } from './accounts';
 import { SolanaAssets } from './assets';
 import { SolanaBridgeTxnsV1 } from './txns/bridge';
-import { PollerOptions, SolanaConfig, SolanaProgramId } from './config';
+import { PollerOptions, SolanaConfig, SolanaProgramId, SolanaPublicNetworks } from './config';
 import { SolanaTxns } from './txns/txns';
 import * as util from 'util';
 import { BridgeToken, BridgeTokens, LogProgress, Precise, Routing, RoutingDefault, Sleep, ValueUnits } from '../../common';
@@ -14,11 +14,7 @@ import { ethers } from 'ethers';
 import base58 from 'bs58';
 import { SolanaError } from './solanaError';
 
-export enum SolanaPublicNetworks  {
-    mainnet_beta = "https://api.mainnet-beta.solana.com",
-    testnet = "https://api.testnet.solana.com",
-    devnet = "https://api.devnet.solana.com"
-}
+
 
 export class SolanaConnect {
 
