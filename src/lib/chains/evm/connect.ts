@@ -21,7 +21,7 @@ import {
   NetworkIdentifiers,
 } from "../../common/networks/networks";
 import { BridgeType, ChainStatus, PartialBridgeTxn, TransactionType } from "../../common/transactions/transactions";
-import { BridgeToken } from "../../common/tokens/tokens";
+import { BridgeToken, BridgeTokens } from "../../common/tokens/tokens";
 import { Routing, ValueUnits } from "../../common";
 
 type Connection = {
@@ -467,6 +467,10 @@ export class EvmConnect {
   }
   public get generateWallet(): ethers.Wallet {
     return ethers.Wallet.createRandom();
+  }
+
+  public getToken(token:string):BridgeToken | undefined{
+    return BridgeTokens.get(this.__network,   token);
   }
 
 }

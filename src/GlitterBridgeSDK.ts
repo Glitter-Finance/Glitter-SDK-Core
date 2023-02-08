@@ -178,5 +178,4 @@ private _environment: GlitterEnvironment | undefined;
   get avalanche(): EvmConnect | undefined {
     return this._evm[BridgeNetworks.Avalanche];
   }   
-
 }

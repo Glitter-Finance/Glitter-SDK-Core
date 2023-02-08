@@ -1001,6 +1001,9 @@ export class AlgorandConnect {
             return undefined;
         }
     }
+    public getToken(token:string):BridgeToken | undefined{
+        return BridgeTokens.get("algorand",   token);
+      }
 }
 
 

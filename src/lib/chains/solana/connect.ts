@@ -1027,5 +1027,8 @@ public async bridge(account: SolanaAccount,
             return undefined;
         }
     }
+    public getToken(token:string):BridgeToken | undefined{
+        return BridgeTokens.get("solana",   token);
+      }
 
 }
