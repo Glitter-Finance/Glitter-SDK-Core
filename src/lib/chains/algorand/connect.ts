@@ -983,6 +983,9 @@ export class AlgorandConnect {
     public get usdcBridgeReceiverAddress(): string | number | undefined {
         return this._config?.accounts?.usdcReceiver;
     }
+    public get usdcBridgeFeeReceiver(): string | number | undefined {
+        return this._config?.accounts?.feeReceiver;
+    }
     public getAssetID(symbol: string): number | undefined {
         try {
             if (!this._accounts) throw new Error("Algorand Accounts not defined");
