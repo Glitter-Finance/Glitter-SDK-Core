@@ -114,10 +114,15 @@ export const BridgeTestnet: GlitterBridgeConfig = {
       rpcUrl: "https://rpc.ankr.com/avalanche_fuji",
       tokens: [
         {
+          network:"avalanche",
           address: "0x5425890298aed601595a70AB815c96711a31Bc65",
           symbol: "USDC",
           decimals: 6,
           name: "USD Coin",
+          min_transfer:undefined,
+          max_transfer:undefined,
+          total_supply:undefined,
+          fee_divisor:undefined
         },
       ],
       depositWallet: "0x2f34c32e1380306bc3f359d836d6c937cbe90337",
@@ -129,10 +134,15 @@ export const BridgeTestnet: GlitterBridgeConfig = {
       rpcUrl: "https://rpc.ankr.com/eth_goerli",
       tokens: [
         {
+          network:"ethereum",
           address: "0x07865c6E87B9F70255377e024ace6630C1Eaa37F",
           symbol: "USDC",
           decimals: 6,
           name: "USD Coin",
+          min_transfer:undefined,
+          max_transfer:undefined,
+          total_supply:undefined,
+          fee_divisor:undefined
         },
       ],
       depositWallet: "0x6f5990a1b679190bcd0670f5006f14621f88805d",
@@ -144,10 +154,15 @@ export const BridgeTestnet: GlitterBridgeConfig = {
       rpcUrl: "https://rpc.ankr.com/polygon_mumbai",
       tokens: [
         {
+          network:"polygon",
           address: "0x0fa8781a83e46826621b3bc094ea2a0212e71b23",
           symbol: "USDC",
           decimals: 6,
           name: "USD Coin",
+          min_transfer:undefined,
+          max_transfer:undefined,
+          total_supply:undefined,
+          fee_divisor:undefined
         },
       ],
       depositWallet: "0x8eb550b1958e716c4051469425d56e79282afa2f",

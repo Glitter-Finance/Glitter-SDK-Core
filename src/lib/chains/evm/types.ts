@@ -1,6 +1,6 @@
 import { ethers } from "ethers";
 import { BridgeEvmNetworks } from "../../common/networks/networks";
-
+import { BridgeToken } from "../..//common";
 export type TokenConfig = {
   symbol: string;
   name: string;
@@ -13,7 +13,7 @@ export type EvmConfig = {
     chainId: number;
     bridge: string;
     rpcUrl: string;
-    tokens: TokenConfig[];
+    tokens: BridgeToken[];
     depositWallet: string;
     releaseWallet: string;
   };

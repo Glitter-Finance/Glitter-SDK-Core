@@ -51,7 +51,7 @@ export class GlitterBridgeSDK {
 
     return this;
   }
-
+  
   public setRPC(network: BridgeNetworks, rpc: string): GlitterBridgeSDK {
     this._rpcOverrides[network] = rpc;
     return this;

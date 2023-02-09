@@ -13,7 +13,7 @@ import { AlgorandConnect } from "./connect";
 import { AlgorandBridgeTxnsV1 } from "./txns/bridge";
 import { AlgorandTxns } from "./txns/txns";
 
-import { AlgorandWallet } from "./wallet";
+
 
 export {
   AlgorandAccount,
@@ -28,5 +28,4 @@ export {
   AlgorandConnect,
   AlgorandBridgeTxnsV1,
   AlgorandTxns,
-  AlgorandWallet,
 };

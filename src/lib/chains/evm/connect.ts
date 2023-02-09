@@ -24,8 +24,6 @@ import { BridgeType, ChainStatus, PartialBridgeTxn, TransactionType } from "../.
 import { EvmPoller } from "./poller";
 import { Routing, ValueUnits } from "../../common";
 
-
-
 type Connection = {
   rpcProvider: providers.BaseProvider;
   bridge: TokenBridge;
@@ -47,7 +45,7 @@ export class EvmConnect {
     const bridge = TokenBridge__factory.connect(bridgeAddress, rpcProvider);
     const tokens = config.tokens.reduce((_tokens, curr) => {
       const symbol = curr.symbol.toLowerCase();
-      _tokens[symbol] = ERC20__factory.connect(curr.address, rpcProvider);
+      _tokens[symbol] = ERC20__factory.connect(curr.address?.toString() as string, rpcProvider);
       return _tokens;
     }, {} as Record<string, ERC20>);
 
@@ -101,7 +99,8 @@ export class EvmConnect {
         );
       }
 
-      return token.address.toLowerCase();
+      const address = token?.address as string; 
+      return address.toLowerCase();
     }
 
     return this.__config[entity].toLowerCase();

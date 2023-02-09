@@ -42,7 +42,7 @@ import { AlgorandConfig } from "./lib/chains/algorand/config";
 import { AlgorandConnect } from "./lib/chains/algorand/connect";
 import { AlgorandBridgeTxnsV1 } from "./lib/chains/algorand/txns/bridge";
 import { AlgorandTxns } from "./lib/chains/algorand/txns/txns";
-
+import { SolanaPublicNetworks } from "./lib/chains/solana/config";
 import {
   Routing,
   RoutingPoint,
@@ -58,7 +58,7 @@ import {
   BridgeTokens,
   
 } from "./lib/common/tokens/tokens";
-import { BridgeType } from "./lib/common/transactions/transactions";
+
 import { Logger } from "./lib/common/utils/logger";
 import {
   InputParams,
@@ -74,6 +74,7 @@ import { BridgeNetworks } from "./lib/common/networks/networks";
 import { GlitterEnvironment } from "./lib/configs/config";
 import { DepositNote } from "./lib/common/routing/routing";
 import { base64To0xString,base64ToBigUIntString,convertToAscii,convertToNumber } from "./lib/common/utils/utils";
+import { PartialBridgeTxn,TransactionType,BridgeType } from "./lib/common/transactions/transactions";
 export {
   GlitterBridgeSDK,
   BridgeNetworks,
@@ -134,5 +135,8 @@ export {
   base64To0xString,
   base64ToBigUIntString,
   convertToAscii,
-  convertToNumber
+  convertToNumber,
+  PartialBridgeTxn,
+  TransactionType,
+  SolanaPublicNetworks 
 };

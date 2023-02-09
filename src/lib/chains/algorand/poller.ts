@@ -210,7 +210,7 @@ export class AlgorandPoller{
         }while(true)
             //Set last Contract Count
             this._lastRound = nextMinRound;
-            this._lastContractCount = count;  
+            this._lastContractCount = PartialBtxnList.length;  
             
         resolve(PartialBtxnList);     
     }catch(err){

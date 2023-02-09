@@ -1,11 +1,10 @@
 
-import { EvmNetworkConfig } from "glitter-bridge-sdk-dev/dist";
 import winston from "winston";
 import { BridgeNetworks, NetworkIdentifiers } from "../../common/networks/networks";
 import { BridgeType, ChainStatus, PartialBridgeTxn, TransactionType } from "../../common/transactions/transactions";
 import axios from 'axios';
 import { Routing, ValueUnits } from "../../common";
-import { BridgeDepositEvent, BridgeReleaseEvent, TransferEvent } from "./types";
+import { BridgeDepositEvent, BridgeReleaseEvent, TransferEvent,EvmNetworkConfig } from "./types";
 import { EvmBridgeEventsParser } from "./events";
 import { ethers, providers } from "ethers";
 import { DeserializeEvmBridgeTransfer } from "./serde";
