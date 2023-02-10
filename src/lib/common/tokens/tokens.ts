@@ -58,10 +58,10 @@ export type BridgeToken = {
   address: string | number | undefined;
   decimals: number;
   name: string | undefined;
-  fee_divisor: number | undefined;
-  min_transfer: number | undefined;
-  max_transfer: number | undefined;
-  total_supply: bigint | undefined;
+  fee_divisor?: number | undefined;
+  min_transfer?: number | undefined;
+  max_transfer?: number | undefined;
+  total_supply?: bigint | undefined;
 };
 export function BridgeTokenDefault(): BridgeToken {
   return {
