@@ -21,9 +21,9 @@ import {
   NetworkIdentifiers,
 } from "../../common/networks/networks";
 import { BridgeType, ChainStatus, PartialBridgeTxn, TransactionType } from "../../common/transactions/transactions";
-import { EvmPoller } from "./poller";
+import { BridgeToken, BridgeTokens } from "../../common/tokens/tokens";
 import { Routing, ValueUnits } from "../../common";
-
+import { EvmPoller } from "./poller";
 type Connection = {
   rpcProvider: providers.BaseProvider;
   bridge: TokenBridge;
@@ -48,6 +48,11 @@ export class EvmConnect {
       _tokens[symbol] = ERC20__factory.connect(curr.address?.toString() as string, rpcProvider);
       return _tokens;
     }, {} as Record<string, ERC20>);
+
+  //    //Load tokens
+  //    config.tokens.forEach(element => {
+  //     BridgeTokens.add(element);
+  // });
 
     return {
       rpcProvider,
@@ -208,6 +213,24 @@ export class EvmConnect {
       return Promise.reject(error.message);
     }
   }
+  async getBlockNumber(txHash: string): Promise<number> {
+    try {
+      const transactionReceipt = await this.__providers.rpcProvider.getTransactionReceipt(txHash);
+      const blockNumber = transactionReceipt.blockNumber;
+      return blockNumber;
+    } catch (error: any) {
+      return Promise.reject(error.message);
+    }
+  }
+  async getTimeStampFromBlockNumber(blockNumber: number): Promise<number> {
+    try {
+      const block = await this.__providers.rpcProvider.getBlock(blockNumber);
+      const timestamp = block.timestamp;
+      return timestamp;
+    } catch (error: any) {
+      return Promise.reject(error.message);
+    }
+  }
   async getTimeStamp(txHash: string): Promise<number> {
     try {
       const transactionReceipt = await this.__providers.rpcProvider.getTransactionReceipt(txHash);
@@ -325,6 +348,16 @@ export class EvmConnect {
     return ethers.utils.keccak256(txnID);
   }
 
+  public async listBridgeTransaction(limit:number,asset:BridgeToken, starthash?:string ):Promise<PartialBridgeTxn[]> {
+    return new Promise(async(resolve,reject) =>{
+      try{
+          
+      }catch(err) {
+        reject(err)
+      }
+    })
+  }
+
   public async getUSDCPartialTxn(txnID: string): Promise<PartialBridgeTxn> {
 
     //USDC decimals
@@ -334,7 +367,8 @@ export class EvmConnect {
     const logs = await this.parseLogs(txnID);
 
     //Get Timestamp
-    const timestamp_s = await this.getTimeStamp(txnID);
+    const blockNumber = await this.getBlockNumber(txnID);
+    const timestamp_s = await this.getTimeStampFromBlockNumber(blockNumber);
     const timestamp = new Date(timestamp_s * 1000);
 
     //Check deposit/transfer/release
@@ -370,6 +404,7 @@ export class EvmConnect {
       chainStatus: await this.getTxnStatus(txnID),
       network: this.__network,
       tokenSymbol: "usdc",
+      block: blockNumber,
     };
 
     //Get txn params
@@ -394,7 +429,7 @@ export class EvmConnect {
           token: "usdc"
         },
         amount: returnTxn.amount,
-        units: returnTxn.units.toString(),
+        units: returnTxn.units,
       };
       returnTxn.routing = routing;
 
@@ -419,27 +454,12 @@ export class EvmConnect {
           txn_signature: txnID,
         },
         amount: returnTxn.amount,
-        units: returnTxn.units.toString(),
+        units: returnTxn.units,
       };
       returnTxn.routing = routing;
 
     }
     return Promise.resolve(returnTxn);
-  }
-
-/**
- *
- * Gets usdc partial transactions
- * @param lastBlock
- * @param lastTxn
- * @returns {PartialBridgeTxn[]}
- */
-public async getUsdcPartialTransactions(lastBlock?:number,lastTxn?:string):Promise<PartialBridgeTxn[]>{
-
-       if(!this._poller) throw new Error("poller not set")
-        const list = this._poller.UsdcPoller(lastBlock,lastTxn)
-       return Promise.resolve(list)
-
   }
 
   public get tokenBridgePollerAddress(): string | number | undefined {
@@ -453,6 +473,13 @@ public async getUsdcPartialTransactions(lastBlock?:number,lastTxn?:string):Promi
   }
   public get usdcBridgeReceiverAddress(): string | number | undefined {
     return this.__config?.releaseWallet;
+  }
+  public get generateWallet(): ethers.Wallet {
+    return ethers.Wallet.createRandom();
+  }
+
+  public getToken(token:string):BridgeToken | undefined{
+    return BridgeTokens.get(this.__network,   token);
   }
 
 }

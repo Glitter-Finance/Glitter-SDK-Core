@@ -3,7 +3,10 @@ import * as nacl from 'tweetnacl';
 import { derivePath } from 'ed25519-hd-key';
 import { Commitment } from '@solana/web3.js';
 
-
+export type DepositNote = {
+    system: string, 
+    date: string,
+}
 export const COMMITMENT = "singleGossip";
 export const defaultCommitment = 'confirmed' as Commitment;
 export class SolanaUtils {

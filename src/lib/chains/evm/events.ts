@@ -20,7 +20,7 @@ export class EvmBridgeEventsParser {
         try {
           return bridgeContractinterface.parseLog(log);
         } catch (error) {
-          console.log("[EvmBridgeEvents] Unable to parse event logs.", error);
+          //console.log("[EvmBridgeEvents] Unable to parse event logs.", error);
           return null;
         }
       })
@@ -49,10 +49,10 @@ export class EvmBridgeEventsParser {
     const parsedTransfer = parsedLogs.find((x) => x.name === "Transfer");
 
     if (!parsedTransfer) return null;
-    const { from, to, amount } = parsedTransfer.args;
+    const { from, to, value } = parsedTransfer.args;
 
     return {
-      amount,
+      value,
       from,
       to,
       __type: "Transfer",

@@ -11,6 +11,8 @@ import { BridgeMainnet } from "./lib/configs/networks/mainnet";
 import { BridgeTestnet } from "./lib/configs/networks/testnet";
 
 export class GlitterBridgeSDK {
+private _environment: GlitterEnvironment | undefined;
+
   //Configs
   private _bridgeConfig: GlitterBridgeConfig | undefined;
 
@@ -28,6 +30,10 @@ export class GlitterBridgeSDK {
 
   //Setters
   public setEnvironment(environment: GlitterEnvironment): GlitterBridgeSDK {
+
+    //Set environment
+    this._environment = environment;
+
     switch (environment) {
       case GlitterEnvironment.mainnet:
         this._bridgeConfig = BridgeMainnet;
@@ -154,6 +160,9 @@ export class GlitterBridgeSDK {
   }
 
   //Getters
+  get environment(): GlitterEnvironment | undefined {
+    return this._environment;
+  }
   get algorand(): AlgorandConnect | undefined {
     return this._algorand;
   }
@@ -169,5 +178,4 @@ export class GlitterBridgeSDK {
   get avalanche(): EvmConnect | undefined {
     return this._evm[BridgeNetworks.Avalanche];
   }   
-
 }

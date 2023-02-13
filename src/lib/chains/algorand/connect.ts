@@ -25,7 +25,7 @@ export class AlgorandConnect {
     private _assets: AlgorandAssets | undefined = undefined;
     private _transactions: AlgorandTxns | undefined = undefined;
     private _bridgeTxnsV1: AlgorandBridgeTxnsV1 | undefined = undefined;
-    private _poller:AlgorandPoller|undefined
+    private _poller: AlgorandPoller | undefined
     private _config: AlgorandConfig | undefined = undefined;
     _lastTxnHash: string = "";
 
@@ -35,9 +35,15 @@ export class AlgorandConnect {
         this._clientIndexer = GetAlgodIndexer(config.indexerUrl, config.indexerUrl, config.nativeToken);
         this._accounts = new AlgorandAccounts(this._client);
         this._assets = new AlgorandAssets(this._client);
-        this._transactions = new AlgorandTxns(this._client,config.accounts);
+        this._transactions = new AlgorandTxns(this._client, config.accounts);
         this._bridgeTxnsV1 = new AlgorandBridgeTxnsV1(this._client, config.appProgramId, this._transactions, config.accounts);
-        this._poller = new AlgorandPoller(this._client,this._clientIndexer,this._bridgeTxnsV1)
+        this._poller = new AlgorandPoller(this._client, this._clientIndexer, this._bridgeTxnsV1)
+   
+        //Load tokens
+        config.tokens.forEach(element => {
+            BridgeTokens.add(element);
+        });
+
     }
 
 
@@ -91,16 +97,16 @@ export class AlgorandConnect {
      * @param amount 
      * @returns {Promise<algosdk.Transaction[]>}
      */
- public async bridgeTransaction(
-    fromAddress:string, 
-    fromSymbol:string,
-    toNetwork:string,
-    toAddress:string, 
-    tosymbol:string,
-    amount:number
- ): Promise<algosdk.Transaction[]> {
-    return new Promise(async (resolve, reject ) =>{
-        try{
+    public async bridgeTransaction(
+        fromAddress: string,
+        fromSymbol: string,
+        toNetwork: string,
+        toAddress: string,
+        tosymbol: string,
+        amount: number
+    ): Promise<algosdk.Transaction[]> {
+        return new Promise(async (resolve, reject) => {
+            try {
 
             if (!this._client) throw new Error(AlgoError.CLIENT_NOT_SET);
             if (!this._bridgeTxnsV1) throw new Error(AlgoError.BRIDGE_NOT_SET);
@@ -110,37 +116,37 @@ export class AlgorandConnect {
             // ?? asset should be xsol 
             if (!asset) throw new Error(AlgoError.INVALID_ASSET);
 
-            //Get routing
-            const routing = RoutingDefault();
-            routing.from.address = fromAddress;
-            routing.from.token = fromSymbol;
-            routing.from.network = "algorand";
+                //Get routing
+                const routing = RoutingDefault();
+                routing.from.address = fromAddress;
+                routing.from.token = fromSymbol;
+                routing.from.network = "algorand";
 
-            routing.to.address = toAddress;
-            routing.to.token = tosymbol;
-            routing.to.network = toNetwork;
-            routing.amount = amount;
+                routing.to.address = toAddress;
+                routing.to.token = tosymbol;
+                routing.to.network = toNetwork;
+                routing.amount = amount;
 
 
-            let  transaction :Transaction[] ;
+                let transaction: Transaction[];
 
-            if (asset.symbol.toLocaleLowerCase() =="usdc" && routing.to.token.toLocaleLowerCase()=="usdc" ) {
+                if (asset.symbol.toLocaleLowerCase() == "usdc" && routing.to.token.toLocaleLowerCase() == "usdc") {
 
-                 transaction = await this._bridgeTxnsV1.HandleUsdcSwap(routing);
-            }else {
-               
-            transaction = await this._bridgeTxnsV1.bridgeTransactions(routing, asset);
+                    transaction = await this._bridgeTxnsV1.HandleUsdcSwap(routing);
+                } else {
+
+                    transaction = await this._bridgeTxnsV1.bridgeTransactions(routing, asset);
+                }
+
+                resolve(transaction);
+
+            } catch (err) {
+
+                reject(err)
             }
+        })
 
-            resolve(transaction);
-
-        } catch(err){
-
-            reject(err)
-        }
-    })
-
- }   
+    }
 
     /**
      * @method bridge
@@ -174,20 +180,20 @@ export class AlgorandConnect {
                 routing.amount = amount;
 
                 //Run Transaction
-                let  transaction :Transaction[] ;
+                let transaction: Transaction[];
 
-                if (asset.symbol.toLocaleLowerCase() =="usdc" && routing.to.token.toLocaleLowerCase()=="usdc" ) {
+                if (asset.symbol.toLocaleLowerCase() == "usdc" && routing.to.token.toLocaleLowerCase() == "usdc") {
 
-                     transaction = await this._bridgeTxnsV1.HandleUsdcSwap(routing);
-                }else {
-                   transaction = await this._bridgeTxnsV1.bridgeTransactions(routing, asset);
+                    transaction = await this._bridgeTxnsV1.HandleUsdcSwap(routing);
+                } else {
+                    transaction = await this._bridgeTxnsV1.bridgeTransactions(routing, asset);
                 }
 
                 let result = await this.signAndSend_SingleSigner(transaction, account);
                 console.log(`Algorand Bridge Transaction Complete`);
-    
+
                 resolve(true);
-                
+
             } catch (error) {
                 reject(error);
             }
@@ -577,12 +583,12 @@ export class AlgorandConnect {
      * @returns signed transaction 
      */
     async sendSignedTransaction(
-    rawsignedTxns:Uint8Array[],
-    debug_rootPath?:string                
-    ):Promise<boolean>{
-        return new Promise(async (resolve,reject) =>{
-        // eslint-disable-next-line no-async-promise-executor
-            try{
+        rawsignedTxns: Uint8Array[],
+        debug_rootPath?: string
+    ): Promise<boolean> {
+        return new Promise(async (resolve, reject) => {
+            // eslint-disable-next-line no-async-promise-executor
+            try {
                 //Fail Safe
                 if (!this._transactions) throw new Error(AlgoError.UNDEFINED_TRANSACTION);
                 if (!this._client) throw new Error(AlgoError.CLIENT_NOT_SET);
@@ -592,11 +598,11 @@ export class AlgorandConnect {
                 const txnResult = await this._client.sendRawTransaction(rawsignedTxns).do();
                 await algosdk.waitForConfirmation(this._client, txnResult, 4); // why 4? 
                 console.log('Group Transaction ID: ' + txnResult.txId);
-                
+
                 resolve(true)
 
 
-            }catch(err) {
+            } catch (err) {
                 reject(err)
             }
         })
@@ -768,7 +774,7 @@ export class AlgorandConnect {
 
                     //Log
                     let timeInSeconds = (Date.now() - start) / 1000;
-                    LogProgress(`$bal. (${balance}), Timeout in ${Math.round((timeoutSeconds - timeInSeconds)*10)/10}s`);
+                    LogProgress(`$bal. (${balance}), Timeout in ${Math.round((timeoutSeconds - timeInSeconds) * 10) / 10}s`);
 
                     //Check timeout
                     if (Date.now() - start > timeoutSeconds * 1000) {
@@ -782,7 +788,7 @@ export class AlgorandConnect {
 
                 //Log
                 let timeInSeconds = (Date.now() - start) / 1000;
-                LogProgress(`$bal. (${balance}), Timeout in ${Math.round((timeoutSeconds - timeInSeconds)*10)/10}s`);
+                LogProgress(`$bal. (${balance}), Timeout in ${Math.round((timeoutSeconds - timeInSeconds) * 10) / 10}s`);
 
 
                 resolve(balance);
@@ -818,7 +824,7 @@ export class AlgorandConnect {
 
                     //Log
                     let timeInSeconds = (Date.now() - start) / 1000;
-                    LogProgress(`$bal. (${balance}), Timeout in ${Math.round((timeoutSeconds - timeInSeconds)*10)/10}s`);
+                    LogProgress(`$bal. (${balance}), Timeout in ${Math.round((timeoutSeconds - timeInSeconds) * 10) / 10}s`);
 
                     //Check timeout
                     if (Date.now() - start > timeoutSeconds * 1000) {
@@ -832,7 +838,7 @@ export class AlgorandConnect {
 
                 //Log
                 let timeInSeconds = (Date.now() - start) / 1000;
-                LogProgress(`$bal. (${balance}), Timeout in ${Math.round((timeoutSeconds - timeInSeconds)*10)/10}s`);
+                LogProgress(`$bal. (${balance}), Timeout in ${Math.round((timeoutSeconds - timeInSeconds) * 10) / 10}s`);
 
 
                 resolve(balance);
@@ -868,7 +874,7 @@ export class AlgorandConnect {
 
                     //Log
                     let timeInSeconds = (Date.now() - start) / 1000;
-                    LogProgress(`$bal. (${balance}), Timeout in ${Math.round((timeoutSeconds - timeInSeconds)*10)/10}s`);
+                    LogProgress(`$bal. (${balance}), Timeout in ${Math.round((timeoutSeconds - timeInSeconds) * 10) / 10}s`);
 
                     //Check timeout
                     if (Date.now() - start > timeoutSeconds * 1000) {
@@ -882,7 +888,7 @@ export class AlgorandConnect {
 
                 //Log
                 let timeInSeconds = (Date.now() - start) / 1000;
-                LogProgress(`$bal. (${balance}), Timeout in ${Math.round((timeoutSeconds - timeInSeconds)*10)/10}s`);
+                LogProgress(`$bal. (${balance}), Timeout in ${Math.round((timeoutSeconds - timeInSeconds) * 10) / 10}s`);
 
 
                 resolve(balance);
@@ -954,8 +960,8 @@ export class AlgorandConnect {
 
                     //Log
                     let timeInSeconds = (Date.now() - start) / 1000;
-                    LogProgress(`${symbol} bal. (${balance}), Timeout in ${Math.round((timeoutSeconds - timeInSeconds)*10)/10}s`);
-                   
+                    LogProgress(`${symbol} bal. (${balance}), Timeout in ${Math.round((timeoutSeconds - timeInSeconds) * 10) / 10}s`);
+
                     //Check timeout
                     if (Date.now() - start > timeoutSeconds * 1000) {
                         reject(new Error("Timeout waiting for balance"));
@@ -968,8 +974,8 @@ export class AlgorandConnect {
 
                 //Final Log
                 let timeInSeconds = (Date.now() - start) / 1000;
-                LogProgress(`${symbol} bal. (${balance}), Timeout in ${Math.round((timeoutSeconds - timeInSeconds)*10)/10}s`);
-                   
+                LogProgress(`${symbol} bal. (${balance}), Timeout in ${Math.round((timeoutSeconds - timeInSeconds) * 10) / 10}s`);
+
 
                 resolve(balance);
             } catch (error) {
@@ -1001,14 +1007,14 @@ export class AlgorandConnect {
                 while (true) {
 
                     //Check break conditions
-                    if (balance  >= minAmount) {
+                    if (balance >= minAmount) {
                         break;
                     }
 
                     //Log
                     let timeInSeconds = (Date.now() - start) / 1000;
-                    LogProgress(`${symbol} bal. (${balance}), Timeout in ${Math.round((timeoutSeconds - timeInSeconds)*10)/10}s`);
-                   
+                    LogProgress(`${symbol} bal. (${balance}), Timeout in ${Math.round((timeoutSeconds - timeInSeconds) * 10) / 10}s`);
+
                     //Check timeout
                     if (Date.now() - start > timeoutSeconds * 1000) {
                         reject(new Error("Timeout waiting for balance"));
@@ -1021,8 +1027,8 @@ export class AlgorandConnect {
 
                 //Final Log
                 let timeInSeconds = (Date.now() - start) / 1000;
-                LogProgress(`${symbol} bal. (${balance}), Timeout in ${Math.round((timeoutSeconds - timeInSeconds)*10)/10}s`);
-                   
+                LogProgress(`${symbol} bal. (${balance}), Timeout in ${Math.round((timeoutSeconds - timeInSeconds) * 10) / 10}s`);
+
                 resolve(balance);
             } catch (error) {
                 reject(error);
@@ -1052,14 +1058,14 @@ export class AlgorandConnect {
                 while (true) {
 
                     //Check break conditions
-                    if (balance  != startingAmount) {
+                    if (balance != startingAmount) {
                         break;
                     }
 
                     //Log
                     let timeInSeconds = (Date.now() - start) / 1000;
-                    LogProgress(`${symbol} bal. (${balance}), Timeout in ${Math.round((timeoutSeconds - timeInSeconds)*10)/10}s`);
-                   
+                    LogProgress(`${symbol} bal. (${balance}), Timeout in ${Math.round((timeoutSeconds - timeInSeconds) * 10) / 10}s`);
+
                     //Check timeout
                     if (Date.now() - start > timeoutSeconds * 1000) {
                         reject(new Error("Timeout waiting for balance"));
@@ -1072,8 +1078,8 @@ export class AlgorandConnect {
 
                 //Final Log
                 let timeInSeconds = (Date.now() - start) / 1000;
-                LogProgress(`${symbol} bal. (${balance}), Timeout in ${Math.round((timeoutSeconds - timeInSeconds)*10)/10}s`);
-                   
+                LogProgress(`${symbol} bal. (${balance}), Timeout in ${Math.round((timeoutSeconds - timeInSeconds) * 10) / 10}s`);
+
                 resolve(balance);
             } catch (error) {
                 reject(error);
@@ -1178,24 +1184,45 @@ export class AlgorandConnect {
     }
     public getTxnHashedFromBase64(txnID: string): string {
         return ethers.utils.keccak256(base64To0xString(txnID));
-      }
- 
+    }
 
-    public get tokenBridgePollerAddress():string|number|undefined{
+
+    public get tokenBridgePollerAddress(): string | number | undefined {
         return this._config?.accounts?.bridge;
     }
-    public get tokenBridgeAppID():number|undefined{
+    public get tokenBridgeAppID(): number | undefined {
         return this._config?.appProgramId;
     }
-    public get usdcBridgePollerAddress():string|number|undefined{
+    public get usdcBridgePollerAddress(): string | number | undefined {
         return this._config?.accounts?.usdcDeposit;
     }
-    public get usdcBridgeDepositAddress():string|number|undefined{
+    public get usdcBridgeDepositAddress(): string | number | undefined {
         return this._config?.accounts?.usdcDeposit;
-    }   
-    public get usdcBridgeReceiverAddress():string|number|undefined{
+    }
+    public get usdcBridgeReceiverAddress(): string | number | undefined {
         return this._config?.accounts?.usdcReceiver;
     }
+    public get usdcBridgeFeeReceiver(): string | number | undefined {
+        return this._config?.accounts?.feeReceiver;
+    }
+    public getAssetID(symbol: string): number | undefined {
+        try {
+            if (!this._accounts) throw new Error("Algorand Accounts not defined");
+
+            //Get Token
+            const token = BridgeTokens.get("algorand", symbol);
+            if (!token) throw new Error("Token not found");
+            if (!token.address) throw new Error("mint address is required");
+            if (typeof token.address !== "number") throw new Error("token address is required in number format");
+            return token.address;
+        } catch (error) {
+            console.log(error);
+            return undefined;
+        }
+    }
+    public getToken(token:string):BridgeToken | undefined{
+        return BridgeTokens.get("algorand",   token);
+      }
 }
 
 

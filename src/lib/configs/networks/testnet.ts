@@ -58,7 +58,7 @@ export const BridgeTestnet: GlitterBridgeConfig = {
         name: undefined,
         max_transfer: undefined,
         total_supply: undefined,
-      },
+      }
     ],
   },
   solana: {
@@ -69,7 +69,9 @@ export const BridgeTestnet: GlitterBridgeConfig = {
       vestingProgram: "EMkD74T2spV3A71qfY5PNqVNrNrpbFcdwMF2TerRMr9n",
       owner: "hY5PXHYm58H5KtJW4GrtegxXnpMruoX3LLP6CufHoHj",
       usdcReceiver: "Av47VxT8GpGXHYc3aG7fKddgZjCuZEb5yF3BCaXyE7wu",
+      usdcReceiverTokenAccount:"HrrpuLCq2ewozVZU5sFrWL6oRvFe8KH1VMhVQLCcWpdy",
       usdcDeposit: "8Cb6eKCiowqsfYoLeaQf9voTHv1nV6rKjBvMQwLEGoDJ",
+      usdcDepositTokenAccount:"CWmY521qXB29Hwp3WBzyX1huApRdQu4kjrcxZpa2St7d",
       memoProgram: "MemoSq4gqABAXKb96qnH8TysNcWxMyWCqXgDLGmfcHr",
     },
     tokens: [
@@ -105,7 +107,7 @@ export const BridgeTestnet: GlitterBridgeConfig = {
         name: undefined,
         max_transfer: undefined,
         total_supply: undefined,
-      },
+      }
     ],
   },
   evm: {
@@ -170,4 +172,28 @@ export const BridgeTestnet: GlitterBridgeConfig = {
       chainId: 80001,
     },
   },
+  stellar: {
+   accounts: {
+    usdcDepositAddress: "",
+    usdcDepositTag: "",
+    usdcReceiverAddress: "",
+    usdcReceiverTag: ""
+  }},
+  hedera: {
+   accounts: {
+    usdcDepositAddress: "",
+    usdcDepositTag: "",
+    usdcReceiverAddress: "",
+    usdcReceiverTag: ""
+  }},
+  tron: {
+   accounts: {
+    usdcDeposit: "",
+    usdcReceiver: "",
+  }},
+  flow: {
+   accounts: {
+    usdcDeposit: "",
+    usdcReceiver: "",
+  }}
 };

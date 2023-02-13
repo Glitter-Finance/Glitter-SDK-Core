@@ -20,7 +20,7 @@ import {
     createTransferInstruction,
     getAssociatedTokenAddress,
 } from "@solana/spl-token";
-import { DepositNote } from "../../../common/routing/routing";
+import { DepositNote } from "../utils";
 import { BridgeToken, BridgeTokens, Routing, ValueUnits } from "../../../common";
 import { SolanaAccountsConfig, SolanaProgramId } from "../config";
 
@@ -370,6 +370,8 @@ export class SolanaBridgeTxnsV1 {
                 if (!routing.amount) throw new Error("amount is required");
                 if (!this._bridgeProgramAddress) throw new Error("Bridge Program Address is not set");
                 if (!this._client) throw new Error("Client is not set");
+
+
 
                 //Get Bridge Program PubKey
                 const bridgeProgram = new PublicKey(this._bridgeProgramAddress!);
