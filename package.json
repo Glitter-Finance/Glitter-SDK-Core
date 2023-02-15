@@ -36,6 +36,7 @@
     "eventemitter3": "^5.0.0",
     "glitter-evm-contracts": "^1.0.32",
     "minimist": "latest",
+    "tronweb": "^5.1.0",
     "tweetnacl": "^1.0.3",
     "winston": "latest"
   },
