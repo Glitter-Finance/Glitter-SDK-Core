@@ -7,6 +7,7 @@ import {
   BridgeNetworks,
   NetworkIdentifiers,
 } from "../../common/networks/networks";
+import { EvmError } from "./evmErrors";
 
 export class SerializeEvmBridgeTransfer {
   /**
@@ -73,7 +74,7 @@ export class SerializeEvmBridgeTransfer {
 
     if (!_sourceChain || !_destinationChain)
       throw new Error(
-        "[SerializeEvmBridgeTransfer] Unable to serialize bridge transfer networks"
+        EvmError.NOT_SERIALIZABLE
       );
 
     return {
@@ -139,7 +140,7 @@ export class DeserializeEvmBridgeTransfer {
 
     if (!sourceChain || !destinationChain)
       throw new Error(
-        "[DeserializeEvmBridgeTransfer] Unable to deserialize bridge transfer networks"
+        EvmError.NOT_DESERILIZABLE
       );
 
     return {

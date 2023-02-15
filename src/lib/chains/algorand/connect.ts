@@ -8,7 +8,6 @@ import { AlgorandBridgeTxnsV1 } from "./txns/bridge";
 import * as fs from 'fs';
 import { BridgeToken, BridgeTokens, LogProgress, Routing, RoutingDefault, Sleep } from '../../common';
 import { PartialBridgeTxn, TransactionType } from '../../common/transactions/transactions';
-import { AlgorandPoller } from './poller';
 import { ethers } from 'ethers';
 import { base64To0xString, base64ToString } from '../../common/utils/utils';
 import { AlgoError } from './algoError';
@@ -25,7 +24,6 @@ export class AlgorandConnect {
     private _assets: AlgorandAssets | undefined = undefined;
     private _transactions: AlgorandTxns | undefined = undefined;
     private _bridgeTxnsV1: AlgorandBridgeTxnsV1 | undefined = undefined;
-    private _poller: AlgorandPoller | undefined
     private _config: AlgorandConfig | undefined = undefined;
     _lastTxnHash: string = "";
 
@@ -37,7 +35,6 @@ export class AlgorandConnect {
         this._assets = new AlgorandAssets(this._client);
         this._transactions = new AlgorandTxns(this._client, config.accounts);
         this._bridgeTxnsV1 = new AlgorandBridgeTxnsV1(this._client, config.appProgramId, this._transactions, config.accounts);
-        this._poller = new AlgorandPoller(this._client, this._clientIndexer, this._bridgeTxnsV1)
    
         //Load tokens
         config.tokens.forEach(element => {
@@ -1088,88 +1085,6 @@ export class AlgorandConnect {
     }
 
 
-    /**
-     * @method getPartialBridgeTransactions
-     * @param minRound
-     * @returns {PartialBridgeTxn[]|undefined} 
-     */
-    public async getPartialBridgeTransactions(minRound?:number):Promise<PartialBridgeTxn[]|undefined>{
-       
-        return new Promise(async(resolve,reject) =>{
-            try{
-                if (!this._poller) throw new Error(AlgoError.POLLER_NOT_SET);
-
-                const BridgeTxnlist = await this._poller.ListBridgeTransactionHandler(minRound);
-                resolve(BridgeTxnlist)
-
-            }catch(err){
-                reject(err)
-            }
-        })
-        
-    }
-
-    /**
-     * @method getUsdcDepositPartialTransactions
-     * @param minRound
-     * @returns {PartialBridgeTxn[]|undefined} 
-     */
-    public async getUsdcDepositPartialTransactions(minRound?:number):Promise<PartialBridgeTxn[]>{
-
-        return new Promise(async(resolve,reject) =>{
-            try{
-                if(!this._poller) throw new Error(AlgoError.POLLER_NOT_SET);
-                const list = this._poller.ListUSDCDepositTransactionHandler(minRound,undefined,undefined);
-                resolve(list)
-            }catch(err){
-                reject(err)
-            }
-        })
-    }
-
-    /**
-     * @method getUsdcReleasePartialTransactions
-     * @param minRound
-     * @returns {PartialBridgeTxn[]|undefined} 
-     */
-    public async getUsdcReleasePartialTransactions(minRound?:number):Promise<PartialBridgeTxn[]>{
-        return new Promise(async(resolve,reject) =>{
-            try{
-                if(!this._poller) throw new Error(AlgoError.POLLER_NOT_SET);
-                const list = this._poller.ListUSDCReleaseTransactionHandler(minRound,undefined,undefined);
-                resolve(list)
-            }catch(err){
-                reject(err)
-            }
-        })
-    }
-
-    getPollerLastRound(){
-    
-    if (!this._poller) throw new Error(AlgoError.POLLER_NOT_SET)
-    const lastRound = this._poller.getLastMinRound();
-    return lastRound
-    
-    }
-    
-    getPollerLastTxn(){
-    
-    if (!this._poller) throw new Error(AlgoError.POLLER_NOT_SET)
-    const lastTxn = this._poller.getLastTxnId();
-    return lastTxn
-    
-   }
-
-   getUsdcDepositPolletLastRound(){
-    if(!this._poller) throw new Error(AlgoError.POLLER_NOT_SET)
-    const lastRound = this._poller.getLastMinRoundUsdcDeposit();
-    return lastRound
-   }
-   getUsdcReleasePolletLastRound(){
-    if(!this._poller) throw new Error(AlgoError.POLLER_NOT_SET)
-    const lastRound = this._poller.getLastMinRoundUsdcRelease();
-    return lastRound
-   }
 
     /**
      * 

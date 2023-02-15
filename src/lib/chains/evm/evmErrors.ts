@@ -1,8 +1,12 @@
-export enum SolanaError {
+export enum EvmError {
     CLIENT_NOT_SET = 'CLIENT HAS NOT SET',
     BRIDGE_NOT_SET = 'BRIDGE HAS NOT SET',
-    INVALID_ASSET = 'UNDEFINED ASSET',
-    INVALID_ASSET_ID ='ASSED ID NOT FOUND',
+    INVALID_ASSET = '[EvmConnect] Can not provide address of undefined token.',
+    INVALID_ASSET_ID ='[EvmConnect] Please provide token symbol.',
+    ASSET_NOT_SUPPORTED ="[EvmConnect] Unsupported token symbol.",
+    INVALID_DESTINATION = "[EvmConnect] Cannot transfer tokens to same chain.",
+    NOT_SERIALIZABLE ="[SerializeEvmBridgeTransfer] Unable to serialize bridge transfer networks",
+    NOT_DESERILIZABLE = "[DeserializeEvmBridgeTransfer] Unable to deserialize bridge transfer networks",
     INVALID_ASSET_ID_TYPE ='ASSET ID SHOULD BE string',
     UNDEFINED_TRANSACTION = 'TRANSACTION IS UNDEFINED',
     INVALID_SIGNER ='SIGNER IS REQUIRED',
@@ -14,10 +18,8 @@ export enum SolanaError {
     ACCOUNT_INFO ='ACCOUNT INFO NOT FOUND',
     INVALID_ACCOUNT ='ACCOUNT/ADDRESS IS UNDEFINED',
     INVALID_APP_ID ='APP ID NOT DEFINED',
-    ACCOUNTS_NOT_SET ='SOLANA ACCOUNTS NOT SET',
-    ASSETS_NOT_SET ='SOLANA ASSETS NOT SET',
-    SOL_TOKEN_NOT_SET ='SOL TOKEN NOT SET',
-    UNDEFINED_SOL_ASSETS ='SOL ASSETS NOT DEFINED',
+    ACCOUNTS_NOT_SET ='EVM ACCOUNTS NOT SET',
+    ASSETS_NOT_SET ='EVM ASSETS NOT SET',
     UNDEFINED_TOKEN_ACCOUNT ='TOKEN ACCOUNT NOT FOUND',
     UNDEFINED_ROUTING ='ROUTING NOT SET'
 

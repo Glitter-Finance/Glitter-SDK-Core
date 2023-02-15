@@ -1,4 +1,4 @@
-import { ConfirmedSignaturesForAddress2Options, Connection, Keypair, PublicKey, sendAndConfirmTransaction, Transaction, TransactionInstruction } from '@solana/web3.js';
+import {  Connection, Keypair, PublicKey, sendAndConfirmTransaction, Transaction, TransactionInstruction } from '@solana/web3.js';
 import { SolanaAccount, SolanaAccounts } from './accounts';
 import { SolanaAssets } from './assets';
 import { SolanaBridgeTxnsV1 } from './txns/bridge';
@@ -8,7 +8,6 @@ import * as util from 'util';
 import { BridgeToken, BridgeTokens, LogProgress, Precise, Routing, RoutingDefault, Sleep, ValueUnits } from '../../common';
 import { COMMITMENT } from './utils';
 import { DepositNote } from '../../common/routing/routing';
-import { SolanaPoller } from './poller';
 import { BridgeType, PartialBridgeTxn } from '../../common/transactions/transactions';
 import { ethers } from 'ethers';
 import base58 from 'bs58';
@@ -23,7 +22,6 @@ export class SolanaConnect {
     private _assets: SolanaAssets | undefined = undefined;
     private _transactions: SolanaTxns | undefined = undefined;
     private _bridgeTxnsV1: SolanaBridgeTxnsV1 | undefined = undefined;
-    private _poller:SolanaPoller | undefined;
     private _config: SolanaConfig | undefined = undefined;
     _lastTxnHash: string = "";
 
@@ -35,7 +33,6 @@ export class SolanaConnect {
         this._assets = new SolanaAssets(this._client);
         this._transactions = new SolanaTxns(this._client);
         this._bridgeTxnsV1 = new SolanaBridgeTxnsV1(this._client, config.accounts.bridgeProgram, config.accounts);
-        this._poller = new SolanaPoller(this._client, this._bridgeTxnsV1)
 
         //Load tokens
         config.tokens.forEach(element => {
@@ -927,103 +924,6 @@ export class SolanaConnect {
         });
     }
 
-        /**
-         * 
-         * @method listsBridgetransactions
-         * @param take 
-         * @param beginAt
-         * @param endAt 
-         * @returns {PartialBridgeTxn[]|undefined}
-         */
-        public async getPartialBridgeTransactions(take:number, beginAt?:string,endAt?:string):Promise<PartialBridgeTxn[]|undefined>{
-            return new Promise(async(resolve, reject) =>{
-            try{
-                if(!this._poller) throw new Error(SolanaError.POLLER_NOT_SET)
-                const list = this._poller?.ListBridgeTransactionHandler(take,beginAt,endAt); 
-                if(!list){
-                    throw new Error("LIST IS UNDEFINED")
-                }
-                resolve(list)    
-            }catch(err){
-                reject(err)
-            }
-        })  
-        }
-
-        
-        /**
-        *
-        * @method getUSDCDepositTransactions
-        * @param take 
-        * @param beginAt
-        * @param endAt
-        * @returns {PartialBridgeTxn[]|undefined}
-        */
-        public async getUsdcDepositPartialTransactions(take:number, beginAt?:string,endAt?:string):Promise<PartialBridgeTxn[]|undefined>{
-        return new Promise(async(resolve, reject) =>{
-        try{
-            if(!this._poller) throw new Error(SolanaError.POLLER_NOT_SET)
-            const list = this._poller?.ListUSDCDepositTransactionHandler(take,beginAt,endAt); 
-            if(!list){
-                throw new Error("LIST IS UNDEFINED")
-            }
-            resolve(list)    
-        }catch(err){
-            reject(err)
-        }
-        })  
-        }
-
-     /**
-      * 
-      * @method startPoller
-      * @param bridgeType 
-      * @param delay 
-      * @param options 
-      * @param usdcBridgeTransactions
-      * @returns {PartialBridgeTxn[]|undefined} 
-      */
-     public async startPoller(bridgeType: BridgeType,delay:number,options?:PollerOptions,usdcBridgeTransactions?:'deposit' |'release'):Promise<PartialBridgeTxn[]|undefined>{
-        return new Promise(async(resolve, reject) =>{
-        try{
-
-
-            if(!this._poller) throw new Error("poller not set");
-            this._poller?.start(bridgeType,delay,options,usdcBridgeTransactions); 
-
-            const list = this._poller.poll()
-            if(!list){
-                throw new Error("unable to list USDC Release PartialBridgeTxn")
-            }
-            resolve(list)    
-        }catch(err){
-            reject(err)
-        }
-        })  
-        }
-
-        /**
-        *
-        * @method getUSDCDReleaseTransactions
-        * @param take 
-        * @param beginAt
-        * @param endAt
-        * @returns {PartialBridgeTxn[]|undefined}
-        */
-        public async getUsdcReleasePartialTransactions(take:number, beginAt?:string,endAt?:string):Promise<PartialBridgeTxn[]|undefined>{
-            return new Promise(async(resolve, reject) =>{
-            try{
-                if(!this._poller) throw new Error(SolanaError.POLLER_NOT_SET)
-                const list = this._poller?.ListUSDCReleaseTransactionHandler(take,beginAt,endAt); 
-                if(!list){
-                    throw new Error("LIST IS UNDEFINED")
-                }
-                resolve(list)    
-            }catch(err){
-                reject(err)
-            }
-            })  
-            }
 
         //Helper Functions
     async getTestAirDrop(signer: SolanaAccount): Promise<boolean> {

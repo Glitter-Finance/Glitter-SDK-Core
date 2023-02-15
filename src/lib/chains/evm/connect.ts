@@ -23,7 +23,7 @@ import {
 import { BridgeType, ChainStatus, PartialBridgeTxn, TransactionType } from "../../common/transactions/transactions";
 import { BridgeToken, BridgeTokens } from "../../common/tokens/tokens";
 import { Routing, ValueUnits } from "../../common";
-import { EvmPoller } from "./poller";
+import { EvmError } from "./evmErrors";
 type Connection = {
   rpcProvider: providers.BaseProvider;
   bridge: TokenBridge;
@@ -34,7 +34,6 @@ export class EvmConnect {
   protected readonly __network: BridgeEvmNetworks;
   protected readonly __providers: Connection;
   protected readonly __config: EvmNetworkConfig;
-  private _poller:EvmPoller|undefined
 
   private createConnections(
     rpcUrl: string,
@@ -65,7 +64,6 @@ export class EvmConnect {
     this.__config = config;
     this.__network = network;
     this.__providers = this.createConnections(config.rpcUrl, config);
-    this._poller = new EvmPoller(config,this.__network,this.__providers.rpcProvider);
   }
 
   get provider(): ethers.providers.BaseProvider {
@@ -92,7 +90,7 @@ export class EvmConnect {
   ): string {
     if (entity === "tokens") {
       if (!tokenSymbol)
-        throw new Error("[EvmConnect] Please provide token symbol.");
+        throw new Error(EvmError.INVALID_ASSET_ID);
 
       const token = this.__config.tokens.find(
         (token) => token.symbol.toLowerCase() === tokenSymbol.toLowerCase()
@@ -100,7 +98,7 @@ export class EvmConnect {
 
       if (!token) {
         throw new Error(
-          "[EvmConnect] Can not provide address of undefined token."
+          EvmError.INVALID_ASSET
         );
       }
 
@@ -308,11 +306,11 @@ export class EvmConnect {
           `[EvmConnect] Signer should be connected to network ${this.__network}`
         );
       if (!this.isValidToken(tokenSymbol)) {
-        throw new Error(`[EvmConnect] Unsupported token symbol.`);
+        throw new Error(EvmError.ASSET_NOT_SUPPORTED);
       }
 
       if (destination === this.__network) {
-        throw new Error("[EvmConnect] Cannot transfer tokens to same chain.");
+        throw new Error(EvmError.INVALID_DESTINATION);
       }
 
       const bridge = TokenBridge__factory.connect(
