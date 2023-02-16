@@ -1,11 +1,13 @@
 import { PublicKey } from "@solana/web3.js";
 import { ethers } from "ethers";
+const TronWeb = require('tronweb');
 import { fromHexString } from "../../common/utils/bytes";
 import algoSdk from "algosdk";
 import {
   BridgeEvmNetworks,
   BridgeNetworks,
   NetworkIdentifiers,
+  PartialEvmNetwork,
 } from "../../common/networks/networks";
 
 export class SerializeEvmBridgeTransfer {
@@ -20,6 +22,8 @@ export class SerializeEvmBridgeTransfer {
     account: PublicKey | algoSdk.Account | string
   ): string {
     switch (sourceChain) {
+      case BridgeNetworks.TRON:
+        return `0x${TronWeb.address.toHex(account as string)}`
       case BridgeNetworks.solana:
         return ethers.utils
           .hexZeroPad((account as PublicKey).toBytes(), 32)
@@ -47,7 +51,7 @@ export class SerializeEvmBridgeTransfer {
    * @returns Serialized transfer
    */
   static serialize(
-    sourceChain: BridgeEvmNetworks,
+    sourceChain: BridgeEvmNetworks | PartialEvmNetwork,
     destinationChain: BridgeNetworks,
     sourceWallet: string,
     destinationWallet: PublicKey | algoSdk.Account | string,
@@ -101,6 +105,8 @@ export class DeserializeEvmBridgeTransfer {
     data: string
   ): string {
     switch (chain) {
+      case BridgeNetworks.TRON:
+        return TronWeb.address.fromHex(data)
       case BridgeNetworks.algorand:
         return algoSdk.encodeAddress(fromHexString(data));
       case BridgeNetworks.Polygon:

@@ -1,5 +1,9 @@
+import { PublicKey } from "@solana/web3.js";
 import { BigNumber, ethers } from "ethers";
+import { BridgeNetworks } from "../../common/networks/networks";
+import { SerializeEvmBridgeTransfer } from "../evm";
 import { TronConfig } from "./types";
+import algosdk from "algosdk";
 const TronWeb = require('tronweb');
 const Trc20DetailedAbi = require('./abi/TRC20Detailed.json');
 const TokenBridgeAbi = require('./abi/TokenBridge.json');
@@ -102,7 +106,9 @@ export class TronConnect {
             this.getAddress("tokens", tokenSymbol),
             Trc20DetailedAbi
         )
-        const balance = await token.balanceOf(address).call();
+        const balance = await token.balanceOf(
+            this.fromTronAddress(address)
+        ).call();
         return ethers.BigNumber.from(balance.toString());
     }
     async approveTokensForBridge(
@@ -111,7 +117,7 @@ export class TronConnect {
         privateKey: string
     ): Promise<ethers.ContractTransaction> {
         if (!this.isValidToken(tokenSymbol))
-            return Promise.reject("[EvmConnect] Unsupported token symbol.");
+            return Promise.reject("[TronConnect] Unsupported token symbol.");
 
         const bridgeAddress = this.getAddress("bridge");
         const tokenAddress = this.getAddress("tokens", tokenSymbol);
@@ -128,6 +134,84 @@ export class TronConnect {
             tokenAddress
         )
 
-        return await token.increaseAllowance(bridgeAddress, amount).call();
+        return await token.increaseAllowance(bridgeAddress, amount).send();
+    }
+    async bridgeAllowance(
+        tokenSymbol: string,
+        signer: ethers.Signer
+    ): Promise<ethers.BigNumber> {
+        if (!this.isValidToken(tokenSymbol))
+            return Promise.reject("Unsupported token symbol.");
+
+        const tokenAddress = this.getAddress("tokens", tokenSymbol);
+        const usdc = await this.getContractAt(tokenAddress, Trc20DetailedAbi);
+
+        const allowance = await usdc.allowance(
+            signer.getAddress(),
+            this.getAddress("bridge")
+        ).call();
+
+        return ethers.BigNumber.from(allowance.toString());
+    }
+    /**
+     * Bridge tokens to another supported chain
+     * @param {BridgeNetworks} destination
+     * @param {"USDC"} tokenSymbol only USDC for now
+     * @param {string | ethers.BigNumber} amount in BigNumber units e.g 1_000_000 for 1USDC
+     * @param {string | PublicKey | algosdk.Account} destinationWallet provide USDC reciever address on destination chain
+     * @param {ethers.Wallet} wallet to sign transaction
+     * @returns {Promise<ethers.ContractTransaction>}
+     */
+    async bridge(
+        destination: BridgeNetworks,
+        tokenSymbol: string,
+        amount: ethers.BigNumber | string,
+        destinationWallet: string | PublicKey | algosdk.Account,
+        privateKey: string
+    ): Promise<ethers.ContractTransaction> {
+        try {
+            if (!this.__tronWeb) {
+                throw new Error(`[TronConnect] Unsupported token symbol.`);
+            }
+
+            if (!this.isValidToken(tokenSymbol)) {
+                throw new Error(`[TronConnect] Unsupported token symbol.`);
+            }
+
+            const trWeb = TronWeb(
+                this.__tronConfig.fullNode,
+                this.__tronConfig.solidityNode,
+                this.__tronConfig.eventServer,
+                privateKey
+            )
+
+            const bridge = await trWeb.contract(
+                this.getAddress('bridge'),
+                Trc20DetailedAbi
+            )
+
+            const tokenAddress = this.getAddress("tokens", tokenSymbol);
+            const depositAddress = this.getAddress("depositWallet");
+            const _amount =
+                typeof amount === "string" ? ethers.BigNumber.from(amount) : amount;
+
+            const serialized = SerializeEvmBridgeTransfer.serialize(
+                BridgeNetworks.TRON,
+                destination,
+                TronWeb.address.fromPrivateKey(privateKey),
+                destinationWallet,
+                _amount
+            );
+
+            return await bridge.deposit(
+                serialized.destinationChain,
+                serialized.amount,
+                depositAddress,
+                tokenAddress,
+                serialized.destinationWallet
+            ).send();
+        } catch (error) {
+            return Promise.reject(error);
+        }
     }
 }

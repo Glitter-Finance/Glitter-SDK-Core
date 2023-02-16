@@ -4,6 +4,7 @@ export enum BridgeNetworks {
   Ethereum = "ethereum",
   Polygon = "polygon",
   Avalanche = "avalanche",
+  TRON = 'tron'
 }
 
 export type BridgeEvmNetworks =
@@ -11,6 +12,7 @@ export type BridgeEvmNetworks =
   | typeof BridgeNetworks.Ethereum
   | typeof BridgeNetworks.Polygon;
 
+export type PartialEvmNetwork = typeof BridgeNetworks.TRON
 /**
  * These IDs will be stored
  * within event logs to
@@ -25,4 +27,5 @@ export const NetworkIdentifiers: {
   3: BridgeNetworks.Ethereum,
   4: BridgeNetworks.solana,
   5: BridgeNetworks.Polygon,
+  6: BridgeNetworks.TRON
 };
