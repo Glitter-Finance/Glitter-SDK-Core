@@ -101,7 +101,7 @@ export class DeserializeEvmBridgeTransfer {
    * @returns {string} formatted address
    */
   static deserializeAddress(
-    chain: BridgeEvmNetworks | BridgeNetworks,
+    chain: BridgeNetworks,
     data: string
   ): string {
     switch (chain) {
@@ -125,8 +125,8 @@ export class DeserializeEvmBridgeTransfer {
     destinationIdBytes: string,
     amount: ethers.BigNumber
   ): {
-    sourceNetwork: BridgeEvmNetworks;
-    destinationNetwork: BridgeEvmNetworks | BridgeNetworks;
+    sourceNetwork: BridgeEvmNetworks | PartialEvmNetwork;
+    destinationNetwork: BridgeNetworks;
     sourceWallet: string;
     destinationWallet: string;
     amount: ethers.BigNumber;
@@ -149,7 +149,7 @@ export class DeserializeEvmBridgeTransfer {
       );
 
     return {
-      sourceNetwork: sourceChain[1] as BridgeEvmNetworks,
+      sourceNetwork: sourceChain[1] as BridgeEvmNetworks | PartialEvmNetwork,
       destinationNetwork: destinationChain[1],
       amount,
       sourceWallet,
