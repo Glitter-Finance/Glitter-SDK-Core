@@ -25,20 +25,28 @@ export class SerializeEvmBridgeTransfer {
       case BridgeNetworks.TRON:
         return `0x${TronWeb.address.toHex(account as string)}`
       case BridgeNetworks.solana:
-        return ethers.utils
+        if (typeof account !== "object" || typeof account !== 'string') throw new Error('Unsupported account type');
+        return typeof account === "object" ? ethers.utils
           .hexZeroPad((account as PublicKey).toBytes(), 32)
-          .toString();
+          .toString() : ethers.utils
+            .hexZeroPad(new PublicKey(account).toBytes(), 32)
+            .toString();
       case BridgeNetworks.Polygon:
       case BridgeNetworks.Avalanche:
       case BridgeNetworks.Ethereum:
         return account as string;
       case BridgeNetworks.algorand:
-        return ethers.utils
-          .hexZeroPad(
-            algoSdk.decodeAddress((account as algoSdk.Account).addr).publicKey,
-            32
-          )
-          .toString();
+        if (typeof account !== "object" || typeof account !== 'string') throw new Error('Unsupported account type');
+        return typeof account === "object" ?
+          ethers.utils
+            .hexZeroPad(
+              algoSdk.decodeAddress((account as algoSdk.Account).addr).publicKey,
+              32
+            )
+            .toString() : ethers.utils
+              .hexZeroPad(algoSdk.decodeAddress(
+                account as string
+              ).publicKey, 32).toString()
     }
   }
   /**
