@@ -4,8 +4,8 @@ import { BridgeDepositEvent, BridgeReleaseEvent, TransferEvent } from "../evm";
 import { EventTopics } from "./types";
 
 const BRIDGE_DEPOSIT_EVENT_SIGNATURE = (trWeb: any): string => trWeb.sha3('BridgeDeposit(uint16,uint256,address,bytes)')
-const BRIDGE_RELEASE_EVENT_SIGNATURE = (trWeb: any): string => trWeb.sha3('BridgeRelease()')
-const TRC20_TRANSFER_EVENT_SIGNATURE = (trWeb: any): string => trWeb.sha3('Transfer()')
+const BRIDGE_RELEASE_EVENT_SIGNATURE = (trWeb: any): string => trWeb.sha3('BridgeRelease(uint256,address,address,bytes32)')
+const TRC20_TRANSFER_EVENT_SIGNATURE = (trWeb: any): string => trWeb.sha3('Transfer(address,address,uint256)')
 
 export function getLogByEventSignature(
     trWeb: any,
@@ -37,19 +37,48 @@ export function decodeEventData(
     const coder = new AbiCoder()
     switch (topic) {
         case "BridgeDeposit":
-            const decoded = coder.decode(
+            const decodedDeposit = coder.decode(
                 ["uint16", "uint256", "address", "bytes"],
-                `0x${log.data}`
+                !log.data.startsWith("0x") ? `0x${log.data}` : log.data
             );
-            if (decoded.length > 0) {
+            if (decodedDeposit.length > 0) {
                 const bridgeDeposit: BridgeDepositEvent = {
-                    destinationChainId: Number(decoded[0].toString()),
-                    amount: ethers.BigNumber.from(decoded[1].toString()),
-                    destinationWallet: decoded[3],
-                    erc20Address: decoded[2],
+                    destinationChainId: Number(decodedDeposit[0].toString()),
+                    amount: ethers.BigNumber.from(decodedDeposit[1].toString()),
+                    destinationWallet: decodedDeposit[3],
+                    erc20Address: decodedDeposit[2],
                     __type: "BridgeDeposit"
                 }
                 return bridgeDeposit
+            }
+        case "BridgeRelease":
+            const decodedRelease = coder.decode(
+                ["address", "address", "uint256"],
+                !log.data.startsWith("0x") ? `0x${log.data}` : log.data
+            );
+            if (decodedRelease.length > 0) {
+                const bridgeRelease: BridgeReleaseEvent = {
+                    amount: ethers.BigNumber.from(decodedRelease[0].toString()),
+                    depositTransactionHash: decodedRelease[3],
+                    destinationWallet: decodedRelease[1],
+                    erc20Address: decodedRelease[2],
+                    __type: "BridgeRelease"
+                }
+                return bridgeRelease
+            }
+        case "Transfer":
+            const decodedTransfer = coder.decode(
+                ["address", "address", "uint256"],
+                !log.data.startsWith("0x") ? `0x${log.data}` : log.data
+            );
+            if (decodedTransfer.length > 0) {
+                const transfer: TransferEvent = {
+                    from: decodedTransfer[0],
+                    to: decodedTransfer[1],
+                    value: ethers.BigNumber.from(decodedTransfer[2].toString()),
+                    __type: "Transfer"
+                }
+                return transfer
             }
     }
 
