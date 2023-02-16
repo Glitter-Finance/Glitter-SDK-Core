@@ -1,9 +1,10 @@
 import { PublicKey } from "@solana/web3.js";
 import { BigNumber, ethers } from "ethers";
 import { BridgeNetworks } from "../../common/networks/networks";
-import { SerializeEvmBridgeTransfer } from "../evm";
+import { BridgeDepositEvent, BridgeReleaseEvent, SerializeEvmBridgeTransfer, TransferEvent } from "../evm";
 import { TronConfig } from "./types";
 import algosdk from "algosdk";
+import { decodeEventData, getLogByEventSignature } from "./utils";
 const TronWeb = require('tronweb');
 const Trc20DetailedAbi = require('./abi/TRC20Detailed.json');
 const TokenBridgeAbi = require('./abi/TokenBridge.json');
@@ -213,5 +214,85 @@ export class TronConnect {
         } catch (error) {
             return Promise.reject(error);
         }
+    }
+
+    async getBridgeLogs(
+        depositOrReleaseTxId: string
+    ): Promise<Array<
+        TransferEvent |
+        BridgeDepositEvent |
+        BridgeReleaseEvent
+    >> {
+        let events: Array<
+            TransferEvent |
+            BridgeDepositEvent |
+            BridgeReleaseEvent
+        > = []
+        const dpstTxInfo = await this.__tronWeb.trx.getTransactionInfo(depositOrReleaseTxId)
+        let depositMatch = null;
+        let releaseMatch = null;
+        let transferMatch = null;
+
+
+        for (const log of dpstTxInfo.log) {
+            try {
+                const d = getLogByEventSignature(this.__tronWeb, log, "BridgeDeposit");
+                const r = getLogByEventSignature(this.__tronWeb, log, "BridgeRelease");
+                const t = getLogByEventSignature(this.__tronWeb, log, "Transfer");
+
+                if (d) {
+                    depositMatch = d;
+                }
+
+                if (r) {
+                    releaseMatch = r;
+                }
+
+                if (t) {
+                    transferMatch = t;
+                }
+
+            } catch (error) {
+                console.error('[TronConnect] Error: ' + error)
+            }
+        }
+
+        if (depositMatch) {
+            const decodedDeposit = decodeEventData(
+                depositMatch,
+                "BridgeDeposit"
+            )
+
+            if (decodedDeposit)
+                events.push(
+                    decodedDeposit
+                )
+        }
+
+        if (releaseMatch) {
+            const decodedRelease = decodeEventData(
+                releaseMatch,
+                "BridgeRelease"
+            )
+
+            if (decodedRelease)
+                events.push(
+                    decodedRelease
+                )
+        }
+
+        if (transferMatch) {
+            const decodedTransfer = decodeEventData(
+                transferMatch,
+                "Transfer"
+            )
+
+            if (decodedTransfer)
+                events.push(
+                    decodedTransfer
+                )
+        }
+
+        return events
     }
 }
