@@ -195,9 +195,15 @@ export const BridgeMainnet: GlitterBridgeConfig = {
     }
   },
   tron: {
-    accounts: {
-      usdcDeposit: "TAG83nhpF82P3r9XhFTwNamgv1BsjTcz6v",
-      usdcReceiver: "",
+    tokens: [
+    ],
+    fullNode: "",
+    solidityNode: "",
+    eventServer: "",
+    addresses: {
+      bridge: "",
+      depositWallet: "",
+      releaseWallet: ""
     }
   },
   flow: {
