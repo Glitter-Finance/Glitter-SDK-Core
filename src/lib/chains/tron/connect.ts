@@ -3,8 +3,10 @@ import { BigNumber, ethers } from "ethers";
 import { BridgeNetworks } from "../../common/networks/networks";
 import { BridgeDepositEvent, BridgeReleaseEvent, SerializeEvmBridgeTransfer, TransferEvent } from "../evm";
 import { TronConfig } from "./types";
-import algosdk from "algosdk";
+import algosdk, { Account } from "algosdk";
 import { decodeEventData, getLogByEventSignature } from "./utils";
+import { TronDeserialized, TronSerde } from "./serde";
+import { walletToAddress } from "../../common/utils/utils";
 const TronWeb = require('tronweb');
 const Trc20DetailedAbi = require('./abi/TRC20Detailed.json');
 const TokenBridgeAbi = require('./abi/TokenBridge.json');
@@ -196,24 +198,31 @@ export class TronConnect {
             const _amount =
                 typeof amount === "string" ? ethers.BigNumber.from(amount) : amount;
 
-            const serialized = SerializeEvmBridgeTransfer.serialize(
-                BridgeNetworks.TRON,
+            let destinationInStr: string = walletToAddress(destinationWallet)
+            const serialized = new TronSerde().serialize(
                 destination,
-                TronWeb.address.fromPrivateKey(privateKey),
-                destinationWallet,
-                _amount
+                destinationInStr
             );
 
             return await bridge.deposit(
-                serialized.destinationChain,
-                serialized.amount,
+                serialized.chainId,
+                _amount.toString(),
                 depositAddress,
                 tokenAddress,
-                serialized.destinationWallet
+                serialized.address
             ).send();
         } catch (error) {
             return Promise.reject(error);
         }
+    }
+
+    deSerializeDepositEvent(
+        deposit: BridgeDepositEvent
+    ): TronDeserialized {
+        return new TronSerde().deSerialize(
+            deposit.destinationChainId,
+            deposit.destinationWallet
+        )
     }
 
     async getBridgeLogs(

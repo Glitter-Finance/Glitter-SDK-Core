@@ -1,3 +1,5 @@
+import { PublicKey } from '@solana/web3.js';
+import algosdk from 'algosdk';
 import minimist = require('minimist');
 import * as readline from 'readline'
 
@@ -14,14 +16,14 @@ export function Sleep(ms: number) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-export function Precise(value: number|string, precision: number = 21): number {
+export function Precise(value: number | string, precision: number = 21): number {
     if (typeof value === "string") {
         return Number(parseFloat(value).toPrecision(precision));
     } else {
         return Number(parseFloat(value.toString()).toPrecision(precision));
     }
 }
-export function PreciseDecimals(value: number|string, decimals: number = 2): number {
+export function PreciseDecimals(value: number | string, decimals: number = 2): number {
     return Number(Precise(value).toFixed(decimals));
 }
 
@@ -41,3 +43,24 @@ export const base64ToBigUIntString = (encoded: any) => {
     return Buffer.from(encoded, "base64").readBigUInt64BE().toString();
 };
 
+export function walletToAddress(
+    wallet: string | PublicKey | algosdk.Account
+): string {
+    let destinationInStr: string | null = null;
+
+    if (wallet instanceof PublicKey) {
+        destinationInStr = wallet.toBase58();
+    } else if (
+        (wallet as algosdk.Account).addr &&
+        (wallet as algosdk.Account).sk
+    ) {
+        destinationInStr = (wallet as algosdk.Account).addr
+    } else {
+        destinationInStr = wallet as string
+    }
+
+    if (!destinationInStr) {
+        throw new Error('Unsupported Wallet Type')
+    }
+    return destinationInStr
+}

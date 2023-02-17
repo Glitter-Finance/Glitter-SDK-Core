@@ -23,6 +23,7 @@ import {
 import { BridgeType, ChainStatus, PartialBridgeTxn, TransactionType } from "../../common/transactions/transactions";
 import { BridgeToken, BridgeTokens } from "../../common/tokens/tokens";
 import { Routing, ValueUnits } from "../../common";
+import { walletToAddress } from "../../common/utils/utils";
 
 type Connection = {
   rpcProvider: providers.BaseProvider;
@@ -48,10 +49,10 @@ export class EvmConnect {
       return _tokens;
     }, {} as Record<string, ERC20>);
 
-  //    //Load tokens
-  //    config.tokens.forEach(element => {
-  //     BridgeTokens.add(element);
-  // });
+    //    //Load tokens
+    //    config.tokens.forEach(element => {
+    //     BridgeTokens.add(element);
+    // });
 
     return {
       rpcProvider,
@@ -325,7 +326,7 @@ export class EvmConnect {
         this.__network,
         destination,
         wallet.address,
-        destinationWallet,
+        walletToAddress(destinationWallet),
         _amount
       );
 
@@ -474,8 +475,8 @@ export class EvmConnect {
     return ethers.Wallet.createRandom();
   }
 
-  public getToken(token:string):BridgeToken | undefined{
-    return BridgeTokens.get(this.__network,   token);
+  public getToken(token: string): BridgeToken | undefined {
+    return BridgeTokens.get(this.__network, token);
   }
 
 }
