@@ -140,13 +140,13 @@ export class TronConnect {
         return await token.approve(bridgeAddress, amount).send();
     }
     async bridgeAllowance(
-        tokenSymbol: string,
+        _tokenSymbol: string,
         userWalletAddress: string
     ): Promise<ethers.BigNumber> {
-        if (!this.isValidToken(tokenSymbol))
+        if (!this.isValidToken(_tokenSymbol))
             return Promise.reject("Unsupported token symbol.");
 
-        const tokenAddress = this.getAddress("tokens", tokenSymbol);
+        const tokenAddress = this.getAddress("tokens", _tokenSymbol);
         const usdc = await this.getContractAt(tokenAddress, Trc20DetailedAbi.abi);
 
         const allowance = await usdc.allowance(
