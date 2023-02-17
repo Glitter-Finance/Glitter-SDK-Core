@@ -196,8 +196,8 @@ export class GlitterBridgeSDK {
    * @param {BridgeEvmNetworks} network
    * @returns {EvmConnect | undefined}
    */
-  public getEvmNetwork(network: BridgeEvmNetworks): EvmConnect | undefined {
-    return this._evm.get(network);
+  public getEvmNetwork(evmNetwork: BridgeEvmNetworks): EvmConnect | undefined {
+    return this._evm.get(evmNetwork);
   }
 
   get environment(): GlitterEnvironment | undefined {
