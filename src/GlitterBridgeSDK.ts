@@ -126,7 +126,7 @@ export class GlitterBridgeSDK {
   }
 
   private connectToAlgorand(): GlitterBridgeSDK {
-    //Failsafe
+    // Failsafe
     // copy paste is an anti pattern
     // https://en.wikipedia.org/wiki/Don%27t_repeat_yourself
     if (!this._bridgeConfig) throw new Error("Glitter environment not set");
@@ -188,17 +188,7 @@ export class GlitterBridgeSDK {
     return this;
   }
 
-  /**
-   * Returns EVMConnect for
-   * a specific evm network
-   * @param {BridgeEvmNetworks} network
-   * @returns {EvmConnect | undefined}
-   */
-  public getEvmNetwork(network: BridgeEvmNetworks): EvmConnect | undefined {
-    return this._evm.get(network);
-  }
-
-  //Getters
+  /** Get chain specific connection */
   get environment(): GlitterEnvironment | undefined {
     return this._environment;
   }
