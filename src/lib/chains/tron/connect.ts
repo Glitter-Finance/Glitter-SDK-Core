@@ -35,13 +35,13 @@ export class TronConnect {
         if (usdcConf) {
             this.__usdc = await this.getContractAt(
                 this.fromTronAddress(usdcConf.address),
-                Trc20DetailedAbi
+                Trc20DetailedAbi.abi
             )
         }
 
         this.__bridge = await this.getContractAt(
             this.fromTronAddress(this.__tronConfig.addresses.bridge),
-            TokenBridgeAbi
+            TokenBridgeAbi.abi
         )
     }
 
@@ -107,7 +107,7 @@ export class TronConnect {
 
         const token = await this.getContractAt(
             this.getAddress("tokens", tokenSymbol),
-            Trc20DetailedAbi
+            Trc20DetailedAbi.abi
         )
         const balance = await token.balanceOf(
             this.fromTronAddress(address)
@@ -118,7 +118,7 @@ export class TronConnect {
         tokenSymbol: string,
         amount: ethers.BigNumber | string,
         privateKey: string
-    ): Promise<ethers.ContractTransaction> {
+    ): Promise<string> {
         if (!this.isValidToken(tokenSymbol))
             return Promise.reject("[TronConnect] Unsupported token symbol.");
 
@@ -133,24 +133,24 @@ export class TronConnect {
         )
 
         const token = await trWeb.contract(
-            Trc20DetailedAbi,
+            Trc20DetailedAbi.abi,
             tokenAddress
         )
 
-        return await token.increaseAllowance(bridgeAddress, amount).send();
+        return await token.approve(bridgeAddress, amount).send();
     }
     async bridgeAllowance(
         tokenSymbol: string,
-        signer: ethers.Signer
+        userWalletAddress: string
     ): Promise<ethers.BigNumber> {
         if (!this.isValidToken(tokenSymbol))
             return Promise.reject("Unsupported token symbol.");
 
         const tokenAddress = this.getAddress("tokens", tokenSymbol);
-        const usdc = await this.getContractAt(tokenAddress, Trc20DetailedAbi);
+        const usdc = await this.getContractAt(tokenAddress, Trc20DetailedAbi.abi);
 
         const allowance = await usdc.allowance(
-            signer.getAddress(),
+            this.fromTronAddress(userWalletAddress),
             this.getAddress("bridge")
         ).call();
 
@@ -171,7 +171,7 @@ export class TronConnect {
         amount: ethers.BigNumber | string,
         destinationWallet: string | PublicKey | algosdk.Account,
         privateKey: string
-    ): Promise<ethers.ContractTransaction> {
+    ): Promise<string> {
         try {
             if (!this.__tronWeb) {
                 throw new Error(`[TronConnect] Unsupported token symbol.`);
@@ -190,7 +190,7 @@ export class TronConnect {
 
             const bridge = await trWeb.contract(
                 this.getAddress('bridge'),
-                Trc20DetailedAbi
+                TokenBridgeAbi.abi
             )
 
             const tokenAddress = this.getAddress("tokens", tokenSymbol);
