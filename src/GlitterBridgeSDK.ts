@@ -189,6 +189,17 @@ export class GlitterBridgeSDK {
   }
 
   /** Get chain specific connection */
+
+  /**
+   * Returns EVMConnect for
+   * a specific evm network
+   * @param {BridgeEvmNetworks} network
+   * @returns {EvmConnect | undefined}
+   */
+  public getEvmNetwork(network: BridgeEvmNetworks): EvmConnect | undefined {
+    return this._evm.get(network);
+  }
+
   get environment(): GlitterEnvironment | undefined {
     return this._environment;
   }
