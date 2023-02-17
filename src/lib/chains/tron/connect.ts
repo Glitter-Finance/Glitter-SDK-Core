@@ -309,7 +309,7 @@ export class TronConnect {
         return this.__tronWeb
     }
 
-    get config() {
+    get tronConfig() {
         return this.__tronConfig
     }
 }
