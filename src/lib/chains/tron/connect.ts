@@ -304,4 +304,12 @@ export class TronConnect {
 
         return events
     }
+
+    get tronWeb() {
+        return this.__tronWeb
+    }
+
+    get config() {
+        return this.__tronConfig
+    }
 }
