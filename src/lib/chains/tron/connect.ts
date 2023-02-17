@@ -237,13 +237,16 @@ export class TronConnect {
             BridgeDepositEvent |
             BridgeReleaseEvent
         > = []
-        const dpstTxInfo = await this.__tronWeb.trx.getTransactionInfo(depositOrReleaseTxId)
+        const txInfo = await this.__tronWeb.trx.getTransactionInfo(depositOrReleaseTxId)
         let depositMatch = null;
         let releaseMatch = null;
         let transferMatch = null;
 
+        if (!('log' in txInfo)) {
+            return [];
+        }
 
-        for (const log of dpstTxInfo.log) {
+        for (const log of txInfo.log) {
             try {
                 const d = getLogByEventSignature(this.__tronWeb, log, "BridgeDeposit");
                 const r = getLogByEventSignature(this.__tronWeb, log, "BridgeRelease");
