@@ -1,6 +1,7 @@
 import { AlgorandConnect } from "./lib/chains/algorand";
 import { EvmConnect } from "./lib/chains/evm";
 import { SolanaConnect } from "./lib/chains/solana";
+import { TronConnect } from "./lib/chains/tron/connect";
 import { BridgeToken, BridgeTokens } from "./lib/common";
 import {
   BridgeEvmNetworks,
@@ -11,22 +12,16 @@ import { BridgeMainnet } from "./lib/configs/networks/mainnet";
 import { BridgeTestnet } from "./lib/configs/networks/testnet";
 
 export class GlitterBridgeSDK {
-private _environment: GlitterEnvironment | undefined;
-
-  //Configs
+  private _environment: GlitterEnvironment | undefined;
+  /** Bridge Configuration */
   private _bridgeConfig: GlitterBridgeConfig | undefined;
-
-  //RPC overrides
+  /** RPC URL Override */
   private _rpcOverrides: { [key: string]: string } = {};
-
-  //Connections
+  /** Chain Specific SDKs */
+  private _evm: Map<BridgeEvmNetworks, EvmConnect | undefined> = new Map();
   private _algorand: AlgorandConnect | undefined;
   private _solana: SolanaConnect | undefined;
-  private _evm: Record<BridgeEvmNetworks, EvmConnect | undefined> = {
-    ethereum: undefined,
-    polygon: undefined,
-    avalanche: undefined,
-  };
+  private _tron: TronConnect | undefined;
 
   //Setters
   public setEnvironment(environment: GlitterEnvironment): GlitterBridgeSDK {
@@ -62,11 +57,19 @@ private _environment: GlitterEnvironment | undefined;
     this._rpcOverrides[network] = rpc;
     return this;
   }
-
-  //Connectors
+  /**
+   * Initialize connections and SDK
+   * @param {BridgeNetworks[]} networks list of 
+   * networks to connect to 
+   * @returns {GlitterBridgeSDK}
+   */
   public connect(networks: BridgeNetworks[]): GlitterBridgeSDK {
-    //Connect to the networks
     networks.forEach((network) => {
+      /**
+       * TODO: Have a single method
+       * for each chain e.g
+       * interface ChainConnect { connect(network: BridgeNetworks): void; }
+       */
       switch (network) {
         case BridgeNetworks.algorand:
           this.connectToAlgorand();
@@ -83,14 +86,49 @@ private _environment: GlitterEnvironment | undefined;
         case BridgeNetworks.Avalanche:
           this.connectToEvmNetwork(BridgeNetworks.Avalanche);
           break;
+        case BridgeNetworks.TRON:
+          this.connectToTron();
+          break;
       }
     });
+
+    return this;
+  }
+  /**
+   * 
+   * @param {BridgeNetworks} network 
+   */
+  private preInitializeChecks(
+    network: BridgeNetworks
+  ) {
+    if (!this._bridgeConfig) throw new Error("Glitter environment not set");
+    /**
+     * TODO: have config keys in such
+     * a way that we directly check
+     * using JS this._bridgeConfig[network]
+     */
+    let unavailableConfigError = `${network} Configuration unavailable`;
+    if (network === BridgeNetworks.TRON && !this._bridgeConfig.tron) {
+      throw new Error(unavailableConfigError);
+    } else if ([BridgeNetworks.Avalanche, BridgeNetworks.Ethereum, BridgeNetworks.Polygon].includes(network)
+      && !this._bridgeConfig.evm[network as BridgeEvmNetworks]) {
+      throw new Error(unavailableConfigError);
+    }
+  }
+
+  private connectToTron(): GlitterBridgeSDK {
+    this.preInitializeChecks(BridgeNetworks.TRON)
+    this._tron = new TronConnect(
+      this._bridgeConfig!.tron
+    )
 
     return this;
   }
 
   private connectToAlgorand(): GlitterBridgeSDK {
     //Failsafe
+    // copy paste is an anti pattern
+    // https://en.wikipedia.org/wiki/Don%27t_repeat_yourself
     if (!this._bridgeConfig) throw new Error("Glitter environment not set");
     if (!this._bridgeConfig.algorand)
       throw new Error("Algorand environment not set");
@@ -113,6 +151,7 @@ private _environment: GlitterEnvironment | undefined;
 
   private connectToSolana(): GlitterBridgeSDK {
     //Failsafe
+    // same here
     if (!this._bridgeConfig) throw new Error("Glitter environment not set");
     if (!this._bridgeConfig.solana)
       throw new Error("Solana environment not set");
@@ -133,19 +172,19 @@ private _environment: GlitterEnvironment | undefined;
   }
 
   private connectToEvmNetwork(network: BridgeEvmNetworks): GlitterBridgeSDK {
-    //Failsafe
-    if (!this._bridgeConfig) throw new Error("Glitter environment not set");
-    if (!this._bridgeConfig.evm[network])
-      throw new Error("EVM environment not set");
+    this.preInitializeChecks(network)
 
     if (this._rpcOverrides[network]) {
-      this._bridgeConfig.evm[network].rpcUrl = this._rpcOverrides[network];
+      this._bridgeConfig!.evm[network].rpcUrl = this._rpcOverrides[network];
     }
 
-    this._evm[network] = new EvmConnect(
+    this._evm.set(
       network,
-      this._bridgeConfig.evm[network]
-    );
+      new EvmConnect(
+        network,
+        this._bridgeConfig!.evm[network]
+      )
+    )
     return this;
   }
 
@@ -156,7 +195,7 @@ private _environment: GlitterEnvironment | undefined;
    * @returns {EvmConnect | undefined}
    */
   public getEvmNetwork(network: BridgeEvmNetworks): EvmConnect | undefined {
-    return this._evm[network];
+    return this._evm.get(network);
   }
 
   //Getters
@@ -170,12 +209,15 @@ private _environment: GlitterEnvironment | undefined;
     return this._solana;
   }
   get ethereum(): EvmConnect | undefined {
-    return this._evm[BridgeNetworks.Ethereum];
+    return this._evm.get(BridgeNetworks.Ethereum);
   }
   get polygon(): EvmConnect | undefined {
-    return this._evm[BridgeNetworks.Polygon];
+    return this._evm.get(BridgeNetworks.Polygon);
   }
   get avalanche(): EvmConnect | undefined {
-    return this._evm[BridgeNetworks.Avalanche];
-  }   
+    return this._evm.get(BridgeNetworks.Avalanche);
+  }
+  get tron(): TronConnect | undefined {
+    return this._tron;
+  }
 }
