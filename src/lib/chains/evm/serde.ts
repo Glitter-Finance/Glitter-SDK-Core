@@ -64,11 +64,6 @@ export class SerializeEvmBridgeTransfer {
     const _sourceChain = getNumericNetworkId(sourceChain);
     const _destinationChain = getNumericNetworkId(destinationChain);
 
-    if (!_sourceChain || !_destinationChain)
-      throw new Error(
-        "[SerializeEvmBridgeTransfer] Unable to serialize bridge transfer networks"
-      );
-
     return {
       sourceChain: _sourceChain,
       destinationChain: _destinationChain,
