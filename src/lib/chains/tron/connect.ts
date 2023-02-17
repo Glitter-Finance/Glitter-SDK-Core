@@ -1,15 +1,15 @@
 import { PublicKey } from "@solana/web3.js";
 import { BigNumber, ethers } from "ethers";
 import { BridgeNetworks } from "../../common/networks/networks";
-import { BridgeDepositEvent, BridgeReleaseEvent, SerializeEvmBridgeTransfer, TransferEvent } from "../evm";
+import { BridgeDepositEvent, BridgeReleaseEvent, TransferEvent } from "../evm";
 import { TronConfig } from "./types";
-import algosdk, { Account } from "algosdk";
 import { decodeEventData, getLogByEventSignature } from "./utils";
 import { TronDeserialized, TronSerde } from "./serde";
 import { walletToAddress } from "../../common/utils/utils";
 const TronWeb = require('tronweb');
 const Trc20DetailedAbi = require('./abi/TRC20Detailed.json');
 const TokenBridgeAbi = require('./abi/TokenBridge.json');
+import algosdk from "algosdk";
 
 export class TronConnect {
     protected __tronConfig: TronConfig
