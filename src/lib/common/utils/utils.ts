@@ -43,6 +43,10 @@ export const base64ToBigUIntString = (encoded: any) => {
     return Buffer.from(encoded, "base64").readBigUInt64BE().toString();
 };
 
+function instanceofAlgoAccount(account: any): boolean {
+    return 'addr' in account && 'sk' in account
+}
+
 export function walletToAddress(
     wallet: string | PublicKey | algosdk.Account
 ): string {
@@ -51,8 +55,7 @@ export function walletToAddress(
     if (wallet instanceof PublicKey) {
         destinationInStr = wallet.toBase58();
     } else if (
-        (wallet as algosdk.Account).addr &&
-        (wallet as algosdk.Account).sk
+        instanceofAlgoAccount(wallet)
     ) {
         destinationInStr = (wallet as algosdk.Account).addr
     } else {
@@ -62,5 +65,6 @@ export function walletToAddress(
     if (!destinationInStr) {
         throw new Error('Unsupported Wallet Type')
     }
+
     return destinationInStr
 }
