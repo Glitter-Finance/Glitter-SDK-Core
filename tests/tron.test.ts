@@ -49,20 +49,20 @@ describe("TRON Serde Tests", () => {
         const destinationChain = BridgeNetworks.Ethereum
         const serde = new TronSerde()
 
-        const solS = serde.serialize(
+        const evmS = serde.serialize(
             destinationChain,
             destinationAddress
         )
 
-        expect(solS.chainId).toEqual(getNumericNetworkId(destinationChain))
+        expect(evmS.chainId).toEqual(getNumericNetworkId(destinationChain))
 
-        const solD = serde.deSerialize(
-            solS.chainId,
-            solS.address
+        const evmD = serde.deSerialize(
+            evmS.chainId,
+            evmS.address
         )
 
-        expect(solD.address).toEqual(destinationAddress)
-        expect(solD.network).toEqual(destinationChain)
+        expect(evmD.address).toEqual(destinationAddress)
+        expect(evmD.network).toEqual(destinationChain)
     })
 })
 
