@@ -142,6 +142,20 @@ describe("EVM SDk Test", () => {
             expect(evmConnect).toBeTruthy()
         }
     }),
+    it('Should fetch deposit bridge event', async () => {
+        const sdk = new GlitterBridgeSDK();
+        sdk.setEnvironment(GlitterEnvironment.mainnet)
+        const nets = [
+            BridgeNetworks.Avalanche,
+            BridgeNetworks.Ethereum,
+            BridgeNetworks.Polygon,
+        ]
+        const net = BridgeNetworks.Avalanche
+        sdk.connect(nets)
+
+        const logs = await sdk.getEvmNetwork(net)!.parseLogs("0x0960a132bceeda742160f1e3ecceb018bded1f9090d5ffdefb847130dc70a76d")
+        expect(logs.find(x => x.__type === "BridgeDeposit")).toBeTruthy();
+    }),
     it('Should provide balance of USDC', async () => {
         const balQueryAccount = "0x98729c03c4D5e820F5e8c45558ae07aE63F97461"
         const CURRENCY = "USDC"
