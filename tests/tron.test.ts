@@ -77,5 +77,26 @@ describe("TRON SDk Test", () => {
 
         const tronConnect = sdk.tron
         expect(tronConnect).toBeTruthy()
+    }),
+    it('Should provide balance of USDC', async () => {
+        const balQueryAccount = "TGJ2oZgXAxK3aWFUtZbi2QQYPeh66BfsJv"
+        const CURRENCY = "USDC"
+        const sdk = new GlitterBridgeSDK();
+        sdk.setEnvironment(GlitterEnvironment.testnet)
+
+        sdk.connect([
+            BridgeNetworks.TRON
+        ])
+
+        const tronConnect = sdk.tron
+        const _blnc = await tronConnect!.getTokenBalanceOnNetwork(
+            CURRENCY,
+            balQueryAccount
+        )
+        
+        const balance = BigInt(_blnc.toString()) / BigInt(10 ** 6)
+        const humanUnitsBalance = Number(balance)
+        expect(humanUnitsBalance).toBeTruthy()
+        expect(humanUnitsBalance).toBeGreaterThan(0)
     })
 })

@@ -126,7 +126,8 @@ export class EvmConnect {
     if (!this.isValidToken(tokenSymbol))
       return Promise.reject("[EvmConnect] Unsupported token symbol.");
 
-    const erc20 = this.__providers.tokens[tokenSymbol];
+    const symBol = tokenSymbol.toLowerCase()
+    const erc20 = this.__providers.tokens[symBol];
     const balance = await erc20.balanceOf(address);
     return balance;
   }
