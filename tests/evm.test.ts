@@ -129,6 +129,37 @@ describe("EVM Serde Tests", () => {
 })
 
 describe("EVM SDk Test", () => {
+    it('SDK supports case insensitive token symbol', () => {
+        const sdk = new GlitterBridgeSDK();
+        sdk.setEnvironment(GlitterEnvironment.testnet)
+        const nets = [
+            BridgeNetworks.Avalanche,
+            BridgeNetworks.Ethereum,
+            BridgeNetworks.Polygon,
+        ]
+        sdk.connect(nets)
+        for (const net of nets) {
+            const evmConnect = sdk.getEvmNetwork(net as BridgeEvmNetworks)
+            expect(evmConnect?.getAddress("tokens", "USDC")).toBeTruthy()
+            expect(evmConnect?.getAddress("tokens", "usdc")).toBeTruthy()
+            expect(evmConnect?.getAddress("tokens", "uSDc")).toBeTruthy()
+        }
+    }),
+    it('SDK Should throw error for non USDC token', () => {
+        const sdk = new GlitterBridgeSDK();
+        sdk.setEnvironment(GlitterEnvironment.testnet)
+        const nets = [
+            BridgeNetworks.Avalanche,
+            BridgeNetworks.Ethereum,
+            BridgeNetworks.Polygon,
+        ]
+        sdk.connect(nets)
+        for (const net of nets) {
+            const evmConnect = sdk.getEvmNetwork(net as BridgeEvmNetworks)
+            expect(() => evmConnect?.getAddress("tokens", "USDT")).toThrowError()
+            expect(() => evmConnect?.getAddress("tokens", "uSDt")).toThrowError()
+        }
+    }),
     it('Should initialize and get evm connect', () => {
         const sdk = new GlitterBridgeSDK();
         sdk.setEnvironment(GlitterEnvironment.testnet)
@@ -143,7 +174,20 @@ describe("EVM SDk Test", () => {
             expect(evmConnect).toBeTruthy()
         }
     }),
-    it('Should fetch and process deposit bridge event', async () => {
+    it('Random transaction hash should return empty logs', async () => {
+        const sdk = new GlitterBridgeSDK();
+        sdk.setEnvironment(GlitterEnvironment.testnet)
+        const nets = [
+            BridgeNetworks.Avalanche,
+            BridgeNetworks.Ethereum,
+            BridgeNetworks.Polygon,
+        ]
+        const net = BridgeNetworks.Polygon
+        sdk.connect(nets)
+        const logs = await sdk.getEvmNetwork(net)!.parseLogs("0x0a096132bceeda742160f1e3ecceb018bded1f9090d5ffdefb847130dc70a76d")
+        expect(logs.length).toEqual(0)
+    }),
+    it('Should fetch and process valid deposit bridge event', async () => {
         const sdk = new GlitterBridgeSDK();
         sdk.setEnvironment(GlitterEnvironment.mainnet)
         const nets = [

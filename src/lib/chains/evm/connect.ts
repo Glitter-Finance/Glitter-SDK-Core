@@ -99,7 +99,7 @@ export class EvmConnect {
 
       if (!token) {
         throw new Error(
-          "[EvmConnect] Can not provide address of undefined token."
+          `[EvmConnect] Can not provide address of ${tokenSymbol} token.`
         );
       }
 
@@ -195,6 +195,10 @@ export class EvmConnect {
       const parser = new EvmBridgeEventsParser();
       const transactionReceipt =
         await this.__providers.rpcProvider.getTransactionReceipt(txHash);
+
+      if (!transactionReceipt || !('logs' in transactionReceipt)) {
+        return [];
+      }
 
       for (const log of transactionReceipt.logs) {
         const deposit = parser.parseDeposit([log]);
