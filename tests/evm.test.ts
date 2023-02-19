@@ -1,6 +1,6 @@
 import { ethers } from 'ethers'
 import { DeserializeEvmBridgeTransfer, SerializeEvmBridgeTransfer } from '../src/lib/chains/evm/serde'
-import { BridgeNetworks, getNumericNetworkId } from '../src/lib/common/networks/networks'
+import { BridgeEvmNetworks, BridgeNetworks, getNumericNetworkId } from '../src/lib/common/networks/networks'
 import { GlitterBridgeSDK } from '../src/GlitterBridgeSDK'
 import { GlitterEnvironment } from '../src/lib/configs/config'
 
@@ -131,15 +131,16 @@ describe("EVM SDk Test", () => {
     it('Should initialize and get evm connect', () => {
         const sdk = new GlitterBridgeSDK();
         sdk.setEnvironment(GlitterEnvironment.testnet)
-
-        sdk.connect([
+        const nets = [
             BridgeNetworks.Avalanche,
             BridgeNetworks.Ethereum,
             BridgeNetworks.Polygon,
-        ])
-
-        const evmConnect = sdk.getEvmNetwork(BridgeNetworks.Ethereum)
-        expect(evmConnect).toBeTruthy()
+        ]
+        sdk.connect(nets)
+        for (const net of nets) {
+            const evmConnect = sdk.getEvmNetwork(net as BridgeEvmNetworks)
+            expect(evmConnect).toBeTruthy()
+        }
     }),
     it('Should provide balance of USDC', async () => {
         const balQueryAccount = "0x98729c03c4D5e820F5e8c45558ae07aE63F97461"
