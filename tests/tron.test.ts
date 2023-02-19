@@ -23,11 +23,51 @@ describe("TRON Serde Tests", () => {
 
         expect(algoD.address).toEqual(destinationAddress)
         expect(algoD.network).toEqual(destinationChain)
+    }),
+    it('Should serialize/deserialize Sol transfer', () => {
+        const destinationAddress = "CXaTaTRKjXFhjfDYzAxyeQRgFcjbqAvpbhBdNDNBQjQR"
+        const destinationChain = BridgeNetworks.solana
+        const serde = new TronSerde()
+
+        const solS = serde.serialize(
+            destinationChain,
+            destinationAddress
+        )
+
+        expect(solS.chainId).toEqual(getNumericNetworkId(destinationChain))
+
+        const solD = serde.deSerialize(
+            solS.chainId,
+            solS.address
+        )
+
+        expect(solD.address).toEqual(destinationAddress)
+        expect(solD.network).toEqual(destinationChain)
+    }),
+    it('Should serialize/deserialize Evm transfer', () => {
+        const destinationAddress = "0xa697a01f9f0686bcf9ee53687292c37e7252d190"
+        const destinationChain = BridgeNetworks.Ethereum
+        const serde = new TronSerde()
+
+        const solS = serde.serialize(
+            destinationChain,
+            destinationAddress
+        )
+
+        expect(solS.chainId).toEqual(getNumericNetworkId(destinationChain))
+
+        const solD = serde.deSerialize(
+            solS.chainId,
+            solS.address
+        )
+
+        expect(solD.address).toEqual(destinationAddress)
+        expect(solD.network).toEqual(destinationChain)
     })
 })
 
 describe("TRON SDk Test", () => {
-    it('Should initialize and get evm connect', () => {
+    it('Should initialize and get TRON connect', () => {
         const sdk = new GlitterBridgeSDK();
         sdk.setEnvironment(GlitterEnvironment.testnet)
 
