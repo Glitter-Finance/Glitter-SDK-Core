@@ -3,6 +3,7 @@ import { DeserializeEvmBridgeTransfer, SerializeEvmBridgeTransfer } from '../src
 import { BridgeEvmNetworks, BridgeNetworks, getNumericNetworkId } from '../src/lib/common/networks/networks'
 import { GlitterBridgeSDK } from '../src/GlitterBridgeSDK'
 import { GlitterEnvironment } from '../src/lib/configs/config'
+import { BridgeDepositEvent } from '../src/lib/chains/evm'
 
 describe("EVM Serde Tests", () => {
     it('Should serialize/deserialize Algo transfer', () => {
@@ -142,7 +143,7 @@ describe("EVM SDk Test", () => {
             expect(evmConnect).toBeTruthy()
         }
     }),
-    it('Should fetch deposit bridge event', async () => {
+    it('Should fetch and process deposit bridge event', async () => {
         const sdk = new GlitterBridgeSDK();
         sdk.setEnvironment(GlitterEnvironment.mainnet)
         const nets = [
@@ -152,9 +153,18 @@ describe("EVM SDk Test", () => {
         ]
         const net = BridgeNetworks.Avalanche
         sdk.connect(nets)
-
+        const srcWallet = "0xa697a01f9f0686bcf9ee53687292c37e7252d190"
         const logs = await sdk.getEvmNetwork(net)!.parseLogs("0x0960a132bceeda742160f1e3ecceb018bded1f9090d5ffdefb847130dc70a76d")
-        expect(logs.find(x => x.__type === "BridgeDeposit")).toBeTruthy();
+        const deposit = logs.find(x => x.__type === "BridgeDeposit") as BridgeDepositEvent | undefined
+        expect(deposit).toBeTruthy();
+        const deserialized = DeserializeEvmBridgeTransfer.deserialize(
+            getNumericNetworkId(net),
+            deposit!.destinationChainId,
+            srcWallet,
+            deposit!.destinationWallet,
+            deposit!.amount
+        )
+        expect(deserialized.destinationWallet).toEqual("DQLaCCQ2SmFxFiiBExsWLJTBmq1qTVq5GWtnYE5oGU9C")
     }),
     it('Should provide balance of USDC', async () => {
         const balQueryAccount = "0x98729c03c4D5e820F5e8c45558ae07aE63F97461"
