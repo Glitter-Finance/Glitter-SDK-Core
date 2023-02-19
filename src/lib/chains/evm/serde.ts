@@ -23,7 +23,8 @@ export class SerializeEvmBridgeTransfer {
   ): string {
     switch (sourceChain) {
       case BridgeNetworks.TRON:
-        return `0x${TronWeb.address.toHex(address)}`
+        // Omit 41 and add 0x
+        return `0x${TronWeb.address.toHex(address).slice(2)}`
       case BridgeNetworks.solana:
         return ethers.utils
           .hexZeroPad(new PublicKey(address).toBytes(), 32)
@@ -90,7 +91,7 @@ export class DeserializeEvmBridgeTransfer {
   ): string {
     switch (chain) {
       case BridgeNetworks.TRON:
-        return TronWeb.address.fromHex(data)
+        return TronWeb.address.fromHex('0x' + data)
       case BridgeNetworks.algorand:
         return algoSdk.encodeAddress(fromHexString(data));
       case BridgeNetworks.Polygon:

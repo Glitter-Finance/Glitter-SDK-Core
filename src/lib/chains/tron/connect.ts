@@ -21,7 +21,7 @@ export class TronConnect {
         tronconfig: TronConfig
     ) {
         this.__tronConfig = tronconfig
-        this.__tronWeb = TronWeb(
+        this.__tronWeb = new TronWeb(
             tronconfig.fullNode,
             tronconfig.solidityNode,
             tronconfig.eventServer
@@ -125,7 +125,7 @@ export class TronConnect {
         const bridgeAddress = this.getAddress("bridge");
         const tokenAddress = this.getAddress("tokens", tokenSymbol);
 
-        const trWeb = TronWeb(
+        const trWeb = new TronWeb(
             this.__tronConfig.fullNode,
             this.__tronConfig.solidityNode,
             this.__tronConfig.eventServer,
