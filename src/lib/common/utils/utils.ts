@@ -52,13 +52,15 @@ export function walletToAddress(
 ): string {
     let destinationInStr: string | null = null;
 
-    if (wallet instanceof PublicKey) {
-        destinationInStr = wallet.toBase58();
-    } else if (
-        instanceofAlgoAccount(wallet)
-    ) {
-        destinationInStr = (wallet as algosdk.Account).addr
-    } else {
+    if (typeof wallet === "object") {
+        if (wallet instanceof PublicKey) {
+            destinationInStr = wallet.toBase58();
+        } else if (
+            instanceofAlgoAccount(wallet)
+        ) {
+            destinationInStr = (wallet as algosdk.Account).addr
+        }
+    } else if (typeof wallet === "string") {
         destinationInStr = wallet as string
     }
 
