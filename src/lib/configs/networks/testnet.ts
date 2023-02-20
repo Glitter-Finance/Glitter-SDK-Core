@@ -187,7 +187,7 @@ export const BridgeTestnet: GlitterBridgeConfig = {
     eventServer: "https://api.shasta.trongrid.io",
     addresses: {
       bridge: "TG5L1sypor6QsvEWdF5zVQR48Fd4B73P3E",
-      depositWallet: "",
+      depositWallet: "TXpEeQDe6UenfjkhG9Y3HPMjuXQGukpJq8",
       releaseWallet: "TEWifyy5yrm7zWbWBs5RVbLyZm4JPiawpf"
     }
   },
