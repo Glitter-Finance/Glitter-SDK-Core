@@ -176,7 +176,7 @@ export class TronConnect {
     ): Promise<string> {
         try {
             if (!this.__tronWeb) {
-                throw new Error(`[TronConnect] Unsupported token symbol.`);
+                throw new Error(`[TronConnect] Sdk uninitialized.`);
             }
 
             if (!this.isValidToken(tokenSymbol)) {
