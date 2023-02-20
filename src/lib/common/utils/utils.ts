@@ -51,7 +51,6 @@ export function walletToAddress(
     wallet: string | PublicKey | algosdk.Account
 ): string {
     let destinationInStr: string | null = null;
-
     if (typeof wallet === "object") {
         if (wallet instanceof PublicKey) {
             destinationInStr = wallet.toBase58();
