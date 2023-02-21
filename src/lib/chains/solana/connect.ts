@@ -7,13 +7,9 @@ import { SolanaTxns } from './txns/txns';
 import * as util from 'util';
 import { BridgeToken, BridgeTokens, LogProgress, Precise, Routing, RoutingDefault, Sleep, ValueUnits } from '../../common';
 import { COMMITMENT } from './utils';
-import { DepositNote } from '../../common/routing/routing';
-import { BridgeType, PartialBridgeTxn } from '../../common/transactions/transactions';
 import { ethers } from 'ethers';
 import base58 from 'bs58';
 import { SolanaError } from './solanaError';
-
-
 
 export class SolanaConnect {
 
@@ -23,7 +19,6 @@ export class SolanaConnect {
     private _transactions: SolanaTxns | undefined = undefined;
     private _bridgeTxnsV1: SolanaBridgeTxnsV1 | undefined = undefined;
     private _config: SolanaConfig | undefined = undefined;
-    _lastTxnHash: string = "";
 
 
     constructor(config: SolanaConfig) {
@@ -970,9 +965,7 @@ export class SolanaConnect {
     public get assets() {
         return this._assets;
     }
-    public get lastTxnHash() {
-        return this._lastTxnHash
-    }
+   
     // wallet- txn helper 
     public async sendSignedTransaction(txn: number[] | Uint8Array): Promise<string> {
         return new Promise(async (resolve, reject) => {

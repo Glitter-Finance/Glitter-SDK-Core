@@ -77,7 +77,7 @@ export class AlgorandAccounts {
                 if (!local_acccount) throw new Error(AlgoError.INVALID_MNEMONIC);
 
                 //Log
-                console.log(`Added Algorand Wallet:  ${local_acccount.addr}`)
+                // console.log(`Added Algorand Wallet:  ${local_acccount.addr}`)
 
                 //Check if already exists
                 if (this._accounts[local_acccount.addr]) {
@@ -101,6 +101,7 @@ export class AlgorandAccounts {
             }
         });
     }
+
     public async addMSIG(addreses: string[], version = 1, threshold = 2, getAccountDetails: boolean = false, getAssetDetails: boolean = false): Promise<AlgorandMSigAccount | undefined> {
         // eslint-disable-next-line no-async-promise-executor
         return new Promise(async (resolve, reject) => {
@@ -260,9 +261,7 @@ export class AlgorandAccounts {
         return new Promise(async (resolve, reject) => {
             try {
                 const account = algosdk.generateAccount();
-                console.log("Account Created: ", account.addr);
-                console.log("mnemonic: ", algosdk.secretKeyToMnemonic(account.sk));
-                const new_account: AlgorandAccount = {
+                 const new_account: AlgorandAccount = {
                     addr: account.addr,
                     sk: account.sk,
                     pk: algosdk.decodeAddress(account.addr).publicKey,
@@ -290,9 +289,7 @@ export class AlgorandAccounts {
                     if (addr.toLowerCase().startsWith(prefix.toLowerCase())) {
 
 
-                        console.log("Account Created: ", account.addr);
-                        console.log("mnemonic: ", algosdk.secretKeyToMnemonic(account.sk));
-
+                      
                         //Convert to account
                         const new_account: AlgorandAccount = {
                             addr: account.addr,

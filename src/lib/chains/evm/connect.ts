@@ -179,6 +179,7 @@ export class EvmConnect {
 
     return allowance;
   }
+  
   /**
    * Parse transaction receipts to retrieve
    * bridge transfer data

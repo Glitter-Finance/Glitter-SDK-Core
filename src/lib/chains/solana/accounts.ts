@@ -130,7 +130,7 @@ export class SolanaAccounts {
                 this.add(solAccount.sk);
 
                 //Log
-                console.log(`Mnemonic: ${mnemonic}`);
+                // console.log(`Mnemonic: ${mnemonic}`);
 
                 //Return
                 resolve(solAccount);
@@ -158,7 +158,7 @@ export class SolanaAccounts {
                     let addr = wallet.publicKey.toString();
                     if (addr.toLowerCase().startsWith(prefix.toLowerCase())) {
 
-                        console.log(`Mnemonic: ${mnemonic}`);
+                        // console.log(`Mnemonic: ${mnemonic}`);
 
                         //Convert to account
                         const solAccount: SolanaAccount = {
@@ -172,7 +172,7 @@ export class SolanaAccounts {
                         this.add(solAccount.sk);
 
                         //Log
-                        console.log(`Mnemonic: ${mnemonic}`);
+                        // console.log(`Mnemonic: ${mnemonic}`);
 
                         //Return
                         resolve(solAccount);

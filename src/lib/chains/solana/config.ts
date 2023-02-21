@@ -37,3 +37,4 @@ export enum SolanaPublicNetworks  {
   testnet = "https://api.testnet.solana.com",
   devnet = "https://api.devnet.solana.com"
 }
+
