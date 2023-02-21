@@ -42,4 +42,8 @@ export class SolanaUtils {
         const mnemonic = bip39.generateMnemonic();
         return mnemonic;
     }
+    public static getWordList(): string[] {
+        const wordList = bip39.wordlists.EN;
+        return wordList;
+    }
 }
