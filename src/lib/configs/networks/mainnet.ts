@@ -203,7 +203,7 @@ export const BridgeMainnet: GlitterBridgeConfig = {
     addresses: {
       bridge: "",
       depositWallet: "TAG83nhpF82P3r9XhFTwNamgv1BsjTcz6v",
-      releaseWallet: ""
+      releaseWallet: "TGUSL4VtESnWQfy2G6RmCNJT6eqqfcR6om"
     }
   },
   flow: {
