@@ -26,7 +26,7 @@ export class TronConnect {
             tronconfig.solidityNode,
             tronconfig.eventServer
         );
-        https://github.com/tronprotocol/tronweb/issues/90
+        // https://github.com/tronprotocol/tronweb/issues/90
         this.__tronWeb.setAddress(this.tronConfig.addresses.releaseWallet)
         this.initContracts();
     }
