@@ -183,7 +183,7 @@ export class TronConnect {
                 throw new Error(`[TronConnect] Unsupported token symbol.`);
             }
 
-            const trWeb = TronWeb(
+            const trWeb = new TronWeb(
                 this.__tronConfig.fullNode,
                 this.__tronConfig.solidityNode,
                 this.__tronConfig.eventServer,
