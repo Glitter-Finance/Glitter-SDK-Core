@@ -14,7 +14,18 @@
     "resolveJsonModule": true,
     "esModuleInterop": true,
   },
-  "include": ["src"],
-  "exclude": ["node_modules", "**/__tests__/*"],
-  "types": ["webrtc"]
+  "include": [
+    "src"
+  ],
+  "exclude": [
+    "node_modules",
+    "**/__tests__/*"
+  ],
+  "types": [
+    "webrtc"
+  ],
+  "files": [
+    "src/lib/chains/tron/abi/TokenBridge.json",
+    "src/lib/chains/tron/abi/TRC20Detailed.json",
+  ]
 }

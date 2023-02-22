@@ -302,6 +302,9 @@ export class SolanaConnect {
 
                 //get fee and set amount
                 const feeUnits = await mock_txn.getEstimatedFee(this._client);
+
+                if (!feeUnits) throw new Error('Fee Unit Calculation Error');
+
                 const fee = ValueUnits.fromUnits(BigInt(feeUnits), solToken.decimals).value;
                 routing.amount = balance - fee;
 

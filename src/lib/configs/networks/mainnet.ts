@@ -135,7 +135,7 @@ export const BridgeMainnet: GlitterBridgeConfig = {
     [BridgeNetworks.Avalanche]: {
       chainId: 43114,
       bridge: "0x19a230a99d520687d9858e427523e5d76342ad54",
-      rpcUrl: "",
+      rpcUrl: "https://rpc.ankr.com/avalanche",
       tokens: [
         {
           address: "0xB97EF9Ef8734C71904D8002F8b6Bc66Dd9c48a6E",
@@ -150,7 +150,7 @@ export const BridgeMainnet: GlitterBridgeConfig = {
     [BridgeNetworks.Ethereum]: {
       chainId: 1,
       bridge: "0x8b1B445749B14a6a01B062271EB28Cd119ce9a98",
-      rpcUrl: "",
+      rpcUrl: "https://rpc.ankr.com/eth",
       tokens: [
         {
           address: "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48",
@@ -165,7 +165,7 @@ export const BridgeMainnet: GlitterBridgeConfig = {
     [BridgeNetworks.Polygon]: {
       chainId: 137,
       bridge: "0x3C649eed903d9770A5abDBA49C754AdfD1ed4172",
-      rpcUrl: "",
+      rpcUrl: "https://rpc.ankr.com/polygon",
       tokens: [
         {
           address: "0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174",
@@ -195,9 +195,15 @@ export const BridgeMainnet: GlitterBridgeConfig = {
     }
   },
   tron: {
-    accounts: {
-      usdcDeposit: "TAG83nhpF82P3r9XhFTwNamgv1BsjTcz6v",
-      usdcReceiver: "",
+    tokens: [
+    ],
+    fullNode: "",
+    solidityNode: "",
+    eventServer: "",
+    addresses: {
+      bridge: "",
+      depositWallet: "TAG83nhpF82P3r9XhFTwNamgv1BsjTcz6v",
+      releaseWallet: "TGUSL4VtESnWQfy2G6RmCNJT6eqqfcR6om"
     }
   },
   flow: {

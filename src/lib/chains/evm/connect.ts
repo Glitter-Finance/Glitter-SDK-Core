@@ -23,11 +23,12 @@ import {
 import { BridgeType, ChainStatus, PartialBridgeTxn, TransactionType } from "../../common/transactions/transactions";
 import { BridgeToken, BridgeTokens } from "../../common/tokens/tokens";
 import { Routing, ValueUnits } from "../../common";
+import { walletToAddress } from "../../common/utils/utils";
 
 type Connection = {
   rpcProvider: providers.BaseProvider;
   bridge: TokenBridge;
-  tokens: Record<string, ERC20>;
+  tokens: Map<string, ERC20>;
 };
 
 export class EvmConnect {
@@ -42,16 +43,12 @@ export class EvmConnect {
     const bridgeAddress = config.bridge;
     const rpcProvider = new ethers.providers.JsonRpcProvider(rpcUrl);
     const bridge = TokenBridge__factory.connect(bridgeAddress, rpcProvider);
-    const tokens = config.tokens.reduce((_tokens, curr) => {
-      const symbol = curr.symbol.toLowerCase();
-      _tokens[symbol] = ERC20__factory.connect(curr.address, rpcProvider);
-      return _tokens;
+    const tokens = new Map<string, ERC20>();
+    
+    config.tokens.map((_token) => {
+      const symbol = _token.symbol.toLowerCase();
+      tokens.set(symbol, ERC20__factory.connect(_token.address, rpcProvider))
     }, {} as Record<string, ERC20>);
-
-  //    //Load tokens
-  //    config.tokens.forEach(element => {
-  //     BridgeTokens.add(element);
-  // });
 
     return {
       rpcProvider,
@@ -98,7 +95,7 @@ export class EvmConnect {
 
       if (!token) {
         throw new Error(
-          "[EvmConnect] Can not provide address of undefined token."
+          `[EvmConnect] Can not provide address of ${tokenSymbol} token.`
         );
       }
 
@@ -109,7 +106,7 @@ export class EvmConnect {
   }
 
   private isValidToken(tokenSymbol: string): boolean {
-    return !!this.__providers.tokens[tokenSymbol.toLowerCase()];
+    return !!this.__providers.tokens.get(tokenSymbol.toLowerCase());
   }
   /**
    * Provide token balance of an address
@@ -125,8 +122,9 @@ export class EvmConnect {
     if (!this.isValidToken(tokenSymbol))
       return Promise.reject("[EvmConnect] Unsupported token symbol.");
 
-    const erc20 = this.__providers.tokens[tokenSymbol];
-    const balance = await erc20.balanceOf(address);
+    const symbol = tokenSymbol.toLowerCase()
+    const erc20 = this.__providers.tokens.get(symbol);
+    const balance = await erc20!.balanceOf(address);
     return balance;
   }
   /**
@@ -193,6 +191,10 @@ export class EvmConnect {
       const parser = new EvmBridgeEventsParser();
       const transactionReceipt =
         await this.__providers.rpcProvider.getTransactionReceipt(txHash);
+
+      if (!transactionReceipt || !('logs' in transactionReceipt)) {
+        return [];
+      }
 
       for (const log of transactionReceipt.logs) {
         const deposit = parser.parseDeposit([log]);
@@ -325,7 +327,7 @@ export class EvmConnect {
         this.__network,
         destination,
         wallet.address,
-        destinationWallet,
+        walletToAddress(destinationWallet),
         _amount
       );
 
@@ -474,8 +476,8 @@ export class EvmConnect {
     return ethers.Wallet.createRandom();
   }
 
-  public getToken(token:string):BridgeToken | undefined{
-    return BridgeTokens.get(this.__network,   token);
+  public getToken(token: string): BridgeToken | undefined {
+    return BridgeTokens.get(this.__network, token);
   }
 
 }
