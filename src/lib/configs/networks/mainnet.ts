@@ -202,7 +202,7 @@ export const BridgeMainnet: GlitterBridgeConfig = {
     eventServer: "",
     addresses: {
       bridge: "",
-      depositWallet: "",
+      depositWallet: "TAG83nhpF82P3r9XhFTwNamgv1BsjTcz6v",
       releaseWallet: ""
     }
   },
