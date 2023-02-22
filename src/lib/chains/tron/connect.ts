@@ -191,8 +191,8 @@ export class TronConnect {
             )
 
             const bridge = await trWeb.contract(
-                this.getAddress('bridge'),
-                TokenBridgeAbi.abi
+                TokenBridgeAbi.abi,
+                this.getAddress('bridge')
             )
 
             const tokenAddress = this.getAddress("tokens", tokenSymbol);
