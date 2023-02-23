@@ -4,7 +4,7 @@ import { FlowConfig } from "../chains/flow/config";
 import { HederaConfig } from "../chains/hedera/config";
 import { SolanaConfig } from "../chains/solana";
 import { StellarConfig } from "../chains/stellar/config";
-import { TronConfig } from "../chains/tron/config";
+import { TronConfig } from "../chains/tron/types";
 
 export type GlitterBridgeConfig = {
   name: string;

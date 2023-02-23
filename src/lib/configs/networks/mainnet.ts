@@ -18,8 +18,8 @@ export const BridgeMainnet: GlitterBridgeConfig = {
       feeReceiver: "A2GPNMIWXZDD3O3MP5UFQL6TKAZPBJEDZYHMFFITIAJZXLQH37SJZUWSZQ",
       multiSig1: "JPDV3CKFABIXDVH36E7ZBVJ2NC2EQJIBEHCKYTWVC4RDDOHHOPSBWH3QFY",
       multiSig2: "DFFTYAB6MWMRTZGHL2GAP7TMK7OUGHDD2AACSO7LXSZ7SY2VLO3OEOJBQU",
-      usdcReceiver: "GUSN5SEZQTM77WE2RMNHXRAKP2ELDM7GRLOEE3GJWNS5BMACRK7JVS3PLE",// Release
-      usdcDeposit: "O7MYJZR3JQS5RYFJVMW4SMXEBXNBPQCEHDAOKMXJCOUSH3ZRIBNRYNMJBQ", // Deposit
+      usdcReceiver: "GUSN5SEZQTM77WE2RMNHXRAKP2ELDM7GRLOEE3GJWNS5BMACRK7JVS3PLE",
+      usdcDeposit: "O7MYJZR3JQS5RYFJVMW4SMXEBXNBPQCEHDAOKMXJCOUSH3ZRIBNRYNMJBQ", 
       bridge: "XJQ25THCV734QIUZARPZGG3NPRFZXTIIU77JSJBT23TJMGL3FXJWVR57OQ",
       asaVault: "U4A3YARBVMT7PORTC3OWXNC75BMGF6TCHFOQY4ZSIIECC5RW25SVKNKV3U",
       algoVault: "R7VCOR74LCUIFH5WKCCMZOS7ADLSDBQJ42YURFPDT3VGYTVNBNG7AIYTCQ",
@@ -135,7 +135,7 @@ export const BridgeMainnet: GlitterBridgeConfig = {
     [BridgeNetworks.Avalanche]: {
       chainId: 43114,
       bridge: "0x19a230a99d520687d9858e427523e5d76342ad54",
-      rpcUrl: "",
+      rpcUrl: "https://rpc.ankr.com/avalanche",
       tokens: [
         {
           network:"avalanche",
@@ -151,7 +151,7 @@ export const BridgeMainnet: GlitterBridgeConfig = {
     [BridgeNetworks.Ethereum]: {
       chainId: 1,
       bridge: "0x8b1B445749B14a6a01B062271EB28Cd119ce9a98",
-      rpcUrl: "",
+      rpcUrl: "https://rpc.ankr.com/eth",
       tokens: [
         {
           network:"ethereum",
@@ -167,7 +167,7 @@ export const BridgeMainnet: GlitterBridgeConfig = {
     [BridgeNetworks.Polygon]: {
       chainId: 137,
       bridge: "0x3C649eed903d9770A5abDBA49C754AdfD1ed4172",
-      rpcUrl: "",
+      rpcUrl: "https://rpc.ankr.com/polygon",
       tokens: [
         {
           network:"polygon",
@@ -198,9 +198,15 @@ export const BridgeMainnet: GlitterBridgeConfig = {
     }
   },
   tron: {
-    accounts: {
-      usdcDeposit: "TAG83nhpF82P3r9XhFTwNamgv1BsjTcz6v",
-      usdcReceiver: "",
+    tokens: [
+    ],
+    fullNode: "",
+    solidityNode: "",
+    eventServer: "",
+    addresses: {
+      bridge: "",
+      depositWallet: "TAG83nhpF82P3r9XhFTwNamgv1BsjTcz6v",
+      releaseWallet: "TGUSL4VtESnWQfy2G6RmCNJT6eqqfcR6om"
     }
   },
   flow: {

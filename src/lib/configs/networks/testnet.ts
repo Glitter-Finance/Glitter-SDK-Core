@@ -69,9 +69,9 @@ export const BridgeTestnet: GlitterBridgeConfig = {
       vestingProgram: "EMkD74T2spV3A71qfY5PNqVNrNrpbFcdwMF2TerRMr9n",
       owner: "hY5PXHYm58H5KtJW4GrtegxXnpMruoX3LLP6CufHoHj",
       usdcReceiver: "Av47VxT8GpGXHYc3aG7fKddgZjCuZEb5yF3BCaXyE7wu",
-      usdcReceiverTokenAccount:"HrrpuLCq2ewozVZU5sFrWL6oRvFe8KH1VMhVQLCcWpdy",
+      usdcReceiverTokenAccount: "HrrpuLCq2ewozVZU5sFrWL6oRvFe8KH1VMhVQLCcWpdy",
       usdcDeposit: "8Cb6eKCiowqsfYoLeaQf9voTHv1nV6rKjBvMQwLEGoDJ",
-      usdcDepositTokenAccount:"CWmY521qXB29Hwp3WBzyX1huApRdQu4kjrcxZpa2St7d",
+      usdcDepositTokenAccount: "CWmY521qXB29Hwp3WBzyX1huApRdQu4kjrcxZpa2St7d",
       memoProgram: "MemoSq4gqABAXKb96qnH8TysNcWxMyWCqXgDLGmfcHr",
     },
     tokens: [
@@ -173,27 +173,43 @@ export const BridgeTestnet: GlitterBridgeConfig = {
     },
   },
   stellar: {
-   accounts: {
-    usdcDepositAddress: "",
-    usdcDepositTag: "",
-    usdcReceiverAddress: "",
-    usdcReceiverTag: ""
-  }},
+    accounts: {
+      usdcDepositAddress: "",
+      usdcDepositTag: "",
+      usdcReceiverAddress: "",
+      usdcReceiverTag: ""
+    }
+  },
   hedera: {
-   accounts: {
-    usdcDepositAddress: "",
-    usdcDepositTag: "",
-    usdcReceiverAddress: "",
-    usdcReceiverTag: ""
-  }},
+    accounts: {
+      usdcDepositAddress: "",
+      usdcDepositTag: "",
+      usdcReceiverAddress: "",
+      usdcReceiverTag: ""
+    }
+  },
   tron: {
-   accounts: {
-    usdcDeposit: "",
-    usdcReceiver: "",
-  }},
+    tokens: [
+      {
+        address: "TFGBSrddCjLJAwuryZ9DUxtEmKv13BPjnh",
+        name: "USD Coin",
+        symbol: "USDC",
+        decimals: 6
+      }
+    ],
+    fullNode: "https://api.shasta.trongrid.io",
+    solidityNode: "https://api.shasta.trongrid.io",
+    eventServer: "https://api.shasta.trongrid.io",
+    addresses: {
+      bridge: "TG5L1sypor6QsvEWdF5zVQR48Fd4B73P3E",
+      depositWallet: "TXpEeQDe6UenfjkhG9Y3HPMjuXQGukpJq8",
+      releaseWallet: "TEWifyy5yrm7zWbWBs5RVbLyZm4JPiawpf"
+    }
+  },
   flow: {
-   accounts: {
-    usdcDeposit: "",
-    usdcReceiver: "",
-  }}
+    accounts: {
+      usdcDeposit: "",
+      usdcReceiver: "",
+    }
+  }
 };

@@ -4,6 +4,7 @@ export enum BridgeNetworks {
   Ethereum = "ethereum",
   Polygon = "polygon",
   Avalanche = "avalanche",
+  TRON = 'tron'
 }
 
 export type BridgeEvmNetworks =
@@ -12,11 +13,11 @@ export type BridgeEvmNetworks =
   | typeof BridgeNetworks.Polygon;
 
 /**
- * These IDs will be stored
- * within event logs to
- * recreate routing information
- * on chain
- */
+* These IDs will be stored
+* within event logs to
+* recreate routing information
+* on chain
+*/
 export const NetworkIdentifiers: {
   [chainId: number]: BridgeNetworks;
 } = {
@@ -25,4 +26,27 @@ export const NetworkIdentifiers: {
   3: BridgeNetworks.Ethereum,
   4: BridgeNetworks.solana,
   5: BridgeNetworks.Polygon,
+  6: BridgeNetworks.TRON
 };
+
+export const getNumericNetworkId = (chain: BridgeNetworks): number => {
+  const n = Object.entries(NetworkIdentifiers).find(
+    ([_id, network]) => {
+      return network === chain;
+    }
+  )
+
+  if (!n) throw new Error('Unsupported network');
+  return Number(n[0])
+}
+
+export const getNetworkByNumericId = (chain: number): BridgeNetworks => {
+  const n = Object.entries(NetworkIdentifiers).find(
+    ([_id, network]) => {
+      return Number(_id) === chain;
+    }
+  )
+
+  if (!n) throw new Error('Unsupported network');
+  return n[1]
+}

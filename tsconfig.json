@@ -14,12 +14,18 @@
     "resolveJsonModule": true,
     "esModuleInterop": true,
   },
-  "include": ["src","src/*.d.ts"],
-  "exclude": ["node_modules", "**/__tests__/*"],
-  "types": ["webrtc"]
+  "include": [
+    "src"
+  ],
+  "exclude": [
+    "node_modules",
+    "**/__tests__/*"
+  ],
+  "types": [
+    "webrtc"
+  ],
+  "files": [
+    "src/lib/chains/tron/abi/TokenBridge.json",
+    "src/lib/chains/tron/abi/TRC20Detailed.json",
+  ]
 }
-
-/*
-"@solana/spl-token": "^0.3.6", //0.1.3
-"@solana/web3.js": "^1.65.0",    //1.30.2
-*/

@@ -292,6 +292,9 @@ export class SolanaConnect {
 
                 //get fee and set amount
                 const feeUnits = await mock_txn.getEstimatedFee(this._client);
+
+                if (!feeUnits) throw new Error('Fee Unit Calculation Error');
+
                 const fee = ValueUnits.fromUnits(BigInt(feeUnits), solToken.decimals).value;
                 routing.amount = balance - fee;
 
@@ -427,7 +430,7 @@ export class SolanaConnect {
                 //Get Token
                 const token = BridgeTokens.get("solana", symbol);
                 if (!token) throw new Error(SolanaError.ASSETS_NOT_SET);
-                if (!token.address) throw new Error(SolanaError.INVALID_APP_ID);
+                if (!token.address) throw new Error(SolanaError.INVALID_ASSET_ID);
                 if (typeof token.address !== "string") throw new Error(SolanaError.INVALID_ASSET_ID_TYPE);
 
                 //Get Txn
@@ -488,7 +491,7 @@ export class SolanaConnect {
                 //Get Token
                 const token = BridgeTokens.get("solana", symbol);
                 if (!token) throw new Error(SolanaError.INVALID_ASSET);
-                if (!token.address) throw new Error(SolanaError.INVALID_APP_ID);
+                if (!token.address) throw new Error(SolanaError.INVALID_ASSET_ID);
                 if (typeof token.address !== "string") throw new Error(SolanaError.INVALID_ASSET_ID_TYPE);
 
                 //Check if balance needs to be closed out
@@ -529,7 +532,7 @@ export class SolanaConnect {
                 // //Get Token
                 const token = BridgeTokens.get("solana", symbol);
                 if (!token) throw new Error(SolanaError.INVALID_ASSET);
-                if (!token.address) throw new Error(SolanaError.INVALID_APP_ID);
+                if (!token.address) throw new Error(SolanaError.INVALID_ASSET_ID);
                 if (typeof token.address !== "string") throw new Error(SolanaError.INVALID_ASSET_ID_TYPE);
 
                 //get token account
@@ -751,7 +754,7 @@ export class SolanaConnect {
                 //Get Token
                 const token = BridgeTokens.get("solana", symbol);
                 if (!token) throw new Error(SolanaError.INVALID_ASSET);
-                if (!token.address) throw new Error(SolanaError.INVALID_APP_ID);
+                if (!token.address) throw new Error(SolanaError.INVALID_ASSET_ID);
                 if (typeof token.address !== "string") throw new Error(SolanaError.INVALID_ASSET_ID_TYPE);
 
                 //get token account

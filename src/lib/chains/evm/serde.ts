@@ -1,11 +1,13 @@
 import { PublicKey } from "@solana/web3.js";
 import { ethers } from "ethers";
+const TronWeb = require('tronweb');
 import { fromHexString } from "../../common/utils/bytes";
 import algoSdk from "algosdk";
 import {
   BridgeEvmNetworks,
   BridgeNetworks,
-  NetworkIdentifiers,
+  getNetworkByNumericId,
+  getNumericNetworkId
 } from "../../common/networks/networks";
 import { EvmError } from "./evmErrors";
 
@@ -18,24 +20,25 @@ export class SerializeEvmBridgeTransfer {
    */
   static serializeAddress(
     sourceChain: BridgeNetworks | BridgeEvmNetworks,
-    account: PublicKey | algoSdk.Account | string
+    address: string
   ): string {
     switch (sourceChain) {
+      case BridgeNetworks.TRON:
+        // Omit 41 and add 0x
+        return `0x${TronWeb.address.toHex(address).slice(2)}`
       case BridgeNetworks.solana:
         return ethers.utils
-          .hexZeroPad((account as PublicKey).toBytes(), 32)
+          .hexZeroPad(new PublicKey(address).toBytes(), 32)
           .toString();
       case BridgeNetworks.Polygon:
       case BridgeNetworks.Avalanche:
       case BridgeNetworks.Ethereum:
-        return account as string;
+        return address;
       case BridgeNetworks.algorand:
         return ethers.utils
-          .hexZeroPad(
-            algoSdk.decodeAddress((account as algoSdk.Account).addr).publicKey,
-            32
-          )
-          .toString();
+          .hexZeroPad(algoSdk.decodeAddress(
+            address
+          ).publicKey, 32).toString()
     }
   }
   /**
@@ -51,7 +54,7 @@ export class SerializeEvmBridgeTransfer {
     sourceChain: BridgeEvmNetworks,
     destinationChain: BridgeNetworks,
     sourceWallet: string,
-    destinationWallet: PublicKey | algoSdk.Account | string,
+    destinationWallet: string,
     amount: ethers.BigNumber
   ): {
     sourceChain: number;
@@ -60,28 +63,14 @@ export class SerializeEvmBridgeTransfer {
     destinationWallet: string;
     amount: string;
   } {
-    const _sourceChain = Object.entries(NetworkIdentifiers).find(
-      ([_id, network]) => {
-        return network === sourceChain;
-      }
-    );
-
-    const _destinationChain = Object.entries(NetworkIdentifiers).find(
-      ([_id, network]) => {
-        return network === destinationChain;
-      }
-    );
-
-    if (!_sourceChain || !_destinationChain)
-      throw new Error(
-        EvmError.NOT_SERIALIZABLE
-      );
+    const _sourceChain = getNumericNetworkId(sourceChain);
+    const _destinationChain = getNumericNetworkId(destinationChain);
 
     return {
-      sourceChain: Number(_sourceChain[0]),
-      destinationChain: Number(_destinationChain[0]),
+      sourceChain: _sourceChain,
+      destinationChain: _destinationChain,
       destinationWallet: SerializeEvmBridgeTransfer.serializeAddress(
-        _destinationChain[1],
+        getNetworkByNumericId(_destinationChain),
         destinationWallet
       ),
       sourceWallet,
@@ -98,10 +87,12 @@ export class DeserializeEvmBridgeTransfer {
    * @returns {string} formatted address
    */
   static deserializeAddress(
-    chain: BridgeEvmNetworks | BridgeNetworks,
+    chain: BridgeNetworks,
     data: string
   ): string {
     switch (chain) {
+      case BridgeNetworks.TRON:
+        return TronWeb.address.fromHex('0x' + data)
       case BridgeNetworks.algorand:
         return algoSdk.encodeAddress(fromHexString(data));
       case BridgeNetworks.Polygon:
@@ -121,35 +112,18 @@ export class DeserializeEvmBridgeTransfer {
     amount: ethers.BigNumber
   ): {
     sourceNetwork: BridgeEvmNetworks;
-    destinationNetwork: BridgeEvmNetworks | BridgeNetworks;
+    destinationNetwork: BridgeNetworks;
     sourceWallet: string;
     destinationWallet: string;
     amount: ethers.BigNumber;
   } {
-    const sourceChain = Object.entries(NetworkIdentifiers).find(
-      ([_id, _network]) => {
-        return Number(_id) === sourceChainId;
-      }
-    );
-
-    const destinationChain = Object.entries(NetworkIdentifiers).find(
-      ([_id, _network]) => {
-        return Number(_id) === destinationChainId;
-      }
-    );
-
-    if (!sourceChain || !destinationChain)
-      throw new Error(
-        EvmError.NOT_DESERILIZABLE
-      );
-
     return {
-      sourceNetwork: sourceChain[1] as BridgeEvmNetworks,
-      destinationNetwork: destinationChain[1],
+      sourceNetwork: getNetworkByNumericId(sourceChainId) as BridgeEvmNetworks,
+      destinationNetwork: getNetworkByNumericId(destinationChainId),
       amount,
       sourceWallet,
       destinationWallet: DeserializeEvmBridgeTransfer.deserializeAddress(
-        destinationChain[1],
+        getNetworkByNumericId(destinationChainId),
         // omit '0x'
         destinationIdBytes.slice(2)
       ),
