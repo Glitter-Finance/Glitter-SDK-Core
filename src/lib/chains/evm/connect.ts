@@ -24,13 +24,13 @@ import { BridgeType, ChainStatus, PartialBridgeTxn, TransactionType } from "../.
 import { BridgeToken, BridgeTokens } from "../../common/tokens/tokens";
 import { Routing, ValueUnits } from "../../common";
 import { walletToAddress } from "../../common/utils/utils";
-import { EvmError } from "./evmErrors";
+
 type Connection = {
   rpcProvider: providers.BaseProvider;
   bridge: TokenBridge;
   tokens: Map<string, ERC20>;
 };
-  
+
 export class EvmConnect {
   protected readonly __network: BridgeEvmNetworks;
   protected readonly __providers: Connection;
@@ -87,7 +87,7 @@ export class EvmConnect {
   ): string {
     if (entity === "tokens") {
       if (!tokenSymbol)
-        throw new Error(EvmError.INVALID_ASSET_ID);
+        throw new Error("[EvmConnect] Please provide token symbol.");
 
       const token = this.__config.tokens.find(
         (token) => token.symbol.toLowerCase() === tokenSymbol.toLowerCase()
@@ -99,13 +99,11 @@ export class EvmConnect {
         );
       }
 
-      const address = token?.address as string; 
-      return address.toLowerCase();
+      return token.address.toLowerCase();
     }
 
     return this.__config[entity].toLowerCase();
   }
-
 
   private isValidToken(tokenSymbol: string): boolean {
     return !!this.__providers.tokens.get(tokenSymbol.toLowerCase());
@@ -177,7 +175,6 @@ export class EvmConnect {
 
     return allowance;
   }
-  
   /**
    * Parse transaction receipts to retrieve
    * bridge transfer data
@@ -309,11 +306,11 @@ export class EvmConnect {
           `[EvmConnect] Signer should be connected to network ${this.__network}`
         );
       if (!this.isValidToken(tokenSymbol)) {
-        throw new Error(EvmError.ASSET_NOT_SUPPORTED);
+        throw new Error(`[EvmConnect] Unsupported token symbol.`);
       }
 
       if (destination === this.__network) {
-        throw new Error(EvmError.INVALID_DESTINATION);
+        throw new Error("[EvmConnect] Cannot transfer tokens to same chain.");
       }
 
       const bridge = TokenBridge__factory.connect(
@@ -349,11 +346,11 @@ export class EvmConnect {
     return ethers.utils.keccak256(txnID);
   }
 
-  public async listBridgeTransaction(limit:number,asset:BridgeToken, starthash?:string ):Promise<PartialBridgeTxn[]> {
-    return new Promise(async(resolve,reject) =>{
-      try{
-          
-      }catch(err) {
+  public async listBridgeTransaction(limit: number, asset: BridgeToken, starthash?: string): Promise<PartialBridgeTxn[]> {
+    return new Promise(async (resolve, reject) => {
+      try {
+
+      } catch (err) {
         reject(err)
       }
     })
