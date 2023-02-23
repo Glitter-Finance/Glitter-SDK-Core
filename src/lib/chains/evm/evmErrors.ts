@@ -21,6 +21,5 @@ export enum EvmError {
     ASSETS_NOT_SET ='Evm assets are not set',
     UNDEFINED_TOKEN_ACCOUNT ='Token account not found',
     UNDEFINED_ROUTING ='Routing has not been set'
-
   }
 

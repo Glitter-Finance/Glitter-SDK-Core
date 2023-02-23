@@ -74,7 +74,7 @@ import { BridgeNetworks } from "./lib/common/networks/networks";
 import { GlitterEnvironment } from "./lib/configs/config";
 import { DepositNote } from "./lib/common/routing/routing";
 import { base64To0xString,base64ToBigUIntString } from "./lib/common/utils/utils";
-import { PartialBridgeTxn,TransactionType,BridgeType } from "./lib/common/transactions/transactions";
+import { PartialBridgeTxn,TransactionType,BridgeType,ChainStatus } from "./lib/common/transactions/transactions";
 export {
   GlitterBridgeSDK,
   BridgeNetworks,
@@ -138,5 +138,6 @@ export {
   convertToNumber,
   PartialBridgeTxn,
   TransactionType,
+  ChainStatus,
   SolanaPublicNetworks 
 };

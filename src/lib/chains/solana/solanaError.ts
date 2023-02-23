@@ -19,6 +19,5 @@ export enum SolanaError {
     UNDEFINED_SOL_ASSETS ='Sol assets are not defined',
     UNDEFINED_TOKEN_ACCOUNT ='Token account not found',
     UNDEFINED_ROUTING ='Routing has not been set'
-
   }
 

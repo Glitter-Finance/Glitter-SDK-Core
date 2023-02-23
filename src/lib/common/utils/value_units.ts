@@ -28,7 +28,6 @@ export class ValueUnits {
     }
   }
 
-
 }
 
 // using BigNumber.js

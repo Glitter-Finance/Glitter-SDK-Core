@@ -16,6 +16,5 @@ export enum AlgoError {
     INDEXER_NOT_SET ='Algo indexer has not been set',
     INVALID_APP_ID ='App id not defined',
     UNDEFINED_ROUTING ='Routing has not been set'
-
   }
 
