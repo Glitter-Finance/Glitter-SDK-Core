@@ -47,7 +47,7 @@ export class EvmConnect {
 
     config.tokens.map((_token) => {
       const symbol = _token.symbol.toLowerCase();
-      tokens.set(symbol, ERC20__factory.connect(symbol, rpcProvider))
+      tokens.set(symbol, ERC20__factory.connect(_token.address as string, rpcProvider))
     }, {} as Record<string, ERC20>);
 
     return {
