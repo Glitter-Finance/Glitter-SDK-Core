@@ -44,10 +44,10 @@ export class EvmConnect {
     const rpcProvider = new ethers.providers.JsonRpcProvider(rpcUrl);
     const bridge = TokenBridge__factory.connect(bridgeAddress, rpcProvider);
     const tokens = new Map<string, ERC20>();
-    
+
     config.tokens.map((_token) => {
       const symbol = _token.symbol.toLowerCase();
-      tokens.set(symbol, ERC20__factory.connect(_token.address, rpcProvider))
+      tokens.set(symbol, ERC20__factory.connect(symbol, rpcProvider))
     }, {} as Record<string, ERC20>);
 
     return {
@@ -93,7 +93,7 @@ export class EvmConnect {
         (token) => token.symbol.toLowerCase() === tokenSymbol.toLowerCase()
       );
 
-      if (!token) {
+      if (!token || !token.address || typeof token.address === "number") {
         throw new Error(
           `[EvmConnect] Can not provide address of ${tokenSymbol} token.`
         );
