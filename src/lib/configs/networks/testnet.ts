@@ -121,10 +121,7 @@ export const BridgeTestnet: GlitterBridgeConfig = {
           symbol: "USDC",
           decimals: 6,
           name: "USD Coin",
-          min_transfer:undefined,
-          max_transfer:undefined,
-          total_supply:undefined,
-          fee_divisor:undefined
+       
         },
       ],
       depositWallet: "0x2f34c32e1380306bc3f359d836d6c937cbe90337",
@@ -141,10 +138,7 @@ export const BridgeTestnet: GlitterBridgeConfig = {
           symbol: "USDC",
           decimals: 6,
           name: "USD Coin",
-          min_transfer:undefined,
-          max_transfer:undefined,
-          total_supply:undefined,
-          fee_divisor:undefined
+        
         },
       ],
       depositWallet: "0x6f5990a1b679190bcd0670f5006f14621f88805d",
@@ -161,10 +155,7 @@ export const BridgeTestnet: GlitterBridgeConfig = {
           symbol: "USDC",
           decimals: 6,
           name: "USD Coin",
-          min_transfer:undefined,
-          max_transfer:undefined,
-          total_supply:undefined,
-          fee_divisor:undefined
+          
         },
       ],
       depositWallet: "0x8eb550b1958e716c4051469425d56e79282afa2f",
