@@ -68,12 +68,12 @@ import {
   LogProgress,
 } from "./lib/common/utils/utils";
 import { ValueUnits } from "./lib/common/utils/value_units";
-
+import {convertToAscii,convertToNumber} from "./lib/chains/algorand/utils"
 import { GlitterBridgeSDK } from "./GlitterBridgeSDK";
 import { BridgeNetworks } from "./lib/common/networks/networks";
 import { GlitterEnvironment } from "./lib/configs/config";
 import { DepositNote } from "./lib/common/routing/routing";
-import { base64To0xString,base64ToBigUIntString,convertToAscii,convertToNumber } from "./lib/common/utils/utils";
+import { base64To0xString,base64ToBigUIntString } from "./lib/common/utils/utils";
 import { PartialBridgeTxn,TransactionType,BridgeType } from "./lib/common/transactions/transactions";
 export {
   GlitterBridgeSDK,

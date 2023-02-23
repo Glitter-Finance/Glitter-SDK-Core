@@ -1,4 +1,3 @@
-
 import { BridgeToken } from "../../common";
 
 export type AlgorandConfig = {
@@ -47,3 +46,4 @@ export type PollerOptions = {
   limit?:number,
   minRound?:number,
 }
+
