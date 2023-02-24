@@ -83,6 +83,7 @@ export const BridgeMainnet: GlitterBridgeConfig = {
       usdcDeposit: "9i8vhhLTARBCd7No8MPWqJLKCs3SEhrWKJ9buAjQn6EM", 
       usdcDepositTokenAccount: "",
       memoProgram: "MemoSq4gqABAXKb96qnH8TysNcWxMyWCqXgDLGmfcHr",
+      solVault:"7xCU4nvqu3Nz3BBQckKzibp3kBav4xbkuqQ3WM9CBHdJ",
     },
     tokens: [
       {
@@ -129,6 +130,17 @@ export const BridgeMainnet: GlitterBridgeConfig = {
         max_transfer: undefined,
         total_supply: undefined,
       },
+      {
+        network: "solana",
+        symbol: "RAY",
+        address: "4k3Dyjzvzp8eMZWUXbBCjEvwSkkk59S5iCNLY3QrkX6R",
+        decimals: 6,
+        min_transfer: undefined,
+        fee_divisor: undefined,
+        name: undefined,
+        max_transfer: undefined,
+        total_supply: undefined,
+      }
     ],
   },
   evm: {

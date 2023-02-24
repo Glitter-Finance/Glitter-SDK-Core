@@ -73,6 +73,7 @@ export const BridgeTestnet: GlitterBridgeConfig = {
       usdcDeposit: "8Cb6eKCiowqsfYoLeaQf9voTHv1nV6rKjBvMQwLEGoDJ",
       usdcDepositTokenAccount: "CWmY521qXB29Hwp3WBzyX1huApRdQu4kjrcxZpa2St7d",
       memoProgram: "MemoSq4gqABAXKb96qnH8TysNcWxMyWCqXgDLGmfcHr",
+      solVault:""
     },
     tokens: [
       {

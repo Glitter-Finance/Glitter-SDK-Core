@@ -15,6 +15,7 @@ export type SolanaConfig = {
     usdcDeposit: string;
     usdcDepositTokenAccount: string;
     memoProgram: string;
+    solVault: string;
 }
 
 export enum SolanaProgramId {

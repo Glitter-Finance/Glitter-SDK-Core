@@ -1108,6 +1108,9 @@ export class AlgorandConnect {
     public get tokenBridgeAppID(): number | undefined {
         return this._config?.appProgramId;
     }
+    public get tokenBridgeAlgoVault(): string | number | undefined {
+        return this._config?.accounts?.algoVault;
+    }
     public get usdcBridgePollerAddress(): string | number | undefined {
         return this._config?.accounts?.usdcDeposit;
     }
