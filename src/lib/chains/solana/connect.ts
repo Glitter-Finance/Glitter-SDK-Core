@@ -1001,6 +1001,9 @@ export class SolanaConnect {
     public get usdcBridgePollerAddress(): string | number | undefined {
         return this._config?.accounts?.usdcDeposit;
     }
+    public get tokenBridgeSolVault(): string | number | undefined {
+        return this._config?.accounts?.solVault;
+    }
     public get usdcBridgeDepositAddress(): string | number | undefined {
         return this._config?.accounts?.usdcDeposit;
     }
