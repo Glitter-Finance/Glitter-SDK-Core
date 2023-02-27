@@ -14,7 +14,7 @@ import {
   SolanaAccount,
 } from "./accounts";
 import { SolanaAssets, SolanaAsset } from "./assets";
-import { SolanaConfig } from "./config";
+import { SolanaConfig,SolanaProgramId,SolanaAccountsConfig,SolanaPublicNetworks } from "./config";
 import { SolanaConnect } from "./connect";
 
 export {
@@ -27,6 +27,9 @@ export {
   SolanaAssets,
   SolanaAsset,
   SolanaConfig,
+  SolanaProgramId,
+  SolanaAccountsConfig,
+  SolanaPublicNetworks,
   SolanaConnect,
   BridgeApproveSchema,
   BridgeCancelSchema,
