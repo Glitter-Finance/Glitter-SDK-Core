@@ -5,6 +5,7 @@ import * as util from "util";
 import AlgodClient from "algosdk";
 import {  BridgeToken, BridgeTokens, Routing, RoutingDefault, RoutingString, SetRoutingUnits } from "../../../common";
 import {AlgorandAccountsConfig, AlgorandProgramAccount} from "../config";
+import { ValueUnits } from "../../../common";
 
 export enum AlgorandBridgeTxnType {
     none,
@@ -219,7 +220,7 @@ export class AlgorandBridgeTxnsV1 {
                  if (!routing.amount) throw new Error("Routing Amount is required");
                  if (!this._transactions) throw new Error("Algorand Transactions is required");
 
-                 const amount_nanoUsdc = Math.round(routing.amount * 10**token.decimals);
+                 const amount_nanoUsdc = ValueUnits.fromValue(routing.amount,token.decimals).units;
                  
                  const routingData:Routing = {
                     from: {

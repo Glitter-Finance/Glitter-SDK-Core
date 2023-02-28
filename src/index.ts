@@ -6,7 +6,6 @@ import {
   SerializeEvmBridgeTransfer,
   DeserializeEvmBridgeTransfer,
 } from "./lib/chains/evm";
-
 import {
   SolanaBridgeTxnsV1,
   BridgeApproveSchema,
@@ -56,7 +55,6 @@ import {
   BridgeToken,
   BridgeTokenDefault,
   BridgeTokens,
-  
 } from "./lib/common/tokens/tokens";
 
 import { Logger } from "./lib/common/utils/logger";
@@ -70,11 +68,16 @@ import {
 import { ValueUnits } from "./lib/common/utils/value_units";
 import {convertToAscii,convertToNumber} from "./lib/chains/algorand/utils"
 import { GlitterBridgeSDK } from "./GlitterBridgeSDK";
-import { BridgeNetworks } from "./lib/common/networks/networks";
+import { BridgeNetworks,NetworkIdentifiers } from "./lib/common/networks/networks";
 import { GlitterEnvironment } from "./lib/configs/config";
 import { DepositNote } from "./lib/common/routing/routing";
 import { base64To0xString,base64ToBigUIntString } from "./lib/common/utils/utils";
 import { PartialBridgeTxn,TransactionType,BridgeType,ChainStatus } from "./lib/common/transactions/transactions";
+import {
+   BridgeDepositEvent, 
+  BridgeReleaseEvent, 
+  TransferEvent } from "./lib/chains/evm/types"
+
 export {
   GlitterBridgeSDK,
   BridgeNetworks,
@@ -139,5 +142,9 @@ export {
   PartialBridgeTxn,
   TransactionType,
   ChainStatus,
-  SolanaPublicNetworks 
+  SolanaPublicNetworks,
+  NetworkIdentifiers,
+  BridgeDepositEvent,
+  BridgeReleaseEvent,
+  TransferEvent
 };
