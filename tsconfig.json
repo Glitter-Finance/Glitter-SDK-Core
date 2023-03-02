@@ -8,7 +8,7 @@
     "skipLibCheck": true,
     "lib": [
       // ... other libs
-      "ES2021.String",
+      "ES2021",
       "dom"
     ],
     "resolveJsonModule": true,
