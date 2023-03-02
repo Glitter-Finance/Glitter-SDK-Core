@@ -7,9 +7,8 @@ import { AlgorandAssets } from "./assets";
 import { AlgorandBridgeTxnsV1 } from "./txns/bridge";
 import * as fs from 'fs';
 import { BridgeToken, BridgeTokens, LogProgress, Routing, RoutingDefault, Sleep } from '../../common';
-import { PartialBridgeTxn, TransactionType } from '../../common/transactions/transactions';
 import { ethers } from 'ethers';
-import { base64To0xString, base64ToString } from '../../common/utils/utils';
+import { base64To0xString } from '../../common/utils/utils';
 import { AlgoError } from './algoError';
 
 /**

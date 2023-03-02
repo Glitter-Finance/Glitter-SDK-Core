@@ -3,11 +3,9 @@ import algosdk from "algosdk";
 import { SolanaAccount } from '../accounts';
 import * as solanaWeb3 from "@solana/web3.js";
 import {
-    clusterApiUrl,
     Connection,
     Keypair,
     PublicKey,
-    sendAndConfirmTransaction,
     SystemProgram,
     Transaction,
     TransactionInstruction,
@@ -23,6 +21,7 @@ import {
 import { DepositNote } from "../utils";
 import { BridgeToken, BridgeTokens, Routing, ValueUnits } from "../../../common";
 import { SolanaAccountsConfig, SolanaProgramId } from "../config";
+import { SolanaError } from "../solanaError";
 
 export class SolanaBridgeTxnsV1 {
 
@@ -156,14 +155,16 @@ export class SolanaBridgeTxnsV1 {
                 if (!routing.to.address) throw new Error('Destination address can not be found');
                 let asset = BridgeTokens.get("solana", routing.from.token);
                 if (!asset || asset.symbol.toLocaleLowerCase() !== "usdc") {
-                    throw new Error("Token Not Found")
+                    throw new Error(SolanaError.INVALID_ASSET)
                 }
 
                 if (!routing.amount) {
                     throw new Error("amount can not be null");
-                } else {
-                    transferAmount = routing.amount * 10 ** asset.decimals
-                }
+                } 
+                const amount_nanoUsdc = ValueUnits.fromValue(routing.amount, asset.decimals).units   
+
+                 transferAmount = routing.amount * 10 ** asset.decimals
+                  
 
                 if (routing.amount < 1) {
                     throw new Error("Minimum Deposit Amount should be >= 1")
@@ -182,8 +183,8 @@ export class SolanaBridgeTxnsV1 {
                         address: routing.to.address,
                         txn_signature: "",
                     },
-                    amount: transferAmount / 1000000,
-                    units: BigInt(transferAmount).toString(),
+                    amount:  routing.amount ,
+                    units: BigInt(amount_nanoUsdc).toString(),
                 } as Routing;
 
                 const bridgeNodeInstructionData: DepositNote = {
@@ -217,7 +218,7 @@ export class SolanaBridgeTxnsV1 {
                 )
 
                 if (!fromTokenAccount) {
-                    throw new Error("fromTokenAccount does not exist")
+                    throw new Error(SolanaError.UNDEFINED_TOKEN_ACCOUNT)
                 }
                 let tx = new Transaction();
                 if (!(await this._client.getAccountInfo(fromTokenAccount.address))) {
@@ -265,14 +266,17 @@ export class SolanaBridgeTxnsV1 {
                 if (!routing.to.address) throw new Error('Destination address can not be found');
                 let asset = BridgeTokens.get("solana", routing.from.token);
                 if (!asset || asset.symbol.toLocaleLowerCase() !== "usdc") {
-                    throw new Error("Token Not Found")
+                    throw new Error(SolanaError.INVALID_ASSET)
                 }
 
                 if (!routing.amount) {
                     throw new Error("amount can not be null");
-                } else {
+                } 
+
+                   const amount_nanoUsdc = ValueUnits.fromValue(routing.amount, token.decimals).units   
+
                     transferAmount = routing.amount * 10 ** asset.decimals
-                }
+                
                 if (routing.amount < 1) {
                     throw new Error("Minimum Deposit Amount should be >= 1")
                 }
@@ -289,8 +293,8 @@ export class SolanaBridgeTxnsV1 {
                         address: routing.to.address,
                         txn_signature: "",
                     },
-                    amount: transferAmount / 1000000,
-                    units: BigInt(transferAmount).toString(),
+                    amount: routing.amount ,
+                    units: BigInt(amount_nanoUsdc).toString(),
                 } as Routing;
 
                 const bridgeNodeInstructionData: DepositNote = {
@@ -311,7 +315,7 @@ export class SolanaBridgeTxnsV1 {
                 const memoProgram = this._accounts?.memoProgram;
                 if (!memoProgram) throw new Error('Memo Program not found');
                 if (!this._client) {
-                    throw new Error("connection not set up")
+                    throw new Error(SolanaError.CLIENT_NOT_SET)
                 }
                 const usdcMint_ = await getMint(this._client, new PublicKey(usdcMint));
                 const destinationPubkey = new PublicKey(destination);
@@ -369,7 +373,7 @@ export class SolanaBridgeTxnsV1 {
                 if (typeof token.address !== "string") throw new Error("token address is required in string format");
                 if (!routing.amount) throw new Error("amount is required");
                 if (!this._bridgeProgramAddress) throw new Error("Bridge Program Address is not set");
-                if (!this._client) throw new Error("Client is not set");
+                if (!this._client) throw new Error(SolanaError.CLIENT_NOT_SET);
 
 
 
@@ -434,10 +438,10 @@ export class SolanaBridgeTxnsV1 {
                 //Fail Safe
                 if (token.symbol.toLowerCase() == "sol") throw new Error("Token must be SOL");
                 if (!token.address) throw new Error("mint address is required");
-                if (typeof token.address !== "string") throw new Error("token address is required in string format");
+                if (typeof token.address !== "string") throw new Error(SolanaError.INVALID_ASSET_ID);
                 if (!routing.amount) throw new Error("amount is required");
                 // if (!this._bridgeProgramAddress) throw new Error("Bridge Program Address is not set");
-                if (!this._client) throw new Error("Client is not set");
+                if (!this._client) throw new Error(SolanaError.CLIENT_NOT_SET);
 
                 //Get Bridge Program PubKey
                 const bridgeProgram = new PublicKey(this._bridgeProgramAddress!);

@@ -2,7 +2,6 @@ import * as algosdk from 'algosdk';
 import { Transaction,Algodv2 } from "algosdk";
 import { BridgeToken, BridgeTokens, Routing, RoutingString, SetRoutingUnits } from '../../../common';
 import { AlgorandAccountsConfig } from '../config';
-//import {getUsdcRecieverAddress, getUSDCAssetID} from '../algoConnectionpublic';
 
 export class AlgorandTxns {
     private _client: Algodv2;
@@ -92,9 +91,8 @@ export class AlgorandTxns {
               txn_signature: "",
             },
             amount: routing.amount,
-            units: routing.amount,
+            units: routing.units,
           };
-
         const note = algosdk.encodeObj({
             system:  JSON.stringify(routingData),
             date: `${new Date()}`,
