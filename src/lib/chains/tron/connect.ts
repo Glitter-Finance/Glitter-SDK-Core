@@ -232,8 +232,8 @@ export class TronConnect {
 
         for (const log of txInfo.log) {
             try {
-                const r = getLogByEventSignature(this.__tronWeb, log, "BridgeRelease");
-                const t = getLogByEventSignature(this.__tronWeb, log, "Transfer");
+                const r = getLogByEventSignature(this.__tronWeb, [log], "BridgeRelease");
+                const t = getLogByEventSignature(this.__tronWeb, [log], "Transfer");
 
                 if (r) {
                     releaseMatch = r;
