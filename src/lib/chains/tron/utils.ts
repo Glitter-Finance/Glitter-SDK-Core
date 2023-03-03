@@ -3,7 +3,6 @@ import { AbiCoder } from "ethers/lib/utils";
 import { BridgeDepositEvent, BridgeReleaseEvent, TransferEvent } from "../evm";
 import { EventTopics } from "./types";
 
-const BRIDGE_DEPOSIT_EVENT_SIGNATURE = (trWeb: any): string => trWeb.sha3('BridgeDeposit(uint16,uint256,address,bytes)')
 const BRIDGE_RELEASE_EVENT_SIGNATURE = (trWeb: any): string => trWeb.sha3('BridgeRelease(uint256,address,address,bytes32)')
 const TRC20_TRANSFER_EVENT_SIGNATURE = (trWeb: any): string => trWeb.sha3('Transfer(address,address,uint256)')
 
@@ -19,7 +18,7 @@ export function getLogByEventSignature(
     } | null {
     if (logs.length === 0) return null
 
-    const signature = topic === "BridgeDeposit" ? BRIDGE_DEPOSIT_EVENT_SIGNATURE(trWeb) :
+    const signature =
         topic === "BridgeRelease" ? BRIDGE_RELEASE_EVENT_SIGNATURE(trWeb) : TRC20_TRANSFER_EVENT_SIGNATURE(trWeb)
 
     const matchingLog = logs.find(
@@ -36,21 +35,6 @@ export function decodeEventData(
 ): BridgeDepositEvent | BridgeReleaseEvent | TransferEvent | null {
     const coder = new AbiCoder()
     switch (topic) {
-        case "BridgeDeposit":
-            const decodedDeposit = coder.decode(
-                ["uint16", "uint256", "address", "bytes"],
-                !log.data.startsWith("0x") ? `0x${log.data}` : log.data
-            );
-            if (decodedDeposit.length > 0) {
-                const bridgeDeposit: BridgeDepositEvent = {
-                    destinationChainId: Number(decodedDeposit[0].toString()),
-                    amount: ethers.BigNumber.from(decodedDeposit[1].toString()),
-                    destinationWallet: decodedDeposit[3],
-                    erc20Address: decodedDeposit[2],
-                    __type: "BridgeDeposit"
-                }
-                return bridgeDeposit
-            }
         case "BridgeRelease":
             const decodedRelease = coder.decode(
                 ["address", "address", "uint256"],
@@ -83,4 +67,11 @@ export function decodeEventData(
     }
 
     return null
+}
+
+export function hexToBytes(hex: string) {
+    let bytes = [];
+    for (let c = 0; c < hex.length; c += 2)
+        bytes.push(parseInt(hex.substr(c, 2), 16));
+    return bytes;
 }
