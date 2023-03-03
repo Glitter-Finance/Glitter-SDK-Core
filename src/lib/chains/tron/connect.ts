@@ -115,31 +115,6 @@ export class TronConnect {
         ).call();
         return ethers.BigNumber.from(balance.toString());
     }
-    async approveTokensForBridge(
-        tokenSymbol: string,
-        amount: ethers.BigNumber | string,
-        privateKey: string
-    ): Promise<string> {
-        if (!this.isValidToken(tokenSymbol))
-            return Promise.reject("[TronConnect] Unsupported token symbol.");
-
-        const bridgeAddress = this.getAddress("bridge");
-        const tokenAddress = this.getAddress("tokens", tokenSymbol);
-
-        const trWeb = new TronWeb(
-            this.__tronConfig.fullNode,
-            this.__tronConfig.solidityNode,
-            this.__tronConfig.eventServer,
-            privateKey
-        )
-
-        const token = await trWeb.contract(
-            Trc20DetailedAbi.abi,
-            tokenAddress
-        )
-
-        return await token.approve(bridgeAddress, amount).send();
-    }
     /**
      * Bridge tokens to another supported chain
      * @param {BridgeNetworks} destination
