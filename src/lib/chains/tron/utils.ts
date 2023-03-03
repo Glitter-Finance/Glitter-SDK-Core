@@ -57,14 +57,16 @@ export function decodeEventData(
             }
         case "Transfer":
             const decodedTransfer = coder.decode(
-                ["address", "address", "uint256"],
+                ["uint256"],
                 !log.data.startsWith("0x") ? `0x${log.data}` : log.data
             );
+            const from = '41' + log.topics[1].substring(24)
+            const to = '41' + log.topics[2].substring(24)
             if (decodedTransfer.length > 0) {
                 const transfer: TransferEvent = {
-                    from: decodedTransfer[0],
-                    to: decodedTransfer[1],
-                    value: ethers.BigNumber.from(decodedTransfer[2].toString()),
+                    from,
+                    to,
+                    value: ethers.BigNumber.from(decodedTransfer[0].toString()),
                     __type: "Transfer"
                 }
                 return transfer
