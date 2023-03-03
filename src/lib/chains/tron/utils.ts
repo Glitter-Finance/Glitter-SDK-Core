@@ -1,5 +1,6 @@
 import { ethers } from "ethers";
 import { AbiCoder } from "ethers/lib/utils";
+import { isArray } from "util";
 import { BridgeDepositEvent, BridgeReleaseEvent, TransferEvent } from "../evm";
 import { EventTopics } from "./types";
 
@@ -20,6 +21,10 @@ export function getLogByEventSignature(
 
     const signature =
         topic === "BridgeRelease" ? BRIDGE_RELEASE_EVENT_SIGNATURE(trWeb) : TRC20_TRANSFER_EVENT_SIGNATURE(trWeb)
+
+    if (!logs || (logs && !isArray(logs))) {
+        return null
+    }
 
     const matchingLog = logs.find(
         x => `0x${x.topics[0].toLowerCase()}` === signature.toLowerCase()
