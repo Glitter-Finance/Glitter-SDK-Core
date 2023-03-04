@@ -1,5 +1,6 @@
 import * as solanaWeb3 from "@solana/web3.js";
 import { Connection, Keypair, PublicKey, Signer } from "@solana/web3.js";
+import { IAccount } from "../../common/utils/iaccount";
 import { SolanaUtils } from "./utils";
 
 export type SolanaAccount = {
@@ -20,7 +21,7 @@ export type SolanaTokenAccount = {
     symbol: string;
 }
 
-export class SolanaAccounts {
+export class SolanaAccounts implements IAccount {
 
     private _accounts: Record<string, SolanaAccount> = {};
     private _client?: Connection;

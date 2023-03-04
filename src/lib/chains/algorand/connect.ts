@@ -418,6 +418,44 @@ export class AlgorandConnect {
         });
     }
 
+/**
+ * @method OptinTokenForWallet
+ * @param address 
+ * @param symbol 
+ * @returns {Promise<algosdk.Transaction[]|undefined>}
+ */        
+ async OptinTokenTransaction(
+        address:string,
+        symbol:string   
+):Promise<algosdk.Transaction[]|undefined>{
+
+    return new Promise(async(resolve,reject) =>{
+        try{
+            //Get Token
+            const token = BridgeTokens.get("algorand", symbol);
+            if (!token) throw new Error(AlgoError.INVALID_ASSET);
+
+            //Fail Safe
+            if (!this._transactions) throw new Error(AlgoError.UNDEFINED_TRANSACTION);
+            if (!token.address) throw new Error(AlgoError.INVALID_ASSET_ID);
+            if (typeof token.address !== "number") throw new Error(AlgoError.INVALID_ASSET_ID_TYPE);
+                  
+            //Get Txn
+            console.log(`Opting in ${address} to ${token.address}`);
+            const transactions: Transaction[] = [];
+            const txn = await this._transactions.optinTransaction(address, token.address);
+            if(!txn) throw new Error(AlgoError.UNDEFINED_TRANSACTION)
+            transactions.push(txn);
+            resolve(transactions)
+
+        }catch(e){
+            reject(e);
+        }   
+    })
+
+}
+
+
     /**
      * 
      * @method OptedinAccountExists
@@ -428,15 +466,24 @@ export class AlgorandConnect {
     async OptedinAccountExists(address:string,asset:string):Promise<boolean> {
         return new Promise(async(resolve,reject) =>{
             try{
-                if(!this._client) throw new Error(AlgoError.CLIENT_NOT_SET);
-                
-                const info = await this._client.accountInformation(address).query;
+                if(!this._client) throw new Error("AlgoError.CLIENT_NOT_SET");
+                const token = BridgeTokens.get("algorand",asset); 
+                const asset_id_ = token?.address; 
+                const info = await this._client.accountInformation(address).do();
+                const asset_store = info['assets'];
+                for(let i=0;i<asset_store.length;i++){  
+                    if(asset_id_===asset_store[i]['asset-id']) {
+                        resolve(true);
+                    }
+                }
+                resolve(false)
 
             }catch(err){
                 reject(err)
             }
         })
     }
+
 
 
     /**

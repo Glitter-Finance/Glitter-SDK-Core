@@ -10,6 +10,7 @@ import { COMMITMENT } from './utils';
 import { ethers } from 'ethers';
 import base58 from 'bs58';
 import { SolanaError } from './solanaError';
+import { add } from 'winston';
 
 export class SolanaConnect {
 
@@ -421,10 +422,10 @@ export class SolanaConnect {
             try {
 
                 //Fail Safe
-                if (!this._assets) throw new Error("Solana Assets not defined");
+                if (!this._assets) throw new Error(SolanaError.UNDEFINED_SOL_ASSETS);
                 if (!this._transactions) throw new Error(SolanaError.UNDEFINED_TRANSACTION);
                 if (!account) throw new Error(SolanaError.INVALID_ACCOUNT);
-                if (!this._client) throw new Error(SolanaError.UNDEFINED_SOL_ASSETS);
+                if (!this._client) throw new Error(SolanaError.CLIENT_NOT_SET);
                 //Fail Safe
 
                 //Get Token
@@ -466,6 +467,90 @@ export class SolanaConnect {
         });
     }
 
+    /**
+     * @method OptinTokenTransaction
+     * @param address 
+     * @param symbol 
+     * @returns {Promise<Transaction|undefined>} 
+     */
+    async OptinTokenTransaction(
+        address:string,
+        symbol:string,
+    ):Promise<Transaction|undefined>{
+    // eslint-disable-next-line no-async-promise-executor
+    return new Promise(async(resolve,reject)=>{
+
+        try{
+            //Fail Safe
+            if (!this._assets) throw new Error(SolanaError.UNDEFINED_SOL_ASSETS);
+            if (!this._transactions) throw new Error(SolanaError.UNDEFINED_TRANSACTION);
+            if (!this._client) throw new Error(SolanaError.CLIENT_NOT_SET);
+            //Fail Safe
+
+            //Get Token
+            const token = BridgeTokens.get("solana", symbol);
+            if (!token) throw new Error(SolanaError.ASSETS_NOT_SET);
+            if (!token.address) throw new Error(SolanaError.INVALID_ASSET_ID);
+            if (typeof token.address !== "string") throw new Error(SolanaError.INVALID_ASSET_ID_TYPE);
+
+            //Get Txn
+            console.log(`Opting in ${address} to ${token.address}`);
+            const accountPubKey = new PublicKey(address);
+            const newAccountTransaction = await this._assets.CreateTokenAccountTransaction( accountPubKey, token);
+            console.log(`Optin Completed`);
+            resolve(newAccountTransaction);
+        }catch(e){
+            reject(e)
+        }
+     
+    })
+}
+
+
+    /**
+     *
+     * @method OptinAccountExists
+     * @param address 
+     * @param symbol 
+     * @returns {Promise<boolean>} 
+     */
+    async OptinAccountExists(
+        address:string,
+        symbol:string,
+    ):Promise<boolean>{
+    return new Promise(async(resolve,reject)=>{
+        try{
+
+                //Fail Safe
+                if (!this._assets) throw new Error(SolanaError.UNDEFINED_SOL_ASSETS);
+                if (!this._transactions) throw new Error(SolanaError.UNDEFINED_TRANSACTION);
+                if (!this._client) throw new Error(SolanaError.CLIENT_NOT_SET);
+                //Fail Safe
+
+                //Get Token
+                const token = BridgeTokens.get("solana", symbol);
+                if (!token) throw new Error(SolanaError.ASSETS_NOT_SET);
+                if (!token.address) throw new Error(SolanaError.INVALID_ASSET_ID);
+                if (typeof token.address !== "string") throw new Error(SolanaError.INVALID_ASSET_ID_TYPE);
+
+                //Get Txn
+                console.log(`Opting in ${address} to ${token.address}`);
+
+                //get token account
+                const accountPubKey = new PublicKey(address);
+                const tokenAccount = await this._assets.getTokenAccount(accountPubKey, token);
+                if (tokenAccount) {
+                    console.log(`Account ${address} already opted in to ${token.address}`);
+                    resolve(true);
+                    return;
+                }
+
+                resolve (false)
+    }catch(e){
+        reject(e)
+    }
+})
+}
     /**
      * @method closeOutAccount
      * @param signer 
