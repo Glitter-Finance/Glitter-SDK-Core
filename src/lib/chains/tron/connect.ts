@@ -121,7 +121,8 @@ export class TronConnect {
      * @param {"USDC"} tokenSymbol only USDC for now
      * @param {string | ethers.BigNumber} amount in BigNumber units e.g 1_000_000 for 1USDC
      * @param {string | PublicKey | algosdk.Account} destinationWallet provide USDC reciever address on destination chain
-     * @param {ethers.Wallet} wallet to sign transaction
+     * @param {string} string source wallet
+     * @param {privateKey} string to sign transaction
      * @returns {Promise<ethers.ContractTransaction>}
      */
     async bridge(
@@ -189,7 +190,73 @@ export class TronConnect {
             return Promise.reject(error);
         }
     }
+    /**
+     * Bridge tokens to another supported chain
+     * @param {BridgeNetworks} destination
+     * @param {"USDC"} tokenSymbol only USDC for now
+     * @param {string | ethers.BigNumber} amount in BigNumber units e.g 1_000_000 for 1USDC
+     * @param {string | PublicKey | algosdk.Account} destinationWallet provide USDC reciever address on destination chain
+     * @param {ethers.Wallet} wallet to sign transaction
+     * @returns {Promise<ethers.ContractTransaction>}
+     */
+    async bridgeWeb(
+        destination: BridgeNetworks,
+        tokenSymbol: string,
+        amount: ethers.BigNumber | string,
+        destinationWallet: string | PublicKey | algosdk.Account,
+        sourceWallet: string,
+        trWeb: any
+    ): Promise<string> {
+        try {
+            if (!this.__tronWeb) {
+                throw new Error(`[TronConnect] Sdk uninitialized.`);
+            }
 
+            if (!this.isValidToken(tokenSymbol)) {
+                throw new Error(`[TronConnect] Unsupported token symbol.`);
+            }
+
+            const tokenAddress = this.getAddress("tokens", tokenSymbol);
+            const depositAddress = this.getAddress("depositWallet");
+
+            const trc20Params = [
+                { type: "address", value: TronWeb.address.fromHex(depositAddress) },
+                { type: "uint256", value: amount.toString() },
+            ];
+
+            let destinationInStr: string = walletToAddress(destinationWallet)
+            const transfer = {
+                destination: {
+                    chain: destination.toString(),
+                    address: destinationInStr,
+                },
+                amount: amount.toString(),
+            };
+
+            const data = JSON.stringify(transfer);
+
+            let txn = await trWeb.transactionBuilder.triggerSmartContract(
+                tokenAddress,
+                "transfer(address,uint256)",
+                {},
+                trc20Params,
+                sourceWallet
+            );
+
+            txn = await trWeb.transactionBuilder.addUpdateData(
+                txn.transaction,
+                data,
+                "utf8"
+            );
+
+            let signedtxn = await trWeb.trx.sign(txn);
+            await trWeb.trx.sendRawTransaction(signedtxn);
+
+            return signedtxn.txID
+        } catch (error) {
+            return Promise.reject(error);
+        }
+    }
     async deSerializeDepositEvent(
         depositTxHash: string
     ): Promise<{
