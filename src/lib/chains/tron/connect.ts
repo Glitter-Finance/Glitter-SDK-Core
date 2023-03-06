@@ -181,7 +181,7 @@ export class TronConnect {
                 "utf8"
             );
 
-            let signedtxn = await trWeb.trx.sign(txn, process.env.DEV_PK);
+            let signedtxn = await trWeb.trx.sign(txn, privateKey);
             await trWeb.trx.sendRawTransaction(signedtxn);
 
             return signedtxn.txID
