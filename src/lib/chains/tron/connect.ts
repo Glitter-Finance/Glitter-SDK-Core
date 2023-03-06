@@ -181,7 +181,7 @@ export class TronConnect {
                 "utf8"
             );
 
-            let signedtxn = await trWeb.trx.sign(txn, process.env.DEV_PK);
+            let signedtxn = await trWeb.trx.sign(txn, privateKey);
             await trWeb.trx.sendRawTransaction(signedtxn);
 
             return signedtxn.txID
@@ -232,8 +232,8 @@ export class TronConnect {
 
         for (const log of txInfo.log) {
             try {
-                const r = getLogByEventSignature(this.__tronWeb, log, "BridgeRelease");
-                const t = getLogByEventSignature(this.__tronWeb, log, "Transfer");
+                const r = getLogByEventSignature(this.__tronWeb, [log], "BridgeRelease");
+                const t = getLogByEventSignature(this.__tronWeb, [log], "Transfer");
 
                 if (r) {
                     releaseMatch = r;
