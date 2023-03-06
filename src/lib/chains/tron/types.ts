@@ -12,4 +12,4 @@ export type TronConfig = {
     tokens: TokenConfig[]
 }
 
-export type EventTopics = "BridgeRelease" | "BridgeDeposit" | "Transfer"
+export type EventTopics = "BridgeRelease" | "Transfer"
