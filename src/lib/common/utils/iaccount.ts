@@ -6,5 +6,5 @@ export interface IAccount {
     createNew(): Promise<AlgorandAccount> | Promise<SolanaAccount>;
     createNewWithPrefix(prefix: string, tries?: number): Promise<AlgorandAccount | undefined> | Promise<SolanaAccount | undefined>;
     updateAccountDetails(local_account: AlgorandAccount | SolanaAccount | undefined, getAssetDetails?: boolean): Promise<AlgorandAccount | SolanaAccount>;
-  }
+}
   
