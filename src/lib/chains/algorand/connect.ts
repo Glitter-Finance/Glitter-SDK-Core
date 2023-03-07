@@ -10,12 +10,13 @@ import { BridgeToken, BridgeTokens, LogProgress, Routing, RoutingDefault, Sleep 
 import { ethers } from 'ethers';
 import { base64To0xString } from '../../common/utils/utils';
 import { AlgoError } from './algoError';
+import { BridgeConnect } from '../../common/utils/iconnect';
 
 /**
  * 
  * Algorand connect
  */
-export class AlgorandConnect {
+export class AlgorandConnect implements BridgeConnect {
 
     private _clientIndexer: algosdk.Indexer | undefined = undefined;
     private _client: algosdk.Algodv2 | undefined = undefined;
@@ -100,7 +101,7 @@ export class AlgorandConnect {
         toAddress: string,
         tosymbol: string,
         amount: number
-    ): Promise<algosdk.Transaction[]> {
+    ): Promise<algosdk.Transaction[]|undefined> {
         return new Promise(async (resolve, reject) => {
             try {
 
@@ -240,7 +241,7 @@ export class AlgorandConnect {
      * @param symbol 
      * @returns {Promise<boolean>}
      */
-    public async fundAccountToken(funder: AlgorandAccount, account: AlgorandAccount, amount: number, symbol: string): Promise<boolean> {
+    public async fundAccountTokens(funder: AlgorandAccount, account: AlgorandAccount, amount: number, symbol: string): Promise<boolean> {
         return new Promise(async (resolve, reject) => {
             try {
                 if (!this._client) throw new Error(AlgoError.CLIENT_NOT_SET);
@@ -312,7 +313,7 @@ export class AlgorandConnect {
      * @returns  {Promise<boolean>}
      */
     async sendTokens(routing: Routing,
-        signer: Account,
+        account: Account,
         token: BridgeToken,
         debug_rootPath?: string): Promise<boolean> {
         // eslint-disable-next-line no-async-promise-executor
@@ -321,7 +322,7 @@ export class AlgorandConnect {
 
                 //Fail Safe
                 if (!this._transactions) throw new Error(AlgoError.UNDEFINED_TRANSACTION);
-                if (!signer) throw new Error(AlgoError.INVALID_SIGNER);
+                if (!account) throw new Error(AlgoError.INVALID_SIGNER);
 
                 //Get Txn
                 console.log(`Sending ${routing.amount} ${token.symbol} from ${routing.from.address} to ${routing.to.address}`);
@@ -329,7 +330,7 @@ export class AlgorandConnect {
                 transactions.push(await this._transactions.sendTokensTransaction(routing, token));
 
                 //Send
-                await this.signAndSend_SingleSigner(transactions, signer, debug_rootPath)
+                await this.signAndSend_SingleSigner(transactions, account, debug_rootPath)
                 console.log(`Txn Completed`);
                 resolve(true);
 
@@ -382,11 +383,11 @@ export class AlgorandConnect {
     /**
      * 
      * @method optinToken
-     * @param signer 
+     * @param account 
      * @param symbol 
      * @returns {Promise<boolean>}  
      */
-    async optinToken(signer: Account,
+    async optinToken(account: Account,
         symbol: string): Promise<boolean> {
         // eslint-disable-next-line no-async-promise-executor
         return new Promise(async (resolve, reject) => {
@@ -402,13 +403,13 @@ export class AlgorandConnect {
                 if (typeof token.address !== "number") throw new Error(AlgoError.INVALID_ASSET_ID_TYPE);
                       
                 //Get Txn
-                console.log(`Opting in ${signer.addr} to ${token.address}`);
+                console.log(`Opting in ${account.addr} to ${token.address}`);
                 const transactions: Transaction[] = [];
-                const txn = await this._transactions.optinTransaction(signer.addr, token.address);
+                const txn = await this._transactions.optinTransaction(account.addr, token.address);
                 transactions.push(txn);
 
                 //Send Txn
-                await this.signAndSend_SingleSigner(transactions, signer);
+                await this.signAndSend_SingleSigner(transactions, account);
                 console.log(`Optin Completed`);
                 resolve(true);
 
@@ -428,7 +429,7 @@ export class AlgorandConnect {
         address:string,
         symbol:string   
 ):Promise<algosdk.Transaction[]|undefined>{
-
+    // eslint-disable-next-line no-async-promise-executor
     return new Promise(async(resolve,reject) =>{
         try{
             //Get Token
@@ -460,14 +461,14 @@ export class AlgorandConnect {
      * 
      * @method OptedinAccountExists
      * @param address 
-     * @param asset 
+     * @param symbol 
      * @returns {Promise<boolean>}
      */
-    async OptedinAccountExists(address:string,asset:string):Promise<boolean> {
+    async OptinAccountExists(address:string,symbol:string):Promise<boolean> {
         return new Promise(async(resolve,reject) =>{
             try{
                 if(!this._client) throw new Error("AlgoError.CLIENT_NOT_SET");
-                const token = BridgeTokens.get("algorand",asset); 
+                const token = BridgeTokens.get("algorand",symbol); 
                 const asset_id_ = token?.address; 
                 const info = await this._client.accountInformation(address).do();
                 const asset_store = info['assets'];

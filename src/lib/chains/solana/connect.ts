@@ -11,8 +11,9 @@ import { ethers } from 'ethers';
 import base58 from 'bs58';
 import { SolanaError } from './solanaError';
 import { add } from 'winston';
+import { BridgeConnect } from '../../common/utils/iconnect';
 
-export class SolanaConnect {
+export class SolanaConnect implements BridgeConnect {
 
     private _client?: Connection;
     private _accounts: SolanaAccounts | undefined = undefined;
@@ -51,7 +52,7 @@ export class SolanaConnect {
      * @returns Unsigned bridge transaction
      * @description performs the bridge operation without signing transaction and return the undigned transaction instead
      */
-    public async bridgeTransactions(
+    public async bridgeTransaction(
         fromAddress: string,
         fromSymbol: string,
         toNetwork: string,
@@ -121,7 +122,7 @@ export class SolanaConnect {
         toAddress: string,
         tosymbol: string,
         amount: number
-    ) {
+    ):Promise<boolean> {
         return new Promise(async (resolve, reject) => {
             try {
 
@@ -561,7 +562,7 @@ export class SolanaConnect {
     public async closeOutTokenAccount(
         signer: SolanaAccount,
         receiver: SolanaAccount,
-        symbol: string) {
+        symbol: string):Promise<boolean> {
 
         return new Promise(async (resolve, reject) => {
             try {
