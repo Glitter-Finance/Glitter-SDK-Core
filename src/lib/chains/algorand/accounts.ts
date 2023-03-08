@@ -1,7 +1,7 @@
 import algosdk, { MultisigMetadata, Algodv2 } from "algosdk";
 import * as util from "util";
 import { BridgeToken, ValueUnits } from "../../common";
-import { IAccount } from "../../common/utils/iaccount";
+import { BridgeAccounts, BridgeAccountManager } from "../../common/utils/interfaces";
 import { AlgoError } from "./algoError";
 
 export type AlgorandAccount = {
@@ -37,7 +37,7 @@ export type AlgorandAccountAsset = {
     decimals: number | undefined;
 }
 
-export class AlgorandAccounts implements IAccount {
+export class AlgorandAccounts implements BridgeAccountManager<BridgeAccounts> {
 
     public algo_decimals = 6;
 

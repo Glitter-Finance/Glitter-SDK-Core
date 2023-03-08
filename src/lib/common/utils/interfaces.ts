@@ -1,12 +1,25 @@
+import { AlgorandAccount } from "../../chains/algorand";
+import { EvmAccount } from "../../chains/evm/accounts";
+import { SolanaAccount } from "../../chains/solana";
 import { Transaction } from "@solana/web3.js";
 import algosdk from "algosdk";
 import { Account } from "algosdk";
-import { SolanaAccount } from "glitter-bridge-sdk-dev/dist";
-import { AlgorandAccount } from "../../chains/algorand/accounts";
 import { Routing } from "../routing/routing";
 import { BridgeToken } from "../tokens/tokens";
 
-export interface BridgeConnect {
+export interface BridgeAccounts{
+    solanaAccount:SolanaAccount,
+    algorandAccount:AlgorandAccount,
+    evmAccount:EvmAccount,
+}
+export interface BridgeAccountManager<T extends BridgeAccounts> {
+    createNew(): Promise<T[keyof T]>;
+    add(...args: [sk: Uint8Array | undefined] | [mnemonic: string | undefined] ): Promise<T[keyof T] | undefined>;
+    createNewWithPrefix(prefix: string, tries?: number): Promise<T[keyof T]|undefined>
+    updateAccountDetails(local_account: T[keyof T] | undefined, getAssetDetails?: boolean): Promise<T[keyof T]>;
+}
+
+export interface BridgeConnect<T extends BridgeAccounts> {
 
     bridgeTransaction(
         fromAddress: string,
@@ -18,7 +31,7 @@ export interface BridgeConnect {
     ): Promise<Transaction | algosdk.Transaction[]|undefined>,
     
     bridge(
-        account: AlgorandAccount|SolanaAccount, 
+        account: T[keyof T], 
         fromSymbol: string, 
         toNetwork: string, 
         toAddress: string, 
@@ -27,14 +40,14 @@ export interface BridgeConnect {
         ): Promise<boolean>,
 
     fundAccount(
-        funder: SolanaAccount|AlgorandAccount, 
-        account: SolanaAccount|AlgorandAccount, 
+        funder: T[keyof T], 
+        account: T[keyof T], 
         amount: number
         ):Promise<boolean>,
 
     fundAccountTokens(
-        funder: SolanaAccount|AlgorandAccount, 
-        account: SolanaAccount|AlgorandAccount, 
+        funder: T[keyof T], 
+        account: T[keyof T], 
         amount: number, 
         symbol: string
         ): Promise<boolean>,  

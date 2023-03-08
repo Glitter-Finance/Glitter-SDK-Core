@@ -77,7 +77,9 @@ import {
    BridgeDepositEvent, 
   BridgeReleaseEvent, 
   TransferEvent } from "./lib/chains/evm/types"
-
+import { AlgoError } from "./lib/chains/algorand/algoError";
+import { SolanaError } from "./lib/chains/solana/solanaError";
+import { EvmError } from "./lib/chains/evm/evmErrors";
 export {
   GlitterBridgeSDK,
   BridgeNetworks,
@@ -146,5 +148,8 @@ export {
   NetworkIdentifiers,
   BridgeDepositEvent,
   BridgeReleaseEvent,
-  TransferEvent
+  TransferEvent,
+  AlgoError,
+  SolanaError,
+  EvmError
 };

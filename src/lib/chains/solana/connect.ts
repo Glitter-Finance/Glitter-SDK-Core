@@ -11,9 +11,9 @@ import { ethers } from 'ethers';
 import base58 from 'bs58';
 import { SolanaError } from './solanaError';
 import { add } from 'winston';
-import { BridgeConnect } from '../../common/utils/iconnect';
+import { BridgeAccounts, BridgeConnect } from '../../common/utils/interfaces';
 
-export class SolanaConnect implements BridgeConnect {
+export class SolanaConnect implements BridgeConnect<BridgeAccounts> {
 
     private _client?: Connection;
     private _accounts: SolanaAccounts | undefined = undefined;
@@ -291,7 +291,7 @@ export class SolanaConnect implements BridgeConnect {
                 const mock_txn = await this._transactions.sendSolTransaction(routing);
                 mock_txn.recentBlockhash = (await this._client.getRecentBlockhash()).blockhash;
                 mock_txn.sign(...[SolanaAccounts.getSignerObject(signer)]);
-
+                   
                 //get fee and set amount
                 const feeUnits = await mock_txn.getEstimatedFee(this._client);
 
