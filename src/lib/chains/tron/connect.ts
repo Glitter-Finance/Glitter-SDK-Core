@@ -3,8 +3,7 @@ import { BigNumber, ethers } from "ethers";
 import { BridgeNetworks } from "../../common/networks/networks";
 import { BridgeDepositEvent, BridgeReleaseEvent, TransferEvent } from "../evm";
 import { TronConfig } from "./types";
-import { decodeEventData, getLogByEventSignature } from "./utils";
-import { TronDeserialized, TronSerde } from "./serde";
+import { decodeEventData, getLogByEventSignature, hexToBytes } from "./utils";
 import { walletToAddress } from "../../common/utils/utils";
 const TronWeb = require('tronweb');
 const Trc20DetailedAbi = require('./abi/TRC20Detailed.json');
@@ -116,55 +115,14 @@ export class TronConnect {
         ).call();
         return ethers.BigNumber.from(balance.toString());
     }
-    async approveTokensForBridge(
-        tokenSymbol: string,
-        amount: ethers.BigNumber | string,
-        privateKey: string
-    ): Promise<string> {
-        if (!this.isValidToken(tokenSymbol))
-            return Promise.reject("[TronConnect] Unsupported token symbol.");
-
-        const bridgeAddress = this.getAddress("bridge");
-        const tokenAddress = this.getAddress("tokens", tokenSymbol);
-
-        const trWeb = new TronWeb(
-            this.__tronConfig.fullNode,
-            this.__tronConfig.solidityNode,
-            this.__tronConfig.eventServer,
-            privateKey
-        )
-
-        const token = await trWeb.contract(
-            Trc20DetailedAbi.abi,
-            tokenAddress
-        )
-
-        return await token.approve(bridgeAddress, amount).send();
-    }
-    async bridgeAllowance(
-        _tokenSymbol: string,
-        userWalletAddress: string
-    ): Promise<ethers.BigNumber> {
-        if (!this.isValidToken(_tokenSymbol))
-            return Promise.reject("Unsupported token symbol.");
-
-        const tokenAddress = this.getAddress("tokens", _tokenSymbol);
-        const usdc = await this.getContractAt(tokenAddress, Trc20DetailedAbi.abi);
-
-        const allowance = await usdc.allowance(
-            this.fromTronAddress(userWalletAddress),
-            this.getAddress("bridge")
-        ).call();
-
-        return ethers.BigNumber.from(allowance.toString());
-    }
     /**
      * Bridge tokens to another supported chain
      * @param {BridgeNetworks} destination
      * @param {"USDC"} tokenSymbol only USDC for now
      * @param {string | ethers.BigNumber} amount in BigNumber units e.g 1_000_000 for 1USDC
      * @param {string | PublicKey | algosdk.Account} destinationWallet provide USDC reciever address on destination chain
-     * @param {ethers.Wallet} wallet to sign transaction
+     * @param {string} string source wallet
+     * @param {privateKey} string to sign transaction
      * @returns {Promise<ethers.ContractTransaction>}
      */
     async bridge(
@@ -172,6 +130,7 @@ export class TronConnect {
         tokenSymbol: string,
         amount: ethers.BigNumber | string,
         destinationWallet: string | PublicKey | algosdk.Account,
+        sourceWallet: string,
         privateKey: string
     ): Promise<string> {
         try {
@@ -190,41 +149,132 @@ export class TronConnect {
                 privateKey
             )
 
-            const bridge = await trWeb.contract(
-                TokenBridgeAbi.abi,
-                this.getAddress('bridge')
-            )
-
             const tokenAddress = this.getAddress("tokens", tokenSymbol);
             const depositAddress = this.getAddress("depositWallet");
-            const _amount =
-                typeof amount === "string" ? ethers.BigNumber.from(amount) : amount;
+
+            const trc20Params = [
+                { type: "address", value: TronWeb.address.fromHex(depositAddress) },
+                { type: "uint256", value: amount.toString() },
+            ];
 
             let destinationInStr: string = walletToAddress(destinationWallet)
-            const serialized = new TronSerde().serialize(
-                destination,
-                destinationInStr
+            const transfer = {
+                destination: {
+                    chain: destination.toString(),
+                    address: destinationInStr,
+                },
+                amount: amount.toString(),
+            };
+
+            const data = JSON.stringify(transfer);
+
+            let txn = await trWeb.transactionBuilder.triggerSmartContract(
+                tokenAddress,
+                "transfer(address,uint256)",
+                {},
+                trc20Params,
+                sourceWallet
             );
 
-            return await bridge.deposit(
-                serialized.chainId,
-                _amount.toString(),
-                depositAddress,
-                tokenAddress,
-                serialized.address
-            ).send();
+            txn = await trWeb.transactionBuilder.addUpdateData(
+                txn.transaction,
+                data,
+                "utf8"
+            );
+
+            let signedtxn = await trWeb.trx.sign(txn, privateKey);
+            await trWeb.trx.sendRawTransaction(signedtxn);
+
+            return signedtxn.txID
         } catch (error) {
             return Promise.reject(error);
         }
     }
+    /**
+     * Bridge tokens to another supported chain
+     * @param {BridgeNetworks} destination
+     * @param {"USDC"} tokenSymbol only USDC for now
+     * @param {string | ethers.BigNumber} amount in BigNumber units e.g 1_000_000 for 1USDC
+     * @param {string | PublicKey | algosdk.Account} destinationWallet provide USDC reciever address on destination chain
+     * @param {ethers.Wallet} wallet to sign transaction
+     * @returns {Promise<ethers.ContractTransaction>}
+     */
+    async bridgeWeb(
+        destination: BridgeNetworks,
+        tokenSymbol: string,
+        amount: ethers.BigNumber | string,
+        destinationWallet: string | PublicKey | algosdk.Account,
+        sourceWallet: string,
+        trWeb: any
+    ): Promise<string> {
+        try {
+            if (!this.__tronWeb) {
+                throw new Error(`[TronConnect] Sdk uninitialized.`);
+            }
 
-    deSerializeDepositEvent(
-        deposit: BridgeDepositEvent
-    ): TronDeserialized {
-        return new TronSerde().deSerialize(
-            deposit.destinationChainId,
-            deposit.destinationWallet
-        )
+            if (!this.isValidToken(tokenSymbol)) {
+                throw new Error(`[TronConnect] Unsupported token symbol.`);
+            }
+
+            const tokenAddress = this.getAddress("tokens", tokenSymbol);
+            const depositAddress = this.getAddress("depositWallet");
+
+            const trc20Params = [
+                { type: "address", value: TronWeb.address.fromHex(depositAddress) },
+                { type: "uint256", value: amount.toString() },
+            ];
+
+            let destinationInStr: string = walletToAddress(destinationWallet)
+            const transfer = {
+                destination: {
+                    chain: destination.toString(),
+                    address: destinationInStr,
+                },
+                amount: amount.toString(),
+            };
+
+            const data = JSON.stringify(transfer);
+
+            let txn = await trWeb.transactionBuilder.triggerSmartContract(
+                tokenAddress,
+                "transfer(address,uint256)",
+                {},
+                trc20Params,
+                sourceWallet
+            );
+
+            txn = await trWeb.transactionBuilder.addUpdateData(
+                txn.transaction,
+                data,
+                "utf8"
+            );
+
+            let signedtxn = await trWeb.trx.sign(txn);
+            await trWeb.trx.sendRawTransaction(signedtxn);
+
+            return signedtxn.txID
+        } catch (error) {
+            return Promise.reject(error);
+        }
+    }
+    async deSerializeDepositEvent(
+        depositTxHash: string
+    ): Promise<{
+        destination: {
+            chain: BridgeNetworks,
+            address: string,
+        }, amount: string
+    } | null> {
+        const tx = await this.__tronWeb.trx.getTransaction(depositTxHash);
+        if (!('raw_data' in tx) || !('data' in tx.raw_data)) {
+            return null
+        }
+
+        const decoded = JSON.parse(
+            new TextDecoder().decode(Uint8Array.from(hexToBytes(tx.raw_data.data)))
+        );
+
+        return decoded
     }
 
     async getBridgeLogs(
@@ -240,7 +290,6 @@ export class TronConnect {
             BridgeReleaseEvent
         > = []
         const txInfo = await this.__tronWeb.trx.getTransactionInfo(depositOrReleaseTxId)
-        let depositMatch = null;
         let releaseMatch = null;
         let transferMatch = null;
 
@@ -250,13 +299,8 @@ export class TronConnect {
 
         for (const log of txInfo.log) {
             try {
-                const d = getLogByEventSignature(this.__tronWeb, log, "BridgeDeposit");
-                const r = getLogByEventSignature(this.__tronWeb, log, "BridgeRelease");
-                const t = getLogByEventSignature(this.__tronWeb, log, "Transfer");
-
-                if (d) {
-                    depositMatch = d;
-                }
+                const r = getLogByEventSignature(this.__tronWeb, [log], "BridgeRelease");
+                const t = getLogByEventSignature(this.__tronWeb, [log], "Transfer");
 
                 if (r) {
                     releaseMatch = r;
@@ -269,18 +313,6 @@ export class TronConnect {
             } catch (error) {
                 console.error('[TronConnect] Error: ' + error)
             }
-        }
-
-        if (depositMatch) {
-            const decodedDeposit = decodeEventData(
-                depositMatch,
-                "BridgeDeposit"
-            )
-
-            if (decodedDeposit)
-                events.push(
-                    decodedDeposit
-                )
         }
 
         if (releaseMatch) {
