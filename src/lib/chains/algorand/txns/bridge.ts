@@ -257,8 +257,7 @@ export class AlgorandBridgeTxnsV1 {
                 //Fail Safe
                 if (!routing) throw new Error("Bridge Transaction is required");
                 if (!token) throw new Error("Token Config is required");
-                if (!this.ValidateSendRouting(routing)) throw new Error("Invalid Routing");
-
+                  
                 //Set up Transactions
                 // algorand wallet algo|xsol|usdc 
                 let fn = AlgorandBridgeTxnType.none;
