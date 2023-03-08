@@ -24,6 +24,7 @@ import { BridgeType, ChainStatus, PartialBridgeTxn, TransactionType } from "../.
 import { BridgeToken, BridgeTokens } from "../../common/tokens/tokens";
 import { Routing, ValueUnits } from "../../common";
 import { walletToAddress } from "../../common/utils/utils";
+import BigNumber from "bignumber.js";
 
 type Connection = {
   rpcProvider: providers.BaseProvider;
@@ -427,7 +428,7 @@ export class EvmConnect {
           token: "usdc"
         },
         amount: returnTxn.amount,
-        units: returnTxn.units,
+        units: BigNumber(returnTxn.units),
       };
       returnTxn.routing = routing;
 
@@ -452,7 +453,7 @@ export class EvmConnect {
           txn_signature: txnID,
         },
         amount: returnTxn.amount,
-        units: returnTxn.units,
+        units: BigNumber(returnTxn.units),
       };
       returnTxn.routing = routing;
 

@@ -8,7 +8,6 @@ export type Routing = {
     amount: BigNumber | number | undefined;
     units: BigNumber | undefined;
 }
-
 export type RoutingPoint = {
     network: string;
     address: string;
@@ -71,6 +70,9 @@ export function RoutingString(routing: Routing): string {
     );
 }
 
+/**
+ * @deprecated The method should not be used. Please use RoutingHelper instead
+ */
 export function SetRoutingUnits(routing: Routing, token: BridgeToken | undefined) {
     if (!token) throw new Error("Token not defined");
     if (routing.units) return;
@@ -79,3 +81,14 @@ export function SetRoutingUnits(routing: Routing, token: BridgeToken | undefined
     routing.units =  BigNumber(routing.amount).times(BigNumber(10).pow(token.decimals));    //ValueUnits.fromValue(routing.amount, token.decimals).units.toString();
 }
 
+export class RoutingHelper {
+    public static BaseUnits_FromReadableValue(value: number|BigNumber, decimals: number): BigNumber {
+        let baseRaw = BigNumber(value).times(BigNumber(10).pow(decimals));
+        let baseString = baseRaw.toFixed(0);
+        return BigNumber(baseString);
+    }
+    public static ReadableValue_FromBaseUnits(baseUnits: BigNumber, decimals: number): BigNumber {
+        let baseRaw = BigNumber(baseUnits).div(BigNumber(10).pow(decimals));
+        return baseRaw;
+    }
+}
