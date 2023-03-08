@@ -1,3 +1,4 @@
+import BigNumber from "bignumber.js";
 import { Routing } from "../routing/routing"
 
 export enum TransactionType{
@@ -34,8 +35,8 @@ export type PartialBridgeTxn ={
     network?:string|null,
     tokenSymbol?:string|null,
     address?:string|null,
-    units?:string|null,
-    amount?:number|null,
+    units?:BigNumber|null,
+    amount?:BigNumber|number|null,
     routing?:Routing |null    
 };
 
