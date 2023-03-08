@@ -1,11 +1,12 @@
+import BigNumber from "bignumber.js";
 import { BridgeToken } from "../tokens/tokens";
 import { ValueUnits } from "../utils/value_units";
 
 export type Routing = {
     from: RoutingPoint;
     to: RoutingPoint;
-    amount: number | undefined;
-    units: string | undefined;
+    amount: BigNumber | number | undefined;
+    units: BigNumber | undefined;
 }
 
 export type RoutingPoint = {
@@ -75,7 +76,6 @@ export function SetRoutingUnits(routing: Routing, token: BridgeToken | undefined
     if (routing.units) return;
     if (!routing.amount) throw new Error("Routing amount not defined");
     if (token.decimals == undefined) throw new Error("Routing decimals not defined");
-
-    routing.units = ValueUnits.fromValue(routing.amount, token.decimals).units.toString();
+    routing.units =  BigNumber(routing.amount).times(BigNumber(10).pow(token.decimals));    //ValueUnits.fromValue(routing.amount, token.decimals).units.toString();
 }
 
