@@ -48,6 +48,7 @@ import {
   RoutingDefault,
   RoutingPointDefault,
   RoutingString,
+  RoutingHelper,
   SetRoutingUnits,
 } from "./lib/common/routing/routing";
 import {
@@ -121,6 +122,7 @@ export {
   RoutingDefault,
   RoutingPointDefault,
   RoutingString,
+  RoutingHelper,
   SetRoutingUnits,
   BridgeTokenConfig,
   BridgeToken,
