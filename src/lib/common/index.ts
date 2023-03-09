@@ -26,7 +26,9 @@ import {
 import {
     ValueUnits
 } from "./utils/value_units";
-
+import{
+    Shorten
+} from "./utils/shorten";
 export{   
     Routing,
     RoutingPoint,
@@ -45,5 +47,6 @@ export{
     PreciseDecimals,
     ValueUnits,
     LogProgress,
-    RoutingHelper
+    RoutingHelper,
+    Shorten
 }
