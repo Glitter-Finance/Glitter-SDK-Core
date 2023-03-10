@@ -1,5 +1,5 @@
 import * as ethers from "ethers"   ;
-import { BridgeAccounts, BridgeAccountManager } from "../../common/utils/interfaces";
+import { BridgeAccounts, BridgeAccountManager } from "../../common/interfaces/interfaces";
 import { AlgorandAccount } from "../algorand";
 import { SolanaAccount } from "../solana";
 export type EvmAccount = {

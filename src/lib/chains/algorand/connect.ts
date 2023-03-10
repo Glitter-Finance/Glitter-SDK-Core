@@ -10,13 +10,13 @@ import { BridgeToken, BridgeTokens, LogProgress, Routing, RoutingDefault, Sleep 
 import { ethers } from 'ethers';
 import { base64To0xString } from '../../common/utils/utils';
 import { AlgoError } from './algoError';
-import { BridgeAccounts, BridgeConnect } from '../../common/utils/interfaces';
+import { BridgeAccounts, BridgeConnectManager } from '../../common/interfaces/interfaces';
 
 /**
  * 
  * Algorand connect
  */
-export class AlgorandConnect implements BridgeConnect<BridgeAccounts> {
+export class AlgorandConnect implements BridgeConnectManager<BridgeAccounts> {
 
     private _clientIndexer: algosdk.Indexer | undefined = undefined;
     private _client: algosdk.Algodv2 | undefined = undefined;
@@ -1188,6 +1188,10 @@ export class AlgorandConnect implements BridgeConnect<BridgeAccounts> {
     public getToken(token:string):BridgeToken | undefined{
         return BridgeTokens.get("algorand",   token);
       }
+
+    public getBridgeTokenList(): BridgeToken[] | undefined {
+        return this._config?.tokens;
+    }      
 }
 
 

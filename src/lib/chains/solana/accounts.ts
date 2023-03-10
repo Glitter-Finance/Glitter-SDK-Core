@@ -1,6 +1,6 @@
 import * as solanaWeb3 from "@solana/web3.js";
 import { Connection, Keypair, PublicKey, Signer } from "@solana/web3.js";
-import { BridgeAccounts, BridgeAccountManager } from "../../common/utils/interfaces";
+import { BridgeAccounts, BridgeAccountManager } from "../../common/interfaces/interfaces";
 import { SolanaUtils } from "./utils";
 
 export type SolanaAccount = {

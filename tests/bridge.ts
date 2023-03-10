@@ -23,19 +23,28 @@ async function runMain(): Promise<boolean> {7
        //Load SDK
        const sdk = new GlitterBridgeSDK()
        .setEnvironment(GlitterEnvironment.mainnet)
-       .connect([BridgeNetworks.algorand, BridgeNetworks.solana]);
+       .connect([BridgeNetworks.algorand, BridgeNetworks.solana,BridgeNetworks.Ethereum]);
 
    //Reference variables locally for ease of use
    const algorandAccounts = sdk.algorand?.accounts;
    const solanaAccounts = sdk.solana?.accounts;
    const algorand = sdk.algorand;
    const solana = sdk.solana;
+   const ethereum = sdk.ethereum;     
+
+
 
    //Ensure SDK variables are loaded
    if (!algorandAccounts) throw new Error("Algorand Accounts not loaded");
    if (!solanaAccounts) throw new Error("Solana Accounts not loaded");
    if (!algorand) throw new Error("Algorand not loaded");
    if (!solana) throw new Error("Solana not loaded");
+   if (!ethereum) throw new Error("Solana not loaded");
+
+
+   const res = algorand.getBridgeTokenList();
+   console.log("res",res) 
+
 
    //load/create new algorand account
    console.log();

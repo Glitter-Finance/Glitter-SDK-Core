@@ -10,10 +10,9 @@ import { COMMITMENT } from './utils';
 import { ethers } from 'ethers';
 import base58 from 'bs58';
 import { SolanaError } from './solanaError';
-import { add } from 'winston';
-import { BridgeAccounts, BridgeConnect } from '../../common/utils/interfaces';
+import { BridgeAccounts, BridgeConnectManager } from '../../common/interfaces/interfaces';
 
-export class SolanaConnect implements BridgeConnect<BridgeAccounts> {
+export class SolanaConnect implements BridgeConnectManager<BridgeAccounts   > {
 
     private _client?: Connection;
     private _accounts: SolanaAccounts | undefined = undefined;
@@ -1121,4 +1120,9 @@ export class SolanaConnect implements BridgeConnect<BridgeAccounts> {
         return BridgeTokens.get("solana", token);
     }
 
+    public getBridgeTokenList(): BridgeToken[] | undefined {
+    return this._config?.tokens;
+    }
+
 }
+

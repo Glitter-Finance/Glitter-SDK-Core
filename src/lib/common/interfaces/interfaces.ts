@@ -19,7 +19,7 @@ export interface BridgeAccountManager<T extends BridgeAccounts> {
     updateAccountDetails(local_account: T[keyof T] | undefined, getAssetDetails?: boolean): Promise<T[keyof T]>;
 }
 
-export interface BridgeConnect<T extends BridgeAccounts> {
+export interface BridgeConnectManager<T extends BridgeAccounts> {
 
     bridgeTransaction(
         fromAddress: string,

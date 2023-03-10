@@ -1,7 +1,7 @@
 import algosdk, { MultisigMetadata, Algodv2 } from "algosdk";
 import * as util from "util";
 import { BridgeToken, ValueUnits } from "../../common";
-import { BridgeAccounts, BridgeAccountManager } from "../../common/utils/interfaces";
+import { BridgeAccounts, BridgeAccountManager } from "../../common/interfaces/interfaces";
 import { AlgoError } from "./algoError";
 
 export type AlgorandAccount = {

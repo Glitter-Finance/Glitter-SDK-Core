@@ -3,7 +3,6 @@ import algosdk from 'algosdk';
 import minimist = require('minimist');
 import * as readline from 'readline'
 
-
 export class InputParams {
 
     static get(field: string): string | undefined {
