@@ -99,3 +99,4 @@ export class TronSerde implements Serde {
     }
 
 }
+

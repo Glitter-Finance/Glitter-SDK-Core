@@ -141,6 +141,7 @@ export class TronConnect {
 
         return await token.approve(bridgeAddress, amount).send();
     }
+    
     async bridgeAllowance(
         _tokenSymbol: string,
         userWalletAddress: string

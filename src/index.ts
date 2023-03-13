@@ -80,6 +80,10 @@ import {
 import { AlgoError } from "./lib/chains/algorand/algoError";
 import { SolanaError } from "./lib/chains/solana/solanaError";
 import { EvmError } from "./lib/chains/evm/evmErrors";
+import { TronConnect } from "./lib/chains/tron/connect";
+import { TronConfig } from "./lib/chains/tron/types";
+import { TronSerde,TronDeserialized,TronSerialized } from "./lib/chains/tron/serde";
+
 export {
   GlitterBridgeSDK,
   BridgeNetworks,
@@ -151,5 +155,10 @@ export {
   TransferEvent,
   AlgoError,
   SolanaError,
-  EvmError
+  EvmError,
+  TronConfig,
+  TronConnect,
+  TronDeserialized,
+  TronSerialized,
+  TronSerde
 };

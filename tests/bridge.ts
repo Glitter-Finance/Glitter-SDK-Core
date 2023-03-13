@@ -17,7 +17,7 @@ async function run() {
   console.log(result);
 }
 
-async function runMain(): Promise<boolean> {7
+async function runMain(): Promise<boolean> {
     return new Promise(async (resolve, reject) => {
       try {
        //Load SDK
