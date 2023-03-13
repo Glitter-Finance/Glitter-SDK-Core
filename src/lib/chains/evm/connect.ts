@@ -279,7 +279,7 @@ export class EvmConnect {
    * @param {ethers.Wallet} wallet
    * @returns {Promise<boolean>}
    */
-  private async isCorrectChain(wallet: ethers.Wallet): Promise<boolean> {
+  private async isCorrectChain(wallet: ethers.Signer): Promise<boolean> {
     const chainId = await wallet.getChainId();
     return this.__config.chainId === chainId;
   }
@@ -297,10 +297,11 @@ export class EvmConnect {
     tokenSymbol: string,
     amount: ethers.BigNumber | string,
     destinationWallet: string | PublicKey | algosdk.Account,
-    wallet: ethers.Wallet
+    signer: ethers.Signer
   ): Promise<ethers.ContractTransaction> {
     try {
-      const isCorrectChain = await this.isCorrectChain(wallet);
+      const signerAddress = await signer.getAddress()
+      const isCorrectChain = await this.isCorrectChain(signer);
       if (!isCorrectChain)
         throw new Error(
           `[EvmConnect] Signer should be connected to network ${this.__network}`
@@ -315,7 +316,7 @@ export class EvmConnect {
 
       const bridge = TokenBridge__factory.connect(
         this.getAddress("bridge"),
-        wallet
+        signer
       );
 
       const tokenAddress = this.getAddress("tokens", tokenSymbol);
@@ -326,7 +327,7 @@ export class EvmConnect {
       const serlized = SerializeEvmBridgeTransfer.serialize(
         this.__network,
         destination,
-        wallet.address,
+        signerAddress,
         walletToAddress(destinationWallet),
         _amount
       );
